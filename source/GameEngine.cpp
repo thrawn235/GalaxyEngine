@@ -2,7 +2,7 @@
 
 GameEngine::GameEngine()
 {
-	
+	text = new TextEngineIOStream;
 }
 vector<Object*> GameEngine::GetAllObjects()
 {

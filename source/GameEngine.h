@@ -10,6 +10,8 @@ using namespace std;
 
 //Galaxy includes
 #include "Object.h"
+#include "TextEngine.h"
+#include "TextEngineIOStream.h"
 
 //forward declaration:
 class Object;
@@ -18,9 +20,12 @@ class GameEngine
 {
 protected:
 	vector<Object*> objects;
+
 public:
-	GameEngine();
-	vector<Object*> GetAllObjects();
+	TextEngine* 	text;
+
+					GameEngine 		();
+	vector<Object*> GetAllObjects 	();
 };
 
 //include Guard End

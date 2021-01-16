@@ -5,13 +5,11 @@ using namespace std;
 #include "GameEngine.h"
 
 
-
 int main()
 {
 	GameEngine engine;
-	Object test(&engine);
+	Object test( &engine );
 
 	test.Talk();
-	cout<<"hello world";
 	return 0;
 }

@@ -27,13 +27,16 @@ objectFiles 	= $(sourceFiles:.cpp=.o)
 #==============================================================================================
 
 #========================================== DOS ===============================================
-$(sourceDir)dos/Object.o: $(sourceDir)Object.cpp $(sourceDir)GameEngine.o
+$(sourceDir)dos/Object.o: $(sourceDir)Object.cpp $(sourceDir)Object.h $(sourceDir)GameEngine.o
 	$(CompilerDos) $(CFLAGS) -o $@ -c $<
 
-$(sourceDir)dos/GameEngine.o: $(sourceDir)GameEngine.cpp
+$(sourceDir)dos/TextEngine.o: $(sourceDir)TextEngineIOStream.cpp $(sourceDir)TextEngineIOStream.h $(sourceDir)TextEngine.h
 	$(CompilerDos) $(CFLAGS) -o $@ -c $<
 
-$(binDir)dos/main.exe: $(sourceDir)main.cpp $(sourceDir)dos/Object.o $(sourceDir)dos/GameEngine.o
+$(sourceDir)dos/GameEngine.o: $(sourceDir)GameEngine.cpp $(sourceDir)GameEngine.h
+	$(CompilerDos) $(CFLAGS) -o $@ -c $<
+
+$(binDir)dos/main.exe: $(sourceDir)main.cpp $(sourceDir)dos/Object.o $(sourceDir)dos/GameEngine.o $(sourceDir)dos/TextEngine.o
 	$(CompilerDos) $(CFLAGS) -o $@ $^
 	cp $(assetsDir)* $(binDir)dos/
 
@@ -42,13 +45,16 @@ dos: $(binDir)dos/main.exe
 #==============================================================================================
 
 #============================================= win ============================================
-$(sourceDir)win/Object.o: $(sourceDir)Object.cpp $(sourceDir)GameEngine.o
+$(sourceDir)win/Object.o: $(sourceDir)Object.cpp $(sourceDir)Object.h $(sourceDir)GameEngine.o
 	$(CompilerWin) $(CFLAGS) -o $@ -c $<
 
-$(sourceDir)win/GameEngine.o: $(sourceDir)GameEngine.cpp
+$(sourceDir)win/TextEngine.o: $(sourceDir)TextEngineIOStream.cpp $(sourceDir)TextEngineIOStream.h $(sourceDir)TextEngine.h
 	$(CompilerWin) $(CFLAGS) -o $@ -c $<
 
-$(binDir)win/main.exe: $(sourceDir)main.cpp $(sourceDir)win/Object.o $(sourceDir)win/GameEngine.o
+$(sourceDir)win/GameEngine.o: $(sourceDir)GameEngine.cpp $(sourceDir)GameEngine.h
+	$(CompilerWin) $(CFLAGS) -o $@ -c $<
+
+$(binDir)win/main.exe: $(sourceDir)main.cpp $(sourceDir)win/Object.o $(sourceDir)win/GameEngine.o $(sourceDir)win/TextEngine.o
 	$(CompilerWin) $(CFLAGS) $(CFLAGSWin) -o $@ $^
 
 .PHONY: win
@@ -56,13 +62,16 @@ win: $(binDir)win/main.exe
 #==============================================================================================
 
 #============================================== linux =========================================
-$(sourceDir)linux/Object.o: $(sourceDir)Object.cpp $(sourceDir)GameEngine.o
+$(sourceDir)linux/Object.o: $(sourceDir)Object.cpp $(sourceDir)Object.h $(sourceDir)GameEngine.o
 	$(CompilerLinux) $(CFLAGS) -o $@ -c $<
 
-$(sourceDir)linux/GameEngine.o: $(sourceDir)GameEngine.cpp
+$(sourceDir)linux/TextEngine.o: $(sourceDir)TextEngineIOStream.cpp $(sourceDir)TextEngineIOStream.h $(sourceDir)TextEngine.h
 	$(CompilerLinux) $(CFLAGS) -o $@ -c $<
 
-$(binDir)linux/main: $(sourceDir)main.cpp $(sourceDir)linux/Object.o $(sourceDir)linux/GameEngine.o
+$(sourceDir)linux/GameEngine.o: $(sourceDir)GameEngine.cpp $(sourceDir)GameEngine.cpp
+	$(CompilerLinux) $(CFLAGS) -o $@ -c $<
+
+$(binDir)linux/main: $(sourceDir)main.cpp $(sourceDir)linux/Object.o $(sourceDir)linux/GameEngine.o $(sourceDir)linux/TextEngine.o
 	$(CompilerLinux) $(CFLAGS) -o $@ $^
 
 .PHONY: linux
@@ -94,10 +103,12 @@ runlinux:
 .PHONY: clean
 clean:
 	rm -Rf $(binDir)*.exe
-	rm -Rf $(binDir)/dos/*
-	rm -Rf $(binDir)/win/*
-	rm -Rf $(binDir)/linux/*
-	rm -Rf $(sourceDir)*.o
+	rm -Rf $(binDir)dos/*
+	rm -Rf $(binDir)win/*
+	rm -Rf $(binDir)linux/*
+	rm -Rf $(sourceDir)dos/*
+	rm -Rf $(sourceDir)win/*
+	rm -Rf $(sourceDir)linux/*
 
 #============================================== git =============================================
 .PHONY: push

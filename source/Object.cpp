@@ -1,11 +1,15 @@
 #include "Object.h"
 
-Object::Object(GameEngine* engine)
+Object::Object( GameEngine* engine )
 {
 	this->engine = engine;
 }
 void Object::Talk()
 {
-	cout<<"I say: hack the planet!"<<endl;
-	cout<<"And i have "<<engine->GetAllObjects().size()<<" Friends"<<endl;
+	engine->text->PrintString( "I say: hack the planet!" );
+	engine->text->EndLine();
+	engine->text->PrintString( "And I have " );
+	engine->text->PrintInt( engine->GetAllObjects().size() );
+	engine->text->PrintString( " friends!" );
+	engine->text->EndLine();
 }

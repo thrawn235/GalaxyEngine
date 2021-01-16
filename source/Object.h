@@ -5,7 +5,7 @@
 #define OBJECT
 
 //stdlib inludes:
-#include <iostream>
+#include <stdio.h>
 using namespace std;
 
 //Galaxy includes:
@@ -19,8 +19,8 @@ class Object
 protected:
 	GameEngine* engine;
 public:
-	Object(GameEngine* engine);
-	void Talk();
+			Object 	( GameEngine* engine );
+	void 	Talk 	();
 };
 
 #endif
