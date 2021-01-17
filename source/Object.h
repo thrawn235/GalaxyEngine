@@ -1,18 +1,26 @@
-//Object
+//====================================
+// Object.h
+// the Main Parent Class of all Objects in the Game.
+// All other Objects (player, enemies etc) are derived vom it
+//====================================
 
-//include Guard
+//========== include guard ===========
 #ifndef OBJECT
 #define OBJECT
+//====================================
 
-//stdlib inludes:
+//========== stdlib includes =========
 #include <stdio.h>
 using namespace std;
+//====================================
 
-//Galaxy includes:
+//========= galaxy includes ==========
 #include "GameEngine.h"
+//====================================
 
-//forward declarations:
+//======= forward declarations =======
 class GameEngine;
+//====================================
 
 class Object
 {

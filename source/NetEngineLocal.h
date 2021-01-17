@@ -1,7 +1,7 @@
-//=============================
+//====================================
 // NetEngineLocal.h
 // the Gameserver does all the Game Logic and sends the current state to the client(s)
-//=============================
+//====================================
 
 //========== include guard ===========
 #ifndef NETENGINELOCAL
