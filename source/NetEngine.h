@@ -10,7 +10,6 @@
 
 //========== stdlib includes =========
 #include <string>
-#include <vector>
 using namespace std;
 //====================================
 
@@ -20,6 +19,16 @@ using namespace std;
 //======= forward declarations =======
 //====================================
 
+//============= defines ==============
+#define NET_BUFFER_SIZE 1024
+//====================================
+
+struct NetBuffer
+{
+	unsigned int firstIndex = 0;
+	unsigned int lastIndex = 0;
+	unsigned char buffer[NET_BUFFER_SIZE];
+};
 
 struct NetCommand
 {
@@ -31,9 +40,12 @@ class NetEngine
 protected:
 
 public:
-					NetEngine 	( vector<NetCommand>* localNetBuffer )	{};
-	virtual void 	SetTarget	( string target ) 						= 0;
-	virtual void 	SendCommand	( NetCommand* command )					= 0;
+							NetEngine 		( NetBuffer* localNetBuffer )			{};
+	virtual void 			SetTarget		( string target ) 						= 0;
+	virtual void 			SendCommand		( NetCommand* command )					= 0;
+	virtual void 			SendLayer1		( unsigned char out ) 					= 0;
+	virtual unsigned char 	ReceiveLayer1	() 										= 0;
+	virtual unsigned int 	GetLayer1Unread	() 										= 0;
 };
 
 #endif

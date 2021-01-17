@@ -1,6 +1,6 @@
 #include "GameEngine.h"
 
-GameEngine::GameEngine( vector<NetCommand> *localNetBuffer )
+GameEngine::GameEngine( NetBuffer* localNetBuffer )
 {
 	net = new NetEngineLocal( localNetBuffer );
 	#ifdef dos

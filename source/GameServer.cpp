@@ -2,7 +2,7 @@
 
 #include "GameServer.h"
 
-GameServer::GameServer( vector<NetCommand>* localNetBuffer )
+GameServer::GameServer( NetBuffer* localNetBuffer )
 {
 	engine = new GameEngine( localNetBuffer );	
 }

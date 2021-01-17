@@ -9,7 +9,6 @@
 //====================================
 
 //========== stdlib includes =========
-#include <vector>
 using namespace std;
 //====================================
 
@@ -27,7 +26,7 @@ protected:
 	GameEngine* engine;
 
 public:
-			GameServer 	( vector<NetCommand>* localNetBuffer );
+			GameServer 	( NetBuffer* localNetBuffer );
 	void 	Run			();
 };
 

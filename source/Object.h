@@ -1,7 +1,7 @@
 //====================================
 // Object.h
 // the Main Parent Class of all Objects in the Game.
-// All other Objects (player, enemies etc) are derived vom it
+// All other Objects (player, enemies etc) are derived vom it-
 //====================================
 
 //========== include guard ===========

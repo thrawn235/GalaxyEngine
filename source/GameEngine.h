@@ -30,7 +30,7 @@ public:
 	TextEngine* 	text;
 	NetEngine*		net;
 
-					GameEngine 		( vector<NetCommand>* localNetBuffer );
+					GameEngine 		( NetBuffer* localNetBuffer );
 	vector<Object*> GetAllObjects 	();
 };
 

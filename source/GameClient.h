@@ -27,7 +27,7 @@ protected:
 	GameEngine* engine;
 
 public:
-			GameClient 	( vector<NetCommand>* localNetBuffer );
+			GameClient 	( NetBuffer* localNetBuffer );
 	void 	Run			();
 };
 

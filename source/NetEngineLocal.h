@@ -10,7 +10,6 @@
 
 //========== stdlib includes =========
 #include <string>
-#include <vector>
 using namespace std;
 //====================================
 
@@ -25,12 +24,15 @@ using namespace std;
 class NetEngineLocal : public NetEngine
 {
 protected:
-	vector<NetCommand>*		localNetBuffer;
+	NetBuffer*		localNetBuffer;
 
 public:
-					NetEngineLocal 	( vector<NetCommand>* localNetBuffer );
-	virtual void 	SetTarget		( string target );
-	virtual void 	SendCommand		( NetCommand* command );
+							NetEngineLocal 	( NetBuffer* localNetBuffer );
+	virtual void 			SetTarget		( string target );
+	virtual void 			SendCommand		( NetCommand* command );
+	virtual void 			SendLayer1		( unsigned char out );
+	virtual unsigned char 	ReceiveLayer1	();
+	virtual unsigned int 	GetLayer1Unread	();
 };
 
 #endif

@@ -2,7 +2,7 @@
 
 #include "GameClient.h"
 
-GameClient::GameClient( vector<NetCommand>* localNetBuffer )
+GameClient::GameClient( NetBuffer* localNetBuffer )
 {
 	engine = new GameEngine( localNetBuffer );
 }
