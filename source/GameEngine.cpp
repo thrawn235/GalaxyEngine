@@ -1,8 +1,13 @@
 #include "GameEngine.h"
 
-GameEngine::GameEngine()
+GameEngine::GameEngine( vector<NetCommand> *localNetBuffer )
 {
-	text = new TextEngineIOStream;
+	net = new NetEngineLocal( localNetBuffer );
+	#ifdef dos
+		text = new TextEngineSTDIO;
+	#else
+		text = new TextEngineIOStream;
+	#endif
 }
 vector<Object*> GameEngine::GetAllObjects()
 {

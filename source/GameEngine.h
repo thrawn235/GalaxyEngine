@@ -11,7 +11,12 @@ using namespace std;
 //Galaxy includes
 #include "Object.h"
 #include "TextEngine.h"
-#include "TextEngineIOStream.h"
+#include "NetEngineLocal.h"
+#ifdef dos
+	#include "TextEngineSTDIO.h"
+#else
+	#include "TextEngineIOStream.h"
+#endif
 
 //forward declaration:
 class Object;
@@ -23,8 +28,9 @@ protected:
 
 public:
 	TextEngine* 	text;
+	NetEngine*		net;
 
-					GameEngine 		();
+					GameEngine 		( vector<NetCommand>* localNetBuffer );
 	vector<Object*> GetAllObjects 	();
 };
 

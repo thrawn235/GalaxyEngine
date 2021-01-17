@@ -18,7 +18,9 @@ CompilerLinux 	= g++
 CompilerWin 	= x86_64-w64-mingw32-g++
 Compiler 		= $(CompilerDosDir)i586-pc-msdosdjgpp-g++
 CFLAGS			= -Wall -O3 -s
-CFLAGSWin		= -static-libgcc -static-libstdc++ -static
+CFLAGSWin		= -static-libgcc -static-libstdc++ -static -Dwin
+CFLAGSDos 		= -Ddos
+CFLAGSLinux		= -Dlinux
 emulator		= dosbox
 EFLAGS			= -conf $(emuDir)dosbox.conf #-exit
 sourceFiles		= $(wildcard $(sourceDir)*.cpp)
@@ -27,17 +29,29 @@ objectFiles 	= $(sourceFiles:.cpp=.o)
 #==============================================================================================
 
 #========================================== DOS ===============================================
-$(sourceDir)dos/Object.o: $(sourceDir)Object.cpp $(sourceDir)Object.h $(sourceDir)GameEngine.o
-	$(CompilerDos) $(CFLAGS) -o $@ -c $<
+$(sourceDir)dos/Object.o: $(sourceDir)Object.cpp $(sourceDir)Object.h $(sourceDir)dos/GameEngine.o
+	$(CompilerDos) $(CFLAGS) $(CFLAGSDos) -o $@ -c $<
 
-$(sourceDir)dos/TextEngine.o: $(sourceDir)TextEngineIOStream.cpp $(sourceDir)TextEngineIOStream.h $(sourceDir)TextEngine.h
-	$(CompilerDos) $(CFLAGS) -o $@ -c $<
+$(sourceDir)dos/TextEngineIOStream.o: $(sourceDir)TextEngineIOStream.cpp $(sourceDir)TextEngineIOStream.h $(sourceDir)TextEngine.h
+	$(CompilerDos) $(CFLAGS) $(CFLAGSDos) -o $@ -c $<
+
+$(sourceDir)dos/TextEngineSTDIO.o: $(sourceDir)TextEngineSTDIO.cpp $(sourceDir)TextEngineSTDIO.h $(sourceDir)TextEngine.h
+	$(CompilerDos) $(CFLAGS) $(CFLAGSDos) -o $@ -c $<
 
 $(sourceDir)dos/GameEngine.o: $(sourceDir)GameEngine.cpp $(sourceDir)GameEngine.h
-	$(CompilerDos) $(CFLAGS) -o $@ -c $<
+	$(CompilerDos) $(CFLAGS) $(CFLAGSDos) -o $@ -c $<
 
-$(binDir)dos/main.exe: $(sourceDir)main.cpp $(sourceDir)dos/Object.o $(sourceDir)dos/GameEngine.o $(sourceDir)dos/TextEngine.o
-	$(CompilerDos) $(CFLAGS) -o $@ $^
+$(sourceDir)dos/GameClient.o: $(sourceDir)GameClient.cpp $(sourceDir)GameClient.h $(sourceDir)dos/GameEngine.o
+	$(CompilerDos) $(CFLAGS) $(CFLAGSDos) -o $@ -c $<
+
+$(sourceDir)dos/GameServer.o: $(sourceDir)GameServer.cpp $(sourceDir)GameServer.h $(sourceDir)dos/GameEngine.o
+	$(CompilerDos) $(CFLAGS) $(CFLAGSDos) -o $@ -c $<
+
+$(sourceDir)dos/NetEngineLocal.o: $(sourceDir)NetEngineLocal.cpp $(sourceDir)NetEngineLocal.h $(sourceDir)dos/GameEngine.o
+	$(CompilerDos) $(CFLAGS) $(CFLAGSDos) -o $@ -c $<
+
+$(binDir)dos/main.exe: $(sourceDir)main.cpp $(sourceDir)dos/Object.o $(sourceDir)dos/GameEngine.o $(sourceDir)dos/TextEngineSTDIO.o $(sourceDir)dos/GameClient.o $(sourceDir)dos/GameServer.o $(sourceDir)dos/NetEngineLocal.o
+	$(CompilerDos) $(CFLAGS) $(CFLAGSDos) -o $@ $^
 	cp $(assetsDir)* $(binDir)dos/
 
 .PHONY: dos
@@ -45,16 +59,28 @@ dos: $(binDir)dos/main.exe
 #==============================================================================================
 
 #============================================= win ============================================
-$(sourceDir)win/Object.o: $(sourceDir)Object.cpp $(sourceDir)Object.h $(sourceDir)GameEngine.o
-	$(CompilerWin) $(CFLAGS) -o $@ -c $<
+$(sourceDir)win/Object.o: $(sourceDir)Object.cpp $(sourceDir)Object.h $(sourceDir)win/GameEngine.o
+	$(CompilerWin) $(CFLAGS) $(CFLAGSWin)  -o $@ -c $<
 
-$(sourceDir)win/TextEngine.o: $(sourceDir)TextEngineIOStream.cpp $(sourceDir)TextEngineIOStream.h $(sourceDir)TextEngine.h
-	$(CompilerWin) $(CFLAGS) -o $@ -c $<
+$(sourceDir)win/TextEngineIOStream.o: $(sourceDir)TextEngineIOStream.cpp $(sourceDir)TextEngineIOStream.h $(sourceDir)TextEngine.h
+	$(CompilerWin) $(CFLAGS) $(CFLAGSWin) -o $@ -c $<
+
+$(sourceDir)win/TextEnginSTDIOe.o: $(sourceDir)TextEngineSTDIO.cpp $(sourceDir)TextEngineSTDIO.h $(sourceDir)TextEngine.h
+	$(CompilerWin) $(CFLAGS) $(CFLAGSWin) -o $@ -c $<
 
 $(sourceDir)win/GameEngine.o: $(sourceDir)GameEngine.cpp $(sourceDir)GameEngine.h
-	$(CompilerWin) $(CFLAGS) -o $@ -c $<
+	$(CompilerWin) $(CFLAGS) $(CFLAGSWin) -o $@ -c $<
 
-$(binDir)win/main.exe: $(sourceDir)main.cpp $(sourceDir)win/Object.o $(sourceDir)win/GameEngine.o $(sourceDir)win/TextEngine.o
+$(sourceDir)win/GameClient.o: $(sourceDir)GameClient.cpp $(sourceDir)GameClient.h $(sourceDir)win/GameEngine.o
+	$(CompilerWin) $(CFLAGS) $(CFLAGSWin) -o $@ -c $<
+
+$(sourceDir)win/GameServer.o: $(sourceDir)GameServer.cpp $(sourceDir)GameServer.h $(sourceDir)win/GameEngine.o
+	$(CompilerWin) $(CFLAGS) $(CFLAGSWin) -o $@ -c $<
+
+$(sourceDir)win/NetEngineLocal.o: $(sourceDir)NetEngineLocal.cpp $(sourceDir)NetEngineLocal.h $(sourceDir)win/GameEngine.o
+	$(CompilerWin) $(CFLAGS) $(CFLAGSWin) -o $@ -c $<
+
+$(binDir)win/main.exe: $(sourceDir)main.cpp $(sourceDir)win/Object.o $(sourceDir)win/GameEngine.o $(sourceDir)win/TextEngineIOStream.o $(sourceDir)win/GameClient.o $(sourceDir)win/GameServer.o $(sourceDir)win/NetEngineLocal.o
 	$(CompilerWin) $(CFLAGS) $(CFLAGSWin) -o $@ $^
 
 .PHONY: win
@@ -62,17 +88,29 @@ win: $(binDir)win/main.exe
 #==============================================================================================
 
 #============================================== linux =========================================
-$(sourceDir)linux/Object.o: $(sourceDir)Object.cpp $(sourceDir)Object.h $(sourceDir)GameEngine.o
-	$(CompilerLinux) $(CFLAGS) -o $@ -c $<
+$(sourceDir)linux/Object.o: $(sourceDir)Object.cpp $(sourceDir)Object.h $(sourceDir)linux/GameEngine.o
+	$(CompilerLinux) $(CFLAGS) $(CFLAGSLinux) -o $@ -c $<
 
-$(sourceDir)linux/TextEngine.o: $(sourceDir)TextEngineIOStream.cpp $(sourceDir)TextEngineIOStream.h $(sourceDir)TextEngine.h
-	$(CompilerLinux) $(CFLAGS) -o $@ -c $<
+$(sourceDir)linux/TextEngineIOStream.o: $(sourceDir)TextEngineIOStream.cpp $(sourceDir)TextEngineIOStream.h $(sourceDir)TextEngine.h
+	$(CompilerLinux) $(CFLAGS) $(CFLAGSLinux) -o $@ -c $<
+
+$(sourceDir)linux/TextEngineSTDIO.o: $(sourceDir)TextEngineSTDIO.cpp $(sourceDir)TextEngineSTDIO.h $(sourceDir)TextEngine.h
+	$(CompilerLinux) $(CFLAGS) $(CFLAGSLinux) -o $@ -c $<
 
 $(sourceDir)linux/GameEngine.o: $(sourceDir)GameEngine.cpp $(sourceDir)GameEngine.cpp
-	$(CompilerLinux) $(CFLAGS) -o $@ -c $<
+	$(CompilerLinux) $(CFLAGS) $(CFLAGSLinux) -o $@ -c $<
 
-$(binDir)linux/main: $(sourceDir)main.cpp $(sourceDir)linux/Object.o $(sourceDir)linux/GameEngine.o $(sourceDir)linux/TextEngine.o
-	$(CompilerLinux) $(CFLAGS) -o $@ $^
+$(sourceDir)linux/GameClient.o: $(sourceDir)GameClient.cpp $(sourceDir)GameClient.h $(sourceDir)linux/GameEngine.o
+	$(CompilerLinux) $(CFLAGS) $(CFLAGSLinux) -o $@ -c $<
+
+$(sourceDir)linux/GameServer.o: $(sourceDir)GameServer.cpp $(sourceDir)GameServer.h $(sourceDir)linux/GameEngine.o
+	$(CompilerLinux) $(CFLAGS) $(CFLAGSLinux) -o $@ -c $<
+
+$(sourceDir)linux/NetEngineLocal.o: $(sourceDir)NetEngineLocal.cpp $(sourceDir)NetEngineLocal.h $(sourceDir)linux/GameEngine.o
+	$(CompilerLinux) $(CFLAGS) $(CFLAGSLinux) -o $@ -c $<
+
+$(binDir)linux/main: $(sourceDir)main.cpp $(sourceDir)linux/Object.o $(sourceDir)linux/GameEngine.o $(sourceDir)linux/TextEngineIOStream.o $(sourceDir)linux/GameClient.o $(sourceDir)linux/GameServer.o $(sourceDir)linux/NetEngineLocal.o
+	$(CompilerLinux) $(CFLAGS) $(CFLAGSLinux) -o $@ $^
 
 .PHONY: linux
 linux: $(binDir)linux/main
