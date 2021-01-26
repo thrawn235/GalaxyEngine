@@ -27,7 +27,7 @@ protected:
 	GameEngine* engine;
 
 public:
-			GameClient 	( NetBuffer* localNetBuffer );
+			GameClient 	();
 	void 	Run			();
 };
 

@@ -1,8 +1,8 @@
 #include "GameEngine.h"
 
-GameEngine::GameEngine( NetBuffer* localNetBuffer )
+GameEngine::GameEngine()
 {
-	net = new NetEngineLocal( localNetBuffer );
+	net = new NetEngineLocal;
 	#ifdef dos
 		text = new TextEngineSTDIO;
 	#else

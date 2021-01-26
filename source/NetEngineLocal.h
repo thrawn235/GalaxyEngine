@@ -10,6 +10,8 @@
 
 //========== stdlib includes =========
 #include <string>
+#include <vector>
+#include <stdlib.h>
 using namespace std;
 //====================================
 
@@ -18,21 +20,30 @@ using namespace std;
 //====================================
 
 //======= forward declarations =======
+class NetEngineLocal;
 //====================================
 
 
 class NetEngineLocal : public NetEngine
 {
 protected:
-	NetBuffer*		localNetBuffer;
+	vector<Packet*>		inbox;
+	unsigned int 		address;
+	unsigned int 		target;
 
 public:
-							NetEngineLocal 	( NetBuffer* localNetBuffer );
-	virtual void 			SetTarget		( string target );
-	virtual void 			SendCommand		( NetCommand* command );
-	virtual void 			SendLayer1		( unsigned char out );
-	virtual unsigned char 	ReceiveLayer1	();
-	virtual unsigned int 	GetLayer1Unread	();
+								NetEngineLocal 				();
+	virtual void 				Init 						();
+	virtual void				Send 						( Packet* packet, char* target );
+	virtual void 				SetTarget 					( char* target );
+	virtual void 				SetAddress 					( char* address );
+	virtual void				Send 						( Packet* packet );
+	virtual Packet*				GetFirstPacketFromInbox 	();
+	virtual bool				InboxEmpty	 				();
+	virtual bool 				InboxFull					();
+	virtual unsigned int 		NumPacketsInInbox			();
+	virtual char*				GetAddress 					();
+	virtual vector<Packet*>* 	GetInbox 					();
 };
 
 #endif

@@ -2,9 +2,9 @@
 
 #include "GameServer.h"
 
-GameServer::GameServer( NetBuffer* localNetBuffer )
+GameServer::GameServer()
 {
-	engine = new GameEngine( localNetBuffer );	
+	engine = new GameEngine;	
 }
 void GameServer::Run()
 {

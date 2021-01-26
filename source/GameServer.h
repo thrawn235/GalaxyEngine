@@ -26,7 +26,7 @@ protected:
 	GameEngine* engine;
 
 public:
-			GameServer 	( NetBuffer* localNetBuffer );
+			GameServer 	();
 	void 	Run			();
 };
 

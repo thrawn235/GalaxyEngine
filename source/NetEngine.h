@@ -10,6 +10,7 @@
 
 //========== stdlib includes =========
 #include <string>
+#include <vector>
 using namespace std;
 //====================================
 
@@ -23,16 +24,12 @@ using namespace std;
 #define NET_BUFFER_SIZE 1024
 //====================================
 
-struct NetBuffer
+struct Packet
 {
-	unsigned int firstIndex = 0;
-	unsigned int lastIndex = 0;
-	unsigned char buffer[NET_BUFFER_SIZE];
-};
-
-struct NetCommand
-{
-
+	char			 	sender[32];
+	unsigned long		sequence;
+	unsigned int 		dataLength;
+	void*				data;
 };
 
 class NetEngine
@@ -40,12 +37,17 @@ class NetEngine
 protected:
 
 public:
-							NetEngine 		( NetBuffer* localNetBuffer )			{};
-	virtual void 			SetTarget		( string target ) 						= 0;
-	virtual void 			SendCommand		( NetCommand* command )					= 0;
-	virtual void 			SendLayer1		( unsigned char out ) 					= 0;
-	virtual unsigned char 	ReceiveLayer1	() 										= 0;
-	virtual unsigned int 	GetLayer1Unread	() 										= 0;
+							NetEngine 					()									{};
+	virtual void 			Init 						()									= 0;
+	virtual void			Send 						( Packet* packet, char* target )	= 0;
+	virtual void 			SetTarget 					( char* target )					= 0;
+	virtual void 			SetAddress 					( char* address )					= 0;
+	virtual char* 			GetAddress					()									= 0;
+	virtual void			Send 						( Packet* packet )					= 0;
+	virtual Packet*			GetFirstPacketFromInbox 	()									= 0;
+	virtual bool			InboxEmpty	 				()									= 0;
+	virtual bool 			InboxFull					()									= 0;
+	virtual unsigned int 	NumPacketsInInbox			()									= 0;
 };
 
 #endif

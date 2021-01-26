@@ -10,12 +10,10 @@ using namespace std;
 
 int main()
 {
-	NetBuffer localNetBuffer;
+	GameEngine* engine = new GameEngine();
 
-	GameEngine* engine = new GameEngine( &localNetBuffer );
-
-	GameClient* client = new GameClient( &localNetBuffer );
-	GameServer* server = new GameServer( &localNetBuffer );
+	GameClient* client = new GameClient();
+	GameServer* server = new GameServer();
 
 	
 	long int rounds = 0;
@@ -24,18 +22,12 @@ int main()
 	while( !exit )
 	{
 		client->Run();
-		engine->net->SendLayer1( rounds );
-		engine->text->PrintString( "netsize: " );
-		engine->text->PrintInt( engine->net->GetLayer1Unread() );
-		engine->text->EndLine();
 
 		if( subRounds >= 3 )
 		{
 			server->Run();
 			subRounds = 0;
-			unsigned char rec = engine->net->ReceiveLayer1();
-			engine->text->PrintString( "received from net: " );
-			engine->text->PrintInt( rec );
+			engine->text->PrintInt( subRounds );
 			engine->text->EndLine();
 		}
 
