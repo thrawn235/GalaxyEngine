@@ -23,11 +23,11 @@ using namespace std;
 class GameServer
 {
 protected:
-	GameEngine* engine;
+    GameEngine* engine;
 
 public:
-			GameServer 	();
-	void 	Run			();
+            GameServer  ();
+    void    Run         ();
 };
 
 #endif

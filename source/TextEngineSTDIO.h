@@ -19,12 +19,12 @@ class TextEngineSTDIO : public TextEngine
 {
 protected:
 public:
-	TextEngineSTDIO();
-	virtual void PrintString	( string in );
-	virtual void PrintChar		( char in );
-	virtual void PrintInt		( int in );
-	virtual void PrintFloat		( float in );
-	virtual void EndLine		();
+    TextEngineSTDIO();
+    virtual void PrintString    ( string in );
+    virtual void PrintChar      ( char in );
+    virtual void PrintInt       ( int in );
+    virtual void PrintFloat     ( float in );
+    virtual void EndLine        ();
 };
 
 //include Guard End

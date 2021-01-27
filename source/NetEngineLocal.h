@@ -27,23 +27,23 @@ class NetEngineLocal;
 class NetEngineLocal : public NetEngine
 {
 protected:
-	vector<Packet*>		inbox;
-	unsigned int 		address;
-	unsigned int 		target;
+    vector<Packet*>     inbox;
+    long long int       address;
+    long long int       target;
 
 public:
-								NetEngineLocal 				();
-	virtual void 				Init 						();
-	virtual void				Send 						( Packet* packet, char* target );
-	virtual void 				SetTarget 					( char* target );
-	virtual void 				SetAddress 					( char* address );
-	virtual void				Send 						( Packet* packet );
-	virtual Packet*				GetFirstPacketFromInbox 	();
-	virtual bool				InboxEmpty	 				();
-	virtual bool 				InboxFull					();
-	virtual unsigned int 		NumPacketsInInbox			();
-	virtual char*				GetAddress 					();
-	virtual vector<Packet*>* 	GetInbox 					();
+                                NetEngineLocal              ();
+    virtual void                Init                        ();
+    virtual void                Send                        ( Packet* packet, long long int target );
+    virtual void                SetTarget                   ( long long int target );
+    virtual void                SetAddress                  ( long long int address );
+    virtual void                Send                        ( Packet* packet );
+    virtual Packet*             GetFirstPacketFromInbox     ();
+    virtual bool                InboxEmpty                  ();
+    virtual bool                InboxFull                   ();
+    virtual unsigned int        NumPacketsInInbox           ();
+    virtual long long int       GetAddress                  ();
+    virtual vector<Packet*>*    GetInbox                    ();
 };
 
 #endif

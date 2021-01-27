@@ -24,11 +24,11 @@ using namespace std;
 class GameClient
 {
 protected:
-	GameEngine* engine;
+    GameEngine* engine;
 
 public:
-			GameClient 	();
-	void 	Run			();
+            GameClient  ();
+    void    Run         ();
 };
 
 //#endif

@@ -19,12 +19,12 @@ class TextEngineIOStream : public TextEngine
 {
 protected:
 public:
-	TextEngineIOStream();
-	virtual void PrintString	( string in );
-	virtual void PrintChar		( char in );
-	virtual void PrintInt		( int in );
-	virtual void PrintFloat		( float in );
-	virtual void EndLine		();
+    TextEngineIOStream();
+    virtual void PrintString    ( string in );
+    virtual void PrintChar      ( char in );
+    virtual void PrintInt       ( int in );
+    virtual void PrintFloat     ( float in );
+    virtual void EndLine        ();
 };
 
 //include Guard End

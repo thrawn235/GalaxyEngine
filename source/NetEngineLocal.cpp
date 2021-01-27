@@ -11,71 +11,71 @@ vector<NetEngineLocal*> netNodes;
 
 NetEngineLocal::NetEngineLocal()
 {
-	netNodes.push_back(this);
+    netNodes.push_back(this);
 }
 void NetEngineLocal::Init()
 {
 
 }
-void NetEngineLocal::Send( Packet* packet, char* target )
+void NetEngineLocal::Send( Packet* packet, long long int target )
 {
-	for( unsigned int i = 0; i < netNodes.size(); i++ )
-	{
-		if( netNodes[i]->GetAddress() == (unsigned int)*target )
-		{
-			netNodes[i]->GetInbox()->push_back( packet );
-		}
-	}
+    for( unsigned int i = 0; i < netNodes.size(); i++ )
+    {
+        if( netNodes[i]->GetAddress() == target )
+        {
+            netNodes[i]->GetInbox()->push_back( packet );
+        }
+    }
 }
-void NetEngineLocal::SetTarget( char* target )
+void NetEngineLocal::SetTarget( long long int target )
 {
-	this->target = (unsigned int)*target;
+    this->target = target;
 }
-void NetEngineLocal::SetAddress( char* address )
+void NetEngineLocal::SetAddress( long long int address )
 {
-	this->address = address;
+    this->address = address;
 }
 void NetEngineLocal::Send( Packet* packet )
 {
-	for( unsigned int i = 0; i < netNodes.size(); i++ )
-	{
-		if( netNodes[i]->GetAddress() == target )
-		{
-			netNodes[i]->GetInbox()->push_back( packet );
-		}
-	}
+    for( unsigned int i = 0; i < netNodes.size(); i++ )
+    {
+        if( netNodes[i]->GetAddress() == target )
+        {
+            netNodes[i]->GetInbox()->push_back( packet );
+        }
+    }
 }
-Packet*	NetEngineLocal::GetFirstPacketFromInbox()
+Packet* NetEngineLocal::GetFirstPacketFromInbox()
 {
-	if( inbox.size() > 0 )
-	{
-		Packet* tmp = inbox[0];
-		inbox.pop_back();
-		return tmp;
-	}
-	return NULL;
+    if( inbox.size() > 0 )
+    {
+        Packet* tmp = inbox[0];
+        inbox.pop_back();
+        return tmp;
+    }
+    return NULL;
 }
 bool NetEngineLocal::InboxEmpty()
 {
-	if( inbox.size() == 0 )
-	{
-		return false;
-	}
-	return true;
+    if( inbox.size() == 0 )
+    {
+        return false;
+    }
+    return true;
 }
 bool NetEngineLocal::InboxFull()
 {
-	return false;
+    return false;
 }
 unsigned int NetEngineLocal::NumPacketsInInbox()
 {
-	return inbox.size();
+    return inbox.size();
 }
-char* NetEngineLocal::GetAddress()
+long long int NetEngineLocal::GetAddress()
 {
-	return (char*)address;
+    return address;
 }
 vector<Packet*>* NetEngineLocal::GetInbox()
 {
-	return &inbox;
+    return &inbox;
 }

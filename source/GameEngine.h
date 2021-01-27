@@ -13,9 +13,9 @@ using namespace std;
 #include "TextEngine.h"
 #include "NetEngineLocal.h"
 #ifdef dos
-	#include "TextEngineSTDIO.h"
+    #include "TextEngineSTDIO.h"
 #else
-	#include "TextEngineIOStream.h"
+    #include "TextEngineIOStream.h"
 #endif
 
 //forward declaration:
@@ -24,14 +24,14 @@ class Object;
 class GameEngine
 {
 protected:
-	vector<Object*> objects;
+    vector<Object*> objects;
 
 public:
-	TextEngine* 	text;
-	NetEngine*		net;
+    TextEngine*     text;
+    NetEngine*      net;
 
-					GameEngine 		();
-	vector<Object*> GetAllObjects 	();
+                    GameEngine      ();
+    vector<Object*> GetAllObjects   ();
 };
 
 //include Guard End

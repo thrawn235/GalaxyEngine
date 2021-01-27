@@ -25,10 +25,10 @@ class GameEngine;
 class Object
 {
 protected:
-	GameEngine* engine;
+    GameEngine* engine;
 public:
-			Object 	( GameEngine* engine );
-	void 	Talk 	();
+            Object  ( GameEngine* engine );
+    void    Talk    ();
 };
 
 #endif
