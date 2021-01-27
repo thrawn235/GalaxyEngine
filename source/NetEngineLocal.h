@@ -44,6 +44,7 @@ public:
     virtual unsigned int        NumPacketsInInbox           ();
     virtual long long int       GetAddress                  ();
     virtual vector<Packet*>*    GetInbox                    ();
+    virtual int                 GetType                     ();
 };
 
 #endif

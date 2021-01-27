@@ -30,8 +30,12 @@ public:
     TextEngine*     text;
     NetEngine*      net;
 
-                    GameEngine      ();
-    vector<Object*> GetAllObjects   ();
+                    GameEngine          ();
+    vector<Object*> GetAllObjects       ();
+    void            UpdateAll           ();
+    void            ClientSideUpdateAll ();
+    void            PredictAll          ();
+    void            RenderAll           ();
 };
 
 //include Guard End

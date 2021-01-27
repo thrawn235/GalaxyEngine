@@ -50,7 +50,7 @@ Packet* NetEngineLocal::GetFirstPacketFromInbox()
     if( inbox.size() > 0 )
     {
         Packet* tmp = inbox[0];
-        inbox.pop_back();
+        inbox.erase( inbox.begin() );
         return tmp;
     }
     return NULL;
@@ -59,9 +59,9 @@ bool NetEngineLocal::InboxEmpty()
 {
     if( inbox.size() == 0 )
     {
-        return false;
+        return true;
     }
-    return true;
+    return false;
 }
 bool NetEngineLocal::InboxFull()
 {
@@ -78,4 +78,8 @@ long long int NetEngineLocal::GetAddress()
 vector<Packet*>* NetEngineLocal::GetInbox()
 {
     return &inbox;
+}
+int NetEngineLocal::GetType()
+{
+    return NET_TYPE_LOCAL_BUFFER;
 }

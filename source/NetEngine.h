@@ -22,6 +22,8 @@ using namespace std;
 
 //============= defines ==============
 #define NET_BUFFER_SIZE 1024
+#define NET_TYPE_LOCAL_BUFFER   1
+#define NET_TYPE_SOCKETS        2
 //====================================
 
 struct Packet
@@ -48,6 +50,7 @@ public:
     virtual bool            InboxEmpty                  ()                                          = 0;
     virtual bool            InboxFull                   ()                                          = 0;
     virtual unsigned int    NumPacketsInInbox           ()                                          = 0;
+    virtual int             GetType                     ()                                          = 0;
 };
 
 #endif

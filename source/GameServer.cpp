@@ -5,15 +5,23 @@
 GameServer::GameServer()
 {
     engine = new GameEngine;
-    engine->net->SetAddress( 2 );
-    engine->net->SetTarget( 1 );
+    if( engine->net->GetType() == NET_TYPE_LOCAL_BUFFER )
+    {
+        engine->net->SetAddress( 2 );
+        engine->net->SetTarget( 1 );
+    }
 }
 void GameServer::Run()
 {
     engine->text->PrintString( "this is the Server:" );
     engine->text->EndLine();
-    if( !engine->net->InboxEmpty() )
+    while( !engine->net->InboxEmpty() )
     {
-        engine->text->PrintString( (char*)engine->net->GetFirstPacketFromInbox()->data );
+        Packet* tmp = engine->net->GetFirstPacketFromInbox();
+        engine->text->PrintString( (char*)tmp->data );
+        //free( tmp->data );
+        delete tmp;
     }
+
+    engine->UpdateAll();
 }

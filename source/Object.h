@@ -27,8 +27,11 @@ class Object
 protected:
     GameEngine* engine;
 public:
-            Object  ( GameEngine* engine );
-    void    Talk    ();
+         Object              ( GameEngine* engine );
+    void Update              ();
+    void ClientSideUpdate    ();
+    void Predict             ();
+    void Render              ();
 };
 
 #endif
