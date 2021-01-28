@@ -26,16 +26,26 @@ class GameEngine
 protected:
     vector<Object*> objects;
 
+    unsigned long int highestUID;
+
 public:
     TextEngine*     text;
     NetEngine*      net;
 
-                    GameEngine          ();
-    vector<Object*> GetAllObjects       ();
-    void            UpdateAll           ();
-    void            ClientSideUpdateAll ();
-    void            PredictAll          ();
-    void            RenderAll           ();
+                        GameEngine          ();
+
+    void                SetHighestUID       ( unsigned long int UID );
+    unsigned long int   GetHighestUID       ();
+    unsigned long int   GetHighestUIDAndInc ();
+
+    vector<Object*>     GetAllObjects       ();
+
+    void                AddObject           ( Object* object );
+
+    void                UpdateAll           ();
+    void                ClientSideUpdateAll ();
+    void                PredictAll          ();
+    void                RenderAll           ();
 };
 
 //include Guard End
