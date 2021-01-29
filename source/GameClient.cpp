@@ -21,6 +21,8 @@ GameClient::GameClient()
 }
 void GameClient::Run()
 {
+    engine->UpdateGamestateFromNet();
+
     //debug:
     engine->text->PrintString("this is the client:\n");
     engine->text->PrintString("these are my objects:\n");

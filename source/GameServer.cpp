@@ -30,13 +30,13 @@ void GameServer::Run()
         engine->text->EndLine();
     }
 
-    while( !engine->net->InboxEmpty() )
+    /*while( !engine->net->InboxEmpty() )
     {
         Packet* tmp = engine->net->GetFirstPacketFromInbox();
         engine->text->PrintString( (char*)tmp->data );
         //free( tmp->data );
         delete tmp;
-    }
+    }*/
 
     engine->UpdateAll();
 }

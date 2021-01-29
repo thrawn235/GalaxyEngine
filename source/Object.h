@@ -37,6 +37,8 @@ protected:
     bool                active;
     bool                predict;
     bool                clientActive;
+
+    int test;
 public:
                                 Object             ( GameEngine* engine );
 
@@ -53,10 +55,11 @@ public:
     virtual void                SetPredict         ( bool predict );
     virtual void                SetClientActive    ( bool clientActive );
 
-    virtual void                SendStatus         ();
-    virtual void                LoadStatus         ( void* data );
+    virtual void                SendStatus         ();                          //serialize all attributes and send them over the net
+    virtual void                LoadStatus         ( void* data );              //get data from the net and update all attributes
 
-    virtual void                Update             ();
+    virtual void                Update             ();                          //is called every tick (usually on the server)
+    virtual void                GameLogic          ();                          //is called from Update. handles just the GameLogic (minus netupdate etc)
     virtual void                ClientSideUpdate   ();
     virtual void                Predict            ();
     virtual void                Render             ();

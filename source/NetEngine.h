@@ -50,7 +50,7 @@ public:
     virtual bool            InboxEmpty                  ()                                          = 0;
     virtual bool            InboxFull                   ()                                          = 0;
     virtual unsigned int    NumPacketsInInbox           ()                                          = 0;
-    virtual int             GetType                     ()                                          = 0;
+    virtual int             GetType                     ()                                          = 0;        //Get the Type of the Net Implementation (ex. local buffer of ethernet )
 };
 
 #endif

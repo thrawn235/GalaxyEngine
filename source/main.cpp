@@ -27,8 +27,6 @@ int main()
         {
             server->Run();
             subRounds = 0;
-            engine->text->PrintInt( subRounds );
-            engine->text->EndLine();
         }
 
         engine->text->PrintString( "End of Round " );

@@ -27,8 +27,9 @@ protected:
     GameEngine* engine;
 
 public:
-            GameClient  ();
-    void    Run         ();
+            GameClient              ();     //Constructor
+    void    Run                     ();     //everything is done here
+    void    GetGamestateFromServer  ();     //Get Gamestate from Server and update all Objects
 };
 
 //#endif
