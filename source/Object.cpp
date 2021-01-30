@@ -118,6 +118,8 @@ void Object::GameLogic()
 void Object::ClientSideUpdate()
 {
     engine->text->PrintString( "Object UID:%i; Type:%i; Pos:%f:%f (client)\n", uid, type, pos.x, pos.y );
+
+    SendStatus();
 }
 void Object::Predict()
 {

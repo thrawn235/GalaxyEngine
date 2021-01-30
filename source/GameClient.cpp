@@ -24,13 +24,13 @@ void GameClient::Run()
     engine->UpdateGamestateFromNet();
 
     //debug:
-    engine->text->PrintString("this is the client:\n");
-    engine->text->PrintString("these are my objects:\n");
+    engine->debug->PrintString("this is the client:\n");
+    /*engine->text->PrintString("these are my objects:\n");
     vector<Object*> objects = engine->GetAllObjects();
     for( unsigned int i = 0; i < objects.size(); i++ )
     {
         engine->text->PrintString("UID: %i\n", objects[i]->GetUID() );
-    }
+    }*/
     engine->ClientSideUpdateAll();
     engine->PredictAll();
     engine->RenderAll();
