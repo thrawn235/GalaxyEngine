@@ -6,6 +6,9 @@ Object::Object( GameEngine* engine )
 
     uid             = engine->GetHighestUIDAndInc();
 
+    pos             = Vector2D( 0, 0 );
+    movement        = Vector2D( 0, 0 );
+
     active          = true;
     clientActive    = true;
     predict         = true;
@@ -13,7 +16,7 @@ Object::Object( GameEngine* engine )
 
     type            = OBJECT_TYPE_OBJECT;
 
-    test = 0;
+    test            = 0;
 }
 unsigned long int Object::GetUID()
 {
@@ -63,6 +66,22 @@ void Object::SetClientActive( bool clientActive )
 {
     this->clientActive = clientActive;
 }
+Vector2D Object::GetPos()
+{
+    return pos;
+}
+void Object::SetPos( Vector2D pos )
+{
+    this->pos = pos;
+}
+Vector2D Object::GetMovement()
+{
+    return movement;
+}
+void Object::SetMovement( Vector2D movement )
+{
+    this->movement = movement;
+}
 
 void Object::SendStatus()
 {
@@ -72,32 +91,12 @@ void Object::SendStatus()
     pkt->dataLength = sizeof( this );
     pkt->data       = this;
 
-    //Object* tmp = (Object*)pkt->data;
-    /*engine->text->PrintString( "sending Packet: \n");
-    engine->text->PrintString( " UID: ");
-    engine->text->PrintInt( tmp->GetUID() );
-    engine->text->EndLine();*/
-
     engine->net->Send( pkt );
 }
 void Object::LoadStatus( void* data )
 {
-    /*Object* tmp = (Object*)data;
-    engine->text->PrintString(" receiving Packet: \n");
-    engine->text->PrintString( "UID: ");
-    engine->text->PrintInt( tmp->GetUID() );
-    engine->text->EndLine();*/
-
     //lets assume we know that data is of type Object
     memcpy( this, data, sizeof( Object ) );
-
-    /*Object* newStatus = ( Object* )data;
-    this->uid           = newStatus->GetUID();
-    this->type          = newStatus->GetType();
-    this->visible       = newStatus->GetVisible();
-    this->active        = newStatus->GetActive();
-    this->predict       = newStatus->GetPredict();
-    this->clientActive  = newStatus->GetActive();*/
 }
 
 void Object::Update()
@@ -114,47 +113,11 @@ void Object::GameLogic()
         visible = false;
     }
 
-    engine->text->PrintString("this is Object: ");
-    engine->text->PrintInt( GetUID() );
-    engine->text->EndLine();
-    engine->text->PrintString(" this is the GameLogic Method (Server): ");
-    engine->text->PrintString(" Type: ");
-    engine->text->PrintInt( GetType() );
-    engine->text->EndLine();
-    engine->text->PrintString(" visible: ");
-    engine->text->PrintInt( GetVisible() );
-    engine->text->EndLine();
-    engine->text->PrintString(" active: ");
-    engine->text->PrintInt( GetActive() );
-    engine->text->EndLine();
-    engine->text->PrintString(" predict: ");
-    engine->text->PrintInt( GetPredict() );
-    engine->text->EndLine();
-    engine->text->PrintString(" clientActive: ");
-    engine->text->PrintInt( GetClientActive() );
-    engine->text->EndLine();
+    engine->text->PrintString("Object UID:%i; Type:%i; Pos:%f:%f (server)\n", uid, type, pos.x, pos.y );
 }
 void Object::ClientSideUpdate()
 {
-    engine->text->PrintString("this is Object: ");
-    engine->text->PrintInt( GetUID() );
-    engine->text->EndLine();
-    engine->text->PrintString(" this is the ClientSideUpdate Method (Client): ");
-    engine->text->PrintString(" Type: ");
-    engine->text->PrintInt( GetType() );
-    engine->text->EndLine();
-    engine->text->PrintString(" visible: ");
-    engine->text->PrintInt( GetVisible() );
-    engine->text->EndLine();
-    engine->text->PrintString(" active: ");
-    engine->text->PrintInt( GetActive() );
-    engine->text->EndLine();
-    engine->text->PrintString(" predict: ");
-    engine->text->PrintInt( GetPredict() );
-    engine->text->EndLine();
-    engine->text->PrintString(" clientActive: ");
-    engine->text->PrintInt( GetClientActive() );
-    engine->text->EndLine();
+    engine->text->PrintString( "Object UID:%i; Type:%i; Pos:%f:%f (client)\n", uid, type, pos.x, pos.y );
 }
 void Object::Predict()
 {

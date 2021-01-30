@@ -1,30 +1,36 @@
 //Text Engine iostream
 
-//include Guard
-#ifndef TEXTENGINEIOSTREAM
-#define TEXTENGINEIOSTREAM
+//========== include guard ===========
+#ifndef TEXTENGINE_IOSTREAM
+#define TEXTENGINE_IOSTREAM
 
-//stdlib:
+//========== stdlib includes =========
 #include <string>
+#include <cstdarg>
 #include <iostream>
 using namespace std;
+//====================================
 
-//Galaxy includes
+//========= galaxy includes ==========
 #include "TextEngine.h"
+//====================================
 
-//forward declaration:
+//======= forward declarations =======
+//====================================
 
 
 class TextEngineIOStream : public TextEngine
 {
 protected:
+	bool output;
 public:
-    TextEngineIOStream();
-    virtual void PrintString    ( string in );
-    virtual void PrintChar      ( char in );
-    virtual void PrintInt       ( int in );
-    virtual void PrintFloat     ( float in );
-    virtual void EndLine        ();
+    				TextEngineIOStream	();
+    virtual void    PrintString     	( string format, ... );
+    virtual void    EndLine         	();
+    virtual void	DisableOutput		();
+    virtual void	EnableOutput		();
+    virtual bool 	GetOutput			();
+    virtual void	SetOutput			( bool output );
 };
 
 //include Guard End

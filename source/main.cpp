@@ -29,10 +29,8 @@ int main()
             subRounds = 0;
         }
 
-        engine->text->PrintString( "End of Round " );
-        engine->text->PrintInt( rounds );
-        engine->text->EndLine();
-        engine->text->EndLine();
+        engine->debug->PrintString( "End of Round %i\n", rounds );
+        engine->debug->EndLine();
         char input = getchar();
         if( input == 'q' )
         {
@@ -42,9 +40,9 @@ int main()
         subRounds ++;
     }
 
-    engine->text->EndLine();
-    engine->text->PrintString( "Good Bye!" );
-    engine->text->EndLine();
+    engine->debug->EndLine();
+    engine->debug->PrintString( "Good Bye!" );
+    engine->debug->EndLine();
 
     return 0;
 }

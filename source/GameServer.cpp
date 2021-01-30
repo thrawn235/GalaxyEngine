@@ -20,14 +20,12 @@ GameServer::GameServer()
 }
 void GameServer::Run()
 {
-    engine->text->PrintString("this is the server:\n");
-    engine->text->PrintString("these are my objects:\n");
+    engine->text->PrintString( "this is the server:\n" );
+    engine->text->PrintString( "these are my objects:\n" );
     vector<Object*> objects = engine->GetAllObjects();
     for( unsigned int i = 0; i < objects.size(); i++ )
     {
-        engine->text->PrintString("UID: ");
-        engine->text->PrintInt( objects[i]->GetUID() );
-        engine->text->EndLine();
+        engine->text->PrintString( "UID: %i\n", objects[i]->GetUID() );
     }
 
     /*while( !engine->net->InboxEmpty() )

@@ -5,8 +5,10 @@ GameEngine::GameEngine()
     net = new NetEngineLocal;
     #ifdef dos
         text = new TextEngineSTDIO;
+        debug = new TextEngineSTDIO;
     #else
         text = new TextEngineIOStream;
+        debug = new TextEngineIOStream;
     #endif
 
     highestUID = 1;
@@ -76,20 +78,8 @@ void GameEngine::UpdateGamestateFromNet()
 {
     while( !net->InboxEmpty() )
     {
-        /*text->PrintString( "NumInInbox: " );
-        text->PrintInt( net->NumPacketsInInbox() );
-        text->EndLine();*/
-
         Packet* pkt = net->GetFirstPacketFromInbox();
         Object* newStatus = ( Object* )pkt->data;
-
-        /*text->PrintString( "Packet: \n" );
-        text->PrintString( "    Type: " );
-        text->PrintInt( newStatus->GetType() );
-        text->EndLine();
-        text->PrintString( "    UID: " );
-        text->PrintInt( newStatus->GetUID() );
-        text->EndLine();*/
 
         
         bool found = false;

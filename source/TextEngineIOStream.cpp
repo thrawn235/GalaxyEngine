@@ -2,24 +2,69 @@
 
 TextEngineIOStream::TextEngineIOStream()
 {
+    output = true;
 }
-void TextEngineIOStream::PrintString( string in )
+void TextEngineIOStream::PrintString( string format, ... )
 {
-    cout<<in;
-}
-void TextEngineIOStream::PrintChar( char in )
-{
-    cout<<in;
-}
-void TextEngineIOStream::PrintInt( int in )
-{
-    cout<<in;
-}
-void TextEngineIOStream::PrintFloat( float in )
-{
-    cout<<in;
+    va_list args;
+    va_start( args, format );
+
+    const char* formatCStr = format.c_str();
+
+    if( output )
+    {
+        while (*formatCStr != '\0') 
+        {
+        	if (*formatCStr == '%')
+        	{
+        		++formatCStr;
+
+		        if (*formatCStr == 'd' || *formatCStr == 'i' )
+		        {
+		            int i = va_arg(args, int);
+		            std::cout << i;
+		        }
+		        else if (*formatCStr == 'c')
+		        {
+		            // note automatic conversion to integral type
+		            int c = va_arg(args, int);
+		            std::cout << static_cast<char>(c);
+		        }
+		        else if (*formatCStr == 'f')
+		        {
+		            double d = va_arg(args, double);
+		            std::cout << d;
+		        }
+		    }
+	        else
+	        {
+	        	cout<< (char)*formatCStr;
+	        }
+	        ++formatCStr;
+	    }
+    }
+    va_end(args);
 }
 void TextEngineIOStream::EndLine()
 {
-    cout<<endl;
+    if( output )
+    {
+        cout<<endl;
+    }
+}
+void TextEngineIOStream::DisableOutput()
+{
+    output = false;
+}
+void TextEngineIOStream::EnableOutput()
+{
+    output  = true;
+}
+bool TextEngineIOStream::GetOutput()
+{
+    return output;
+}
+void TextEngineIOStream::SetOutput( bool output )
+{
+    this->output = output;
 }

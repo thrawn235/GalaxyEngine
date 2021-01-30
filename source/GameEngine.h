@@ -26,6 +26,7 @@ using namespace std;
 #else
     #include "TextEngineIOStream.h"
 #endif
+#include "Vector2D.h"
 //====================================
 
 //======= forward declarations =======
@@ -41,6 +42,7 @@ protected:
 
 public:
     TextEngine*     text;
+    TextEngine*     debug;
     NetEngine*      net;
 
                         GameEngine              ();

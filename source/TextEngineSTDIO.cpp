@@ -2,24 +2,40 @@
 
 TextEngineSTDIO::TextEngineSTDIO()
 {
+    output = true;
 }
-void TextEngineSTDIO::PrintString( string in )
+void TextEngineSTDIO::PrintString( string format, ... )
 {
-    printf( "%s", in.c_str() );
-}
-void TextEngineSTDIO::PrintChar( char in )
-{
-    printf( "%c", in );
-}
-void TextEngineSTDIO::PrintInt( int in )
-{
-    printf( "%i", in );
-}
-void TextEngineSTDIO::PrintFloat( float in )
-{
-    printf( "%f", in );
+    va_list args;
+    va_start( args, format );
+    const char* cstr = format.c_str();
+    if( output )
+    {
+        printf( cstr, args );
+    }
+
+    va_end( args );
 }
 void TextEngineSTDIO::EndLine()
 {
-    printf( "\n" );
+    if( output )
+    {
+        printf( "\n" );
+    }
+}
+void TextEngineSTDIO::DisableOutput()
+{
+    output = false;
+}
+void TextEngineSTDIO::EnableOutput()
+{
+    output  = true;
+}
+bool TextEngineSTDIO::GetOutput()
+{
+    return output;
+}
+void TextEngineSTDIO::SetOutput( bool output )
+{
+    this->output = output;
 }
