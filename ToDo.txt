@@ -1,5 +1,4 @@
 To Do:
 
-Hub Netwok Class
-NetEngine::ConnectToHub( NetHub* hub )
+Fix stdio text engine
 change all generic variable types (int) to fixed size ones unit16_t
