@@ -19,6 +19,7 @@ using namespace std;
 
 //========= galaxy includes ==========
 #include "Object.h"
+#include "DerivedObjects.h"
 #include "TextEngine.h"
 #include "NetEngineLocal.h"
 #ifdef dos
@@ -41,25 +42,31 @@ protected:
     unsigned long int highestUID;
 
 public:
+    //-------------- Engine Components ----------------
     TextEngine*     text;
     TextEngine*     debug;
     NetEngine*      net;
 
+    //------------- Constructor / Destructor -----------
                         GameEngine              ();
 
+    // ------------------ Set / Get --------------------
     void                SetHighestUID           ( unsigned long int UID );
     unsigned long int   GetHighestUID           ();
     unsigned long int   GetHighestUIDAndInc     ();
 
+    //---------------- Main Engine Fuctions -----------
     vector<Object*>     GetAllObjects           ();
 
     void                AddObject               ( Object* object );
 
+    //---------------- Object Update Functions --------
     void                UpdateAll               ();                             //all the gamelogic happens here. Usually on the Server side
     void                ClientSideUpdateAll     ();                             //gamelogic update on the client side. use with caution
     void                PredictAll              ();                             //moves all objects on along its movement vector based on frametime. this is for visual smoothness only
     void                RenderAll               ();                             //draw all objects
 
+    //------------------- Network ---------------------
     void                UpdateGamestateFromNet  ();
 };
 

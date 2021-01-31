@@ -1,4 +1,5 @@
 #include "Object.h"
+#include "GameEngine.h"
 
 Object::Object( GameEngine* engine )
 {
@@ -113,11 +114,11 @@ void Object::GameLogic()
         visible = false;
     }
 
-    engine->text->PrintString("Object UID:%i; Type:%i; Pos:%f:%f (server)\n", uid, type, pos.x, pos.y );
+    engine->text->PrintString( "Game Logic: Object UID:%i; Type:%i(Object); Pos:%f:%f (server)\n", uid, type, pos.x, pos.y );
 }
 void Object::ClientSideUpdate()
 {
-    engine->text->PrintString( "Object UID:%i; Type:%i; Pos:%f:%f (client)\n", uid, type, pos.x, pos.y );
+    engine->text->PrintString( "ClientSide: Object UID:%i; Type:%i(Object); Pos:%f:%f (client)\n", uid, type, pos.x, pos.y );
 
     SendStatus();
 }
@@ -127,5 +128,5 @@ void Object::Predict()
 }
 void Object::Render()
 {
-
+    engine->text->PrintString( "Render: Object UID:%i; Type:%i(Object); Pos:%f:%f (client)\n", uid, type, pos.x, pos.y );
 }

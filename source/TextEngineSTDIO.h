@@ -22,15 +22,26 @@ using namespace std;
 class TextEngineSTDIO : public TextEngine
 {
 protected:
-	bool output;
+    bool output;
 public:
-    				TextEngineSTDIO	();
+    //------------------ Constructor / Destructor ----------------------
+                    TextEngineSTDIO();
+
+    //------------------------ Set / Get -------------------------------
+    virtual void    DisableOutput   ();
+    virtual void    EnableOutput    ();
+    virtual bool    GetOutput       ();
+    virtual void    SetOutput       ( bool output );
+
+    //------------------------- Text Output ----------------------------
     virtual void    PrintString     ( string format, ... );
     virtual void    EndLine         ();
-    virtual void	DisableOutput	();
-    virtual void	EnableOutput	();
-    virtual bool 	GetOutput		();
-    virtual void	SetOutput		( bool output );
+
+    //------------------------ Text Input ------------------------------
+    virtual int     InputInt        ();
+    virtual float   InputFloat      ();
+    virtual char    InputChar       ();
+    virtual string  InputString     ();
 };
 
 //include Guard End

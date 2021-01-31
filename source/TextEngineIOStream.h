@@ -22,15 +22,26 @@ using namespace std;
 class TextEngineIOStream : public TextEngine
 {
 protected:
-	bool output;
+    bool output;
 public:
-    				TextEngineIOStream	();
-    virtual void    PrintString     	( string format, ... );
-    virtual void    EndLine         	();
-    virtual void	DisableOutput		();
-    virtual void	EnableOutput		();
-    virtual bool 	GetOutput			();
-    virtual void	SetOutput			( bool output );
+    //------------------ Constructor / Destructor ----------------------
+                    TextEngineIOStream  ();
+
+    //------------------------ Set / Get -------------------------------
+    virtual void    DisableOutput       ();
+    virtual void    EnableOutput        ();
+    virtual bool    GetOutput           ();
+    virtual void    SetOutput           ( bool output );
+
+    //------------------------- Text Output ----------------------------
+    virtual void    PrintString         ( string format, ... );
+    virtual void    EndLine             ();
+
+    //------------------------ Text Input ------------------------------
+    virtual int     InputInt            ();
+    virtual float   InputFloat          ();
+    virtual char    InputChar           ();
+    virtual string  InputString         ();
 };
 
 //include Guard End

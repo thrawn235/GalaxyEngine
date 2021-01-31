@@ -1,4 +1,6 @@
 To Do:
 
-Fix stdio text engine
-change all generic variable types (int) to fixed size ones unit16_t
+fix circular update problem in net engine
+MemoryEngine
+make separate client and server setups possible
+change all generic variable types (int) to fixed size ones like unit16_t

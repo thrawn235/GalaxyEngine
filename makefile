@@ -29,6 +29,9 @@ objectFiles 	= $(sourceFiles:.cpp=.o)
 #==============================================================================================
 
 #========================================== DOS ===============================================
+$(sourceDir)dos/DerivedObjects.o: $(sourceDir)DerivedObjects.cpp $(sourceDir)DerivedObjects.h $(sourceDir)dos/GameEngine.o $(sourceDir)dos/Object.o
+	$(CompilerDos) $(CFLAGS) $(CFLAGSDos) -o $@ -c $<
+
 $(sourceDir)dos/Object.o: $(sourceDir)Object.cpp $(sourceDir)Object.h $(sourceDir)dos/GameEngine.o
 	$(CompilerDos) $(CFLAGS) $(CFLAGSDos) -o $@ -c $<
 
@@ -50,7 +53,7 @@ $(sourceDir)dos/GameServer.o: $(sourceDir)GameServer.cpp $(sourceDir)GameServer.
 $(sourceDir)dos/NetEngineLocal.o: $(sourceDir)NetEngineLocal.cpp $(sourceDir)NetEngineLocal.h $(sourceDir)dos/GameEngine.o
 	$(CompilerDos) $(CFLAGS) $(CFLAGSDos) -o $@ -c $<
 
-$(binDir)dos/main.exe: $(sourceDir)main.cpp $(sourceDir)dos/Object.o $(sourceDir)dos/GameEngine.o $(sourceDir)dos/TextEngineSTDIO.o $(sourceDir)dos/GameClient.o $(sourceDir)dos/GameServer.o $(sourceDir)dos/NetEngineLocal.o
+$(binDir)dos/main.exe: $(sourceDir)main.cpp $(sourceDir)dos/Object.o $(sourceDir)dos/GameEngine.o $(sourceDir)dos/TextEngineSTDIO.o $(sourceDir)dos/GameClient.o $(sourceDir)dos/GameServer.o $(sourceDir)dos/NetEngineLocal.o $(sourceDir)dos/DerivedObjects.o
 	$(CompilerDos) $(CFLAGS) $(CFLAGSDos) -o $@ $^
 	cp $(assetsDir)* $(binDir)dos/
 
@@ -59,6 +62,9 @@ dos: $(binDir)dos/main.exe
 #==============================================================================================
 
 #============================================= win ============================================
+$(sourceDir)win/DerivedObjects.o: $(sourceDir)DerivedObjects.cpp $(sourceDir)DerivedObjects.h $(sourceDir)win/GameEngine.o $(sourceDir)win/Object.o
+	$(CompilerWin) $(CFLAGS) $(CFLAGSWin) -o $@ -c $<
+
 $(sourceDir)win/Object.o: $(sourceDir)Object.cpp $(sourceDir)Object.h $(sourceDir)win/GameEngine.o
 	$(CompilerWin) $(CFLAGS) $(CFLAGSWin)  -o $@ -c $<
 
@@ -80,7 +86,7 @@ $(sourceDir)win/GameServer.o: $(sourceDir)GameServer.cpp $(sourceDir)GameServer.
 $(sourceDir)win/NetEngineLocal.o: $(sourceDir)NetEngineLocal.cpp $(sourceDir)NetEngineLocal.h $(sourceDir)win/GameEngine.o
 	$(CompilerWin) $(CFLAGS) $(CFLAGSWin) -o $@ -c $<
 
-$(binDir)win/main.exe: $(sourceDir)main.cpp $(sourceDir)win/Object.o $(sourceDir)win/GameEngine.o $(sourceDir)win/TextEngineIOStream.o $(sourceDir)win/GameClient.o $(sourceDir)win/GameServer.o $(sourceDir)win/NetEngineLocal.o
+$(binDir)win/main.exe: $(sourceDir)main.cpp $(sourceDir)win/Object.o $(sourceDir)win/GameEngine.o $(sourceDir)win/TextEngineIOStream.o $(sourceDir)win/GameClient.o $(sourceDir)win/GameServer.o $(sourceDir)win/NetEngineLocal.o $(sourceDir)win/DerivedObjects.o
 	$(CompilerWin) $(CFLAGS) $(CFLAGSWin) -o $@ $^
 
 .PHONY: win
@@ -88,7 +94,10 @@ win: $(binDir)win/main.exe
 #==============================================================================================
 
 #============================================== linux =========================================
-$(sourceDir)linux/Object.o: $(sourceDir)Object.cpp $(sourceDir)Object.h $(sourceDir)linux/GameEngine.o
+$(sourceDir)linux/DerivedObjects.o:	$(sourceDir)DerivedObjects.cpp $(sourceDir)DerivedObjects.h $(sourceDir)linux/GameEngine.o $(sourceDir)linux/Object.o
+	$(CompilerLinux) $(CFLAGS) $(CFlagsLinux) -o $@ -c $<
+
+$(sourceDir)linux/Object.o: 		$(sourceDir)Object.cpp $(sourceDir)Object.h $(sourceDir)linux/GameEngine.o
 	$(CompilerLinux) $(CFLAGS) $(CFLAGSLinux) -o $@ -c $<
 
 $(sourceDir)linux/TextEngineIOStream.o: $(sourceDir)TextEngineIOStream.cpp $(sourceDir)TextEngineIOStream.h $(sourceDir)TextEngine.h
@@ -109,7 +118,7 @@ $(sourceDir)linux/GameServer.o: $(sourceDir)GameServer.cpp $(sourceDir)GameServe
 $(sourceDir)linux/NetEngineLocal.o: $(sourceDir)NetEngineLocal.cpp $(sourceDir)NetEngineLocal.h $(sourceDir)linux/GameEngine.o
 	$(CompilerLinux) $(CFLAGS) $(CFLAGSLinux) -o $@ -c $<
 
-$(binDir)linux/main: $(sourceDir)main.cpp $(sourceDir)linux/Object.o $(sourceDir)linux/GameEngine.o $(sourceDir)linux/TextEngineIOStream.o $(sourceDir)linux/GameClient.o $(sourceDir)linux/GameServer.o $(sourceDir)linux/NetEngineLocal.o
+$(binDir)linux/main: $(sourceDir)main.cpp $(sourceDir)linux/Object.o $(sourceDir)linux/GameEngine.o $(sourceDir)linux/TextEngineIOStream.o $(sourceDir)linux/GameClient.o $(sourceDir)linux/GameServer.o $(sourceDir)linux/NetEngineLocal.o $(sourceDir)linux/DerivedObjects.o
 	$(CompilerLinux) $(CFLAGS) $(CFLAGSLinux) -o $@ $^
 
 .PHONY: linux

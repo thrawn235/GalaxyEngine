@@ -68,3 +68,44 @@ void TextEngineIOStream::SetOutput( bool output )
 {
     this->output = output;
 }
+
+int TextEngineIOStream::InputInt()
+{
+    if( output )
+    {
+        int out;
+        cin>>out;
+        return out;
+    }
+    return 0;
+}
+float TextEngineIOStream::InputFloat()
+{
+    if( output )
+    {
+        float out;
+        cin>>out;
+        return out;
+    }
+    return 0;
+}
+char TextEngineIOStream::InputChar()
+{
+    if( output )
+    {
+        char out;
+        cin>>out;
+        return out;
+    }
+    return 0;
+}
+string TextEngineIOStream::InputString()
+{
+	string out;
+    if( output )
+    {
+        cin>>out;
+        return out;
+    }
+    return out;
+}

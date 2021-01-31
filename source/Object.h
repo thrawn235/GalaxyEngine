@@ -15,12 +15,14 @@ using namespace std;
 //====================================
 
 //========= galaxy includes ==========
-#include "GameEngine.h"
+//#include "GameEngine.h"
 #include "Vector2D.h"
 //====================================
 
 //============= defines ==============
-#define OBJECT_TYPE_OBJECT 0
+#define OBJECT_TYPE_OBJECT  0
+#define OBJECT_TYPE_PLAYER  1
+#define OBJECT_TYPE_ENEMY   2
 //====================================
 
 //======= forward declarations =======

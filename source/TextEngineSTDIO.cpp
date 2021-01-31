@@ -11,7 +11,7 @@ void TextEngineSTDIO::PrintString( string format, ... )
     const char* cstr = format.c_str();
     if( output )
     {
-        printf( cstr, args );
+        vprintf( cstr, args );
     }
 
     va_end( args );
@@ -38,4 +38,47 @@ bool TextEngineSTDIO::GetOutput()
 void TextEngineSTDIO::SetOutput( bool output )
 {
     this->output = output;
+}
+
+int TextEngineSTDIO::InputInt()
+{
+    if( output )
+    {
+        int out;
+        scanf( "%i", &out );
+        return out;
+    }
+    return 0;
+}
+float TextEngineSTDIO::InputFloat()
+{
+    if( output )
+    {
+        float out;
+        scanf( "%f", &out );
+        return out;
+    }
+    return 0;
+}
+char TextEngineSTDIO::InputChar()
+{
+    if( output )
+    {
+        char out;
+        scanf( "%c", &out );
+        return out;
+    }
+    return 0;
+}
+string TextEngineSTDIO::InputString()
+{
+    string out;
+    if( output )
+    {
+        char* str;
+        scanf( "%s", str );
+        out = str;
+        return out;
+    }
+    return out;
 }

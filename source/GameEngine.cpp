@@ -101,5 +101,19 @@ void GameEngine::UpdateGamestateFromNet()
             newObject->LoadStatus( newStatus );
             AddObject( newObject );
         }
+        if( newStatus->GetType() == OBJECT_TYPE_PLAYER && !found )
+        {
+            //text->PrintString( "Adding new Object" );
+            Object* newObject = new Player( this );
+            newObject->LoadStatus( newStatus );
+            AddObject( newObject );
+        }
+        if( newStatus->GetType() == OBJECT_TYPE_ENEMY && !found )
+        {
+            //text->PrintString( "Adding new Object" );
+            Object* newObject = new Enemy( this );
+            newObject->LoadStatus( newStatus );
+            AddObject( newObject );
+        }
     }
 }
