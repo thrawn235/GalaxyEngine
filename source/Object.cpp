@@ -102,7 +102,7 @@ void Object::SendStatus()
 
     Object* pktDebug = (Object*)pkt->data;
 
-    engine->debug->PrintString( "  sending packet UID:%i Type:%i Pos:%f:%f from:%i\n", pktDebug->GetUID(), pktDebug->GetType(), pktDebug->GetPos().x, pktDebug->GetPos().y, pkt->sender );
+    engine->debug->PrintString( "  sending packet UID:%i Type:%i Pos:%f:%f from:%i NetAddr:%i\n", pktDebug->GetUID(), pktDebug->GetType(), pktDebug->GetPos().x, pktDebug->GetPos().y, pkt->sender, engine->net->GetAddress() );
 
     engine->net->Send( pkt );
 }
@@ -126,19 +126,19 @@ void Object::GameLogic()
         visible = false;
     }
 
-    engine->text->PrintString( "Game Logic: Object UID:%i; Type:%i(Object); Pos:%f:%f (server)\n", uid, type, pos.x, pos.y );
+    engine->text->PrintString( "Game Logic: Object UID:%i; Type:%i(Object); Pos:%f:%f NetAddr:%i (server)\n", uid, type, pos.x, pos.y, engine->net->GetAddress() );
 }
 void Object::ClientSideUpdate()
 {
-    engine->text->PrintString( "ClientSide: Object UID:%i; Type:%i(Object); Pos:%f:%f (client)\n", uid, type, pos.x, pos.y );
+    engine->text->PrintString( "ClientSide: Object UID:%i; Type:%i(Object); Pos:%f:%f NetAddr:%i (client)\n", uid, type, pos.x, pos.y, engine->net->GetAddress() );
 
     //SendStatus();
 }
-void Object::Predict()
+void Object::Predict( float tickRate )
 {
-
+    pos = pos + movement * tickRate;
 }
 void Object::Render()
 {
-    engine->text->PrintString( "Render: Object UID:%i; Type:%i(Object); Pos:%f:%f (client)\n", uid, type, pos.x, pos.y );
+    engine->text->PrintString( "Render: Object UID:%i; Type:%i(Object); Pos:%f:%f NetAddr:%i (client)\n", uid, type, pos.x, pos.y, engine->net->GetAddress() );
 }

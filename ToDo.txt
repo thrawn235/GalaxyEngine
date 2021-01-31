@@ -1,5 +1,8 @@
 To Do:
 
+LoadStatus / SendStatus should not be needed to be reimplemented for child classes
+Adding Objects should be Game Independed
+Enemy has the wrong sender address on the server
 MemoryEngine
 make separate client and server setups possible
 change all generic variable types (int) to fixed size ones like unit16_t

@@ -12,6 +12,9 @@ GameEngine::GameEngine()
     #endif
 
     highestUID = 1;
+
+    tickRate                    = 1;
+    clientTicksSinceLogicTick   = 0;
 }
 void GameEngine::SetHighestUID( unsigned long int UID )
 {
@@ -60,7 +63,7 @@ void GameEngine::PredictAll()
     {
         if( objects[i]->GetPredict() )
         {
-            objects[i]->Predict();
+            objects[i]->Predict( tickRate );
         }
     }
 }
@@ -78,13 +81,23 @@ void GameEngine::UpdateGamestateFromNet()
 {
     debug->PrintString( "received %i packets\n", net->GetNumPacketsInInbox()  );
 
+    if( net->InboxEmpty() )
+    {
+        clientTicksSinceLogicTick++;
+    }
+    else
+    {
+        tickRate = 1 / clientTicksSinceLogicTick;
+        clientTicksSinceLogicTick = 0;
+    }
+
     while( !net->InboxEmpty() )
     {
         Packet* pkt = net->GetFirstPacketFromInbox();
         Object* newStatus = ( Object* )pkt->data;
         newStatus->SetEngine( this );
 
-        debug->PrintString( "   Packet: UID:%i Type:%i Pos:%f:%f from:%i\n", newStatus->GetUID(), newStatus->GetType(), newStatus->GetPos().x, newStatus->GetPos().y, pkt->sender );
+        debug->PrintString( "   received Packet: UID:%i Type:%i Pos:%f:%f from:%i rewrite NetAddr to:%i\n", newStatus->GetUID(), newStatus->GetType(), newStatus->GetPos().x, newStatus->GetPos().y, pkt->sender, newStatus->GetEngine()->net->GetAddress() );
 
         
         bool found = false;

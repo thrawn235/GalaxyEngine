@@ -41,6 +41,9 @@ protected:
 
     unsigned long int highestUID;
 
+    float           tickRate;
+    unsigned int    clientTicksSinceLogicTick;
+
 public:
     //-------------- Engine Components ----------------
     TextEngine*     text;

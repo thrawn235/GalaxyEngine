@@ -32,7 +32,7 @@ class GameEngine;
 class Object
 {
 protected:
-    GameEngine* engine;                 //pointer to the game engine
+    GameEngine*         engine;         //pointer to the game engine
 
     Vector2D            pos;            //position of the object
     Vector2D            movement;       //final movement vector (once all forces are added)
@@ -79,7 +79,7 @@ public:
     virtual void                Update             ();                          //is called every tick (usually on the server)
     virtual void                GameLogic          ();                          //is called from Update. handles just the GameLogic (minus netupdate etc)
     virtual void                ClientSideUpdate   ();
-    virtual void                Predict            ();
+    virtual void                Predict            ( float tickRate );
     virtual void                Render             ();
 };
 
