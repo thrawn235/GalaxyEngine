@@ -1,6 +1,5 @@
 To Do:
 
-fix circular update problem in net engine
 MemoryEngine
 make separate client and server setups possible
 change all generic variable types (int) to fixed size ones like unit16_t

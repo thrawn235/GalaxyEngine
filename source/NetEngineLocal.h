@@ -41,7 +41,7 @@ public:
     virtual Packet*             GetFirstPacketFromInbox     ();
     virtual bool                InboxEmpty                  ();
     virtual bool                InboxFull                   ();
-    virtual unsigned int        NumPacketsInInbox           ();
+    virtual unsigned int        GetNumPacketsInInbox        ();
     virtual long long int       GetAddress                  ();
     virtual vector<Packet*>*    GetInbox                    ();
     virtual int                 GetType                     ();

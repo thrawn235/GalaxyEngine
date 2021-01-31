@@ -11,6 +11,7 @@
 //========== stdlib includes =========
 #include <string>
 #include <vector>
+#include <cstdint>
 using namespace std;
 //====================================
 
@@ -28,9 +29,9 @@ using namespace std;
 
 struct Packet
 {
-    long long int       sender;
-    unsigned long       sequence;
-    unsigned int        dataLength;
+    uint64_t            sender;
+    uint32_t            sequence;
+    uint16_t            dataLength;
     void*               data;
 };
 
@@ -49,7 +50,7 @@ public:
     virtual Packet*         GetFirstPacketFromInbox     ()                                          = 0;
     virtual bool            InboxEmpty                  ()                                          = 0;
     virtual bool            InboxFull                   ()                                          = 0;
-    virtual unsigned int    NumPacketsInInbox           ()                                          = 0;
+    virtual unsigned int    GetNumPacketsInInbox        ()                                          = 0;
     virtual int             GetType                     ()                                          = 0;        //Get the Type of the Net Implementation (ex. local buffer of ethernet )
 };
 

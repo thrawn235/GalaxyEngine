@@ -31,7 +31,7 @@ int main()
 
         engine->debug->PrintString( "End of Round %i\n", rounds );
         engine->debug->EndLine();
-        if( engine->text->InputChar() == 'q' )
+        if( engine->debug->InputChar() == 'q' )
         {
             exit = true;
         }

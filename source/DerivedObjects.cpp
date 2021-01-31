@@ -18,6 +18,8 @@ void Player::ClientSideUpdate()
 	pos.x = engine->text->InputFloat();
 	engine->text->PrintString( "   enter new yPos: " );
 	pos.y = engine->text->InputFloat();
+
+	SendStatus();
 }
 void Player::Render()
 {

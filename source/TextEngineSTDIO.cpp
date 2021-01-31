@@ -75,7 +75,7 @@ string TextEngineSTDIO::InputString()
     string out;
     if( output )
     {
-        char* str;
+        char* str = NULL;
         scanf( "%s", str );
         out = str;
         return out;

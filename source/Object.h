@@ -52,22 +52,24 @@ public:
                                 Object             ( GameEngine* engine );
 
     //---------------------- Get/Set --------------------------
-    virtual unsigned long int   GetUID             ();
-    virtual void                SetUID             ( unsigned long uid );
-    virtual unsigned int        GetType            ();
-    virtual void                SetType            ( unsigned int type );
-    virtual bool                GetVisible         ();
-    virtual bool                GetActive          ();
-    virtual bool                GetPredict         ();
-    virtual bool                GetClientActive    ();
-    virtual void                SetVisible         ( bool visible );
-    virtual void                SetActive          ( bool active );
-    virtual void                SetPredict         ( bool predict );
-    virtual void                SetClientActive    ( bool clientActive );
-    virtual Vector2D            GetPos             ();
-    virtual void                SetPos             ( Vector2D pos );
-    virtual Vector2D            GetMovement        ();
-    virtual void                SetMovement        ( Vector2D movement );
+            void                SetEngine          ( GameEngine* engine );
+            GameEngine*         GetEngine          ();
+            unsigned long int   GetUID             ();
+            void                SetUID             ( unsigned long uid );
+            unsigned int        GetType            ();
+            void                SetType            ( unsigned int type );
+            bool                GetVisible         ();
+            bool                GetActive          ();
+            bool                GetPredict         ();
+            bool                GetClientActive    ();
+            void                SetVisible         ( bool visible );
+            void                SetActive          ( bool active );
+            void                SetPredict         ( bool predict );
+            void                SetClientActive    ( bool clientActive );
+            Vector2D            GetPos             ();
+            void                SetPos             ( Vector2D pos );
+            Vector2D            GetMovement        ();
+            void                SetMovement        ( Vector2D movement );
 
     //-------------------- Network ----------------------------
     virtual void                SendStatus         ();                          //serialize all attributes and send them over the net

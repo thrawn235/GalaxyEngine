@@ -67,7 +67,7 @@ bool NetEngineLocal::InboxFull()
 {
     return false;
 }
-unsigned int NetEngineLocal::NumPacketsInInbox()
+unsigned int NetEngineLocal::GetNumPacketsInInbox()
 {
     return inbox.size();
 }

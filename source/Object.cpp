@@ -19,6 +19,14 @@ Object::Object( GameEngine* engine )
 
     test            = 0;
 }
+void Object::SetEngine( GameEngine* engine )
+{
+    this->engine = engine;
+}
+GameEngine* Object::GetEngine()
+{
+    return engine;
+}
 unsigned long int Object::GetUID()
 {
     return uid;
@@ -92,6 +100,10 @@ void Object::SendStatus()
     pkt->dataLength = sizeof( this );
     pkt->data       = this;
 
+    Object* pktDebug = (Object*)pkt->data;
+
+    engine->debug->PrintString( "  sending packet UID:%i Type:%i Pos:%f:%f from:%i\n", pktDebug->GetUID(), pktDebug->GetType(), pktDebug->GetPos().x, pktDebug->GetPos().y, pkt->sender );
+
     engine->net->Send( pkt );
 }
 void Object::LoadStatus( void* data )
@@ -120,7 +132,7 @@ void Object::ClientSideUpdate()
 {
     engine->text->PrintString( "ClientSide: Object UID:%i; Type:%i(Object); Pos:%f:%f (client)\n", uid, type, pos.x, pos.y );
 
-    SendStatus();
+    //SendStatus();
 }
 void Object::Predict()
 {
