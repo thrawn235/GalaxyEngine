@@ -99,6 +99,7 @@ void Object::SendStatus()
     pkt->sequence   = 0;                      //set to 0 for debugging for now!
     pkt->dataLength = sizeof( this );
     pkt->data       = this;
+    pkt->type       = NET_PACKET_TYPE_OBJECT_UPDATE;
 
     Object* pktDebug = (Object*)pkt->data;
 
@@ -120,12 +121,6 @@ void Object::Update()
 }
 void Object::GameLogic()
 {
-    test++;
-    if( test >= uid )
-    {
-        visible = false;
-    }
-
     engine->text->PrintString( "Game Logic: Object UID:%i; Type:%i(Object); Pos:%f:%f NetAddr:%i (server)\n", uid, type, pos.x, pos.y, engine->net->GetAddress() );
 }
 void Object::ClientSideUpdate()
@@ -136,6 +131,7 @@ void Object::ClientSideUpdate()
 }
 void Object::Predict( float tickRate )
 {
+    engine->text->PrintString( "Predict: Object UID:%i; Type:%i(Object); Pos:%f:%f NetAddr:%i (server)\n", uid, type, pos.x, pos.y, engine->net->GetAddress() );
     pos = pos + movement * tickRate;
 }
 void Object::Render()

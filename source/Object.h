@@ -45,8 +45,7 @@ protected:
     bool                active;
     bool                predict;
     bool                clientActive;
-
-    long unsigned int test;
+    
 public:
     //------------ Constructor/Destructor: --------------------
                                 Object             ( GameEngine* engine );

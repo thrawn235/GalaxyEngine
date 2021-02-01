@@ -41,9 +41,6 @@ protected:
 
     unsigned long int highestUID;
 
-    float           tickRate;
-    unsigned int    clientTicksSinceLogicTick;
-
 public:
     //-------------- Engine Components ----------------
     TextEngine*     text;
@@ -60,17 +57,18 @@ public:
 
     //---------------- Main Engine Fuctions -----------
     vector<Object*>     GetAllObjects           ();
+    Object*             GetObjectByUID          ( unsigned long int uid );
 
     void                AddObject               ( Object* object );
 
     //---------------- Object Update Functions --------
     void                UpdateAll               ();                             //all the gamelogic happens here. Usually on the Server side
     void                ClientSideUpdateAll     ();                             //gamelogic update on the client side. use with caution
-    void                PredictAll              ();                             //moves all objects on along its movement vector based on frametime. this is for visual smoothness only
+    void                PredictAll              ( float tickRate );             //moves all objects on along its movement vector based on frametime. this is for visual smoothness only
     void                RenderAll               ();                             //draw all objects
 
     //------------------- Network ---------------------
-    void                UpdateGamestateFromNet  ();
+    //void                UpdateGamestateFromNet  ();
 };
 
 //include Guard End

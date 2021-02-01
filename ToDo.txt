@@ -1,7 +1,7 @@
 To Do:
 
 LoadStatus / SendStatus should not be needed to be reimplemented for child classes
-Adding Objects should be Game Independed
+game ticks / predict doesnt work
 Enemy has the wrong sender address on the server
 MemoryEngine
 make separate client and server setups possible

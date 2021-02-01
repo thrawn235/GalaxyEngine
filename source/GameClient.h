@@ -24,7 +24,10 @@ using namespace std;
 class GameClient
 {
 protected:
-    GameEngine* engine;
+	bool			waitingForUpdate;
+	unsigned int	clientTicksSinceLogicTick;
+	float			tickRate;
+    GameEngine* 	engine;
 
 public:
             GameClient              ();     //Constructor

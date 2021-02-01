@@ -91,6 +91,7 @@ void Player::SendStatus()
     pkt->sequence   = 0;                      //set to 0 for debugging for now!
     pkt->dataLength = sizeof( Player );
     pkt->data       = this;
+    pkt->type       = NET_PACKET_TYPE_OBJECT_UPDATE;
 
     Object* pktDebug = (Object*)pkt->data;
 
@@ -126,6 +127,7 @@ void Enemy::SendStatus()
     pkt->sequence   = 0;                      //set to 0 for debugging for now!
     pkt->dataLength = sizeof( Enemy );
     pkt->data       = this;
+    pkt->type       = NET_PACKET_TYPE_OBJECT_UPDATE;
 
     Object* pktDebug = (Object*)pkt->data;
 
