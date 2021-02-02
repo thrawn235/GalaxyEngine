@@ -32,6 +32,7 @@ using namespace std;
 
 //======= forward declarations =======
 class Object;
+class NetEngine;
 //====================================
 
 class GameEngine

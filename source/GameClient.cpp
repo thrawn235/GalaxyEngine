@@ -10,18 +10,24 @@ GameClient::GameClient()
         engine->net->SetAddress( 1 );
         engine->net->SetTarget( 2 );
     }
+
     engine->SetHighestUID( 1000 );
+    
+    //network variables
     waitingForUpdate            = false;
 
+    //prediction variables
     tickRate                    = 1;
     clientTicksSinceLogicTick   = 0;
 }
+
 void GameClient::Run()
 {
     //debug:
-    engine->debug->PrintString( "this is the client:\n" );
+    engine->debug->PrintString( "===================== client ==================\n" );
     engine->debug->PrintString( "Ive got %i Packets\n", engine->net->GetNumPacketsInInbox() );
 
+    //count ticks (for prediction step)
     clientTicksSinceLogicTick++;
 
     while( !engine->net->InboxEmpty() )
@@ -70,24 +76,33 @@ void GameClient::Run()
             engine->debug->PrintString( "   received Packet: Gameround done!\n");
             waitingForUpdate = false;
 
-            tickRate = 1 / clientTicksSinceLogicTick;
+
+            tickRate = 1.0 / clientTicksSinceLogicTick;
+            engine->debug->PrintString( "       tickrate:%f clientTicks:%i!\n", tickRate, clientTicksSinceLogicTick );
             clientTicksSinceLogicTick = 0;
         }
+
+        //clear memory for the packet
+        pkt->~Packet();
     }
     
-    engine->debug->PrintString("these are my objects:\n");
+    //debug
+    /*engine->debug->PrintString("these are my objects:\n");
     vector<Object*> objects = engine->GetAllObjects();
     for( unsigned int i = 0; i < objects.size(); i++ )
     {
         engine->debug->PrintString("   UID: %i\n", objects[i]->GetUID() );
-    }
+    }*/
 
+    //only update if the server has send a Ack Packet
     if( !waitingForUpdate )
     {
         engine->ClientSideUpdateAll();
+        waitingForUpdate = true;
     }
-    waitingForUpdate = true;
 
     engine->PredictAll( tickRate );
     engine->RenderAll();
+
+    engine->debug->PrintString( "===========================================:\n\n\n" );
 }

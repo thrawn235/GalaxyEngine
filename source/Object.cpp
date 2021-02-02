@@ -17,7 +17,7 @@ Object::Object( GameEngine* engine )
 
     type            = OBJECT_TYPE_OBJECT;
 
-    test            = 0;
+    size = sizeof( Object );
 }
 void Object::SetEngine( GameEngine* engine )
 {
@@ -26,6 +26,14 @@ void Object::SetEngine( GameEngine* engine )
 GameEngine* Object::GetEngine()
 {
     return engine;
+}
+void Object::SetSize( int size )
+{
+    this->size = size;
+}
+int Object::GetSize()
+{
+    return size;
 }
 unsigned long int Object::GetUID()
 {
@@ -97,7 +105,7 @@ void Object::SendStatus()
     Packet* pkt     = new Packet;
     pkt->sender     = engine->net->GetAddress();
     pkt->sequence   = 0;                      //set to 0 for debugging for now!
-    pkt->dataLength = sizeof( this );
+    pkt->dataLength = size;
     pkt->data       = this;
     pkt->type       = NET_PACKET_TYPE_OBJECT_UPDATE;
 
@@ -110,7 +118,7 @@ void Object::SendStatus()
 void Object::LoadStatus( void* data )
 {
     //lets assume we know that data is of type Object
-    memcpy( this, data, sizeof( Object ) );
+    memcpy( this, data, size );
 }
 
 void Object::Update()
@@ -132,6 +140,7 @@ void Object::ClientSideUpdate()
 void Object::Predict( float tickRate )
 {
     engine->text->PrintString( "Predict: Object UID:%i; Type:%i(Object); Pos:%f:%f NetAddr:%i (server)\n", uid, type, pos.x, pos.y, engine->net->GetAddress() );
+    engine->text->PrintString( "   tickRate: %f\n", tickRate );
     pos = pos + movement * tickRate;
 }
 void Object::Render()

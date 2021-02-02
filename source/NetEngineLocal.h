@@ -12,6 +12,7 @@
 #include <string>
 #include <vector>
 #include <stdlib.h>
+#include <cstring>
 using namespace std;
 //====================================
 

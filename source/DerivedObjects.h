@@ -31,8 +31,6 @@ public:
 	virtual void 	GameLogic			();
 	virtual void 	ClientSideUpdate	();
 	virtual void	Render				();
-	virtual void	LoadStatus			( void* data );
-	virtual void	SendStatus			();
 };
 
 
@@ -45,8 +43,6 @@ public:
 					Enemy				( GameEngine* engine );
 	virtual void 	GameLogic			();
 	virtual void	Render				();
-	virtual void	LoadStatus			( void* data );
-	virtual void	SendStatus			();
 };
 
 #endif

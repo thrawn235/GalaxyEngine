@@ -19,6 +19,8 @@ void NetEngineLocal::Init()
 }
 void NetEngineLocal::Send( Packet* packet, long long int target )
 {
+    packet->FixData();
+
     for( unsigned int i = 0; i < netNodes.size(); i++ )
     {
         if( netNodes[i]->GetAddress() == target )
@@ -37,6 +39,8 @@ void NetEngineLocal::SetAddress( long long int address )
 }
 void NetEngineLocal::Send( Packet* packet )
 {
+    packet->FixData();
+    
     for( unsigned int i = 0; i < netNodes.size(); i++ )
     {
         if( netNodes[i]->GetAddress() == target )

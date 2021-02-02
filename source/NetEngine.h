@@ -12,6 +12,7 @@
 #include <string>
 #include <vector>
 #include <cstdint>
+#include <cstring>
 using namespace std;
 //====================================
 
@@ -30,14 +31,25 @@ using namespace std;
 #define NET_PACKET_TYPE_SEND_COMPLETE   2
 //====================================
 
-struct Packet
+class Packet
 {
+public:
     uint64_t            sender;
     uint32_t            sequence;
     uint8_t             type;       //Object Update, Acknoledge Packet etc
     uint16_t            dataLength;
     void*               data;
+
+    //---------- Constructor / Destructor ------------
+    Packet          ();
+    ~Packet         ();
+
+    void FixData    ();     //allocate memory and copy data from the data pointer
 };
+
+
+
+
 
 class NetEngine
 {

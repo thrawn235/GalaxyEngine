@@ -6,6 +6,7 @@
 Player::Player( GameEngine* engine ) : Object( engine )
 {
 	type = OBJECT_TYPE_PLAYER;
+	size = sizeof( Player );
 
 	up = down = left = right = fire = false;
 }
@@ -32,7 +33,7 @@ void Player::GameLogic()
 
 	pos = pos + movement;
 
-	engine->text->PrintString( "Game Logic: Object UID:%i; Type:%i(Player); Pos:%f:%f NetAddr:%i (server)\n", uid, type, pos.x, pos.y, engine->net->GetAddress() );
+	engine->text->PrintString( "Game Logic: Object UID:%i; Type:%i(Player); Pos:%f:%f Mov:%f:%f NetAddr:%i (server)\n", uid, type, pos.x, pos.y, movement.x, movement.y, engine->net->GetAddress() );
 }
 void Player::ClientSideUpdate()
 {
@@ -78,26 +79,7 @@ void Player::ClientSideUpdate()
 }
 void Player::Render()
 {
-	engine->text->PrintString( "Client Side: Object UID:%i; Type:%i(Player); Pos:%f:%f NetAddr:%i (client)\n", uid, type, pos.x, pos.y, engine->net->GetAddress() );
-}
-void Player::LoadStatus( void* data )
-{
-	memcpy( this, data, sizeof( Player ) );
-}
-void Player::SendStatus()
-{
-    Packet* pkt     = new Packet;
-    pkt->sender     = engine->net->GetAddress();
-    pkt->sequence   = 0;                      //set to 0 for debugging for now!
-    pkt->dataLength = sizeof( Player );
-    pkt->data       = this;
-    pkt->type       = NET_PACKET_TYPE_OBJECT_UPDATE;
-
-    Object* pktDebug = (Object*)pkt->data;
-
-    engine->debug->PrintString( "  sending packet UID:%i Type:%i Pos:%f:%f from:%i NetAddr:%i\n", pktDebug->GetUID(), pktDebug->GetType(), pktDebug->GetPos().x, pktDebug->GetPos().y, pkt->sender, engine->net->GetAddress() );
-
-    engine->net->Send( pkt );
+	engine->text->PrintString( "Render: Object UID:%i; Type:%i(Player); Pos:%f:%f Mov:%f:%f NetAddr:%i (client)\n", uid, type, pos.x, pos.y, movement.x, movement.y, engine->net->GetAddress() );
 }
 
 
@@ -107,6 +89,7 @@ void Player::SendStatus()
 Enemy::Enemy( GameEngine* engine ) : Object( engine )
 {
 	type = OBJECT_TYPE_ENEMY;
+	size = sizeof( Enemy );
 }
 void Enemy::GameLogic()
 {
@@ -115,23 +98,4 @@ void Enemy::GameLogic()
 void Enemy::Render()
 {
 	engine->text->PrintString( "Render: Object UID:%i; Type:%i(Enemy); Pos:%f:%f NetAddr:%i (client)\n", uid, type, pos.x, pos.y, engine->net->GetAddress() );
-}
-void Enemy::LoadStatus( void* data )
-{
-	memcpy( this, data, sizeof( Enemy ) );
-}
-void Enemy::SendStatus()
-{
-    Packet* pkt     = new Packet;
-    pkt->sender     = engine->net->GetAddress();
-    pkt->sequence   = 0;                      //set to 0 for debugging for now!
-    pkt->dataLength = sizeof( Enemy );
-    pkt->data       = this;
-    pkt->type       = NET_PACKET_TYPE_OBJECT_UPDATE;
-
-    Object* pktDebug = (Object*)pkt->data;
-
-    engine->debug->PrintString( "  sending packet UID:%i Type:%i Pos:%f:%f from:%i NetAddr:%i\n", pktDebug->GetUID(), pktDebug->GetType(), pktDebug->GetPos().x, pktDebug->GetPos().y, pkt->sender, engine->net->GetAddress() );
-
-    engine->net->Send( pkt );
 }

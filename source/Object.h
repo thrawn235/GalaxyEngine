@@ -34,6 +34,8 @@ class Object
 protected:
     GameEngine*         engine;         //pointer to the game engine
 
+    int                 size;           //size of the Object itself
+
     Vector2D            pos;            //position of the object
     Vector2D            movement;       //final movement vector (once all forces are added)
 
@@ -53,6 +55,8 @@ public:
     //---------------------- Get/Set --------------------------
             void                SetEngine          ( GameEngine* engine );
             GameEngine*         GetEngine          ();
+            void                SetSize            ( int size );
+            int                 GetSize            ();
             unsigned long int   GetUID             ();
             void                SetUID             ( unsigned long uid );
             unsigned int        GetType            ();
