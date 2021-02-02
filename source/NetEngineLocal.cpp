@@ -17,7 +17,7 @@ void NetEngineLocal::Init()
 {
 
 }
-void NetEngineLocal::Send( Packet* packet, long long int target )
+void NetEngineLocal::Send( Packet* packet, uint64_t target )
 {
     packet->FixData();
 
@@ -29,11 +29,11 @@ void NetEngineLocal::Send( Packet* packet, long long int target )
         }
     }
 }
-void NetEngineLocal::SetTarget( long long int target )
+void NetEngineLocal::SetTarget( uint64_t target )
 {
     this->target = target;
 }
-void NetEngineLocal::SetAddress( long long int address )
+void NetEngineLocal::SetAddress( uint64_t address )
 {
     this->address = address;
 }
@@ -75,7 +75,7 @@ unsigned int NetEngineLocal::GetNumPacketsInInbox()
 {
     return inbox.size();
 }
-long long int NetEngineLocal::GetAddress()
+uint64_t NetEngineLocal::GetAddress()
 {
     return address;
 }

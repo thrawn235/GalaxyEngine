@@ -58,10 +58,10 @@ protected:
 public:
                             NetEngine                   ()                                          {};
     virtual void            Init                        ()                                          = 0;
-    virtual void            Send                        ( Packet* packet, long long int target )    = 0;
-    virtual void            SetTarget                   ( long long int target )                    = 0;
-    virtual void            SetAddress                  ( long long int address )                   = 0;
-    virtual long long int   GetAddress                  ()                                          = 0;
+    virtual void            Send                        ( Packet* packet, uint64_t target )         = 0;
+    virtual void            SetTarget                   ( uint64_t target )                         = 0;
+    virtual void            SetAddress                  ( uint64_t address )                        = 0;
+    virtual uint64_t        GetAddress                  ()                                          = 0;
     virtual void            Send                        ( Packet* packet )                          = 0;
     virtual Packet*         GetFirstPacketFromInbox     ()                                          = 0;
     virtual bool            InboxEmpty                  ()                                          = 0;

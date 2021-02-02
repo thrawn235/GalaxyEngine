@@ -29,21 +29,21 @@ class NetEngineLocal : public NetEngine
 {
 protected:
     vector<Packet*>     inbox;
-    long long int       address;
-    long long int       target;
+    uint64_t            address;
+    uint64_t            target;
 
 public:
                                 NetEngineLocal              ();
     virtual void                Init                        ();
-    virtual void                Send                        ( Packet* packet, long long int target );
-    virtual void                SetTarget                   ( long long int target );
-    virtual void                SetAddress                  ( long long int address );
+    virtual void                Send                        ( Packet* packet, uint64_t target );
+    virtual void                SetTarget                   ( uint64_t target );
+    virtual void                SetAddress                  ( uint64_t address );
     virtual void                Send                        ( Packet* packet );
     virtual Packet*             GetFirstPacketFromInbox     ();
     virtual bool                InboxEmpty                  ();
     virtual bool                InboxFull                   ();
     virtual unsigned int        GetNumPacketsInInbox        ();
-    virtual long long int       GetAddress                  ();
+    virtual uint64_t            GetAddress                  ();
     virtual vector<Packet*>*    GetInbox                    ();
     virtual int                 GetType                     ();
 };

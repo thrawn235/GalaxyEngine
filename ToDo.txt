@@ -2,4 +2,3 @@ To Do:
 
 MemoryEngine
 make separate client and server setups possible
-change all generic variable types (int) to fixed size ones like unit16_t
