@@ -35,6 +35,9 @@ protected:
     uint64_t            address;
     uint64_t            target;
 
+    //Sockets:
+    int                 socketDescriptor;
+
 public:
                                 NetEngineLinuxSockets       ();
     virtual void                Init                        ();

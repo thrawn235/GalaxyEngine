@@ -1,11 +1,28 @@
 //NetEngineLinuxSockets.cpp
 
+#define debug
+
 #include "NetEngineLinuxSockets.h"
+
+#ifdef debug
+    #include <iostream>
+#endif
 
 
 NetEngineLinuxSockets::NetEngineLinuxSockets()
 {
-    netNodes.push_back(this);
+    #ifdef debug
+        cout<<"creating socket..."<<endl;
+    #endif
+
+    socketDescriptor = socket( AF_INET, SOCK_STREAM, 0 );
+
+    #ifdef debug
+        if( socketDescriptor == -1 )
+        {
+            cout<<"Could not create socket"<<endl;
+        }
+    #endif
 }
 void NetEngineLinuxSockets::Init()
 {
@@ -15,13 +32,6 @@ void NetEngineLinuxSockets::Send( Packet* packet, uint64_t target )
 {
     packet->FixData();
 
-    for( unsigned int i = 0; i < netNodes.size(); i++ )
-    {
-        if( netNodes[i]->GetAddress() == target )
-        {
-            netNodes[i]->GetInbox()->push_back( packet );
-        }
-    }
 }
 void NetEngineLinuxSockets::SetTarget( uint64_t target )
 {
@@ -35,13 +45,6 @@ void NetEngineLinuxSockets::Send( Packet* packet )
 {
     packet->FixData();
     
-    for( unsigned int i = 0; i < netNodes.size(); i++ )
-    {
-        if( netNodes[i]->GetAddress() == target )
-        {
-            netNodes[i]->GetInbox()->push_back( packet );
-        }
-    }
 }
 Packet* NetEngineLinuxSockets::GetFirstPacketFromInbox()
 {
