@@ -4,20 +4,112 @@
 		"selected_items":
 		[
 			[
+				"client",
+				"clientActive\tabc"
+			],
+			[
+				"serve",
+				"serverActive\tabc"
+			],
+			[
+				"clien",
+				"clientActive\tabc"
+			],
+			[
+				"ser",
+				"serverActive\tabc"
+			],
+			[
+				"linux",
+				"linuxDedicatedServer\tabc"
+			],
+			[
+				"uint",
+				"uint64_t\tabc"
+			],
+			[
+				"size",
+				"sizeof\tabc"
+			],
+			[
+				"NetE",
+				"NetEngine.h\t(NetEngine.h)"
+			],
+			[
+				"data",
+				"dataLength\tabc"
+			],
+			[
+				"NET_PACK",
+				"NET_PACKET_TYPE_SEND_COMPLETE\t(NetEngine.h)"
+			],
+			[
+				"NET_PA",
+				"NET_PACKET_TYPE_OBJECT_UPDATE\t(NetEngine.h)"
+			],
+			[
+				"def",
+				"define"
+			],
+			[
+				"tick",
+				"tickRate\tabc"
+			],
+			[
+				"en",
+				"engine\tabc"
+			],
+			[
+				"de",
+				"debug\tabc"
+			],
+			[
+				"Send",
+				"SendStatus\t(DerivedObjects.cpp)"
+			],
+			[
 				"move",
-				"movement\t(GameEngine.h)"
+				"movement\tabc"
+			],
+			[
+				"in",
+				"input\tabc"
+			],
+			[
+				"Gam",
+				"GameEngine\tabc"
+			],
+			[
+				"new",
+				"newStatus\tabc"
+			],
+			[
+				"sen",
+				"sender\tabc"
+			],
+			[
+				"Get",
+				"GetType\tabc"
+			],
+			[
+				"Inpu",
+				"InputChar\t(TextEngine.h)"
+			],
+			[
+				"GameEn",
+				"GameEngine.h\t(makefile)"
+			],
+			[
+				"Clien",
+				"ClientSideUpdate\t(GameEngine.cpp)"
+			],
+			[
+				"OBJ",
+				"OBJECT_TYPE_ENEMY\t(Object.h)"
 			],
 			[
 				"V",
 				"Vetor2D\tabc"
-			],
-			[
-				"Clien",
-				"ClientSideUpdate\tabc"
-			],
-			[
-				"Get",
-				"GetUID\tabc"
 			],
 			[
 				"End",
@@ -36,10 +128,6 @@
 				"LoadStatus\tabc"
 			],
 			[
-				"Send",
-				"SendStatus\tabc"
-			],
-			[
 				"Upda",
 				"UpdateGamestateFromNet\t(GameEngine.h)"
 			],
@@ -52,10 +140,6 @@
 				"OBJECT_TYPE_OBJECT\t(Object.h)"
 			],
 			[
-				"data",
-				"dataLength\t(NetEngine.h)"
-			],
-			[
 				"Geta",
 				"GetAddress\t(NetEngine.h)"
 			],
@@ -66,10 +150,6 @@
 			[
 				"GetAs",
 				"GetAllObjects\t(GameEngine.h)"
-			],
-			[
-				"clien",
-				"clientActive\tabc"
 			],
 			[
 				"Up",
@@ -100,10 +180,6 @@
 				"address\t(NetEngine.h)"
 			],
 			[
-				"sen",
-				"sender\t(NetEngine.h)"
-			],
-			[
 				"ad",
 				"address\t(NetEngineLocal.h)"
 			],
@@ -112,20 +188,12 @@
 				"testPacket\tabc"
 			],
 			[
-				"in",
-				"inbox\tabc"
-			],
-			[
 				"push",
 				"push_back\tabc"
 			],
 			[
 				"outp",
 				"outputBuffer\tabc"
-			],
-			[
-				"new",
-				"newNetInterface\tabc"
 			],
 			[
 				"out",
@@ -412,10 +480,6 @@
 				"freeNode.address\tabc"
 			],
 			[
-				"en",
-				"end\tabc"
-			],
-			[
 				"_",
 				"_newLength\tabc"
 			],
@@ -450,75 +514,47 @@
 			[
 				"PrintShortIn",
 				"PrintShortIntAccuSave\tabc"
-			],
-			[
-				"PrintShort",
-				"PrintShortIntAccu\tabc"
-			],
-			[
-				"PrintLon",
-				"PrintLongHex\t(memoryEngine.asm)"
-			],
-			[
-				"_Loop",
-				"_loopDone\tabc"
-			],
-			[
-				"PrintShor",
-				"PrintShortIntAccu\tabc"
-			],
-			[
-				"PrintMem",
-				"PrintMemoryInfoLoop\tabc"
-			],
-			[
-				"Enter",
-				"EnterString\t(textEngine.asm)"
-			],
-			[
-				"EnterS",
-				"EnterStringLoopEnd\tabc"
-			],
-			[
-				"PrintShortSign",
-				"PrintShortSignedIntAccu\tabc"
-			],
-			[
-				"PrintShortH",
-				"PrintShortHexAccu\tabc"
-			],
-			[
-				"PrintChar",
-				"PrintCharAccu\tabc"
-			],
-			[
-				"PrintShortBin",
-				"PrintShortBinary\tabc"
-			],
-			[
-				"PrintShortBina",
-				"PrintShortBinary\tabc"
-			],
-			[
-				"PrintLongInt",
-				"PrintLongInt1000Loop\tabc"
-			],
-			[
-				"PrintShortA",
-				"PrintShortIntAccu10LoopDone\tabc"
-			],
-			[
-				"PrintShortInt",
-				"PrintShortIntAccuLoop\tabc"
-			],
-			[
-				"MML",
-				"MMListAllElementsMarker"
 			]
 		]
 	},
 	"buffers":
 	[
+		{
+			"file": "ToDo.txt",
+			"settings":
+			{
+				"buffer_size": 68,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "source/DedicatedServer.cpp",
+			"settings":
+			{
+				"buffer_size": 1144,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "source/main.cpp",
+			"settings":
+			{
+				"buffer_size": 1579,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "makefile",
+			"settings":
+			{
+				"buffer_size": 10178,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		}
 	],
 	"build_system": "",
 	"build_system_choices":
@@ -556,28 +592,38 @@
 	},
 	"expanded_folders":
 	[
-		"/home/sebastian/Programming/GalaxyEngine/source"
+		"/home/sebastian/Programming/GalaxyEngine",
+		"/home/sebastian/Programming/GalaxyEngine/source",
+		"/home/sebastian/Programming/GalaxyEngine/source/dos",
+		"/home/sebastian/Programming/GalaxyEngine/source/linux"
 	],
 	"file_history":
 	[
-		"/home/sebastian/Programming/GalaxyEngine/source/main.cpp",
-		"/home/sebastian/Programming/GalaxyEngine/source/GameEngine.h",
-		"/home/sebastian/Programming/GalaxyEngine/source/TextEngine.h",
-		"/home/sebastian/Programming/GalaxyEngine/source/TextEngineSTDIO.h",
-		"/home/sebastian/Programming/GalaxyEngine/source/TextEngineSTDIO.cpp",
-		"/home/sebastian/Programming/GalaxyEngine/source/TextEngineIOStream.h",
-		"/home/sebastian/Programming/GalaxyEngine/source/TextEngineIOStream.cpp",
-		"/home/sebastian/Programming/GalaxyEngine/source/GameEngine.cpp",
-		"/home/sebastian/Programming/GalaxyEngine/source/GameClient.h",
-		"/home/sebastian/Programming/GalaxyEngine/source/GameClient.cpp",
-		"/home/sebastian/Programming/GalaxyEngine/source/GameServer.h",
-		"/home/sebastian/Programming/GalaxyEngine/source/GameServer.cpp",
-		"/home/sebastian/Programming/GalaxyEngine/source/Object.h",
-		"/home/sebastian/Programming/GalaxyEngine/source/Object.cpp",
-		"/home/sebastian/Programming/GalaxyEngine/source/Vector2D.h",
 		"/home/sebastian/Programming/GalaxyEngine/source/NetEngine.h",
+		"/home/sebastian/Programming/GalaxyEngine/source/Object.cpp",
+		"/home/sebastian/Programming/GalaxyEngine/source/Object.h",
+		"/home/sebastian/Programming/GalaxyEngine/source/DerivedObjects.cpp",
+		"/home/sebastian/Programming/GalaxyEngine/source/DerivedObjects.h",
+		"/home/sebastian/Programming/GalaxyEngine/source/GameClient.cpp",
+		"/home/sebastian/Programming/GalaxyEngine/source/GameServer.cpp",
 		"/home/sebastian/Programming/GalaxyEngine/source/NetEngineLocal.h",
 		"/home/sebastian/Programming/GalaxyEngine/source/NetEngineLocal.cpp",
+		"/home/sebastian/Programming/GalaxyEngine/source/NetEngine.cpp",
+		"/home/sebastian/Programming/GalaxyEngine/makefile",
+		"/home/sebastian/Programming/GalaxyEngine/source/Packet.h",
+		"/home/sebastian/Programming/GalaxyEngine/source/GameEngine.h",
+		"/home/sebastian/Programming/GalaxyEngine/source/GameEngine.cpp",
+		"/home/sebastian/Programming/GalaxyEngine/ToDo.txt",
+		"/home/sebastian/Programming/GalaxyEngine/source/GameClient.h",
+		"/home/sebastian/Programming/GalaxyEngine/source/main.cpp",
+		"/home/sebastian/Programming/GalaxyEngine/source/TextEngineSTDIO.cpp",
+		"/home/sebastian/Programming/GalaxyEngine/source/TextEngine.h",
+		"/home/sebastian/Programming/GalaxyEngine/source/TextEngineIOStream.cpp",
+		"/home/sebastian/Programming/GalaxyEngine/source/TextEngineIOStream.h",
+		"/home/sebastian/Programming/GalaxyEngine/source/TextEngineSTDIO.h",
+		"/home/sebastian/Programming/GalaxyEngine/GalaxyEngine.sublime-project",
+		"/home/sebastian/Programming/GalaxyEngine/source/GameServer.h",
+		"/home/sebastian/Programming/GalaxyEngine/source/Vector2D.h",
 		"/home/sebastian/.config/sublime-text-3/Packages/User/Preferences.sublime-settings",
 		"/home/sebastian/.config/sublime-text-3/Packages/Default/Preferences.sublime-settings",
 		"/home/sebastian/Programming/GalaxyEngine/README.md",
@@ -659,8 +705,124 @@
 	"groups":
 	[
 		{
+			"selected": 2,
 			"sheets":
 			[
+				{
+					"buffer": 0,
+					"file": "ToDo.txt",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 68,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								68,
+								68
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "source/DedicatedServer.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1144,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "source/main.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1579,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								156,
+								156
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 193.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "makefile",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 10178,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								9280,
+								9280
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Makefile/Makefile.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 236.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				}
 			]
 		}
 	],
@@ -740,8 +902,8 @@
 	"show_minimap": true,
 	"show_open_files": false,
 	"show_tabs": true,
-	"side_bar_visible": false,
-	"side_bar_width": 150.0,
+	"side_bar_visible": true,
+	"side_bar_width": 271.0,
 	"status_bar_visible": true,
 	"template_settings":
 	{

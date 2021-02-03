@@ -1,47 +1,76 @@
-#include <iostream>
-#include <stdio.h>
-using namespace std;
+//====================================
+// main.cpp
+// the Main Client contains a server and a client part
+// the server part can be disabled in network play
+//====================================
 
-//Galaxy Includes:
+//========== stdlib includes =========
+#include <iostream>
+using namespace std;
+//====================================
+
+//========= galaxy includes ==========
 #include "GameEngine.h"
-#include "GameClient.h"
 #include "GameServer.h"
-#include "NetEngineLocal.h"
+#include "GameClient.h"
+//====================================
 
 int main()
 {
-    GameEngine* engine = new GameEngine();
+    cout<<"Galaxy Engine: Main Client"<<endl;
 
-    GameClient* client = new GameClient();
-    GameServer* server = new GameServer();
+    bool serverActive = true;
+    bool clientActive = true;
+
+    GameClient* client = NULL;
+    GameServer* server = NULL;
+
+    if( serverActive )
+    {
+        cout<<"creatinig client..."<<endl;
+        client = new GameClient();
+    }
+    if( clientActive )
+    {
+        cout<<"creatinig server..."<<endl;
+        server = new GameServer();
+    }
 
     
     long int rounds = 0;
     int subRounds = 0;
     bool exit = false;
+    cout<<"entering main loop..."<<endl;
     while( !exit )
     {
-        client->Run();
+        if( client != NULL )
+        {
+            client->Run();
+        }
 
         if( subRounds >= 3 )
         {
-            server->Run();
+            if( server != NULL )
+            {
+                server->Run();
+            }
             subRounds = 0;
         }
 
-        engine->debug->PrintString( "End of Round %i\n", rounds );
-        engine->debug->EndLine();
-        if( engine->debug->InputChar() == 'q' )
+       
+        cout<<"wating for input:";
+        char input;
+        cin>>input;
+        if( input == 'q' )
         {
             exit = true;
         }
+        cout<<endl;
         rounds ++;
         subRounds ++;
+        cout<<"end of round "<<rounds<<endl;
     }
 
-    engine->debug->EndLine();
-    engine->debug->PrintString( "Good Bye!" );
-    engine->debug->EndLine();
-
+    cout<<"good bye!"<<endl;
     return 0;
 }

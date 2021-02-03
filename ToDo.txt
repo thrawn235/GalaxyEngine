@@ -2,3 +2,5 @@ To Do:
 
 MemoryEngine
 make separate client and server setups possible
+sockets network implementation
+DLLs ?

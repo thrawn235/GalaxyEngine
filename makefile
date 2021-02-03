@@ -60,8 +60,15 @@ $(binDir)dos/main.exe: $(sourceDir)main.cpp $(sourceDir)dos/Object.o $(sourceDir
 	$(CompilerDos) $(CFLAGS) $(CFLAGSDos) -o $@ $^
 	cp $(assetsDir)* $(binDir)dos/
 
+$(binDir)dos/DedicatedServer.exe: $(sourceDir)DedicatedServer.cpp $(sourceDir)dos/Object.o $(sourceDir)dos/GameEngine.o $(sourceDir)dos/TextEngineSTDIO.o $(sourceDir)dos/GameClient.o $(sourceDir)dos/GameServer.o $(sourceDir)dos/NetEngineLocal.o $(sourceDir)dos/DerivedObjects.o $(sourceDir)dos/NetEngine.o
+	$(CompilerDos) $(CFLAGS) $(CFLAGSDos) -o $@ $^
+	cp $(assetsDir)* $(binDir)dos/
+
 .PHONY: dos
 dos: $(binDir)dos/main.exe
+
+.PHONY: dosDedicatedServer
+dosDedicatedServer: $(binDir)dos/DedicatedServer.exe
 #==============================================================================================
 
 #============================================= win ============================================
@@ -95,8 +102,14 @@ $(sourceDir)win/NetEngineLocal.o: $(sourceDir)NetEngineLocal.cpp $(sourceDir)Net
 $(binDir)win/main.exe: $(sourceDir)main.cpp $(sourceDir)win/Object.o $(sourceDir)win/GameEngine.o $(sourceDir)win/TextEngineIOStream.o $(sourceDir)win/GameClient.o $(sourceDir)win/GameServer.o $(sourceDir)win/NetEngineLocal.o $(sourceDir)win/DerivedObjects.o $(sourceDir)win/NetEngine.o
 	$(CompilerWin) $(CFLAGS) $(CFLAGSWin) -o $@ $^
 
+$(binDir)win/DedicatedServer.exe: $(sourceDir)DedicatedServer.cpp $(sourceDir)win/Object.o $(sourceDir)win/GameEngine.o $(sourceDir)win/TextEngineIOStream.o $(sourceDir)win/GameClient.o $(sourceDir)win/GameServer.o $(sourceDir)win/NetEngineLocal.o $(sourceDir)win/DerivedObjects.o $(sourceDir)win/NetEngine.o
+	$(CompilerWin) $(CFLAGS) $(CFLAGSWin) -o $@ $^
+
 .PHONY: win
 win: $(binDir)win/main.exe
+
+.PHONY: winDedicatedServer
+winDedicatedServer: $(binDir)win/DedicatedServer.exe
 #==============================================================================================
 
 #============================================== linux =========================================
@@ -130,14 +143,20 @@ $(sourceDir)linux/NetEngineLocal.o: $(sourceDir)NetEngineLocal.cpp $(sourceDir)N
 $(binDir)linux/main: $(sourceDir)main.cpp $(sourceDir)linux/Object.o $(sourceDir)linux/GameEngine.o $(sourceDir)linux/TextEngineIOStream.o $(sourceDir)linux/GameClient.o $(sourceDir)linux/GameServer.o $(sourceDir)linux/NetEngineLocal.o $(sourceDir)linux/DerivedObjects.o $(sourceDir)linux/NetEngine.o
 	$(CompilerLinux) $(CFLAGS) $(CFLAGSLinux) -o $@ $^
 
+$(binDir)linux/DedicatedServer: $(sourceDir)DedicatedServer.cpp $(sourceDir)linux/Object.o $(sourceDir)linux/GameEngine.o $(sourceDir)linux/TextEngineIOStream.o $(sourceDir)linux/GameClient.o $(sourceDir)linux/GameServer.o $(sourceDir)linux/NetEngineLocal.o $(sourceDir)linux/DerivedObjects.o $(sourceDir)linux/NetEngine.o
+	$(CompilerLinux) $(CFLAGS) $(CFLAGSLinux) -o $@ $^
+
 .PHONY: linux
 linux: $(binDir)linux/main
+
+.PHONY: linuxDedicatedServer
+linuxDedicatedServer: $(binDir)linux/DedicatedServer
 #==============================================================================================
 
 
 	
 .PHONY: all
-all: dos linux win
+all: dos dosDedicatedServer linux linuxDedicatedServer win winDedicatedServer
 
 #=========================================== testing ==========================================
 .PHONY: run
@@ -147,13 +166,25 @@ run:
 .PHONY: rundos
 rundos: run
 
+.PHONY: rundosDedicatedServer
+rundosDedicatedServer:
+	$(emulator) $(binDir)dos/DedicatedServer.exe $(EFLAGS)
+
 .PHONY: runwin
 runwin: 
 	$(binDir)win/main.exe
 
+.PHONY: runwinDedicatedServer
+runwinDedicatedServer: 
+	$(binDir)win/DedicatedServer.exe
+
 .PHONY: runlinux
 runlinux: 
 	$(binDir)linux/main
+
+.PHONY: runlinuxDedicatedServer
+runlinuxDedicatedServer: 
+	$(binDir)linux/DedicatedServer
 #==============================================================================================
 
 .PHONY: clean
