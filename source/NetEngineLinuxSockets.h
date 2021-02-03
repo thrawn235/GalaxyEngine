@@ -1,6 +1,6 @@
 //====================================
 // NetEngineLinuxSockets.h
-// the Gameserver does all the Game Logic and sends the current state to the client(s)
+// the implementation uses linux sockets from sys/sockets.h
 //====================================
 
 //========== include guard ===========
@@ -39,19 +39,26 @@ protected:
     int                 socketDescriptor;
 
 public:
+    //---------- Constructor / Destructor ------------
                                 NetEngineLinuxSockets       ();
+
+    //-------------------- Init ----------------------
     virtual void                Init                        ();
-    virtual void                Send                        ( Packet* packet, uint64_t target );
+
+    //------------------ Set / Get -------------------
     virtual void                SetTarget                   ( uint64_t target );
     virtual void                SetAddress                  ( uint64_t address );
-    virtual void                Send                        ( Packet* packet );
-    virtual Packet*             GetFirstPacketFromInbox     ();
-    virtual bool                InboxEmpty                  ();
-    virtual bool                InboxFull                   ();
     virtual unsigned int        GetNumPacketsInInbox        ();
     virtual uint64_t            GetAddress                  ();
     virtual vector<Packet*>*    GetInbox                    ();
     virtual int                 GetType                     ();
+
+    //-------------- Network Methods -----------------
+    virtual void                Send                        ( Packet* packet, uint64_t target );
+    virtual void                Send                        ( Packet* packet );
+    virtual Packet*             GetFirstPacketFromInbox     ();
+    virtual bool                InboxEmpty                  ();
+    virtual bool                InboxFull                   ();
 };
 
 #endif

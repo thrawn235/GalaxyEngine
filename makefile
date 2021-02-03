@@ -5,6 +5,8 @@
 # by Sebastian Gurlin
 ######################################################
 
+
+
 #========================================== variables ========================================
 UNAME_S         := $(shell uname -s)
 
@@ -27,6 +29,8 @@ sourceFiles     = $(wildcard $(sourceDir)*.cpp)
 objectFiles     = $(sourceFiles:.cpp=.o)
 #VPATH          = $(sourceDir)
 #==============================================================================================
+
+
 
 #========================================== DOS ===============================================
 $(sourceDir)dos/NetEngine.o: $(sourceDir)NetEngine.cpp $(sourceDir)NetEngine.h
@@ -71,6 +75,8 @@ dos: $(binDir)dos/main.exe
 dosDedicatedServer: $(binDir)dos/DedicatedServer.exe
 #==============================================================================================
 
+
+
 #============================================= win ============================================
 $(sourceDir)win/NetEngine.o: $(sourceDir)NetEngine.cpp $(sourceDir)NetEngine.h
 	$(CompilerWin) $(CFLAGS) $(CFLAGSWin) -o $@ -c $<
@@ -111,6 +117,8 @@ win: $(binDir)win/main.exe
 .PHONY: winDedicatedServer
 winDedicatedServer: $(binDir)win/DedicatedServer.exe
 #==============================================================================================
+
+
 
 #============================================== linux =========================================
 $(sourceDir)linux/NetEngine.o:  $(sourceDir)NetEngine.cpp $(sourceDir)NetEngine.h
@@ -157,9 +165,13 @@ linuxDedicatedServer: $(binDir)linux/DedicatedServer
 #==============================================================================================
 
 
-	
+
+#============================================= all ============================================
 .PHONY: all
 all: dos dosDedicatedServer linux linuxDedicatedServer win winDedicatedServer
+#==============================================================================================
+
+
 
 #=========================================== testing ==========================================
 .PHONY: run
@@ -190,6 +202,9 @@ runlinuxDedicatedServer:
 	$(binDir)linux/DedicatedServer
 #==============================================================================================
 
+
+
+#============================================ clean ===========================================
 .PHONY: clean
 clean:
 	rm -Rf $(binDir)*.exe
@@ -199,8 +214,11 @@ clean:
 	rm -Rf $(sourceDir)dos/*
 	rm -Rf $(sourceDir)win/*
 	rm -Rf $(sourceDir)linux/*
+#==============================================================================================
 
-#============================================== git =============================================
+
+
+#============================================== git ===========================================
 .PHONY: push
 push:
 	git add *

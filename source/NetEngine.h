@@ -1,6 +1,8 @@
 //====================================
 // NetEngine.h
-// the Gameserver does all the Game Logic and sends the current state to the client(s)
+// NetEngine is the interface to the Network
+// sends and receives Data over a Network
+// protocol, medium and everything else is implemented in the children
 //====================================
 
 //========== include guard ===========
@@ -46,6 +48,7 @@ public:
     Packet          ();
     ~Packet         ();
 
+    //----------------- Data -------------------------
     void FixData    ();     //allocate memory and copy data from the data pointer
 };
 
@@ -58,18 +61,25 @@ class NetEngine
 protected:
 
 public:
+    //---------- Constructor / Destructor ------------
                             NetEngine                   ()                                          {};
+
+    //-------------------- Init ----------------------
     virtual void            Init                        ()                                          = 0;
-    virtual void            Send                        ( Packet* packet, uint64_t target )         = 0;
+
+    //------------------ Set / Get -------------------
     virtual void            SetTarget                   ( uint64_t target )                         = 0;
     virtual void            SetAddress                  ( uint64_t address )                        = 0;
     virtual uint64_t        GetAddress                  ()                                          = 0;
+    virtual int             GetType                     ()                                          = 0;        //Get the Type of the Net Implementation (ex. local buffer of ethernet )
+    virtual unsigned int    GetNumPacketsInInbox        ()                                          = 0;
+    
+    //-------------- Network Methods -----------------
     virtual void            Send                        ( Packet* packet )                          = 0;
+    virtual void            Send                        ( Packet* packet, uint64_t target )         = 0;
     virtual Packet*         GetFirstPacketFromInbox     ()                                          = 0;
     virtual bool            InboxEmpty                  ()                                          = 0;
     virtual bool            InboxFull                   ()                                          = 0;
-    virtual unsigned int    GetNumPacketsInInbox        ()                                          = 0;
-    virtual int             GetType                     ()                                          = 0;        //Get the Type of the Net Implementation (ex. local buffer of ethernet )
 };
 
 #endif
