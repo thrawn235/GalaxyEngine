@@ -21,7 +21,11 @@ using namespace std;
 #include "Object.h"
 #include "DerivedObjects.h"
 #include "TextEngine.h"
-#include "NetEngineLocal.h"
+#ifdef linux
+    #include "NetEngineLinuxSockets.h"
+#else
+    #include "NetEngineLocal.h"
+#endif
 #ifdef dos
     #include "TextEngineSTDIO.h"
 #else

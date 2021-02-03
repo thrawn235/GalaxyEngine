@@ -24,8 +24,10 @@ using namespace std;
 
 //============= defines ==============
 #define NET_BUFFER_SIZE 1024
+
 #define NET_TYPE_LOCAL_BUFFER   1
-#define NET_TYPE_SOCKETS        2
+#define NET_TYPE_WIN_SOCKETS    2
+#define NET_TYPE_LINUX_SOCKETS  3
 
 #define NET_PACKET_TYPE_OBJECT_UPDATE   1
 #define NET_PACKET_TYPE_SEND_COMPLETE   2

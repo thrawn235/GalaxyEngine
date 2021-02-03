@@ -6,26 +6,26 @@
 ######################################################
 
 #========================================== variables ========================================
-UNAME_S 		:= $(shell uname -s)
+UNAME_S         := $(shell uname -s)
 
-assetsDir		= ./assets/
-sourceDir 		= ./source/
-binDir			= ./bin/
-emuDir			= ./emulator/
+assetsDir       = ./assets/
+sourceDir       = ./source/
+binDir          = ./bin/
+emuDir          = ./emulator/
 CompilerDosDir  = /home/sebastian/Programming/compiler/djgpp-linux64-gcc1020/djgpp/bin/
-CompilerDos 	= $(CompilerDosDir)i586-pc-msdosdjgpp-g++
-CompilerLinux 	= g++
-CompilerWin 	= x86_64-w64-mingw32-g++
-Compiler 		= $(CompilerDosDir)i586-pc-msdosdjgpp-g++
-CFLAGS			= -Wall -O3 -s
-CFLAGSWin		= -static-libgcc -static-libstdc++ -static -Dwin
-CFLAGSDos 		= -Ddos
-CFLAGSLinux		= -Dlinux
-emulator		= dosbox
-EFLAGS			= -conf $(emuDir)dosbox.conf #-exit
-sourceFiles		= $(wildcard $(sourceDir)*.cpp)
-objectFiles 	= $(sourceFiles:.cpp=.o)
-#VPATH 			= $(sourceDir)
+CompilerDos     = $(CompilerDosDir)i586-pc-msdosdjgpp-g++
+CompilerLinux   = g++
+CompilerWin     = x86_64-w64-mingw32-g++
+Compiler        = $(CompilerDosDir)i586-pc-msdosdjgpp-g++
+CFLAGS          = -Wall -O3 -s
+CFLAGSWin       = -static-libgcc -static-libstdc++ -static -Dwin
+CFLAGSDos       = -Ddos
+CFLAGSLinux     = -Dlinux
+emulator        = dosbox
+EFLAGS          = -conf $(emuDir)dosbox.conf #-exit
+sourceFiles     = $(wildcard $(sourceDir)*.cpp)
+objectFiles     = $(sourceFiles:.cpp=.o)
+#VPATH          = $(sourceDir)
 #==============================================================================================
 
 #========================================== DOS ===============================================
@@ -113,13 +113,13 @@ winDedicatedServer: $(binDir)win/DedicatedServer.exe
 #==============================================================================================
 
 #============================================== linux =========================================
-$(sourceDir)linux/NetEngine.o:	$(sourceDir)NetEngine.cpp $(sourceDir)NetEngine.h
+$(sourceDir)linux/NetEngine.o:  $(sourceDir)NetEngine.cpp $(sourceDir)NetEngine.h
 	$(CompilerLinux) $(CFLAGS) $(CFlagsLinux) -o $@ -c $<
 
-$(sourceDir)linux/DerivedObjects.o:	$(sourceDir)DerivedObjects.cpp $(sourceDir)DerivedObjects.h $(sourceDir)linux/GameEngine.o $(sourceDir)linux/Object.o $(sourceDir)linux/NetEngine.o
+$(sourceDir)linux/DerivedObjects.o: $(sourceDir)DerivedObjects.cpp $(sourceDir)DerivedObjects.h $(sourceDir)linux/GameEngine.o $(sourceDir)linux/Object.o $(sourceDir)linux/NetEngine.o
 	$(CompilerLinux) $(CFLAGS) $(CFlagsLinux) -o $@ -c $<
 
-$(sourceDir)linux/Object.o: 		$(sourceDir)Object.cpp $(sourceDir)Object.h $(sourceDir)linux/GameEngine.o
+$(sourceDir)linux/Object.o:         $(sourceDir)Object.cpp $(sourceDir)Object.h $(sourceDir)linux/GameEngine.o
 	$(CompilerLinux) $(CFLAGS) $(CFLAGSLinux) -o $@ -c $<
 
 $(sourceDir)linux/TextEngineIOStream.o: $(sourceDir)TextEngineIOStream.cpp $(sourceDir)TextEngineIOStream.h $(sourceDir)TextEngine.h
@@ -140,10 +140,13 @@ $(sourceDir)linux/GameServer.o: $(sourceDir)GameServer.cpp $(sourceDir)GameServe
 $(sourceDir)linux/NetEngineLocal.o: $(sourceDir)NetEngineLocal.cpp $(sourceDir)NetEngineLocal.h $(sourceDir)linux/GameEngine.o
 	$(CompilerLinux) $(CFLAGS) $(CFLAGSLinux) -o $@ -c $<
 
-$(binDir)linux/main: $(sourceDir)main.cpp $(sourceDir)linux/Object.o $(sourceDir)linux/GameEngine.o $(sourceDir)linux/TextEngineIOStream.o $(sourceDir)linux/GameClient.o $(sourceDir)linux/GameServer.o $(sourceDir)linux/NetEngineLocal.o $(sourceDir)linux/DerivedObjects.o $(sourceDir)linux/NetEngine.o
+$(sourceDir)linux/NetEngineLinuxSockets.o: $(sourceDir)NetEngineLinuxSockets.cpp $(sourceDir)NetEngineLocal.h $(sourceDir)linux/GameEngine.o
+	$(CompilerLinux) $(CFLAGS) $(CFLAGSLinux) -o $@ -c $<
+
+$(binDir)linux/main: $(sourceDir)main.cpp $(sourceDir)linux/Object.o $(sourceDir)linux/GameEngine.o $(sourceDir)linux/TextEngineIOStream.o $(sourceDir)linux/GameClient.o $(sourceDir)linux/GameServer.o $(sourceDir)linux/NetEngineLinuxSockets.o $(sourceDir)linux/DerivedObjects.o $(sourceDir)linux/NetEngine.o
 	$(CompilerLinux) $(CFLAGS) $(CFLAGSLinux) -o $@ $^
 
-$(binDir)linux/DedicatedServer: $(sourceDir)DedicatedServer.cpp $(sourceDir)linux/Object.o $(sourceDir)linux/GameEngine.o $(sourceDir)linux/TextEngineIOStream.o $(sourceDir)linux/GameClient.o $(sourceDir)linux/GameServer.o $(sourceDir)linux/NetEngineLocal.o $(sourceDir)linux/DerivedObjects.o $(sourceDir)linux/NetEngine.o
+$(binDir)linux/DedicatedServer: $(sourceDir)DedicatedServer.cpp $(sourceDir)linux/Object.o $(sourceDir)linux/GameEngine.o $(sourceDir)linux/TextEngineIOStream.o $(sourceDir)linux/GameClient.o $(sourceDir)linux/GameServer.o $(sourceDir)linux/NetEngineLinuxSockets.o $(sourceDir)linux/DerivedObjects.o $(sourceDir)linux/NetEngine.o
 	$(CompilerLinux) $(CFLAGS) $(CFLAGSLinux) -o $@ $^
 
 .PHONY: linux

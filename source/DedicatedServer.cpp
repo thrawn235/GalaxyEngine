@@ -20,8 +20,8 @@ using namespace std;
 
 int main()
 {
-	cout<<"Galaxy Engine: DedicatedServer"<<endl;
-	cout<<"creatinig server..."<<endl;
+    cout<<"Galaxy Engine: DedicatedServer"<<endl;
+    cout<<"creatinig server..."<<endl;
     GameServer* server = new GameServer();
 
     

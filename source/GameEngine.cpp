@@ -2,7 +2,12 @@
 
 GameEngine::GameEngine()
 {
-    net = new NetEngineLocal;
+    #ifdef linux
+        net = new NetEngineLinuxSockets;
+    #else
+        net = new NetEngineLocal;
+    #endif
+
     #ifdef dos
         text = new TextEngineSTDIO;
         debug = new TextEngineSTDIO;
