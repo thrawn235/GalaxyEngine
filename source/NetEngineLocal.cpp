@@ -13,10 +13,18 @@ NetEngineLocal::NetEngineLocal()
 {
     netNodes.push_back(this);
 }
-void NetEngineLocal::Init()
+
+
+void NetEngineLocal::InitClient()
 {
 
 }
+void NetEngineLocal::InitServer()
+{
+
+}
+
+
 void NetEngineLocal::Send( Packet* packet, uint64_t target )
 {
     packet->FixData();
@@ -86,4 +94,12 @@ vector<Packet*>* NetEngineLocal::GetInbox()
 int NetEngineLocal::GetType()
 {
     return NET_TYPE_LOCAL_BUFFER;
+}
+void NetEngineLocal::ReceivePackets()
+{
+
+}
+void NetEngineLocal::Update()
+{
+
 }

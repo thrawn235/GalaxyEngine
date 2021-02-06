@@ -25,8 +25,6 @@ using namespace std;
 //====================================
 
 //============= defines ==============
-#define NET_BUFFER_SIZE 1024
-
 #define NET_TYPE_LOCAL_BUFFER   1
 #define NET_TYPE_WIN_SOCKETS    2
 #define NET_TYPE_LINUX_SOCKETS  3
@@ -40,7 +38,7 @@ class Packet
 public:
     uint64_t            sender;
     uint32_t            sequence;
-    uint8_t             type;       //Object Update, Acknoledge Packet etc
+    uint8_t             type;           //Object Update, Acknoledge Packet etc
     uint16_t            dataLength;
     void*               data;
 
@@ -49,7 +47,7 @@ public:
     ~Packet         ();
 
     //----------------- Data -------------------------
-    void FixData    ();     //allocate memory and copy data from the data pointer
+    void FixData    ();                 //allocate memory and copy data from the data pointer
 };
 
 
@@ -63,9 +61,11 @@ protected:
 public:
     //---------- Constructor / Destructor ------------
                             NetEngine                   ()                                          {};
+                            ~NetEngine                  ()                                          {};
 
     //-------------------- Init ----------------------
-    virtual void            Init                        ()                                          = 0;
+    virtual void            InitClient                  ()                                          = 0;
+    virtual void            InitServer                  ()                                          = 0;
 
     //------------------ Set / Get -------------------
     virtual void            SetTarget                   ( uint64_t target )                         = 0;
@@ -80,6 +80,10 @@ public:
     virtual Packet*         GetFirstPacketFromInbox     ()                                          = 0;
     virtual bool            InboxEmpty                  ()                                          = 0;
     virtual bool            InboxFull                   ()                                          = 0;
+
+    virtual void            ReceivePackets              ()                                          = 0;
+
+    virtual void            Update                      ()                                          = 0;        //runs in every game loop
 };
 
 #endif

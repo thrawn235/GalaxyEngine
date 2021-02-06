@@ -34,7 +34,11 @@ protected:
 
 public:
                                 NetEngineLocal              ();
-    virtual void                Init                        ();
+    
+    //-------------------- Init ----------------------
+    virtual void                InitClient                  ();
+    virtual void                InitServer                  ();
+
     virtual void                Send                        ( Packet* packet, uint64_t target );
     virtual void                SetTarget                   ( uint64_t target );
     virtual void                SetAddress                  ( uint64_t address );
@@ -46,6 +50,10 @@ public:
     virtual uint64_t            GetAddress                  ();
     virtual vector<Packet*>*    GetInbox                    ();
     virtual int                 GetType                     ();
+
+    virtual void                ReceivePackets              ();
+
+    virtual void                Update                      ();
 };
 
 #endif

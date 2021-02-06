@@ -11,11 +11,13 @@
 
 NetEngineLinuxSockets::NetEngineLinuxSockets()
 {
+    port = 1234;
+
     #ifdef debug
         cout<<"creating socket..."<<endl;
     #endif
 
-    socketDescriptor = socket( AF_INET, SOCK_STREAM, 0 );
+    socketDescriptor = socket( AF_INET, SOCK_DGRAM, IPPROTO_UDP );
 
     #ifdef debug
         if( socketDescriptor == -1 )
@@ -24,9 +26,35 @@ NetEngineLinuxSockets::NetEngineLinuxSockets()
         }
     #endif
 }
-void NetEngineLinuxSockets::Init()
+NetEngineLinuxSockets::~NetEngineLinuxSockets()
+{
+    #ifdef debug
+        cout<<"closing socket"<<endl;
+    #endif
+
+    //close( socketDescriptor );
+}
+void NetEngineLinuxSockets::InitClient()
 {
 
+}
+void NetEngineLinuxSockets::InitServer()
+{
+    #ifdef debug
+        cout<<"binding socket..."<<endl;
+    #endif
+
+    memset( &my_address, 0, sizeof( my_address ) );
+    my_address.sin_family = AF_INET;
+    my_address.sin_port = htons( port );
+    my_address.sin_addr.s_addr = htonl( INADDR_ANY );
+
+    if( bind( socketDescriptor, (struct sockaddr*)&my_address, sizeof( my_address ) ) == -1 )
+    {
+        #ifdef debug
+            cout<<"error binding socket!"<<endl;
+        #endif
+    }
 }
 void NetEngineLinuxSockets::Send( Packet* packet, uint64_t target )
 {
@@ -36,6 +64,11 @@ void NetEngineLinuxSockets::Send( Packet* packet, uint64_t target )
 void NetEngineLinuxSockets::SetTarget( uint64_t target )
 {
     this->target = target;
+
+    memset( &peer_address, 0, sizeof( peer_address ) );
+    peer_address.sin_family = AF_INET;
+    peer_address.sin_port = htons( port );
+    peer_address.sin_addr.s_addr = target;
 }
 void NetEngineLinuxSockets::SetAddress( uint64_t address )
 {
@@ -43,8 +76,12 @@ void NetEngineLinuxSockets::SetAddress( uint64_t address )
 }
 void NetEngineLinuxSockets::Send( Packet* packet )
 {
-    packet->FixData();
-    
+    if ( sendto( socketDescriptor, packet->data, packet->dataLength, 0, (struct sockaddr*) &peer_address, sizeof( peer_address ) ) == -1 )
+    {
+        #ifdef debug
+            cout<<"error sednding data!"<<endl;
+        #endif
+    }
 }
 Packet* NetEngineLinuxSockets::GetFirstPacketFromInbox()
 {
@@ -83,4 +120,34 @@ vector<Packet*>* NetEngineLinuxSockets::GetInbox()
 int NetEngineLinuxSockets::GetType()
 {
     return NET_TYPE_LINUX_SOCKETS;
+}
+void NetEngineLinuxSockets::ReceivePackets()
+{
+    #ifdef debug
+        cout<<"checking socket for data"<<endl;
+    #endif
+    Packet* receivePacket = new Packet;
+    receivePacket->data = malloc( NET_BUFFER_SIZE );
+    int receiveLength = 0;
+    if( ( receiveLength = recv( socketDescriptor, receivePacket->data, NET_BUFFER_SIZE, MSG_DONTWAIT ) ) == -1 )
+    {
+        //free( receivePacket->data );
+        delete receivePacket;
+        #ifdef debug
+            cout<<"no data received"<<endl;
+        #endif
+    }
+    else
+    {
+        #ifdef debug
+            cout<<"received "<<receiveLength<<" bytes"<<endl;
+        #endif
+        //realloc( receivePacket->data, receiveLength );
+        receivePacket->dataLength = receiveLength;
+        inbox.push_back( receivePacket );
+    }
+}
+void NetEngineLinuxSockets::Update()
+{
+    ReceivePackets();
 }

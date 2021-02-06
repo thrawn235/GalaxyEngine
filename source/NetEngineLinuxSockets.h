@@ -1,6 +1,7 @@
 //====================================
 // NetEngineLinuxSockets.h
 // the implementation uses linux sockets from sys/sockets.h
+// it uses UDP
 //====================================
 
 //========== include guard ===========
@@ -13,10 +14,15 @@
 #include <vector>
 #include <stdlib.h>
 #include <cstring>
+#include <arpa/inet.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 using namespace std;
+//====================================
+
+//============== defines =============
+#define NET_BUFFER_SIZE 1024
 //====================================
 
 //========= galaxy includes ==========
@@ -36,14 +42,18 @@ protected:
     uint64_t            target;
 
     //Sockets:
+    struct sockaddr_in  my_address, peer_address;
     int                 socketDescriptor;
+    int                 port;
 
 public:
     //---------- Constructor / Destructor ------------
                                 NetEngineLinuxSockets       ();
+                                ~NetEngineLinuxSockets      ();
 
     //-------------------- Init ----------------------
-    virtual void                Init                        ();
+    virtual void                InitClient                  ();
+    virtual void                InitServer                  ();
 
     //------------------ Set / Get -------------------
     virtual void                SetTarget                   ( uint64_t target );
@@ -59,6 +69,10 @@ public:
     virtual Packet*             GetFirstPacketFromInbox     ();
     virtual bool                InboxEmpty                  ();
     virtual bool                InboxFull                   ();
+
+    virtual void                ReceivePackets              ();
+
+    virtual void                Update                      ();
 };
 
 #endif

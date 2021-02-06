@@ -10,6 +10,13 @@ GameClient::GameClient()
         engine->net->SetAddress( 1 );
         engine->net->SetTarget( 2 );
     }
+    if( engine->net->GetType() == NET_TYPE_LINUX_SOCKETS )
+    {
+        #ifdef linux
+            engine->net->SetTarget( inet_addr( "127.0.0.1" ) );
+            engine->net->InitClient();
+        #endif
+    }
 
     engine->SetHighestUID( 1000 );
     
@@ -29,6 +36,9 @@ void GameClient::Run()
 
     //count ticks (for prediction step)
     clientTicksSinceLogicTick++;
+
+    engine->text->PrintString( "checking the net for packtes\n" );
+    engine->net->Update();
 
     while( !engine->net->InboxEmpty() )
     {
