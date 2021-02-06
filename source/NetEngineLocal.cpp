@@ -67,6 +67,23 @@ Packet* NetEngineLocal::GetFirstPacketFromInbox()
     }
     return NULL;
 }
+
+
+vector<string> NetEngineLocal::GetAllValueNames()
+{
+    vector<string> values;
+    return values;
+}
+uint64_t NetEngineLocal::GetNumericalValue( string valueName )
+{
+    return 0;
+}
+void NetEngineLocal::SetNumericalValue( string valueName, uint64_t value )
+{
+
+}
+
+
 bool NetEngineLocal::InboxEmpty()
 {
     if( inbox.size() == 0 )

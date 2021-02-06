@@ -1,12 +1,11 @@
 //====================================
 // NetEngineLinuxSockets.h
 // the implementation uses linux sockets from sys/sockets.h
-// it uses UDP
 //====================================
 
 //========== include guard ===========
-#ifndef NET_ENGINE_LINUX_SOCKETS
-#define NET_ENGINE_LINUX_SOCKETS
+#ifndef NET_ENGINE_LINUX_SOCKETS_UDP
+#define NET_ENGINE_LINUX_SOCKETS_UDP
 //====================================
 
 //========== stdlib includes =========
@@ -23,6 +22,9 @@ using namespace std;
 
 //============== defines =============
 #define NET_BUFFER_SIZE 1024
+
+#define CONNECTION_TYPE_UDP     1
+#define CONNECTION_TYPE_TCP     2
 //====================================
 
 //========= galaxy includes ==========
@@ -42,9 +44,13 @@ protected:
     uint64_t            target;
 
     //Sockets:
-    struct sockaddr_in  my_address, peer_address;
+    int                 connectionType;              //UDP or TCP
+    struct sockaddr_in  myAddress, peerAddress;
     int                 socketDescriptor;
+    vector<int>         incomingDescriptors;
     int                 port;
+    bool                isServer;
+    bool                connectedToServer;
 
 public:
     //---------- Constructor / Destructor ------------
@@ -63,6 +69,11 @@ public:
     virtual vector<Packet*>*    GetInbox                    ();
     virtual int                 GetType                     ();
 
+    //----------------- Communication-----------------
+    virtual vector<string>      GetAllValueNames            ();
+    virtual uint64_t            GetNumericalValue           ( string valueName );
+    virtual void                SetNumericalValue           ( string valueName, uint64_t value );
+
     //-------------- Network Methods -----------------
     virtual void                Send                        ( Packet* packet, uint64_t target );
     virtual void                Send                        ( Packet* packet );
@@ -73,6 +84,8 @@ public:
     virtual void                ReceivePackets              ();
 
     virtual void                Update                      ();
+    virtual void                ListenForNewConnections     ();
+    virtual void                ConnectToServer             ();
 };
 
 #endif

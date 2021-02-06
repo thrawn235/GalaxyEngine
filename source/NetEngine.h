@@ -25,9 +25,9 @@ using namespace std;
 //====================================
 
 //============= defines ==============
-#define NET_TYPE_LOCAL_BUFFER   1
-#define NET_TYPE_WIN_SOCKETS    2
-#define NET_TYPE_LINUX_SOCKETS  3
+#define NET_TYPE_LOCAL_BUFFER       1
+#define NET_TYPE_WIN_SOCKETS        2
+#define NET_TYPE_LINUX_SOCKETS      3
 
 #define NET_PACKET_TYPE_OBJECT_UPDATE   1
 #define NET_PACKET_TYPE_SEND_COMPLETE   2
@@ -73,6 +73,11 @@ public:
     virtual uint64_t        GetAddress                  ()                                          = 0;
     virtual int             GetType                     ()                                          = 0;        //Get the Type of the Net Implementation (ex. local buffer of ethernet )
     virtual unsigned int    GetNumPacketsInInbox        ()                                          = 0;
+
+    //----------------- Communication-----------------
+    virtual vector<string>  GetAllValueNames            ()                                          = 0;
+    virtual uint64_t        GetNumericalValue           ( string valueName )                        = 0;
+    virtual void            SetNumericalValue           ( string valueName, uint64_t value )        = 0;
     
     //-------------- Network Methods -----------------
     virtual void            Send                        ( Packet* packet )                          = 0;

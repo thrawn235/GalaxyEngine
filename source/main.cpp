@@ -27,13 +27,13 @@ int main()
 
     if( serverActive )
     {
-        cout<<"creatinig client..."<<endl;
-        client = new GameClient();
+        cout<<"creatinig server..."<<endl;
+        server = new GameServer();
     }
     if( clientActive )
     {
-        cout<<"creatinig server..."<<endl;
-        server = new GameServer();
+        cout<<"creatinig client..."<<endl;
+        client = new GameClient();
     }
 
     

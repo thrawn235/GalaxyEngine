@@ -39,17 +39,25 @@ public:
     virtual void                InitClient                  ();
     virtual void                InitServer                  ();
 
-    virtual void                Send                        ( Packet* packet, uint64_t target );
+    //------------------ Set / Get -------------------
     virtual void                SetTarget                   ( uint64_t target );
     virtual void                SetAddress                  ( uint64_t address );
-    virtual void                Send                        ( Packet* packet );
     virtual Packet*             GetFirstPacketFromInbox     ();
-    virtual bool                InboxEmpty                  ();
-    virtual bool                InboxFull                   ();
+    virtual void                Send                        ( Packet* packet, uint64_t target );
     virtual unsigned int        GetNumPacketsInInbox        ();
     virtual uint64_t            GetAddress                  ();
     virtual vector<Packet*>*    GetInbox                    ();
     virtual int                 GetType                     ();
+    virtual void                Send                        ( Packet* packet );
+    
+    //----------------- Communication-----------------
+    virtual vector<string>  GetAllValueNames                ();
+    virtual uint64_t        GetNumericalValue               ( string valueName );
+    virtual void            SetNumericalValue               ( string valueName, uint64_t value );
+
+    //-------------- Network Methods -----------------
+    virtual bool                InboxEmpty                  ();
+    virtual bool                InboxFull                   ();
 
     virtual void                ReceivePackets              ();
 
