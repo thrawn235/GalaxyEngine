@@ -27,6 +27,7 @@ protected:
 
 public:
             GameServer  ();
+            ~GameServer ();
     void    Run         ();
 };
 

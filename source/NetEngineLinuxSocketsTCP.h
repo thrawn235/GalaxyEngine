@@ -82,7 +82,7 @@ public:
     virtual void                ConnectToServer             ();
 
     virtual void*               SerializePacketData         ( Packet* packet, int* dataLength );
-    virtual Packet*             DeSerializePacketData       ( void* data, int dataLength );
+    virtual vector<Packet*>     DeSerializePacketData       ( void* data, int dataLength );
 };
 
 #endif

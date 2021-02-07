@@ -81,19 +81,47 @@ void NetEngineLinuxSocketsTCP::SetAddress( uint64_t address )
 }
 void* NetEngineLinuxSocketsTCP::SerializePacketData( Packet* packet, int* dataLength )
 {
-    void* data = malloc( sizeof( Packet ) + packet->dataLength );
-    memcpy( data, packet, sizeof( Packet ) );
-    memcpy( data + sizeof( Packet ), packet->data, packet->dataLength );
-    *dataLength = sizeof( Packet ) + packet->dataLength;
+    void* data = malloc( sizeof( Packet ) + packet->dataLength + sizeof( uint16_t ) );
+    *(uint16_t*)data = (uint16_t)sizeof( Packet ) + packet->dataLength;
+    memcpy( (char*)data + sizeof( uint16_t ) , packet, sizeof( Packet ) );
+    memcpy( (char*)data + sizeof( uint16_t ) + sizeof( Packet ), packet->data, packet->dataLength );
+    *dataLength = sizeof( Packet ) + sizeof( uint16_t ) + packet->dataLength;
+
+    #ifdef debug
+        cout<<"serializing packet..."<<endl;
+        cout<<"   allocating "<<sizeof( Packet ) + packet->dataLength + sizeof( uint16_t )<<" bytes"<<endl;
+        cout<<"   writing "<<(uint16_t)sizeof( Packet ) + packet->dataLength<<" to the beginning"<<endl;
+    #endif
+
     return data;
 }
-Packet* NetEngineLinuxSocketsTCP::DeSerializePacketData( void* data, int dataLength )
+vector<Packet*> NetEngineLinuxSocketsTCP::DeSerializePacketData( void* data, int dataLength )
 {
-    Packet* packet = new Packet;
-    memcpy( packet, data, sizeof( Packet ) );
-    packet->data = malloc( packet->dataLength );
-    memcpy( packet->data, data + sizeof( Packet), packet->dataLength );
-    return packet;
+    #ifdef debug
+        cout<<"De-serializing packet..."<<endl;
+        cout<<"   dataLength "<<dataLength<<endl;
+    #endif
+
+    vector<Packet*> packets;
+
+    int i = 0;
+    while( i < dataLength )
+    {
+        int packetSize = *(uint16_t*)((char*)data + i);
+
+        #ifdef debug
+            cout<<"      packetSize "<<packetSize<<endl;
+        #endif
+        
+        Packet* packet = new Packet;
+        memcpy( packet, (char*)data + i + sizeof( uint16_t ), sizeof( Packet ) );
+        packet->data = malloc( packet->dataLength );
+        memcpy( packet->data, (char*)data + i + sizeof( uint16_t ) + sizeof( Packet ), packet->dataLength );
+
+        packets.push_back( packet );
+        i = i + packetSize + sizeof( uint16_t );
+    }
+    return packets;
 }
 void NetEngineLinuxSocketsTCP::Send( Packet* packet )
 {
@@ -106,7 +134,7 @@ void NetEngineLinuxSocketsTCP::Send( Packet* packet )
         cout<<"   "<<dataLength<<" bytes..."<<endl;
     #endif
     
-     if( isServer )
+    if( isServer )
     {
         for( unsigned int i = 0; i < incomingDescriptors.size(); i++ )
         {
@@ -121,6 +149,9 @@ void NetEngineLinuxSocketsTCP::Send( Packet* packet )
     }
     else
     {
+        #ifdef debug
+            cout<<"   client sending..."<<endl;
+        #endif
         if ( send( socketDescriptor, data, dataLength, 0 ) == -1 )
         {
             #ifdef debug
@@ -174,23 +205,66 @@ void NetEngineLinuxSocketsTCP::ReceivePackets()
     #ifdef debug
         cout<<"checking socket for data"<<endl;
     #endif
-    int receiveLength = 0;
-    int c = sizeof( struct sockaddr_in );
-    while( ( receiveLength = recvfrom( socketDescriptor, receiveBuffer, NET_BUFFER_SIZE, MSG_DONTWAIT, (struct sockaddr *)&peerAddress, (socklen_t*)&c ) ) != -1 )
+    if( isServer )
     {
-        #ifdef debug
-            char str[INET_ADDRSTRLEN];
-            inet_ntop(AF_INET, &(peerAddress.sin_addr), str, INET_ADDRSTRLEN);
-            cout<<"received "<<receiveLength<<" bytes from "<<str<<endl;
-        #endif
-        
-        //inbox.push_back( DeSerializePacketData( receiveBuffer, receiveLength ) );
+        for( unsigned int i = 0; i < incomingDescriptors.size(); i++ )
+        {
+            //check all packets from all open sockets (incomingDescriptors)
+            int receiveLength = 0;
+            int c = sizeof( struct sockaddr_in );
+            while( ( receiveLength = recvfrom( incomingDescriptors[i], receiveBuffer, NET_BUFFER_SIZE, MSG_DONTWAIT, (struct sockaddr *)&peerAddress, (socklen_t*)&c ) ) != -1 )
+            {
+                #ifdef debug
+                    char str[INET_ADDRSTRLEN];
+                    inet_ntop(AF_INET, &(peerAddress.sin_addr), str, INET_ADDRSTRLEN);
+                    cout<<"received "<<receiveLength<<" bytes from "<<str<<endl;
+                #endif
+                
+                vector<Packet*> packets = DeSerializePacketData( receiveBuffer, receiveLength );
+                for( unsigned int i = 0; i < packets.size(); i++ )
+                {
+                    #ifdef debug
+                        cout<<"   adding packet to inbox"<<endl;
+                    #endif
+                    inbox.push_back( packets[i] );
+                }
+            }
+            if( receiveLength == -1 )
+            {
+                #ifdef debug
+                    cout<<"no data received"<<endl;
+                #endif
+            }
+            i++;
+        }
     }
-    if( receiveLength == -1 )
+    else
     {
-        #ifdef debug
-            cout<<"no data received"<<endl;
-        #endif
+        int receiveLength = 0;
+        int c = sizeof( struct sockaddr_in );
+        while( ( receiveLength = recvfrom( socketDescriptor, receiveBuffer, NET_BUFFER_SIZE, MSG_DONTWAIT, (struct sockaddr *)&peerAddress, (socklen_t*)&c ) ) != -1 )
+        {
+            #ifdef debug
+                char str[INET_ADDRSTRLEN];
+                inet_ntop(AF_INET, &(peerAddress.sin_addr), str, INET_ADDRSTRLEN);
+                cout<<"received "<<receiveLength<<" bytes from "<<str<<endl;
+            #endif
+            
+            vector<Packet*> packets = DeSerializePacketData( receiveBuffer, receiveLength );
+            for( unsigned int i = 0; i < packets.size(); i++ )
+            {
+                #ifdef debug
+                    cout<<"   adding packet to inbox"<<endl;
+                #endif
+                inbox.push_back( packets[i] );
+            }
+        }
+        if( receiveLength == -1 )
+        {
+            #ifdef debug
+                cout<<"no data received"<<endl;
+            #endif
+        }
     }
 }
 void NetEngineLinuxSocketsTCP::Update()

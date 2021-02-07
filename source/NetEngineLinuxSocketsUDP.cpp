@@ -39,7 +39,8 @@ NetEngineLinuxSocketsUDP::~NetEngineLinuxSocketsUDP()
 
 void NetEngineLinuxSocketsUDP::InitClient()
 {
-    
+    //
+    //nothing to do
 }
 void NetEngineLinuxSocketsUDP::InitServer()
 {
@@ -81,7 +82,7 @@ void* NetEngineLinuxSocketsUDP::SerializePacketData( Packet* packet, int* dataLe
 {
     void* data = malloc( sizeof( Packet ) + packet->dataLength );
     memcpy( data, packet, sizeof( Packet ) );
-    memcpy( data + sizeof( Packet ), packet->data, packet->dataLength );
+    memcpy( (char*)data + sizeof( Packet ), packet->data, packet->dataLength );
     *dataLength = sizeof( Packet ) + packet->dataLength;
     return data;
 }
@@ -90,7 +91,7 @@ Packet* NetEngineLinuxSocketsUDP::DeSerializePacketData( void* data, int dataLen
     Packet* packet = new Packet;
     memcpy( packet, data, sizeof( Packet ) );
     packet->data = malloc( packet->dataLength );
-    memcpy( packet->data, data + sizeof( Packet), packet->dataLength );
+    memcpy( packet->data, (char*)data + sizeof( Packet), packet->dataLength );
     return packet;
 }
 void NetEngineLinuxSocketsUDP::Send( Packet* packet )

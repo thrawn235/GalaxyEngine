@@ -19,7 +19,7 @@ int main()
 {
     cout<<"Galaxy Engine: Main Client"<<endl;
 
-    bool serverActive = true;
+    bool serverActive = false;
     bool clientActive = true;
 
     GameClient* client = NULL;
@@ -70,6 +70,9 @@ int main()
         subRounds ++;
         cout<<"end of round "<<rounds<<endl;
     }
+
+    delete client;
+    delete server;
 
     cout<<"good bye!"<<endl;
     return 0;

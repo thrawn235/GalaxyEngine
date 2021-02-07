@@ -3,7 +3,7 @@
 GameEngine::GameEngine()
 {
     #ifdef linux
-        net = new NetEngineLinuxSocketsUDP;
+        net = new NetEngineLinuxSocketsTCP;
     #else
         net = new NetEngineLocal;
     #endif
@@ -17,6 +17,12 @@ GameEngine::GameEngine()
     #endif
 
     highestUID = 1;
+}
+GameEngine::~GameEngine()
+{
+    delete net;
+    delete text;
+    delete debug;
 }
 void GameEngine::SetHighestUID( unsigned long int UID )
 {

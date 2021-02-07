@@ -65,7 +65,7 @@ protected:
 public:
     //---------- Constructor / Destructor ------------
                             NetEngine                   ()                                          {};
-                            ~NetEngine                  ()                                          {};
+    virtual                 ~NetEngine                  ()                                          {};
 
     //-------------------- Init ----------------------
     virtual void            InitClient                  ()                                          = 0;

@@ -25,6 +25,11 @@ GameServer::GameServer()
     tmp = new Player( engine );
     engine->AddObject( tmp );
 }
+GameServer::~GameServer()
+{
+    engine->debug->PrintString( "destroying gameserver...\n" );
+    delete engine;
+}
 void GameServer::Run()
 {
     engine->text->PrintString( "================ server ===============:\n" );

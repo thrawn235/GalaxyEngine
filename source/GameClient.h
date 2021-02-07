@@ -31,6 +31,7 @@ protected:
 
 public:
             GameClient              ();     //Constructor
+            ~GameClient             ();     //Destructor
     void    Run                     ();     //everything is done here
 };
 

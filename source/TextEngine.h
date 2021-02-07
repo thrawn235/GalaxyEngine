@@ -29,6 +29,7 @@ protected:
 public:
     //------------------ Constructor / Destructor ----------------------
                     TextEngine()                            {};
+    virtual         ~TextEngine()                           {};
 
     //------------------------ Set / Get -------------------------------
     virtual void    DisableOutput   ()                      = 0;

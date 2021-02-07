@@ -27,6 +27,11 @@ GameClient::GameClient()
     tickRate                    = 1;
     clientTicksSinceLogicTick   = 0;
 }
+GameClient::~GameClient()
+{
+    engine->debug->PrintString( "destroying gameclient...\n" );
+    delete engine;
+}
 
 void GameClient::Run()
 {

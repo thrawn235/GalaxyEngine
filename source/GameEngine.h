@@ -55,6 +55,7 @@ public:
 
     //------------- Constructor / Destructor -----------
                         GameEngine              ();
+                        ~GameEngine             ();
 
     // ------------------ Set / Get --------------------
     void                SetHighestUID           ( unsigned long int UID );
