@@ -3,7 +3,7 @@
 GameEngine::GameEngine()
 {
     #ifdef linux
-        net = new NetEngineLinuxSockets;
+        net = new NetEngineLinuxSocketsUDP;
     #else
         net = new NetEngineLocal;
     #endif

@@ -22,7 +22,8 @@ using namespace std;
 #include "DerivedObjects.h"
 #include "TextEngine.h"
 #ifdef linux
-    #include "NetEngineLinuxSockets.h"
+    #include "NetEngineLinuxSocketsUDP.h"
+    #include "NetEngineLinuxSocketsTCP.h"
 #else
     #include "NetEngineLocal.h"
 #endif

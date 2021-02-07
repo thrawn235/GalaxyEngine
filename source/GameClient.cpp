@@ -10,7 +10,7 @@ GameClient::GameClient()
         engine->net->SetAddress( 1 );
         engine->net->SetTarget( 2 );
     }
-    if( engine->net->GetType() == NET_TYPE_LINUX_SOCKETS )
+    if( engine->net->GetType() == NET_TYPE_LINUX_SOCKETS_UDP || engine->net->GetType() == NET_TYPE_LINUX_SOCKETS_TCP )
     {
         #ifdef linux
             engine->net->SetTarget( inet_addr( "127.0.0.1" ) );

@@ -1,11 +1,12 @@
 //====================================
-// NetEngineLinuxSockets.h
+// NetEngineLinuxSocketsTCP.h
 // the implementation uses linux sockets from sys/sockets.h
+// this implementation uses TCP
 //====================================
 
 //========== include guard ===========
-#ifndef NET_ENGINE_LINUX_SOCKETS_UDP
-#define NET_ENGINE_LINUX_SOCKETS_UDP
+#ifndef NET_ENGINE_LINUX_SOCKETS_TCP
+#define NET_ENGINE_LINUX_SOCKETS_TCP
 //====================================
 
 //========== stdlib includes =========
@@ -23,9 +24,6 @@ using namespace std;
 
 //============== defines =============
 #define NET_BUFFER_SIZE 1024
-
-#define CONNECTION_TYPE_UDP     1
-#define CONNECTION_TYPE_TCP     2
 //====================================
 
 //========= galaxy includes ==========
@@ -37,7 +35,7 @@ class NetEngineLocal;
 //====================================
 
 
-class NetEngineLinuxSockets : public NetEngine
+class NetEngineLinuxSocketsTCP : public NetEngine
 {
 protected:
     vector<Packet*>     inbox;
@@ -45,7 +43,6 @@ protected:
     uint64_t            target;
 
     //Sockets:
-    int                 connectionType;              //UDP or TCP
     struct sockaddr_in  myAddress, peerAddress;
     int                 socketDescriptor;
     vector<int>         incomingDescriptors;
@@ -56,8 +53,8 @@ protected:
 
 public:
     //---------- Constructor / Destructor ------------
-                                NetEngineLinuxSockets       ();
-                                ~NetEngineLinuxSockets      ();
+                                NetEngineLinuxSocketsTCP    ();
+                                ~NetEngineLinuxSocketsTCP   ();
 
     //-------------------- Init ----------------------
     virtual void                InitClient                  ();
@@ -71,32 +68,21 @@ public:
     virtual vector<Packet*>*    GetInbox                    ();
     virtual int                 GetType                     ();
 
-    //----------------- Communication-----------------
-    virtual vector<string>      GetAllValueNames            ();
-    virtual uint64_t            GetNumericalValue           ( string valueName );
-    virtual void                SetNumericalValue           ( string valueName, uint64_t value );
-
     //-------------- Network Methods -----------------
     virtual void                Send                        ( Packet* packet );
     virtual Packet*             GetFirstPacketFromInbox     ();
     virtual bool                InboxEmpty                  ();
-    virtual bool                InboxFull                   ();
 
     virtual void                Update                      ();
 
     //--------------- LinuxSockets only --------------
     virtual void                ReceivePackets              ();
 
-    virtual void                CreateTCPSocket             ();
-    virtual void                CreateUDPSocket             ();
-
     virtual void                ListenForNewConnections     ();
     virtual void                ConnectToServer             ();
 
     virtual void*               SerializePacketData         ( Packet* packet, int* dataLength );
     virtual Packet*             DeSerializePacketData       ( void* data, int dataLength );
-    virtual void                SendUDP                     ( void* data, int dataLength );
-    virtual void                SendTCP                     ( void* data, int dataLength );
 };
 
 #endif
