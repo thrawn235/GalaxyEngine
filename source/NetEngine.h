@@ -31,13 +31,14 @@ using namespace std;
 
 #define NET_PACKET_TYPE_OBJECT_UPDATE   1
 #define NET_PACKET_TYPE_SEND_COMPLETE   2
+#define NET_PACKET_TYPE_JOIN_REQUEST    3
+#define NET_PACKET_TYPE_JOIN_ACK        4
 //====================================
 
 class Packet
 {
 public:
     uint64_t            sender;
-    uint32_t            sequence;
     uint8_t             type;           //Object Update, Acknoledge Packet etc
     uint16_t            dataLength;
     void*               data;
@@ -81,12 +82,9 @@ public:
     
     //-------------- Network Methods -----------------
     virtual void            Send                        ( Packet* packet )                          = 0;
-    virtual void            Send                        ( Packet* packet, uint64_t target )         = 0;
     virtual Packet*         GetFirstPacketFromInbox     ()                                          = 0;
     virtual bool            InboxEmpty                  ()                                          = 0;
     virtual bool            InboxFull                   ()                                          = 0;
-
-    virtual void            ReceivePackets              ()                                          = 0;
 
     virtual void            Update                      ()                                          = 0;        //runs in every game loop
 };

@@ -104,7 +104,6 @@ void Object::SendStatus()
 {
     Packet* pkt     = new Packet;
     pkt->sender     = engine->net->GetAddress();
-    pkt->sequence   = 0;                      //set to 0 for debugging for now!
     pkt->dataLength = size;
     pkt->data       = this;
     pkt->type       = NET_PACKET_TYPE_OBJECT_UPDATE;

@@ -13,6 +13,7 @@
 #include <vector>
 #include <stdlib.h>
 #include <cstring>
+#include <unistd.h>
 #include <arpa/inet.h>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -51,6 +52,7 @@ protected:
     int                 port;
     bool                isServer;
     bool                connectedToServer;
+    void*               receiveBuffer;
 
 public:
     //---------- Constructor / Destructor ------------
@@ -75,17 +77,26 @@ public:
     virtual void                SetNumericalValue           ( string valueName, uint64_t value );
 
     //-------------- Network Methods -----------------
-    virtual void                Send                        ( Packet* packet, uint64_t target );
     virtual void                Send                        ( Packet* packet );
     virtual Packet*             GetFirstPacketFromInbox     ();
     virtual bool                InboxEmpty                  ();
     virtual bool                InboxFull                   ();
 
+    virtual void                Update                      ();
+
+    //--------------- LinuxSockets only --------------
     virtual void                ReceivePackets              ();
 
-    virtual void                Update                      ();
+    virtual void                CreateTCPSocket             ();
+    virtual void                CreateUDPSocket             ();
+
     virtual void                ListenForNewConnections     ();
     virtual void                ConnectToServer             ();
+
+    virtual void*               SerializePacketData         ( Packet* packet, int* dataLength );
+    virtual Packet*             DeSerializePacketData       ( void* data, int dataLength );
+    virtual void                SendUDP                     ( void* data, int dataLength );
+    virtual void                SendTCP                     ( void* data, int dataLength );
 };
 
 #endif
