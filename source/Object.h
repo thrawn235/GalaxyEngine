@@ -29,13 +29,8 @@ using namespace std;
 class GameEngine;
 //====================================
 
-class Object
-{
-protected:
-    GameEngine*         engine;         //pointer to the game engine
-
-    int                 size;           //size of the Object itself
-
+struct ObjectStats
+{   
     Vector2D            pos;            //position of the object
     Vector2D            movement;       //final movement vector (once all forces are added)
 
@@ -47,6 +42,16 @@ protected:
     bool                active;
     bool                predict;
     bool                clientActive;
+};
+
+class Object
+{
+protected:
+    GameEngine*         engine;         //pointer to the game engine
+
+    char*               sendBuffer;     //buffer used to send attributes;
+
+    ObjectStats         objectStats;
     
 public:
     //------------ Constructor/Destructor: --------------------
@@ -55,8 +60,6 @@ public:
     //---------------------- Get/Set --------------------------
             void                SetEngine          ( GameEngine* engine );
             GameEngine*         GetEngine          ();
-            void                SetSize            ( int size );
-            int                 GetSize            ();
             unsigned long int   GetUID             ();
             void                SetUID             ( unsigned long uid );
             unsigned int        GetType            ();

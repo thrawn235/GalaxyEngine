@@ -5,39 +5,38 @@
 
 Player::Player( GameEngine* engine ) : Object( engine )
 {
-	type = OBJECT_TYPE_PLAYER;
-	size = sizeof( Player );
+	objectStats.type = OBJECT_TYPE_PLAYER;
 
-	up = down = left = right = fire = false;
+	playerStats.up = playerStats.down = playerStats.left = playerStats.right = playerStats.fire = false;
 }
 void Player::GameLogic()
 {
-	movement.Zero();
+	objectStats.movement.Zero();
 
-	if( up )
+	if( playerStats.up )
 	{
-		movement.y = +1;
+		objectStats.movement.y = +1;
 	}
-	else if( down )
+	else if( playerStats.down )
 	{
-		movement.y = -1;
+		objectStats.movement.y = -1;
 	}
-	else if( left )
+	else if( playerStats.left )
 	{
-		movement.x = -1;
+		objectStats.movement.x = -1;
 	}
-	else if( right )
+	else if( playerStats.right )
 	{
-		movement.x = + 1;
+		objectStats.movement.x = + 1;
 	}
 
-	pos = pos + movement;
+	objectStats.pos = objectStats.pos + objectStats.movement;
 
-	engine->text->PrintString( "Game Logic: Object UID:%i; Type:%i(Player); Pos:%f:%f Mov:%f:%f NetAddr:%i (server)\n", uid, type, pos.x, pos.y, movement.x, movement.y, engine->net->GetAddress() );
+	engine->text->PrintString( "Game Logic: Object UID:%i; Type:%i(Player); Pos:%f:%f Mov:%f:%f NetAddr:%i (server)\n", objectStats.uid, objectStats.type, objectStats.pos.x, objectStats.pos.y, objectStats.movement.x, objectStats.movement.y, engine->net->GetAddress() );
 }
 void Player::ClientSideUpdate()
 {
-	up = down = left = right = fire = false;
+	playerStats.up = playerStats.down = playerStats.left = playerStats.right = playerStats.fire = false;
 
 	engine->text->PrintString( "Player Menu:\n" );
 	engine->text->PrintString( "   Commands:\n" );
@@ -53,33 +52,63 @@ void Player::ClientSideUpdate()
 		char inputMove = engine->text->InputChar();
 		if( inputMove == 'u')
 		{
-			up = true;
+			playerStats.up = true;
 		}
 		else if( inputMove == 'd' )
 		{
-			down = true;
+			playerStats.down = true;
 		}
 		else if( inputMove == 'l' )
 		{
-			left = true;
+			playerStats.left = true;
 		}
 		else if( inputMove == 'r' )
 		{
-			right = true;
+			playerStats.right = true;
 		}
 	}
 	else if( input == 'f' )
 	{
 		engine->text->PrintString( "      enter target uid:   = u\n" );
-		target = engine->text->InputInt();
-		fire = true;
+		playerStats.target = engine->text->InputInt();
+		playerStats.fire = true;
 	}
 
 	SendStatus();
 }
 void Player::Render()
 {
-	engine->text->PrintString( "Render: Object UID:%i; Type:%i(Player); Pos:%f:%f Mov:%f:%f NetAddr:%i (client)\n", uid, type, pos.x, pos.y, movement.x, movement.y, engine->net->GetAddress() );
+	engine->text->PrintString( "Render: Object UID:%i; Type:%i(Player); Pos:%f:%f Mov:%f:%f NetAddr:%i (client)\n", objectStats.uid, objectStats.type, objectStats.pos.x, objectStats.pos.y, objectStats.movement.x, objectStats.movement.y, engine->net->GetAddress() );
+}
+void Player::SendStatus()
+{
+	int sendSize = sizeof( ObjectStats ) + sizeof( PlayerStats );
+
+    if( sendBuffer == NULL )
+    {
+        sendBuffer = (char*)malloc( sendSize );
+    }
+
+    memcpy( sendBuffer, &objectStats, sizeof( ObjectStats ) );
+    memcpy( sendBuffer + sizeof( ObjectStats ), &playerStats, sizeof( PlayerStats ) );
+
+    Packet* pkt     = new Packet;
+    pkt->sender     = engine->net->GetAddress();
+    pkt->dataLength = sendSize;
+    pkt->data       = sendBuffer;
+    pkt->type       = NET_PACKET_TYPE_OBJECT_UPDATE;
+
+    Object* pktDebug = (Object*)pkt->data;
+
+    engine->debug->PrintString( "  sending packet UID:%i Type:%i Pos:%f:%f from:%i NetAddr:%i\n", pktDebug->GetUID(), pktDebug->GetType(), pktDebug->GetPos().x, pktDebug->GetPos().y, pkt->sender, engine->net->GetAddress() );
+
+    engine->net->Send( pkt );
+}
+void Player::LoadStatus( void* data )
+{
+    //lets assume we know that data is of type Object
+    memcpy( &objectStats, (char*)data, sizeof( ObjectStats ) );
+    memcpy( &playerStats, (char*)data + sizeof( ObjectStats ), sizeof( PlayerStats ) );
 }
 
 
@@ -88,14 +117,42 @@ void Player::Render()
 
 Enemy::Enemy( GameEngine* engine ) : Object( engine )
 {
-	type = OBJECT_TYPE_ENEMY;
-	size = sizeof( Enemy );
+	objectStats.type = OBJECT_TYPE_ENEMY;
 }
 void Enemy::GameLogic()
 {
-	engine->text->PrintString( "Game Logic: Object UID:%i; Type:%i(Enemy); Pos:%f:%f NetAddr:%i (server)\n", uid, type, pos.x, pos.y, engine->net->GetAddress() );
+	engine->text->PrintString( "Game Logic: Object UID:%i; Type:%i(Enemy); Pos:%f:%f NetAddr:%i (server)\n", objectStats.uid, objectStats.type, objectStats.pos.x, objectStats.pos.y, engine->net->GetAddress() );
 }
 void Enemy::Render()
 {
-	engine->text->PrintString( "Render: Object UID:%i; Type:%i(Enemy); Pos:%f:%f NetAddr:%i (client)\n", uid, type, pos.x, pos.y, engine->net->GetAddress() );
+	engine->text->PrintString( "Render: Object UID:%i; Type:%i(Enemy); Pos:%f:%f NetAddr:%i (client)\n", objectStats.uid, objectStats.type, objectStats.pos.x, objectStats.pos.y, engine->net->GetAddress() );
+}
+void Enemy::SendStatus()
+{
+	int sendSize = sizeof( ObjectStats ) + sizeof( PlayerStats );
+
+    if( sendBuffer == NULL )
+    {
+        sendBuffer = (char*)malloc( sendSize );
+    }
+
+    memcpy( sendBuffer, &objectStats, sizeof( ObjectStats ) );
+    memcpy( sendBuffer + sizeof( ObjectStats ), &enemyStats, sizeof( EnemyStats) );
+
+    Packet* pkt     = new Packet;
+    pkt->sender     = engine->net->GetAddress();
+    pkt->dataLength = sendSize;
+    pkt->data       = sendBuffer;
+    pkt->type       = NET_PACKET_TYPE_OBJECT_UPDATE;
+
+    Object* pktDebug = (Object*)pkt->data;
+
+    engine->debug->PrintString( "  sending packet UID:%i Type:%i Pos:%f:%f from:%i NetAddr:%i\n", pktDebug->GetUID(), pktDebug->GetType(), pktDebug->GetPos().x, pktDebug->GetPos().y, pkt->sender, engine->net->GetAddress() );
+
+    engine->net->Send( pkt );
+}
+void Enemy::LoadStatus( void* data )
+{
+    memcpy( &objectStats, data, sizeof( ObjectStats) );
+    memcpy( &enemyStats, data + sizeof( EnemyStats ), sizeof( EnemyStats ) );
 }
