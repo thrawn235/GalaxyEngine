@@ -24,6 +24,7 @@ using namespace std;
 #ifdef linux
     #include "NetEngineLinuxSocketsUDP.h"
     #include "NetEngineLinuxSocketsTCP.h"
+    #include "NetEngineLocal.h"
 #else
     #include "NetEngineLocal.h"
 #endif

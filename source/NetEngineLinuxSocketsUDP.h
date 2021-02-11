@@ -48,7 +48,7 @@ protected:
     vector<sockaddr_in> incomingAddresses;
     int                 port;
     bool                isServer;
-    bool                connectedToServer;
+    bool                isConnected;
     void*               receiveBuffer;
 
 public:
@@ -56,28 +56,33 @@ public:
                                 NetEngineLinuxSocketsUDP    ();
                                 ~NetEngineLinuxSocketsUDP   ();
 
-    //-------------------- Init ----------------------
-    virtual void                InitClient                  ();
-    virtual void                InitServer                  ();
-
-    //------------------ Set / Get -------------------
-    virtual void                SetTarget                   ( uint64_t target );
-    virtual void                SetAddress                  ( uint64_t address );
-    virtual unsigned int        GetNumPacketsInInbox        ();
-    virtual uint64_t            GetAddress                  ();
-    virtual vector<Packet*>*    GetInbox                    ();
-    virtual int                 GetType                     ();
-
     //-------------- Network Methods -----------------
+    virtual void                SetAddress                  ( uint64_t address );
+    virtual uint64_t            GetAddress                  ();
+    virtual int                 GetType                     ();                         //Get the Type of the Net Implementation (ex. local buffer of ethernet )
+    virtual unsigned int        GetNumPacketsInInbox        ();
+    virtual bool                GetIsServer                 ();
     virtual void                Send                        ( Packet* packet );
     virtual Packet*             GetFirstPacketFromInbox     ();
+    virtual vector<Packet*>*    GetInbox                    ();
     virtual bool                InboxEmpty                  ();
+
+    //-------------------- Client --------------------
+    virtual void                InitClient                  ();
+    virtual void                Connect                     ( uint64_t target );
+    virtual void                Disconnect                  ();
+    virtual bool                GetIsConnected              ();
+
+    //-------------------- Server --------------------
+    virtual void                InitServer                  ();
+    virtual vector<uint64_t>    GetClientAddresses          ();
 
     virtual void                Update                      ();
 
     //--------------- LinuxSockets only --------------
     virtual void                ReceivePackets              ();
     virtual void                SendJoinRequest             ();
+    virtual void                SendDisconnectRequest       ();
     virtual void                SendJoinAck                 ();
 
     virtual void*               SerializePacketData         ( Packet* packet, int* dataLength );

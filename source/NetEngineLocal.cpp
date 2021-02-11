@@ -11,49 +11,41 @@ vector<NetEngineLocal*> netNodes;
 
 NetEngineLocal::NetEngineLocal()
 {
-    netNodes.push_back(this);
+    isServer = false;
 }
 
-
-void NetEngineLocal::InitClient()
-{
-
-}
-void NetEngineLocal::InitServer()
-{
-
-}
-
-
-void NetEngineLocal::Send( Packet* packet, uint64_t target )
-{
-    packet->FixData();
-
-    for( unsigned int i = 0; i < netNodes.size(); i++ )
-    {
-        if( netNodes[i]->GetAddress() == target )
-        {
-            netNodes[i]->GetInbox()->push_back( packet );
-        }
-    }
-}
-void NetEngineLocal::SetTarget( uint64_t target )
-{
-    this->target = target;
-}
 void NetEngineLocal::SetAddress( uint64_t address )
 {
     this->address = address;
 }
+uint64_t NetEngineLocal::GetAddress()
+{
+    return address;
+}
+int NetEngineLocal::GetType()
+{
+    return NET_TYPE_LOCAL_BUFFER;
+}
+unsigned int NetEngineLocal::GetNumPacketsInInbox()
+{
+    return inbox.size();
+}
+bool NetEngineLocal::GetIsServer()
+{
+    return isServer;
+}
 void NetEngineLocal::Send( Packet* packet )
 {
-    packet->FixData();
-    
-    for( unsigned int i = 0; i < netNodes.size(); i++ )
+    if( isConnected  || isServer )
     {
-        if( netNodes[i]->GetAddress() == target )
+        packet->FixData();
+        
+        for( unsigned int i = 0; i < netNodes.size(); i++ )
         {
-            netNodes[i]->GetInbox()->push_back( packet );
+            if( netNodes[i]->GetAddress() == target )
+            {
+                netNodes[i]->GetInbox()->push_back( packet );
+            }
         }
     }
 }
@@ -67,23 +59,10 @@ Packet* NetEngineLocal::GetFirstPacketFromInbox()
     }
     return NULL;
 }
-
-
-vector<string> NetEngineLocal::GetAllValueNames()
+vector<Packet*>* NetEngineLocal::GetInbox()
 {
-    vector<string> values;
-    return values;
+    return &inbox;
 }
-uint64_t NetEngineLocal::GetNumericalValue( string valueName )
-{
-    return 0;
-}
-void NetEngineLocal::SetNumericalValue( string valueName, uint64_t value )
-{
-
-}
-
-
 bool NetEngineLocal::InboxEmpty()
 {
     if( inbox.size() == 0 )
@@ -92,30 +71,62 @@ bool NetEngineLocal::InboxEmpty()
     }
     return false;
 }
-bool NetEngineLocal::InboxFull()
-{
-    return false;
-}
-unsigned int NetEngineLocal::GetNumPacketsInInbox()
-{
-    return inbox.size();
-}
-uint64_t NetEngineLocal::GetAddress()
-{
-    return address;
-}
-vector<Packet*>* NetEngineLocal::GetInbox()
-{
-    return &inbox;
-}
-int NetEngineLocal::GetType()
-{
-    return NET_TYPE_LOCAL_BUFFER;
-}
-void NetEngineLocal::ReceivePackets()
+
+
+void NetEngineLocal::InitClient()
 {
 
 }
+void NetEngineLocal::Connect( uint64_t target )
+{
+    if( !isConnected )
+    {
+        this->target = target;
+
+        isConnected = true;
+        netNodes.push_back(this);
+    }
+}
+void NetEngineLocal::Disconnect()
+{
+    for( unsigned int i = 0; i < netNodes.size(); i++ )
+    {
+        if( netNodes[i] == this )
+        {
+            netNodes.erase( netNodes.begin() + i );
+        }
+    }
+    isConnected = false;
+}
+bool NetEngineLocal::GetIsConnected()
+{
+    return isConnected;
+}
+
+
+void NetEngineLocal::InitServer()
+{
+    isServer = true;
+}
+vector<uint64_t> NetEngineLocal::GetClientAddresses()
+{
+    vector<uint64_t> clients;
+
+    for( unsigned int i = 0; i < netNodes.size(); i++ )
+    {
+        if( netNodes[i] == this )
+        {
+            
+        }
+        else
+        {
+            clients.push_back( netNodes[i]->GetAddress() );
+        }
+    }
+    return clients;
+}
+
+
 void NetEngineLocal::Update()
 {
 

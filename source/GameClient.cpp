@@ -8,13 +8,13 @@ GameClient::GameClient()
     if( engine->net->GetType() == NET_TYPE_LOCAL_BUFFER )
     {
         engine->net->SetAddress( 1 );
-        engine->net->SetTarget( 2 );
+        engine->net->Connect( 2 );
     }
     if( engine->net->GetType() == NET_TYPE_LINUX_SOCKETS_UDP || engine->net->GetType() == NET_TYPE_LINUX_SOCKETS_TCP )
     {
         #ifdef linux
-            engine->net->SetTarget( inet_addr( "127.0.0.1" ) );
             engine->net->InitClient();
+            engine->net->Connect( inet_addr( "127.0.0.1" ) );
         #endif
     }
 

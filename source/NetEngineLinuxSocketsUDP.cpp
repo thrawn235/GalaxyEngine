@@ -12,7 +12,7 @@
 NetEngineLinuxSocketsUDP::NetEngineLinuxSocketsUDP()
 {
     port = 1234;
-    connectedToServer = false;
+    isConnected = false;
     isServer = false;
     receiveBuffer = malloc( NET_BUFFER_SIZE );
 
@@ -37,62 +37,31 @@ NetEngineLinuxSocketsUDP::~NetEngineLinuxSocketsUDP()
 }
 
 
-void NetEngineLinuxSocketsUDP::InitClient()
-{
-    //
-    //nothing to do
-}
-void NetEngineLinuxSocketsUDP::InitServer()
-{
-    isServer = true;
 
-    #ifdef debug
-        cout<<"binding socket..."<<endl;
-    #endif
-
-    memset( &myAddress, 0, sizeof( myAddress ) );
-    myAddress.sin_family = AF_INET;
-    myAddress.sin_port = htons( port );
-    myAddress.sin_addr.s_addr = htonl( INADDR_ANY );
-
-    if( bind( socketDescriptor, (struct sockaddr*)&myAddress, sizeof( myAddress ) ) == -1 )
-    {
-        #ifdef debug
-            cout<<"error binding socket!"<<endl;
-        #endif
-    }
-}
-
-
-void NetEngineLinuxSocketsUDP::SetTarget( uint64_t target )
-{
-    this->target = target;
-
-    memset( &peerAddress, 0, sizeof( peerAddress ) );
-    peerAddress.sin_family = AF_INET;
-    peerAddress.sin_port = htons( port );
-    peerAddress.sin_addr.s_addr = target;
-}
 void NetEngineLinuxSocketsUDP::SetAddress( uint64_t address )
 {
     //
     this->address = address;
 }
-void* NetEngineLinuxSocketsUDP::SerializePacketData( Packet* packet, int* dataLength )
+uint64_t NetEngineLinuxSocketsUDP::GetAddress()
 {
-    void* data = malloc( sizeof( Packet ) + packet->dataLength );
-    memcpy( data, packet, sizeof( Packet ) );
-    memcpy( (char*)data + sizeof( Packet ), packet->data, packet->dataLength );
-    *dataLength = sizeof( Packet ) + packet->dataLength;
-    return data;
+    //
+    return address;
 }
-Packet* NetEngineLinuxSocketsUDP::DeSerializePacketData( void* data, int dataLength )
+int NetEngineLinuxSocketsUDP::GetType()
 {
-    Packet* packet = new Packet;
-    memcpy( packet, data, sizeof( Packet ) );
-    packet->data = malloc( packet->dataLength );
-    memcpy( packet->data, (char*)data + sizeof( Packet), packet->dataLength );
-    return packet;
+    //
+    return NET_TYPE_LINUX_SOCKETS_UDP;
+}
+unsigned int NetEngineLinuxSocketsUDP::GetNumPacketsInInbox()
+{
+    //
+    return inbox.size();
+}
+bool NetEngineLinuxSocketsUDP::GetIsServer()
+{
+    //
+    return isServer;
 }
 void NetEngineLinuxSocketsUDP::Send( Packet* packet )
 {
@@ -129,8 +98,6 @@ void NetEngineLinuxSocketsUDP::Send( Packet* packet )
         }
     }
 }
-
-
 Packet* NetEngineLinuxSocketsUDP::GetFirstPacketFromInbox()
 {
     if( inbox.size() > 0 )
@@ -141,6 +108,11 @@ Packet* NetEngineLinuxSocketsUDP::GetFirstPacketFromInbox()
     }
     return NULL;
 }
+vector<Packet*>* NetEngineLinuxSocketsUDP::GetInbox()
+{
+    //
+    return &inbox;
+}
 bool NetEngineLinuxSocketsUDP::InboxEmpty()
 {
     if( inbox.size() == 0 )
@@ -149,26 +121,96 @@ bool NetEngineLinuxSocketsUDP::InboxEmpty()
     }
     return false;
 }
-unsigned int NetEngineLinuxSocketsUDP::GetNumPacketsInInbox()
+
+
+
+void NetEngineLinuxSocketsUDP::InitClient()
 {
     //
-    return inbox.size();
+    //nothing to do
 }
-uint64_t NetEngineLinuxSocketsUDP::GetAddress()
+void NetEngineLinuxSocketsUDP::Connect( uint64_t target )
+{
+    this->target = target;
+
+    memset( &peerAddress, 0, sizeof( peerAddress ) );
+    peerAddress.sin_family = AF_INET;
+    peerAddress.sin_port = htons( port );
+    peerAddress.sin_addr.s_addr = target;
+
+    if( !isConnected )
+    {
+        //if a client is not connected yet it sends a join request to the server (peerAddress)
+        SendJoinRequest();
+    }
+}
+void NetEngineLinuxSocketsUDP::Disconnect()
+{
+    if( isConnected )
+    {
+        SendDisconnectRequest();
+        close( socketDescriptor );
+        isConnected = false;
+    }
+}
+bool NetEngineLinuxSocketsUDP::GetIsConnected()
 {
     //
-    return address;
+    return isConnected;
 }
-vector<Packet*>* NetEngineLinuxSocketsUDP::GetInbox()
+
+
+void NetEngineLinuxSocketsUDP::InitServer()
 {
-    //
-    return &inbox;
+    isServer = true;
+
+    #ifdef debug
+        cout<<"binding socket..."<<endl;
+    #endif
+
+    memset( &myAddress, 0, sizeof( myAddress ) );
+    myAddress.sin_family = AF_INET;
+    myAddress.sin_port = htons( port );
+    myAddress.sin_addr.s_addr = htonl( INADDR_ANY );
+
+    if( bind( socketDescriptor, (struct sockaddr*)&myAddress, sizeof( myAddress ) ) == -1 )
+    {
+        #ifdef debug
+            cout<<"error binding socket!"<<endl;
+        #endif
+    }
 }
-int NetEngineLinuxSocketsUDP::GetType()
+vector<uint64_t> NetEngineLinuxSocketsUDP::GetClientAddresses()
 {
-    //
-    return NET_TYPE_LINUX_SOCKETS_UDP;
+    vector<uint64_t> clients;
+
+    for( unsigned int i = 0; i < incomingAddresses.size(); i++ )
+    {    
+        clients.push_back( incomingAddresses[i].sin_addr.s_addr );
+    }
+
+    return clients;
 }
+
+
+void* NetEngineLinuxSocketsUDP::SerializePacketData( Packet* packet, int* dataLength )
+{
+    void* data = malloc( sizeof( Packet ) + packet->dataLength );
+    memcpy( data, packet, sizeof( Packet ) );
+    memcpy( (char*)data + sizeof( Packet ), packet->data, packet->dataLength );
+    *dataLength = sizeof( Packet ) + packet->dataLength;
+    return data;
+}
+Packet* NetEngineLinuxSocketsUDP::DeSerializePacketData( void* data, int dataLength )
+{
+    Packet* packet = new Packet;
+    memcpy( packet, data, sizeof( Packet ) );
+    packet->data = malloc( packet->dataLength );
+    memcpy( packet->data, (char*)data + sizeof( Packet), packet->dataLength );
+    return packet;
+}
+
+
 void NetEngineLinuxSocketsUDP::SendJoinRequest()
 {
     #ifdef debug
@@ -186,6 +228,24 @@ void NetEngineLinuxSocketsUDP::SendJoinRequest()
         cout<<"   sending "<<dataLength<<" bytes"<<endl;
     #endif
 }
+void NetEngineLinuxSocketsUDP::SendDisconnectRequest()
+{
+    #ifdef debug
+        cout<<"sending disconnect request..."<<endl;
+    #endif
+
+    Packet joinPacket;
+    joinPacket.type = NET_PACKET_TYPE_DISCONNECT_REQUEST;
+    joinPacket.dataLength = 0;
+    int dataLength = 0;
+
+    sendto( socketDescriptor, &joinPacket, sizeof( Packet ), 0, (struct sockaddr*) &peerAddress, sizeof( peerAddress ) );
+
+    #ifdef debug
+        cout<<"   sending "<<dataLength<<" bytes"<<endl;
+    #endif
+}
+
 void NetEngineLinuxSocketsUDP::SendJoinAck()
 {
     #ifdef debug
@@ -253,7 +313,22 @@ void NetEngineLinuxSocketsUDP::ReceivePackets()
             #ifdef debug
                 cout<<"   received Join Ack"<<endl;
             #endif
-            connectedToServer = true;
+            isConnected = true;
+        }
+        else if( receivePacket->type == NET_PACKET_TYPE_DISCONNECT_REQUEST && !isServer )
+        {
+            #ifdef debug
+                cout<<"   received Disconnect Request"<<endl;
+            #endif
+
+            for( unsigned int i = 0; i < incomingAddresses.size(); i++ )
+            {
+                if( (int)incomingAddresses[i].sin_addr.s_addr == (int)peerAddress.sin_addr.s_addr )
+                {
+                    incomingAddresses.erase( incomingAddresses.begin() + i );
+                    break;
+                }
+            }
         }
         else
         {
@@ -271,13 +346,5 @@ void NetEngineLinuxSocketsUDP::ReceivePackets()
 }
 void NetEngineLinuxSocketsUDP::Update()
 {
-    if( !isServer )
-    {
-        if( !connectedToServer )
-        {
-            //if a client is not connected yet it sends a join request to the server (peerAddress)
-            SendJoinRequest();
-        }
-    }
     ReceivePackets();
 }

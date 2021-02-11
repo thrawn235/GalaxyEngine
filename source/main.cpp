@@ -19,7 +19,7 @@ int main()
 {
     cout<<"Galaxy Engine: Main Client"<<endl;
 
-    bool serverActive = false;
+    bool serverActive = true;
     bool clientActive = true;
 
     GameClient* client = NULL;

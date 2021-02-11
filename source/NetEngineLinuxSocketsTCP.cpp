@@ -12,7 +12,7 @@
 NetEngineLinuxSocketsTCP::NetEngineLinuxSocketsTCP()
 {
     port = 1234;
-    connectedToServer = false;
+    isConnected = false;
     isServer = false;
     receiveBuffer = malloc( NET_BUFFER_SIZE );
 
@@ -36,11 +36,144 @@ NetEngineLinuxSocketsTCP::~NetEngineLinuxSocketsTCP()
     close( socketDescriptor );
 }
 
+void NetEngineLinuxSocketsTCP::SetAddress( uint64_t address )
+{
+    //
+    this->address = address;
+}
+uint64_t NetEngineLinuxSocketsTCP::GetAddress()
+{
+    //
+    return address;
+}
+int NetEngineLinuxSocketsTCP::GetType()
+{
+    //
+    return NET_TYPE_LINUX_SOCKETS_TCP;
+}
+unsigned int NetEngineLinuxSocketsTCP::GetNumPacketsInInbox()
+{
+    //
+    return inbox.size();
+}
+bool NetEngineLinuxSocketsTCP::GetIsServer()
+{
+    //
+    return isServer;
+}
+void NetEngineLinuxSocketsTCP::Send( Packet* packet )
+{
+    #ifdef debug
+        cout<<"sending..."<<endl;
+    #endif
+    int dataLength = 0;
+    void* data = SerializePacketData( packet, &dataLength );
+    #ifdef debug
+        cout<<"   "<<dataLength<<" bytes..."<<endl;
+    #endif
+    
+    if( isServer )
+    {
+        for( unsigned int i = 0; i < incomingDescriptors.size(); i++ )
+        {
+            
+            if ( send( incomingDescriptors[i], data, dataLength, 0 ) == -1 )
+            {
+                #ifdef debug
+                    cout<<"error sednding data!"<<endl;
+                #endif
+            }
+        }
+    }
+    else
+    {
+        #ifdef debug
+            cout<<"   client sending..."<<endl;
+        #endif
+        if ( send( socketDescriptor, data, dataLength, 0 ) == -1 )
+        {
+            #ifdef debug
+                cout<<"error sednding data!"<<endl;
+            #endif
+        }
+    } 
+}
+Packet* NetEngineLinuxSocketsTCP::GetFirstPacketFromInbox()
+{
+    if( inbox.size() > 0 )
+    {
+        Packet* tmp = inbox[0];
+        inbox.erase( inbox.begin() );
+        return tmp;
+    }
+    return NULL;
+}
+vector<Packet*>* NetEngineLinuxSocketsTCP::GetInbox()
+{
+    //
+    return &inbox;
+}
+bool NetEngineLinuxSocketsTCP::InboxEmpty()
+{
+    if( inbox.size() == 0 )
+    {
+        return true;
+    }
+    return false;
+}
+
+
+
+
 
 void NetEngineLinuxSocketsTCP::InitClient()
 {
     
 }
+void NetEngineLinuxSocketsTCP::Connect( uint64_t target )
+{
+    this->target = target;
+
+    memset( &peerAddress, 0, sizeof( peerAddress ) );
+    peerAddress.sin_family = AF_INET;
+    peerAddress.sin_port = htons( port );
+    peerAddress.sin_addr.s_addr = target;
+
+
+    #ifdef debug
+        cout<<"establishing connection..."<<endl;
+    #endif
+    if ( connect( socketDescriptor, (struct sockaddr*)&peerAddress , sizeof( peerAddress ) ) < 0 )
+    {
+        #ifdef debug
+            cout<<"connection error!"<<endl;
+        #endif
+    }
+    else
+    {
+        #ifdef debug
+            cout<<"connection established!"<<endl;
+        #endif
+        isConnected = true;
+    }   
+}
+void NetEngineLinuxSocketsTCP::Disconnect()
+{
+    if( isConnected )
+    {
+        close( socketDescriptor );
+        isConnected = false;
+    }
+}
+bool NetEngineLinuxSocketsTCP::GetIsConnected()
+{
+    //
+    return isConnected;
+}
+
+
+
+
 void NetEngineLinuxSocketsTCP::InitServer()
 {
     isServer = true;
@@ -63,22 +196,21 @@ void NetEngineLinuxSocketsTCP::InitServer()
 
     listen( socketDescriptor , 3 );
 }
-
-
-void NetEngineLinuxSocketsTCP::SetTarget( uint64_t target )
+vector<uint64_t> NetEngineLinuxSocketsTCP::GetClientAddresses()
 {
-    this->target = target;
+    vector<uint64_t> clients;
 
-    memset( &peerAddress, 0, sizeof( peerAddress ) );
-    peerAddress.sin_family = AF_INET;
-    peerAddress.sin_port = htons( port );
-    peerAddress.sin_addr.s_addr = target;
+    for( unsigned int i = 0; i < incomingDescriptors.size(); i++ )
+    {
+        int c = sizeof( struct sockaddr_in );
+        sockaddr_in address;
+        getpeername( incomingDescriptors[i], (struct sockaddr *)&address, (socklen_t*)&c );
+        clients.push_back( address.sin_addr.s_addr );
+    }
+    return clients;
 }
-void NetEngineLinuxSocketsTCP::SetAddress( uint64_t address )
-{
-    //
-    this->address = address;
-}
+
+
 void* NetEngineLinuxSocketsTCP::SerializePacketData( Packet* packet, int* dataLength )
 {
     void* data = malloc( sizeof( Packet ) + packet->dataLength + sizeof( uint16_t ) );
@@ -123,83 +255,8 @@ vector<Packet*> NetEngineLinuxSocketsTCP::DeSerializePacketData( void* data, int
     }
     return packets;
 }
-void NetEngineLinuxSocketsTCP::Send( Packet* packet )
-{
-    #ifdef debug
-        cout<<"sending..."<<endl;
-    #endif
-    int dataLength = 0;
-    void* data = SerializePacketData( packet, &dataLength );
-    #ifdef debug
-        cout<<"   "<<dataLength<<" bytes..."<<endl;
-    #endif
-    
-    if( isServer )
-    {
-        for( unsigned int i = 0; i < incomingDescriptors.size(); i++ )
-        {
-            
-            if ( send( incomingDescriptors[i], data, dataLength, 0 ) == -1 )
-            {
-                #ifdef debug
-                    cout<<"error sednding data!"<<endl;
-                #endif
-            }
-        }
-    }
-    else
-    {
-        #ifdef debug
-            cout<<"   client sending..."<<endl;
-        #endif
-        if ( send( socketDescriptor, data, dataLength, 0 ) == -1 )
-        {
-            #ifdef debug
-                cout<<"error sednding data!"<<endl;
-            #endif
-        }
-    } 
-}
 
 
-Packet* NetEngineLinuxSocketsTCP::GetFirstPacketFromInbox()
-{
-    if( inbox.size() > 0 )
-    {
-        Packet* tmp = inbox[0];
-        inbox.erase( inbox.begin() );
-        return tmp;
-    }
-    return NULL;
-}
-bool NetEngineLinuxSocketsTCP::InboxEmpty()
-{
-    if( inbox.size() == 0 )
-    {
-        return true;
-    }
-    return false;
-}
-unsigned int NetEngineLinuxSocketsTCP::GetNumPacketsInInbox()
-{
-    //
-    return inbox.size();
-}
-uint64_t NetEngineLinuxSocketsTCP::GetAddress()
-{
-    //
-    return address;
-}
-vector<Packet*>* NetEngineLinuxSocketsTCP::GetInbox()
-{
-    //
-    return &inbox;
-}
-int NetEngineLinuxSocketsTCP::GetType()
-{
-    //
-    return NET_TYPE_LINUX_SOCKETS_TCP;
-}
 void NetEngineLinuxSocketsTCP::ReceivePackets()
 {
     #ifdef debug
@@ -273,13 +330,6 @@ void NetEngineLinuxSocketsTCP::Update()
     {
         ListenForNewConnections();
     }
-    else
-    {
-        if( !connectedToServer )
-        {
-            ConnectToServer();
-        }
-    }
 
     ReceivePackets();
 }
@@ -307,23 +357,4 @@ void NetEngineLinuxSocketsTCP::ListenForNewConnections()
             incomingDescriptors.push_back( new_socket );
         #endif
     }
-}
-void NetEngineLinuxSocketsTCP::ConnectToServer()
-{
-    #ifdef debug
-        cout<<"establishing connection..."<<endl;
-    #endif
-    if ( connect( socketDescriptor , (struct sockaddr*)&peerAddress , sizeof( peerAddress ) ) < 0 )
-    {
-        #ifdef debug
-            cout<<"connection error!"<<endl;
-        #endif
-    }
-    else
-    {
-        #ifdef debug
-            cout<<"connection established!"<<endl;
-        #endif
-        connectedToServer = true;
-    }   
 }

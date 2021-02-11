@@ -50,10 +50,10 @@ protected:
     GameEngine*         engine;         //pointer to the game engine
 
     char*               sendBuffer;     //buffer used to send attributes;
-
+public:
     ObjectStats         objectStats;
     
-public:
+
     //------------ Constructor/Destructor: --------------------
                                 Object             ( GameEngine* engine );
 

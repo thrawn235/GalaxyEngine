@@ -31,37 +31,35 @@ protected:
     vector<Packet*>     inbox;
     uint64_t            address;
     uint64_t            target;
+    bool                isServer;
+    bool                isConnected;
 
 public:
                                 NetEngineLocal              ();
     
-    //-------------------- Init ----------------------
-    virtual void                InitClient                  ();
-    virtual void                InitServer                  ();
-
-    //------------------ Set / Get -------------------
-    virtual void                SetTarget                   ( uint64_t target );
-    virtual void                SetAddress                  ( uint64_t address );
-    virtual Packet*             GetFirstPacketFromInbox     ();
-    virtual void                Send                        ( Packet* packet, uint64_t target );
-    virtual unsigned int        GetNumPacketsInInbox        ();
-    virtual uint64_t            GetAddress                  ();
-    virtual vector<Packet*>*    GetInbox                    ();
-    virtual int                 GetType                     ();
-    virtual void                Send                        ( Packet* packet );
-    
-    //----------------- Communication-----------------
-    virtual vector<string>  GetAllValueNames                ();
-    virtual uint64_t        GetNumericalValue               ( string valueName );
-    virtual void            SetNumericalValue               ( string valueName, uint64_t value );
-
     //-------------- Network Methods -----------------
+    virtual void                SetAddress                  ( uint64_t address );
+    virtual uint64_t            GetAddress                  ();
+    virtual int                 GetType                     ();                         //Get the Type of the Net Implementation (ex. local buffer of ethernet )
+    virtual unsigned int        GetNumPacketsInInbox        ();
+    virtual bool                GetIsServer                 ();
+    virtual void                Send                        ( Packet* packet );
+    virtual Packet*             GetFirstPacketFromInbox     ();
+    virtual vector<Packet*>*    GetInbox                    ();
     virtual bool                InboxEmpty                  ();
-    virtual bool                InboxFull                   ();
 
-    virtual void                ReceivePackets              ();
+    //-------------------- Client --------------------
+    virtual void                InitClient                  ();
+    virtual void                Connect                     ( uint64_t target );
+    virtual void                Disconnect                  ();
+    virtual bool                GetIsConnected              ();
 
-    virtual void                Update                      ();
+    //-------------------- Server --------------------
+    virtual void                InitServer                  ();
+    virtual vector<uint64_t>    GetClientAddresses          ();
+
+
+    virtual void                Update                      ();                         //runs in every game loop
 };
 
 #endif

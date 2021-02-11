@@ -8,12 +8,12 @@ GameServer::GameServer()
     if( engine->net->GetType() == NET_TYPE_LOCAL_BUFFER )
     {
         engine->net->SetAddress( 2 );
-        engine->net->SetTarget( 1 );
+        engine->net->Connect( 1 );
     }
     if( engine->net->GetType() == NET_TYPE_LINUX_SOCKETS_UDP || engine->net->GetType() == NET_TYPE_LINUX_SOCKETS_TCP )
     {
         #ifdef linux
-            engine->net->SetTarget( inet_addr( "127.0.0.1" ) );
+            //engine->net->Connect( inet_addr( "127.0.0.1" ) );
             engine->net->InitServer();
         #endif
     }
@@ -42,41 +42,42 @@ void GameServer::Run()
         Packet* pkt = engine->net->GetFirstPacketFromInbox();
         if( pkt->type == NET_PACKET_TYPE_OBJECT_UPDATE )
         {
-            Object* newStatus = ( Object* )pkt->data;
-            newStatus->SetEngine( engine );
+            Object newStatus( engine );
+            newStatus.objectStats = *( ObjectStats* )pkt->data;
+            newStatus.SetEngine( engine );
 
-            engine->debug->PrintString( "   received Packet: UID:%i Type:%i Pos:%f:%f mov:%f:%f from:%i rewrite NetAddr to:%i\n", newStatus->GetUID(), newStatus->GetType(), newStatus->GetPos().x, newStatus->GetPos().y,newStatus->GetMovement().x, newStatus->GetMovement().y , pkt->sender, newStatus->GetEngine()->net->GetAddress() );
+            engine->debug->PrintString( "   received Packet: UID:%i Type:%i Pos:%f:%f mov:%f:%f from:%i rewrite NetAddr to:%i\n", newStatus.GetUID(), newStatus.GetType(), newStatus.GetPos().x, newStatus.GetPos().y,newStatus.GetMovement().x, newStatus.GetMovement().y , pkt->sender, newStatus.GetEngine()->net->GetAddress() );
 
-            Object* foundObject = engine->GetObjectByUID( newStatus->GetUID() );
+            Object* foundObject = engine->GetObjectByUID( newStatus.GetUID() );
             if( foundObject != NULL )
             {
                 foundObject->Render();
-                foundObject->LoadStatus( newStatus );
+                foundObject->LoadStatus( &newStatus );
                 engine->debug->PrintString( "found object and update...\n" );
                 foundObject->Render();
             }
             else
             {
                 //Object is not already in the list, so create one
-                if( newStatus->GetType() == OBJECT_TYPE_OBJECT )
+                if( newStatus.GetType() == OBJECT_TYPE_OBJECT )
                 {
                     engine->text->PrintString( "Adding new Object" );
                     Object* newObject = new Object( engine );
-                    newObject->LoadStatus( newStatus );
+                    newObject->LoadStatus( &newStatus );
                     engine->AddObject( newObject );
                 }
-                if( newStatus->GetType() == OBJECT_TYPE_PLAYER )
+                if( newStatus.GetType() == OBJECT_TYPE_PLAYER )
                 {
                     engine->text->PrintString( "Adding new Object" );
                     Object* newObject = new Player( engine );
-                    newObject->LoadStatus( newStatus );
+                    newObject->LoadStatus( &newStatus );
                     engine->AddObject( newObject );
                 }
-                if( newStatus->GetType() == OBJECT_TYPE_ENEMY )
+                if( newStatus.GetType() == OBJECT_TYPE_ENEMY )
                 {
                     engine->text->PrintString( "Adding new Object" );
                     Object* newObject = new Enemy( engine );
-                    newObject->LoadStatus( newStatus );
+                    newObject->LoadStatus( &newStatus );
                     engine->AddObject( newObject );
                 }
             }
