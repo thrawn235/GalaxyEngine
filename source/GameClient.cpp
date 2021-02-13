@@ -50,38 +50,38 @@ void GameClient::Run()
         Packet* pkt = engine->net->GetFirstPacketFromInbox();
         if( pkt->type == NET_PACKET_TYPE_OBJECT_UPDATE )
         {
-            Object* newStatus = ( Object* )pkt->data;
-            newStatus->SetEngine( engine );
+            Object newStatus( engine );
+            newStatus.LoadStatus( pkt->data );
 
-            engine->debug->PrintString( "   received Packet: UID:%i Type:%i Pos:%f:%f from:%i rewrite NetAddr to:%i\n", newStatus->GetUID(), newStatus->GetType(), newStatus->GetPos().x, newStatus->GetPos().y, pkt->sender, newStatus->GetEngine()->net->GetAddress() );
+            engine->debug->PrintString( "   received Packet: UID:%i Type:%i Pos:%f:%f from:%i rewrite NetAddr to:%i\n", newStatus.GetUID(), newStatus.GetType(), newStatus.GetPos().x, newStatus.GetPos().y, pkt->sender, newStatus.GetEngine()->net->GetAddress() );
 
-            Object* foundObject = engine->GetObjectByUID( newStatus->GetUID() );
+            Object* foundObject = engine->GetObjectByUID( newStatus.GetUID() );
             if( foundObject != NULL )
             {
-                foundObject->LoadStatus( newStatus );
+                foundObject->LoadStatus( pkt->data );
             }
             else
             {
                 //Object is not already in the list, so create one
-                if( newStatus->GetType() == OBJECT_TYPE_OBJECT )
+                if( newStatus.GetType() == OBJECT_TYPE_OBJECT )
                 {
                     //text->PrintString( "Adding new Object" );
                     Object* newObject = new Object( engine );
-                    newObject->LoadStatus( newStatus );
+                    newObject->LoadStatus( pkt->data );
                     engine->AddObject( newObject );
                 }
-                if( newStatus->GetType() == OBJECT_TYPE_PLAYER )
+                if( newStatus.GetType() == OBJECT_TYPE_PLAYER )
                 {
                     //text->PrintString( "Adding new Object" );
                     Object* newObject = new Player( engine );
-                    newObject->LoadStatus( newStatus );
+                    newObject->LoadStatus( pkt->data );
                     engine->AddObject( newObject );
                 }
-                if( newStatus->GetType() == OBJECT_TYPE_ENEMY )
+                if( newStatus.GetType() == OBJECT_TYPE_ENEMY )
                 {
                     //text->PrintString( "Adding new Object" );
                     Object* newObject = new Enemy( engine );
-                    newObject->LoadStatus( newStatus );
+                    newObject->LoadStatus( pkt->data );
                     engine->AddObject( newObject );
                 }
             }

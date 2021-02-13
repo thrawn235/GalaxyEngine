@@ -11,6 +11,7 @@
 
 //========== stdlib includes =========
 #include <stdio.h>
+#include <cstdint>
 using namespace std;
 //====================================
 
@@ -29,33 +30,38 @@ using namespace std;
 class GameEngine;
 //====================================
 
-struct ObjectStats
+struct NetStats
+{
+            uint32_t            uid;                            //unique identifier
+            uint16_t            type;                           //type of the object
+            uint16_t            size;
+};
+
+struct ObjectStats : NetStats
 {   
-    Vector2D            pos;            //position of the object
-    Vector2D            movement;       //final movement vector (once all forces are added)
+            Vector2D            pos;                            //position of the object
+            Vector2D            movement;                       //final movement vector (once all forces are added)
 
-    unsigned long int   uid;            //unique identifier
-    
-    unsigned int        type;           //type of the object
-
-    bool                visible;
-    bool                active;
-    bool                predict;
-    bool                clientActive;
+            bool                visible;
+            bool                active;
+            bool                predict;
+            bool                clientActive;
 };
 
 class Object
 {
 protected:
-    GameEngine*         engine;         //pointer to the game engine
+            NetStats*           baseNetStats        = NULL;
+            ObjectStats*        netStats            = NULL;
 
-    char*               sendBuffer;     //buffer used to send attributes;
+            GameEngine*         engine;                         //pointer to the game engine
+
 public:
-    ObjectStats         objectStats;
     
 
     //------------ Constructor/Destructor: --------------------
                                 Object             ( GameEngine* engine );
+                                ~Object            ();
 
     //---------------------- Get/Set --------------------------
             void                SetEngine          ( GameEngine* engine );

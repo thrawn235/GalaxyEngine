@@ -43,8 +43,7 @@ void GameServer::Run()
         if( pkt->type == NET_PACKET_TYPE_OBJECT_UPDATE )
         {
             Object newStatus( engine );
-            newStatus.objectStats = *( ObjectStats* )pkt->data;
-            newStatus.SetEngine( engine );
+            newStatus.LoadStatus( pkt->data );
 
             engine->debug->PrintString( "   received Packet: UID:%i Type:%i Pos:%f:%f mov:%f:%f from:%i rewrite NetAddr to:%i\n", newStatus.GetUID(), newStatus.GetType(), newStatus.GetPos().x, newStatus.GetPos().y,newStatus.GetMovement().x, newStatus.GetMovement().y , pkt->sender, newStatus.GetEngine()->net->GetAddress() );
 

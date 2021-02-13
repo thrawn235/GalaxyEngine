@@ -20,7 +20,7 @@ using namespace std;
 //======= forward declarations =======
 //====================================
 
-struct PlayerStats
+struct PlayerStats : ObjectStats
 {
 	bool up, down, left, right;
 	bool fire;
@@ -29,33 +29,33 @@ struct PlayerStats
 
 class Player : public Object
 {
+private:
+	
 protected:
-	PlayerStats		playerStats;
+	PlayerStats*	netStats;
 public:
 					Player				( GameEngine* engine );
 	virtual void 	GameLogic			();
 	virtual void 	ClientSideUpdate	();
 	virtual void	Render				();
-	virtual void	SendStatus			();
-	virtual void	LoadStatus			( void* data );
 };
 
 
-struct EnemyStats
+struct EnemyStats : ObjectStats
 {
 	
 };
 
 class Enemy : public Object
 {
+private:
+	
 protected:
-	EnemyStats		enemyStats;
+	EnemyStats*		netStats;
 public:
 					Enemy				( GameEngine* engine );
 	virtual void 	GameLogic			();
 	virtual void	Render				();
-	virtual void	SendStatus			();
-	virtual void	LoadStatus			( void* data );
 };
 
 #endif

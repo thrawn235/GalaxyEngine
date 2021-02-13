@@ -3,21 +3,32 @@
 
 Object::Object( GameEngine* engine )
 {
-    this->engine                = engine;
+    engine->debug->PrintString( "object constructor...\n" );
+    if( baseNetStats != NULL )
+    {
+        delete baseNetStats;   
+    }
+    baseNetStats = new ObjectStats;
+    netStats = (ObjectStats*)baseNetStats;
+    netStats->size = sizeof( ObjectStats );
 
-    objectStats.uid             = engine->GetHighestUIDAndInc();
+    this->engine              = engine;
 
-    objectStats.pos             = Vector2D( 0, 0 );
-    objectStats.movement        = Vector2D( 0, 0 );
+    netStats->uid             = engine->GetHighestUIDAndInc();
 
-    objectStats.active          = true;
-    objectStats.clientActive    = true;
-    objectStats.predict         = true;
-    objectStats.visible         = true;
+    netStats->pos             = Vector2D( 0, 0 );
+    netStats->movement        = Vector2D( 0, 0 );
 
-    objectStats.type            = OBJECT_TYPE_OBJECT;
+    netStats->active          = true;
+    netStats->clientActive    = true;
+    netStats->predict         = true;
+    netStats->visible         = true;
 
-    sendBuffer                  = NULL;
+    netStats->type            = OBJECT_TYPE_OBJECT;
+}
+Object::~Object()
+{
+    delete baseNetStats;
 }
 void Object::SetEngine( GameEngine* engine )
 {
@@ -32,109 +43,102 @@ GameEngine* Object::GetEngine()
 unsigned long int Object::GetUID()
 {
     //
-    return objectStats.uid;
+    return netStats->uid;
 }
 void Object::SetUID( unsigned long uid )
 {
     //
-    objectStats.uid = uid;
+    netStats->uid = uid;
 }
 unsigned int Object::GetType()
 {
     //
-    return objectStats.type;
+    return netStats->type;
 }
 void Object::SetType( unsigned int type )
 {
     //
-    objectStats.type = type;
+    netStats->type = type;
 }
 bool Object::GetVisible()
 {
     //
-    return objectStats.visible;
+    return netStats->visible;
 }
 bool Object::GetActive()
 {
     //
-    return objectStats.active;
+    return netStats->active;
 }
 bool Object::GetPredict()
 {
     //
-    return objectStats.predict;
+    return netStats->predict;
 }
 bool Object::GetClientActive()
 {
     //
-    return objectStats.active;
+    return netStats->active;
 }
 void Object::SetVisible( bool visible )
 {
     //
-    objectStats.visible = visible;
+    netStats->visible = visible;
 }
 void Object::SetActive( bool active )
 {
     //
-    objectStats.active = active;
+    netStats->active = active;
 }
 void Object::SetPredict( bool predict )
 {
     //
-    objectStats.predict = predict;
+    netStats->predict = predict;
 }
 void Object::SetClientActive( bool clientActive )
 {
     //
-    objectStats.clientActive = clientActive;
+    netStats->clientActive = clientActive;
 }
 Vector2D Object::GetPos()
 {
     //
-    return objectStats.pos;
+    return netStats->pos;
 }
 void Object::SetPos( Vector2D pos )
 {
     //
-    objectStats.pos = pos;
+    netStats->pos = pos;
 }
 Vector2D Object::GetMovement()
 {
     //
-    return objectStats.movement;
+    return netStats->movement;
 }
 void Object::SetMovement( Vector2D movement )
 {
     //
-    objectStats.movement = movement;
+    netStats->movement = movement;
 }
 
 void Object::SendStatus()
 { 
-    if( sendBuffer == NULL )
-    {
-        sendBuffer = (char*)malloc( sizeof( ObjectStats ) );
-    }
-
-    memcpy( sendBuffer, &objectStats, sizeof( ObjectStats ) );
-
     Packet* pkt     = new Packet;
     pkt->sender     = engine->net->GetAddress();
-    pkt->dataLength = sizeof( ObjectStats );
-    pkt->data       = sendBuffer;
+    pkt->dataLength = netStats->size;
+    pkt->data       = netStats;
     pkt->type       = NET_PACKET_TYPE_OBJECT_UPDATE;
 
-    Object* pktDebug = (Object*)pkt->data;
-
-    engine->debug->PrintString( "  sending packet UID:%i Type:%i Pos:%f:%f from:%i NetAddr:%i\n", pktDebug->GetUID(), pktDebug->GetType(), pktDebug->GetPos().x, pktDebug->GetPos().y, pkt->sender, engine->net->GetAddress() );
+    engine->debug->PrintString( "  sending packet UID:%i Type:%i Pos:%f:%f \n", GetUID(), GetType(), GetPos().x, GetPos().y );
 
     engine->net->Send( pkt );
 }
 void Object::LoadStatus( void* data )
 {
     //lets assume we know that data is of type Object
-    memcpy( &objectStats, data, sizeof( ObjectStats ) );
+    NetStats* tmp = (NetStats*)data;
+    engine->debug->PrintString( "received UID:%i Type:%i size:%i\n", tmp->uid, tmp->type, tmp->size );
+    memcpy( &netStats, data, netStats->size );
 }
 
 void Object::Update()
@@ -146,22 +150,22 @@ void Object::Update()
 void Object::GameLogic()
 {
     //
-    engine->text->PrintString( "Game Logic: Object UID:%i; Type:%i(Object); Pos:%f:%f NetAddr:%i (server)\n", objectStats.uid, objectStats.type, objectStats.pos.x, objectStats.pos.y, engine->net->GetAddress() );
+    engine->text->PrintString( "Game Logic: Object UID:%i; Type:%i(Object); Pos:%f:%f NetAddr:%i (server)\n", netStats->uid, netStats->type, netStats->pos.x, netStats->pos.y, engine->net->GetAddress() );
 }
 void Object::ClientSideUpdate()
 {
-    engine->text->PrintString( "ClientSide: Object UID:%i; Type:%i(Object); Pos:%f:%f NetAddr:%i (client)\n", objectStats.uid, objectStats.type, objectStats.pos.x, objectStats.pos.y, engine->net->GetAddress() );
+    engine->text->PrintString( "ClientSide: Object UID:%i; Type:%i(Object); Pos:%f:%f NetAddr:%i (client)\n", netStats->uid, netStats->type, netStats->pos.x, netStats->pos.y, engine->net->GetAddress() );
 
     //SendStatus();
 }
 void Object::Predict( float tickRate )
 {
-    engine->text->PrintString( "Predict: Object UID:%i; Type:%i(Object); Pos:%f:%f NetAddr:%i (server)\n", objectStats.uid, objectStats.type, objectStats.pos.x, objectStats.pos.y, engine->net->GetAddress() );
+    engine->text->PrintString( "Predict: Object UID:%i; Type:%i(Object); Pos:%f:%f NetAddr:%i (server)\n", netStats->uid, netStats->type, netStats->pos.x, netStats->pos.y, engine->net->GetAddress() );
     engine->text->PrintString( "   tickRate: %f\n", tickRate );
-    objectStats.pos = objectStats.pos + objectStats.movement * tickRate;
+    netStats->pos = netStats->pos + netStats->movement * tickRate;
 }
 void Object::Render()
 {
     //
-    engine->text->PrintString( "Render: Object UID:%i; Type:%i(Object); Pos:%f:%f NetAddr:%i (client)\n", objectStats.uid, objectStats.type, objectStats.pos.x, objectStats.pos.y, engine->net->GetAddress() );
+    engine->text->PrintString( "Render: Object UID:%i; Type:%i(Object); Pos:%f:%f NetAddr:%i (client)\n", netStats->uid, netStats->type, netStats->pos.x, netStats->pos.y, engine->net->GetAddress() );
 }
