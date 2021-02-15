@@ -20,7 +20,7 @@ CompilerLinux   = g++
 CompilerWin     = x86_64-w64-mingw32-g++
 Compiler        = $(CompilerDosDir)i586-pc-msdosdjgpp-g++
 CFLAGS          = -Wall -O3 -s
-CFLAGSWin       = -static-libgcc -static-libstdc++ -static -Dwin
+CFLAGSWin       = -static-libgcc -static-libstdc++ -static -Dwin -lws2_32
 CFLAGSDos       = -Ddos
 CFLAGSLinux     = -Dlinux
 emulator        = dosbox
@@ -105,11 +105,14 @@ $(sourceDir)win/GameServer.o: $(sourceDir)GameServer.cpp $(sourceDir)GameServer.
 $(sourceDir)win/NetEngineLocal.o: $(sourceDir)NetEngineLocal.cpp $(sourceDir)NetEngineLocal.h $(sourceDir)win/GameEngine.o
 	$(CompilerWin) $(CFLAGS) $(CFLAGSWin) -o $@ -c $<
 
-$(binDir)win/main.exe: $(sourceDir)main.cpp $(sourceDir)win/Object.o $(sourceDir)win/GameEngine.o $(sourceDir)win/TextEngineIOStream.o $(sourceDir)win/GameClient.o $(sourceDir)win/GameServer.o $(sourceDir)win/NetEngineLocal.o $(sourceDir)win/DerivedObjects.o $(sourceDir)win/NetEngine.o
-	$(CompilerWin) $(CFLAGS) $(CFLAGSWin) -o $@ $^
+$(sourceDir)win/NetEngineWinSocketsUDP.o: $(sourceDir)NetEngineWinSocketsUDP.cpp $(sourceDir)NetEngineWinSocketsUDP.h $(sourceDir)win/GameEngine.o
+	$(CompilerWin) $(CFLAGS) $(CFLAGSWin) -o $@ -c $<
 
-$(binDir)win/DedicatedServer.exe: $(sourceDir)DedicatedServer.cpp $(sourceDir)win/Object.o $(sourceDir)win/GameEngine.o $(sourceDir)win/TextEngineIOStream.o $(sourceDir)win/GameClient.o $(sourceDir)win/GameServer.o $(sourceDir)win/NetEngineLocal.o $(sourceDir)win/DerivedObjects.o $(sourceDir)win/NetEngine.o
-	$(CompilerWin) $(CFLAGS) $(CFLAGSWin) -o $@ $^
+$(binDir)win/main.exe: $(sourceDir)main.cpp $(sourceDir)win/Object.o $(sourceDir)win/GameEngine.o $(sourceDir)win/TextEngineIOStream.o $(sourceDir)win/GameClient.o $(sourceDir)win/GameServer.o $(sourceDir)win/NetEngineLocal.o $(sourceDir)win/NetEngineWinSocketsUDP.o $(sourceDir)win/DerivedObjects.o $(sourceDir)win/NetEngine.o
+	$(CompilerWin) $(CFLAGS) -o $@ $^ $(CFLAGSWin)
+
+$(binDir)win/DedicatedServer.exe: $(sourceDir)DedicatedServer.cpp $(sourceDir)win/Object.o $(sourceDir)win/GameEngine.o $(sourceDir)win/TextEngineIOStream.o $(sourceDir)win/GameClient.o $(sourceDir)win/GameServer.o $(sourceDir)win/NetEngineLocal.o $(sourceDir)win/NetEngineWinSocketsUDP.o $(sourceDir)win/DerivedObjects.o $(sourceDir)win/NetEngine.o
+	$(CompilerWin) $(CFLAGS) -o $@ $^ $(CFLAGSWin)
 
 .PHONY: win
 win: $(binDir)win/main.exe

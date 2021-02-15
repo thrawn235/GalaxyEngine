@@ -4,17 +4,20 @@ GameEngine::GameEngine()
 {
     #ifdef linux
         net = new NetEngineLinuxSocketsUDP;
-    #else
-        net = new NetEngineLocal;
-    #endif
-
-    #ifdef dos
-        text = new TextEngineSTDIO;
-        debug = new TextEngineSTDIO;
-    #else
         text = new TextEngineIOStream;
         debug = new TextEngineIOStream;
     #endif
+    #ifdef win
+        net = new NetEngineWinSocketsUDP;
+        text = new TextEngineIOStream;
+        debug = new TextEngineIOStream;
+    #endif
+    #ifdef dos
+        net = new NetEngineLocal;
+        text = new TextEngineSTDIO;
+        debug = new TextEngineSTDIO;
+    #endif
+        
 
     highestUID = 1;
 }

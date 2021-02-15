@@ -21,17 +21,20 @@ using namespace std;
 #include "Object.h"
 #include "DerivedObjects.h"
 #include "TextEngine.h"
+#ifdef win
+    #include "NetEngineWinSocketsUDP.h"
+    #include "NetEngineLocal.h"
+    #include "TextEngineIOStream.h"
+#endif
 #ifdef linux
     #include "NetEngineLinuxSocketsUDP.h"
     #include "NetEngineLinuxSocketsTCP.h"
     #include "NetEngineLocal.h"
-#else
-    #include "NetEngineLocal.h"
+    #include "TextEngineIOStream.h"
 #endif
 #ifdef dos
+    #include "NetEngineLocal.h"
     #include "TextEngineSTDIO.h"
-#else
-    #include "TextEngineIOStream.h"
 #endif
 #include "Vector2D.h"
 //====================================
