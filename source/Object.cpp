@@ -2,12 +2,7 @@
 #include "GameEngine.h"
 
 Object::Object( GameEngine* engine )
-{
-    engine->debug->PrintString( "object constructor...\n" );
-    if( baseNetStats != NULL )
-    {
-        delete baseNetStats;   
-    }
+{ 
     baseNetStats = new ObjectStats;
     netStats = (ObjectStats*)baseNetStats;
     netStats->size = sizeof( ObjectStats );
@@ -121,6 +116,11 @@ void Object::SetMovement( Vector2D movement )
     netStats->movement = movement;
 }
 
+void Object::PrintStats()
+{
+    engine->debug->PrintString( "UID:%i Type:%i Pos:%f:%f stats-size:%i\n", GetUID(), GetType(), GetPos().x, GetPos().y, netStats->size );
+}
+
 void Object::SendStatus()
 { 
     Packet* pkt     = new Packet;
@@ -129,7 +129,8 @@ void Object::SendStatus()
     pkt->data       = netStats;
     pkt->type       = NET_PACKET_TYPE_OBJECT_UPDATE;
 
-    engine->debug->PrintString( "  sending packet UID:%i Type:%i Pos:%f:%f \n", GetUID(), GetType(), GetPos().x, GetPos().y );
+    engine->debug->PrintString( "sending Status: ");
+    PrintStats();
 
     engine->net->Send( pkt );
 }
@@ -138,7 +139,7 @@ void Object::LoadStatus( void* data )
     //lets assume we know that data is of type Object
     NetStats* tmp = (NetStats*)data;
     engine->debug->PrintString( "received UID:%i Type:%i size:%i\n", tmp->uid, tmp->type, tmp->size );
-    memcpy( &netStats, data, netStats->size );
+    memcpy( netStats, data, netStats->size );
 }
 
 void Object::Update()
@@ -150,22 +151,26 @@ void Object::Update()
 void Object::GameLogic()
 {
     //
-    engine->text->PrintString( "Game Logic: Object UID:%i; Type:%i(Object); Pos:%f:%f NetAddr:%i (server)\n", netStats->uid, netStats->type, netStats->pos.x, netStats->pos.y, engine->net->GetAddress() );
+    engine->text->PrintString( "Game Logic: " );
+    PrintStats();
 }
 void Object::ClientSideUpdate()
 {
-    engine->text->PrintString( "ClientSide: Object UID:%i; Type:%i(Object); Pos:%f:%f NetAddr:%i (client)\n", netStats->uid, netStats->type, netStats->pos.x, netStats->pos.y, engine->net->GetAddress() );
+    engine->text->PrintString( "Client Side: " );
+    PrintStats();
 
     //SendStatus();
 }
 void Object::Predict( float tickRate )
 {
-    engine->text->PrintString( "Predict: Object UID:%i; Type:%i(Object); Pos:%f:%f NetAddr:%i (server)\n", netStats->uid, netStats->type, netStats->pos.x, netStats->pos.y, engine->net->GetAddress() );
+    engine->text->PrintString( "Predict: " );
+    PrintStats();
     engine->text->PrintString( "   tickRate: %f\n", tickRate );
     netStats->pos = netStats->pos + netStats->movement * tickRate;
 }
 void Object::Render()
 {
     //
-    engine->text->PrintString( "Render: Object UID:%i; Type:%i(Object); Pos:%f:%f NetAddr:%i (client)\n", netStats->uid, netStats->type, netStats->pos.x, netStats->pos.y, engine->net->GetAddress() );
+    engine->text->PrintString( "Render: " );
+    PrintStats();
 }

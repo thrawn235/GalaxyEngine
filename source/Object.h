@@ -35,7 +35,7 @@ struct NetStats
             uint32_t            uid;                            //unique identifier
             uint16_t            type;                           //type of the object
             uint16_t            size;
-};
+}__attribute__ ((packed));
 
 struct ObjectStats : NetStats
 {   
@@ -82,6 +82,8 @@ public:
             void                SetPos             ( Vector2D pos );
             Vector2D            GetMovement        ();
             void                SetMovement        ( Vector2D movement );
+
+    virtual void                PrintStats        ();
 
     //-------------------- Network ----------------------------
     virtual void                SendStatus         ();                          //serialize all attributes and send them over the net

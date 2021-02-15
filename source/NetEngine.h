@@ -53,7 +53,7 @@ public:
 
     //----------------- Data -------------------------
     void FixData    ();                 //allocate memory and copy data from the data pointer
-};
+}__attribute__((packed));
 
 
 

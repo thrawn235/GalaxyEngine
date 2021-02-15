@@ -5,12 +5,8 @@
 
 Player::Player( GameEngine* engine ) : Object( engine )
 {
-	engine->debug->PrintString( "player contructor...\n" );
-	if( baseNetStats != NULL )
-    {
-    	delete baseNetStats;
-    }
-    baseNetStats = new PlayerStats;
+	baseNetStats = (NetStats*)realloc( baseNetStats, sizeof( PlayerStats ) );
+   
     netStats = (PlayerStats*)baseNetStats;
     netStats->size = sizeof( PlayerStats );
 
@@ -96,12 +92,8 @@ void Player::Render()
 
 Enemy::Enemy( GameEngine* engine ) : Object( engine )
 {
-	engine->debug->PrintString( "enemy contructor...\n" );
-	if( baseNetStats != NULL )
-    {
-    	delete baseNetStats;
-    }
-    baseNetStats = new EnemyStats;
+	baseNetStats = (NetStats*)realloc( baseNetStats, sizeof( EnemyStats ) );
+
     netStats = (EnemyStats*)baseNetStats;
     netStats->size = sizeof( EnemyStats );
 

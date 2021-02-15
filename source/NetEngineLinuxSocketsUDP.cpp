@@ -100,10 +100,19 @@ void NetEngineLinuxSocketsUDP::Send( Packet* packet )
 }
 Packet* NetEngineLinuxSocketsUDP::GetFirstPacketFromInbox()
 {
+    #ifdef debug
+        cout<<"getting packet from inbox..."<<endl;
+    #endif
     if( inbox.size() > 0 )
     {
-        Packet* tmp = inbox[0];
-        inbox.erase( inbox.begin() );
+        #ifdef debug
+            cout<<"inbox is NOT empty..."<<endl;
+        #endif
+        Packet* tmp = inbox.back();
+        #ifdef debug
+            cout<<"Packt: sender:"<<tmp->sender<<" type:"<<(unsigned int)tmp->type<<" datalength:"<<tmp->dataLength<<endl;
+        #endif
+        inbox.pop_back();
         return tmp;
     }
     return NULL;
@@ -163,10 +172,6 @@ bool NetEngineLinuxSocketsUDP::GetIsConnected()
 void NetEngineLinuxSocketsUDP::InitServer()
 {
     isServer = true;
-
-    #ifdef debug
-        cout<<"binding socket..."<<endl;
-    #endif
 
     memset( &myAddress, 0, sizeof( myAddress ) );
     myAddress.sin_family = AF_INET;
@@ -334,14 +339,11 @@ void NetEngineLinuxSocketsUDP::ReceivePackets()
         {
             //the packet has nothing to do with the implementation
             //so its put in the inbox for the gameclient to grab it.
+            #ifdef debug
+                cout<<"   received regular game packet - adding to inbox"<<endl;
+            #endif
             inbox.push_back( receivePacket );
         }
-    }
-    if( receiveLength == -1 )
-    {
-        #ifdef debug
-            cout<<"no data received"<<endl;
-        #endif
     }
 }
 void NetEngineLinuxSocketsUDP::Update()

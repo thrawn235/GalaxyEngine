@@ -5,6 +5,7 @@
 GameClient::GameClient()
 {
     engine = new GameEngine;
+
     if( engine->net->GetType() == NET_TYPE_LOCAL_BUFFER )
     {
         engine->net->SetAddress( 1 );
@@ -14,6 +15,7 @@ GameClient::GameClient()
     {
         #ifdef linux
             engine->net->InitClient();
+            engine->debug->PrintString( "connecting to server (join request)...\n" );
             engine->net->Connect( inet_addr( "127.0.0.1" ) );
         #endif
     }
@@ -26,6 +28,8 @@ GameClient::GameClient()
     //prediction variables
     tickRate                    = 1;
     clientTicksSinceLogicTick   = 0;
+
+    engine->debug->PrintString( "\n\n" );
 }
 GameClient::~GameClient()
 {
@@ -37,25 +41,22 @@ void GameClient::Run()
 {
     //debug:
     engine->debug->PrintString( "===================== client ==================\n" );
-    engine->debug->PrintString( "Ive got %i Packets\n", engine->net->GetNumPacketsInInbox() );
 
     //count ticks (for prediction step)
     clientTicksSinceLogicTick++;
 
-    engine->text->PrintString( "checking the net for packtes\n" );
     engine->net->Update();
+    engine->debug->PrintString( "Ive got %i Packets\n", engine->net->GetNumPacketsInInbox() );
 
     while( !engine->net->InboxEmpty() )
     {
+        engine->text->PrintString( "received Packet: " );
+
         Packet* pkt = engine->net->GetFirstPacketFromInbox();
+        NetStats* newStatus = (NetStats*)pkt->data;
         if( pkt->type == NET_PACKET_TYPE_OBJECT_UPDATE )
-        {
-            Object newStatus( engine );
-            newStatus.LoadStatus( pkt->data );
-
-            engine->debug->PrintString( "   received Packet: UID:%i Type:%i Pos:%f:%f from:%i rewrite NetAddr to:%i\n", newStatus.GetUID(), newStatus.GetType(), newStatus.GetPos().x, newStatus.GetPos().y, pkt->sender, newStatus.GetEngine()->net->GetAddress() );
-
-            Object* foundObject = engine->GetObjectByUID( newStatus.GetUID() );
+        {   
+            Object* foundObject = engine->GetObjectByUID( newStatus->uid );
             if( foundObject != NULL )
             {
                 foundObject->LoadStatus( pkt->data );
@@ -63,21 +64,21 @@ void GameClient::Run()
             else
             {
                 //Object is not already in the list, so create one
-                if( newStatus.GetType() == OBJECT_TYPE_OBJECT )
+                if( newStatus->type == OBJECT_TYPE_OBJECT )
                 {
                     //text->PrintString( "Adding new Object" );
                     Object* newObject = new Object( engine );
                     newObject->LoadStatus( pkt->data );
                     engine->AddObject( newObject );
                 }
-                if( newStatus.GetType() == OBJECT_TYPE_PLAYER )
+                if( newStatus->type == OBJECT_TYPE_PLAYER )
                 {
                     //text->PrintString( "Adding new Object" );
                     Object* newObject = new Player( engine );
                     newObject->LoadStatus( pkt->data );
                     engine->AddObject( newObject );
                 }
-                if( newStatus.GetType() == OBJECT_TYPE_ENEMY )
+                if( newStatus->type == OBJECT_TYPE_ENEMY )
                 {
                     //text->PrintString( "Adding new Object" );
                     Object* newObject = new Enemy( engine );
@@ -88,7 +89,7 @@ void GameClient::Run()
         }
         else if( pkt->type == NET_PACKET_TYPE_SEND_COMPLETE )
         {
-            engine->debug->PrintString( "   received Packet: Gameround done!\n");
+            engine->debug->PrintString( "   Packet: Gameround done!\n");
             waitingForUpdate = false;
 
 
@@ -100,14 +101,6 @@ void GameClient::Run()
         //clear memory for the packet
         pkt->~Packet();
     }
-    
-    //debug
-    /*engine->debug->PrintString("these are my objects:\n");
-    vector<Object*> objects = engine->GetAllObjects();
-    for( unsigned int i = 0; i < objects.size(); i++ )
-    {
-        engine->debug->PrintString("   UID: %i\n", objects[i]->GetUID() );
-    }*/
 
     //only update if the server has send a Ack Packet
     if( !waitingForUpdate )
@@ -119,5 +112,5 @@ void GameClient::Run()
     engine->PredictAll( tickRate );
     engine->RenderAll();
 
-    engine->debug->PrintString( "===========================================:\n\n\n" );
+    engine->debug->PrintString( "===============================================\n\n\n" );
 }

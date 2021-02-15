@@ -17,7 +17,7 @@ using namespace std;
 
 int main()
 {
-    cout<<"Galaxy Engine: Main Client"<<endl;
+    cout<<"Galaxy Engine: Main Client"<<endl<<endl;
 
     bool serverActive = true;
     bool clientActive = true;
@@ -27,12 +27,10 @@ int main()
 
     if( serverActive )
     {
-        cout<<"creatinig server..."<<endl;
         server = new GameServer();
     }
     if( clientActive )
     {
-        cout<<"creatinig client..."<<endl;
         client = new GameClient();
     }
 
