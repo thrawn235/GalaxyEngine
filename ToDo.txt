@@ -1,8 +1,5 @@
 To Do:
 
-quit() function for errors
-text, debug and quit methods should be availible in engine modules
-Winsocks unblockable
 DOS Network implementation
 MemoryEngine
 DLLs ?

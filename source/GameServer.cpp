@@ -11,12 +11,9 @@ GameServer::GameServer()
         engine->net->SetAddress( 2 );
         engine->net->Connect( 1 );
     }
-    if( engine->net->GetType() == NET_TYPE_LINUX_SOCKETS_UDP || engine->net->GetType() == NET_TYPE_LINUX_SOCKETS_TCP )
+    if( engine->net->GetType() == NET_TYPE_WIN_SOCKETS_UDP || engine->net->GetType() == NET_TYPE_LINUX_SOCKETS_UDP || engine->net->GetType() == NET_TYPE_LINUX_SOCKETS_TCP )
     {
-        #ifdef linux
-            //engine->net->Connect( inet_addr( "127.0.0.1" ) );
-            engine->net->InitServer();
-        #endif
+        engine->net->InitServer();
     }
 
     Object* tmp = new Enemy( engine );

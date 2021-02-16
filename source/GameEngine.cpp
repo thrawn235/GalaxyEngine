@@ -1,23 +1,28 @@
 #include "GameEngine.h"
 
+//global list of all Game Engines. Its prmarily used for ungraceful program termination
+vector<GameEngine*> engines;
+
+
 GameEngine::GameEngine()
 {
     #ifdef linux
-        net = new NetEngineLinuxSocketsUDP;
         text = new TextEngineIOStream;
         debug = new TextEngineIOStream;
+        net = new NetEngineLinuxSocketsUDP( this );
     #endif
     #ifdef win
-        net = new NetEngineWinSocketsUDP;
         text = new TextEngineIOStream;
         debug = new TextEngineIOStream;
+        net = new NetEngineWinSocketsUDP( this );
     #endif
     #ifdef dos
-        net = new NetEngineLocal;
         text = new TextEngineSTDIO;
         debug = new TextEngineSTDIO;
+        net = new NetEngineLocal( this );
     #endif
-        
+
+    engines.push_back( this );
 
     highestUID = 1;
 }
@@ -40,6 +45,16 @@ unsigned long int GameEngine::GetHighestUIDAndInc()
     highestUID++;
     return highestUID - 1;
 }
+
+void GameEngine::Quit()
+{
+    for( unsigned int i = 0; i < engines.size(); i++ )
+    {
+        delete engines[i];
+    }
+    exit( EXIT_FAILURE );
+}
+
 vector<Object*> GameEngine::GetAllObjects()
 {
     return objects;

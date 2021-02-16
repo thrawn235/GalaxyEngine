@@ -35,7 +35,7 @@ protected:
     bool                isConnected;
 
 public:
-                                NetEngineLocal              ();
+                                NetEngineLocal              ( GameEngine* engine );
     
     //-------------- Network Methods -----------------
     virtual void                SetAddress                  ( uint64_t address );

@@ -53,7 +53,7 @@ protected:
 
 public:
     //---------- Constructor / Destructor ------------
-                                NetEngineLinuxSocketsTCP    ();
+                                NetEngineLinuxSocketsTCP    ( GameEngine* engine );
                                 ~NetEngineLinuxSocketsTCP   ();
 
     //-------------- Network Methods -----------------

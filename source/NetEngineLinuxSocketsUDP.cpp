@@ -1,38 +1,26 @@
 //NetEngineLinuxSocketsUDP.cpp
 
-#define debug
-
 #include "NetEngineLinuxSocketsUDP.h"
-
-#ifdef debug
-    #include <iostream>
-#endif
+#include "GameEngine.h"
 
 
-NetEngineLinuxSocketsUDP::NetEngineLinuxSocketsUDP()
+NetEngineLinuxSocketsUDP::NetEngineLinuxSocketsUDP( GameEngine* engine ) : NetEngine( engine )
 {
     port = 1234;
     isConnected = false;
     isServer = false;
     receiveBuffer = malloc( NET_BUFFER_SIZE );
 
-    #ifdef debug
-        cout<<"creating UDP Socket..."<<endl;
-    #endif
+    engine->debug->PrintString( "creating UDP socket...\n" );
     socketDescriptor = socket( AF_INET, SOCK_DGRAM | SOCK_NONBLOCK, IPPROTO_UDP );
     if( socketDescriptor == -1 )
     {
-        #ifdef debug
-            cout<<"could not create Socket..."<<endl;
-        #endif
+        engine->debug->PrintString( "could not create socket!\n" );
     }
 }
 NetEngineLinuxSocketsUDP::~NetEngineLinuxSocketsUDP()
 {
-    #ifdef debug
-        cout<<"closing socket"<<endl;
-    #endif
-
+    engine->debug->PrintString( "closing socket...\n" );
     close( socketDescriptor );
 }
 
@@ -65,14 +53,11 @@ bool NetEngineLinuxSocketsUDP::GetIsServer()
 }
 void NetEngineLinuxSocketsUDP::Send( Packet* packet )
 {
-    #ifdef debug
-        cout<<"sending..."<<endl;
-    #endif
+    engine->debug->PrintString( "sending...\n" );
     int dataLength = 0;
     void* data = SerializePacketData( packet, &dataLength );
-    #ifdef debug
-        cout<<"   "<<dataLength<<" bytes..."<<endl;
-    #endif
+    
+    engine->debug->PrintString( "   %i bytes...\n", dataLength );
 
     if( isServer )
     {
@@ -81,9 +66,7 @@ void NetEngineLinuxSocketsUDP::Send( Packet* packet )
         {
             if( sendto( socketDescriptor, data, dataLength, 0, (struct sockaddr*) &incomingAddresses[i], sizeof( peerAddress ) ) == -1 )
             {
-                #ifdef debug
-                    cout<<"error sending data!"<<endl;
-                #endif
+                engine->debug->PrintString( "error sending data!\n" );
             }
         }  
     }
@@ -92,26 +75,20 @@ void NetEngineLinuxSocketsUDP::Send( Packet* packet )
         //the client only sends packets to the server (peerAddress)
         if( sendto( socketDescriptor, data, dataLength, 0, (struct sockaddr*) &peerAddress, sizeof( peerAddress ) ) == -1 )
         {
-            #ifdef debug
-                cout<<"error sending data!"<<endl;
-            #endif
+            engine->debug->PrintString( "error sending data!\n" );
         }
     }
 }
 Packet* NetEngineLinuxSocketsUDP::GetFirstPacketFromInbox()
 {
-    #ifdef debug
-        cout<<"getting packet from inbox..."<<endl;
-    #endif
+    engine->debug->PrintString( "getting packet from inbox...\n" );
     if( inbox.size() > 0 )
     {
-        #ifdef debug
-            cout<<"inbox is NOT empty..."<<endl;
-        #endif
+        engine->debug->PrintString( "inbox is NOT empty...\n" );
         Packet* tmp = inbox.back();
-        #ifdef debug
-            cout<<"Packt: sender:"<<tmp->sender<<" type:"<<(unsigned int)tmp->type<<" datalength:"<<tmp->dataLength<<endl;
-        #endif
+        
+        engine->debug->PrintString( "Packet: sender:%i type:%i dataLength:%i\n", tmp->sender, (unsigned int)tmp->type, tmp->dataLength );
+        
         inbox.pop_back();
         return tmp;
     }
@@ -180,9 +157,7 @@ void NetEngineLinuxSocketsUDP::InitServer()
 
     if( bind( socketDescriptor, (struct sockaddr*)&myAddress, sizeof( myAddress ) ) == -1 )
     {
-        #ifdef debug
-            cout<<"error binding socket!"<<endl;
-        #endif
+        engine->debug->PrintString( "error binding socket!\n" );
     }
 }
 vector<uint64_t> NetEngineLinuxSocketsUDP::GetClientAddresses()
@@ -218,9 +193,7 @@ Packet* NetEngineLinuxSocketsUDP::DeSerializePacketData( void* data, int dataLen
 
 void NetEngineLinuxSocketsUDP::SendJoinRequest()
 {
-    #ifdef debug
-        cout<<"sending join request..."<<endl;
-    #endif
+    engine->debug->PrintString( "sending join request...\n" );
 
     Packet joinPacket;
     joinPacket.type = NET_PACKET_TYPE_JOIN_REQUEST;
@@ -229,15 +202,11 @@ void NetEngineLinuxSocketsUDP::SendJoinRequest()
 
     sendto( socketDescriptor, &joinPacket, sizeof( Packet ), 0, (struct sockaddr*) &peerAddress, sizeof( peerAddress ) );
 
-    #ifdef debug
-        cout<<"   sending "<<dataLength<<" bytes"<<endl;
-    #endif
+    engine->debug->PrintString( "sending %i bytes...\n", dataLength );
 }
 void NetEngineLinuxSocketsUDP::SendDisconnectRequest()
 {
-    #ifdef debug
-        cout<<"sending disconnect request..."<<endl;
-    #endif
+    engine->debug->PrintString( "sending disconnect request...\n" );
 
     Packet joinPacket;
     joinPacket.type = NET_PACKET_TYPE_DISCONNECT_REQUEST;
@@ -246,16 +215,12 @@ void NetEngineLinuxSocketsUDP::SendDisconnectRequest()
 
     sendto( socketDescriptor, &joinPacket, sizeof( Packet ), 0, (struct sockaddr*) &peerAddress, sizeof( peerAddress ) );
 
-    #ifdef debug
-        cout<<"   sending "<<dataLength<<" bytes"<<endl;
-    #endif
+    engine->debug->PrintString( "   sending %i bytes\n", dataLength );
 }
 
 void NetEngineLinuxSocketsUDP::SendJoinAck()
 {
-    #ifdef debug
-        cout<<"sending join acknolagement..."<<endl;
-    #endif
+    engine->debug->PrintString( "sending join acknolagement...\n" );
 
     Packet joinPacket;
     joinPacket.type = NET_PACKET_TYPE_JOIN_ACK;
@@ -264,26 +229,21 @@ void NetEngineLinuxSocketsUDP::SendJoinAck()
 
     sendto( socketDescriptor, &joinPacket, sizeof( Packet ), 0, (struct sockaddr*) &peerAddress, sizeof( peerAddress ) );
 
-    #ifdef debug
-        cout<<"   sending "<<dataLength<<" bytes"<<endl;
-    #endif
+    engine->debug->PrintString( "   sending %i bytes\n", dataLength );
 }
 void NetEngineLinuxSocketsUDP::ReceivePackets()
 {
-    #ifdef debug
-        cout<<"checking socket for data"<<endl;
-    #endif
+    engine->debug->PrintString( "   checking socket for data...\n" );
+
     int receiveLength = 0;
     int c = sizeof( struct sockaddr_in );
     while( ( receiveLength = recvfrom( socketDescriptor, receiveBuffer, NET_BUFFER_SIZE, MSG_DONTWAIT, (struct sockaddr *)&peerAddress, (socklen_t*)&c ) ) != -1 )
     {
         //check all packages in the ip stack
 
-        #ifdef debug
-            char str[INET_ADDRSTRLEN];
-            inet_ntop(AF_INET, &(peerAddress.sin_addr), str, INET_ADDRSTRLEN);
-            cout<<"received "<<receiveLength<<" bytes from "<<str<<endl;
-        #endif
+        char str[INET_ADDRSTRLEN];
+        inet_ntop(AF_INET, &(peerAddress.sin_addr), str, INET_ADDRSTRLEN);
+        engine->debug->PrintString( "received %i bytes from %s\n", receiveLength, str );
         
         Packet* receivePacket = DeSerializePacketData( receiveBuffer, receiveLength );
 
@@ -292,9 +252,7 @@ void NetEngineLinuxSocketsUDP::ReceivePackets()
             //if the package is a join request
             //add the sender address to the incomingÁddresses (clients) list (ist its not already in there)
             //and immediatly send a join_Ack back to the sender
-            #ifdef debug
-                cout<<"   join request"<<endl;
-            #endif
+            engine->debug->PrintString( "join request\n" );
             
             bool alreadyInList = false;
             for( unsigned int i = 0; i < incomingAddresses.size(); i++ )
@@ -315,16 +273,12 @@ void NetEngineLinuxSocketsUDP::ReceivePackets()
         {
             //if a join ack is beeing received connected to server is set to true
             //and the client does not send join requests any more
-            #ifdef debug
-                cout<<"   received Join Ack"<<endl;
-            #endif
+            engine->debug->PrintString( "   received join ack\n" );
             isConnected = true;
         }
         else if( receivePacket->type == NET_PACKET_TYPE_DISCONNECT_REQUEST && !isServer )
         {
-            #ifdef debug
-                cout<<"   received Disconnect Request"<<endl;
-            #endif
+            engine->debug->PrintString( "   received disconnect request\n" );
 
             for( unsigned int i = 0; i < incomingAddresses.size(); i++ )
             {
@@ -339,9 +293,7 @@ void NetEngineLinuxSocketsUDP::ReceivePackets()
         {
             //the packet has nothing to do with the implementation
             //so its put in the inbox for the gameclient to grab it.
-            #ifdef debug
-                cout<<"   received regular game packet - adding to inbox"<<endl;
-            #endif
+            engine->debug->PrintString( "   received regular game packet - adding to inbox...\n" );
             inbox.push_back( receivePacket );
         }
     }

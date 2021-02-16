@@ -14,6 +14,7 @@
 //========== stdlib includes =========
 #include <vector>
 #include <cstring>
+#include <stdlib.h>
 using namespace std;
 //====================================
 
@@ -65,6 +66,9 @@ public:
     void                SetHighestUID           ( unsigned long int UID );
     unsigned long int   GetHighestUID           ();
     unsigned long int   GetHighestUIDAndInc     ();
+
+    //------------------- Auxilary Methods ------------
+    void                Quit                    ();
 
     //---------------- Main Engine Fuctions -----------
     vector<Object*>     GetAllObjects           ();

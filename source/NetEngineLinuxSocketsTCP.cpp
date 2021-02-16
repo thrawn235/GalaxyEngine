@@ -1,38 +1,28 @@
 //NetEngineLinuxSocketsTCP.cpp
 
-#define debug
-
 #include "NetEngineLinuxSocketsTCP.h"
-
-#ifdef debug
-    #include <iostream>
-#endif
+#include "GameEngine.h"
 
 
-NetEngineLinuxSocketsTCP::NetEngineLinuxSocketsTCP()
+NetEngineLinuxSocketsTCP::NetEngineLinuxSocketsTCP( GameEngine* engine ) : NetEngine( engine ) 
 {
     port = 1234;
     isConnected = false;
     isServer = false;
     receiveBuffer = malloc( NET_BUFFER_SIZE );
 
-    #ifdef debug
-        cout<<"creating TCP Socket..."<<endl;
-    #endif
+    engine->debug->PrintString( "creating TCP Socket...\n" );
+
     socketDescriptor = socket( AF_INET, SOCK_STREAM | SOCK_NONBLOCK, IPPROTO_IP );
     if( socketDescriptor == -1 )
     {
-        #ifdef debug
-            cout<<"could not create Socket..."<<endl;
-        #endif
+        engine->debug->PrintString( "could not create Socket!\n" );
+        engine->Quit();
     }
 }
 NetEngineLinuxSocketsTCP::~NetEngineLinuxSocketsTCP()
 {
-    #ifdef debug
-        cout<<"closing socket"<<endl;
-    #endif
-
+    engine->debug->PrintString( "closing socket...\n" );
     close( socketDescriptor );
 }
 
@@ -63,38 +53,27 @@ bool NetEngineLinuxSocketsTCP::GetIsServer()
 }
 void NetEngineLinuxSocketsTCP::Send( Packet* packet )
 {
-    #ifdef debug
-        cout<<"sending..."<<endl;
-    #endif
+    engine->debug->PrintString( "sending...\n" );
     int dataLength = 0;
     void* data = SerializePacketData( packet, &dataLength );
-    #ifdef debug
-        cout<<"   "<<dataLength<<" bytes..."<<endl;
-    #endif
+    engine->debug->PrintString( "   %i bytes\n", dataLength );
     
     if( isServer )
     {
         for( unsigned int i = 0; i < incomingDescriptors.size(); i++ )
         {
-            
             if ( send( incomingDescriptors[i], data, dataLength, 0 ) == -1 )
             {
-                #ifdef debug
-                    cout<<"error sednding data!"<<endl;
-                #endif
+                engine->debug->PrintString( "error sending data\n" );
             }
         }
     }
     else
     {
-        #ifdef debug
-            cout<<"   client sending..."<<endl;
-        #endif
+        engine->debug->PrintString( "client sending...\n" );
         if ( send( socketDescriptor, data, dataLength, 0 ) == -1 )
         {
-            #ifdef debug
-                cout<<"error sednding data!"<<endl;
-            #endif
+            engine->debug->PrintString( "error sending data\n" );
         }
     } 
 }
@@ -140,20 +119,14 @@ void NetEngineLinuxSocketsTCP::Connect( uint64_t target )
     peerAddress.sin_addr.s_addr = target;
 
 
-    #ifdef debug
-        cout<<"establishing connection..."<<endl;
-    #endif
+    engine->debug->PrintString( "establishing connection...\n" );
     if ( connect( socketDescriptor, (struct sockaddr*)&peerAddress , sizeof( peerAddress ) ) < 0 )
     {
-        #ifdef debug
-            cout<<"connection error!"<<endl;
-        #endif
+        engine->debug->PrintString( "connection error!\n" );
     }
     else
     {
-        #ifdef debug
-            cout<<"connection established!"<<endl;
-        #endif
+        engine->debug->PrintString( "connection established\n" );
         isConnected = true;
     }   
 }
@@ -178,9 +151,7 @@ void NetEngineLinuxSocketsTCP::InitServer()
 {
     isServer = true;
 
-    #ifdef debug
-        cout<<"binding socket..."<<endl;
-    #endif
+    engine->debug->PrintString( "binding socket...\n" );
 
     memset( &myAddress, 0, sizeof( myAddress ) );
     myAddress.sin_family = AF_INET;
@@ -189,9 +160,7 @@ void NetEngineLinuxSocketsTCP::InitServer()
 
     if( bind( socketDescriptor, (struct sockaddr*)&myAddress, sizeof( myAddress ) ) == -1 )
     {
-        #ifdef debug
-            cout<<"error binding socket!"<<endl;
-        #endif
+        engine->debug->PrintString( "error binding socket!\n" );
     }
 
     listen( socketDescriptor , 3 );
@@ -219,20 +188,16 @@ void* NetEngineLinuxSocketsTCP::SerializePacketData( Packet* packet, int* dataLe
     memcpy( (char*)data + sizeof( uint16_t ) + sizeof( Packet ), packet->data, packet->dataLength );
     *dataLength = sizeof( Packet ) + sizeof( uint16_t ) + packet->dataLength;
 
-    #ifdef debug
-        cout<<"serializing packet..."<<endl;
-        cout<<"   allocating "<<sizeof( Packet ) + packet->dataLength + sizeof( uint16_t )<<" bytes"<<endl;
-        cout<<"   writing "<<(uint16_t)sizeof( Packet ) + packet->dataLength<<" to the beginning"<<endl;
-    #endif
+    engine->debug->PrintString( "serializing packet...\n" );
+    engine->debug->PrintString( "   allocating %i bytes \n", sizeof( Packet ) + packet->dataLength + sizeof( uint16_t ) );
+    engine->debug->PrintString( "   writing %i to the beginning \n", (uint16_t)sizeof( Packet ) + packet->dataLength );
 
     return data;
 }
 vector<Packet*> NetEngineLinuxSocketsTCP::DeSerializePacketData( void* data, int dataLength )
 {
-    #ifdef debug
-        cout<<"De-serializing packet..."<<endl;
-        cout<<"   dataLength "<<dataLength<<endl;
-    #endif
+    engine->debug->PrintString( "De-serializing packet...\n" );
+    engine->debug->PrintString( "   dataLegnth %i\n", dataLength );
 
     vector<Packet*> packets;
 
@@ -241,9 +206,7 @@ vector<Packet*> NetEngineLinuxSocketsTCP::DeSerializePacketData( void* data, int
     {
         int packetSize = *(uint16_t*)((char*)data + i);
 
-        #ifdef debug
-            cout<<"      packetSize "<<packetSize<<endl;
-        #endif
+        engine->debug->PrintString( "      packetSize %i\n", packetSize );
         
         Packet* packet = new Packet;
         memcpy( packet, (char*)data + i + sizeof( uint16_t ), sizeof( Packet ) );
@@ -259,9 +222,7 @@ vector<Packet*> NetEngineLinuxSocketsTCP::DeSerializePacketData( void* data, int
 
 void NetEngineLinuxSocketsTCP::ReceivePackets()
 {
-    #ifdef debug
-        cout<<"checking socket for data"<<endl;
-    #endif
+    engine->debug->PrintString( "checking socket for data...\n" );
     if( isServer )
     {
         for( unsigned int i = 0; i < incomingDescriptors.size(); i++ )
@@ -271,27 +232,22 @@ void NetEngineLinuxSocketsTCP::ReceivePackets()
             int c = sizeof( struct sockaddr_in );
             while( ( receiveLength = recvfrom( incomingDescriptors[i], receiveBuffer, NET_BUFFER_SIZE, MSG_DONTWAIT, (struct sockaddr *)&peerAddress, (socklen_t*)&c ) ) != -1 )
             {
-                #ifdef debug
-                    char str[INET_ADDRSTRLEN];
-                    inet_ntop(AF_INET, &(peerAddress.sin_addr), str, INET_ADDRSTRLEN);
-                    cout<<"received "<<receiveLength<<" bytes from "<<str<<endl;
-                #endif
+                char str[INET_ADDRSTRLEN];
+                inet_ntop(AF_INET, &(peerAddress.sin_addr), str, INET_ADDRSTRLEN);
+                engine->debug->PrintString( "received %i bytes from %s\n", receiveLength, str );
                 
                 vector<Packet*> packets = DeSerializePacketData( receiveBuffer, receiveLength );
                 for( unsigned int i = 0; i < packets.size(); i++ )
                 {
-                    #ifdef debug
-                        cout<<"   adding packet to inbox"<<endl;
-                    #endif
+                    engine->debug->PrintString( "adding packet to inbox...\n" );
                     inbox.push_back( packets[i] );
                 }
             }
             if( receiveLength == -1 )
             {
-                #ifdef debug
-                    cout<<"no data received"<<endl;
-                #endif
+                engine->debug->PrintString( "no data received\n" );
             }
+
             i++;
         }
     }
@@ -301,26 +257,21 @@ void NetEngineLinuxSocketsTCP::ReceivePackets()
         int c = sizeof( struct sockaddr_in );
         while( ( receiveLength = recvfrom( socketDescriptor, receiveBuffer, NET_BUFFER_SIZE, MSG_DONTWAIT, (struct sockaddr *)&peerAddress, (socklen_t*)&c ) ) != -1 )
         {
-            #ifdef debug
-                char str[INET_ADDRSTRLEN];
-                inet_ntop(AF_INET, &(peerAddress.sin_addr), str, INET_ADDRSTRLEN);
-                cout<<"received "<<receiveLength<<" bytes from "<<str<<endl;
-            #endif
+            char str[INET_ADDRSTRLEN];
+            inet_ntop(AF_INET, &(peerAddress.sin_addr), str, INET_ADDRSTRLEN);
+            cout<<"received "<<receiveLength<<" bytes from "<<str<<endl;
+            engine->debug->PrintString( "received %i bytes from %s\n", receiveLength, str );
             
             vector<Packet*> packets = DeSerializePacketData( receiveBuffer, receiveLength );
             for( unsigned int i = 0; i < packets.size(); i++ )
             {
-                #ifdef debug
-                    cout<<"   adding packet to inbox"<<endl;
-                #endif
+                engine->debug->PrintString( "adding packet to inbox\n" );
                 inbox.push_back( packets[i] );
             }
         }
         if( receiveLength == -1 )
         {
-            #ifdef debug
-                cout<<"no data received"<<endl;
-            #endif
+            engine->debug->PrintString( "no data received\n" );
         }
     }
 }
@@ -335,26 +286,20 @@ void NetEngineLinuxSocketsTCP::Update()
 }
 void NetEngineLinuxSocketsTCP::ListenForNewConnections()
 {
-    #ifdef debug
-        cout<<"listening on socket..."<<endl;
-    #endif
+    engine->debug->PrintString( "listening on socket...\n" );
     
 
     int c = sizeof( struct sockaddr_in );
     int new_socket = accept4( socketDescriptor, (struct sockaddr *)&peerAddress, (socklen_t*)&c, SOCK_NONBLOCK );
     if ( new_socket < 0 )
     {
-        #ifdef debug
-            cout<<"no peer is trying to connect!"<<endl;
-        #endif
+        engine->debug->PrintString( "no peer is trying to connect\n" );
     }
     else
     {
-        #ifdef debug
-            cout<<"connection attempt detected!"<<endl;
-            char *client_ip = inet_ntoa(peerAddress.sin_addr);
-            cout<<"   peer ip: "<<client_ip<<endl;
-            incomingDescriptors.push_back( new_socket );
-        #endif
+        engine->debug->PrintString( "connection attempt detected\n" );
+        char *client_ip = inet_ntoa(peerAddress.sin_addr);
+        engine->debug->PrintString( "   peer ip %s\n", client_ip );
+        incomingDescriptors.push_back( new_socket );
     }
 }

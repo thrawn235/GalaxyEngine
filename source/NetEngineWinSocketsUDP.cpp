@@ -1,43 +1,34 @@
 //NetEngineWinSocketsUDP.cpp
 
-#define debug
-
 #include "NetEngineWinSocketsUDP.h"
-
-#ifdef debug
-    #include <iostream>
-#endif
+#include "GameEngine.h"
 
 
-NetEngineWinSocketsUDP::NetEngineWinSocketsUDP()
+NetEngineWinSocketsUDP::NetEngineWinSocketsUDP( GameEngine* engine ) : NetEngine( engine )
 {
     port = 1234;
     isConnected = false;
     isServer = false;
     receiveBuffer = malloc( NET_BUFFER_SIZE );
 
-    #ifdef debug
-        cout<<"Initializing winsocks..."<<endl;
-    #endif
+    engine->debug->PrintString( "initializing winsocks...\n" );
     if (WSAStartup(MAKEWORD(2,2),&wsa) != 0)
     {
-        cout<<"could not initialize WSA!"<<endl;
+        engine->debug->PrintString( "could noot initialize WSA!\n" );
     }
 
-    #ifdef debug
-        cout<<"creating UDP Socket..."<<endl;
-    #endif
+    engine->debug->PrintString( "creating UDP socket...\n" );
     socketDescriptor = socket( AF_INET, SOCK_DGRAM, IPPROTO_UDP );
     if( socketDescriptor == INVALID_SOCKET )
     {
-        cout<<"could not create Socket!"<<endl;
+        engine->debug->PrintString( "could not create socket!\n" );
     }
+    u_long iMode = 1; //non blocking
+    ioctlsocket(socketDescriptor, FIONBIO, &iMode);
 }
 NetEngineWinSocketsUDP::~NetEngineWinSocketsUDP()
 {
-    #ifdef debug
-        cout<<"closing socket"<<endl;
-    #endif
+    engine->debug->PrintString( "closing socket...\n" );
 
     closesocket( socketDescriptor );
 }
@@ -71,14 +62,12 @@ bool NetEngineWinSocketsUDP::GetIsServer()
 }
 void NetEngineWinSocketsUDP::Send( Packet* packet )
 {
-    #ifdef debug
-        cout<<"sending..."<<endl;
-    #endif
+    engine->debug->PrintString( "sending " );
+
     int dataLength = 0;
     void* data = SerializePacketData( packet, &dataLength );
-    #ifdef debug
-        cout<<"   "<<dataLength<<" bytes..."<<endl;
-    #endif
+
+    engine->debug->PrintString( "%i bytes...\n", dataLength );
 
     if( isServer )
     {
@@ -87,9 +76,7 @@ void NetEngineWinSocketsUDP::Send( Packet* packet )
         {
             if( sendto( socketDescriptor, (char*)data, dataLength, 0, (struct sockaddr*) &incomingAddresses[i], sizeof( peerAddress ) ) == -1 )
             {
-                #ifdef debug
-                    cout<<"error sending data!"<<endl;
-                #endif
+                engine->debug->PrintString( "error sending data!\n" );
             }
         }  
     }
@@ -98,26 +85,21 @@ void NetEngineWinSocketsUDP::Send( Packet* packet )
         //the client only sends packets to the server (peerAddress)
         if( sendto( socketDescriptor, (char*)data, dataLength, 0, (struct sockaddr*) &peerAddress, sizeof( peerAddress ) ) == -1 )
         {
-            #ifdef debug
-                cout<<"error sending data!"<<endl;
-            #endif
+            engine->debug->PrintString( "error sending data!\n" );
         }
     }
 }
 Packet* NetEngineWinSocketsUDP::GetFirstPacketFromInbox()
 {
-    #ifdef debug
-        cout<<"getting packet from inbox..."<<endl;
-    #endif
+    engine->debug->PrintString( "getting packet from inbox...\n" );
+
     if( inbox.size() > 0 )
     {
-        #ifdef debug
-            cout<<"inbox is NOT empty..."<<endl;
-        #endif
+        engine->debug->PrintString( "inbox is NOT empty...\n" );
+
         Packet* tmp = inbox.back();
-        #ifdef debug
-            cout<<"Packt: sender:"<<tmp->sender<<" type:"<<(unsigned int)tmp->type<<" datalength:"<<tmp->dataLength<<endl;
-        #endif
+        engine->debug->PrintString( "Packet: sender:%i type:%i dataLength:%i\n", tmp->sender, (unsigned int)tmp->type, tmp->dataLength );
+        
         inbox.pop_back();
         return tmp;
     }
@@ -186,9 +168,7 @@ void NetEngineWinSocketsUDP::InitServer()
 
     if( bind( socketDescriptor, (struct sockaddr*)&myAddress, sizeof( myAddress ) ) == -1 )
     {
-        #ifdef debug
-            cout<<"error binding socket!"<<endl;
-        #endif
+        engine->debug->PrintString( "error binding socket!\n" );
     }
 }
 vector<uint64_t> NetEngineWinSocketsUDP::GetClientAddresses()
@@ -224,9 +204,7 @@ Packet* NetEngineWinSocketsUDP::DeSerializePacketData( void* data, int dataLengt
 
 void NetEngineWinSocketsUDP::SendJoinRequest()
 {
-    #ifdef debug
-        cout<<"sending join request..."<<endl;
-    #endif
+    engine->debug->PrintString( "sending join request...\n" );
 
     Packet joinPacket;
     joinPacket.type = NET_PACKET_TYPE_JOIN_REQUEST;
@@ -235,15 +213,11 @@ void NetEngineWinSocketsUDP::SendJoinRequest()
 
     sendto( socketDescriptor, (char*)&joinPacket, sizeof( Packet ), 0, (struct sockaddr*) &peerAddress, sizeof( peerAddress ) );
 
-    #ifdef debug
-        cout<<"   sending "<<dataLength<<" bytes"<<endl;
-    #endif
+    engine->debug->PrintString( "sending %i bytes...\n", dataLength );
 }
 void NetEngineWinSocketsUDP::SendDisconnectRequest()
 {
-    #ifdef debug
-        cout<<"sending disconnect request..."<<endl;
-    #endif
+    engine->debug->PrintString( "sending disconnect request...\n" );
 
     Packet joinPacket;
     joinPacket.type = NET_PACKET_TYPE_DISCONNECT_REQUEST;
@@ -252,16 +226,12 @@ void NetEngineWinSocketsUDP::SendDisconnectRequest()
 
     sendto( socketDescriptor, (char*)&joinPacket, sizeof( Packet ), 0, (struct sockaddr*) &peerAddress, sizeof( peerAddress ) );
 
-    #ifdef debug
-        cout<<"   sending "<<dataLength<<" bytes"<<endl;
-    #endif
+    engine->debug->PrintString( "   sending %i bytes\n", dataLength );
 }
 
 void NetEngineWinSocketsUDP::SendJoinAck()
 {
-    #ifdef debug
-        cout<<"sending join acknolagement..."<<endl;
-    #endif
+    engine->debug->PrintString( "sending join acknolagement...\n" );
 
     Packet joinPacket;
     joinPacket.type = NET_PACKET_TYPE_JOIN_ACK;
@@ -270,26 +240,21 @@ void NetEngineWinSocketsUDP::SendJoinAck()
 
     sendto( socketDescriptor, (char*)&joinPacket, sizeof( Packet ), 0, (struct sockaddr*) &peerAddress, sizeof( peerAddress ) );
 
-    #ifdef debug
-        cout<<"   sending "<<dataLength<<" bytes"<<endl;
-    #endif
+    engine->debug->PrintString( "   sending %i bytes\n", dataLength );
 }
 void NetEngineWinSocketsUDP::ReceivePackets()
 {
-    #ifdef debug
-        cout<<"checking socket for data"<<endl;
-    #endif
+    engine->debug->PrintString( "   checking socket for data...\n" );
+
     int receiveLength = 0;
     int c = sizeof( struct sockaddr_in );
     while( ( receiveLength = recvfrom( socketDescriptor, (char*)receiveBuffer, NET_BUFFER_SIZE, 0, (struct sockaddr *)&peerAddress, (socklen_t*)&c ) ) != -1 )
     {
         //check all packages in the ip stack
 
-        #ifdef debug
-            //char str[INET_ADDRSTRLEN];
-            //inet_ntop(AF_INET, &(peerAddress.sin_addr), str, INET_ADDRSTRLEN);
-            //cout<<"received "<<receiveLength<<" bytes from "<<str<<endl;
-        #endif
+        //char str[INET_ADDRSTRLEN];
+        //inet_ntop(AF_INET, &(peerAddress.sin_addr), str, INET_ADDRSTRLEN);
+        //engine->debug->PrintString( "received %i bytes from %s\n", receiveLength, str );
         
         Packet* receivePacket = DeSerializePacketData( receiveBuffer, receiveLength );
 
@@ -298,9 +263,7 @@ void NetEngineWinSocketsUDP::ReceivePackets()
             //if the package is a join request
             //add the sender address to the incomingÁddresses (clients) list (ist its not already in there)
             //and immediatly send a join_Ack back to the sender
-            #ifdef debug
-                cout<<"   join request"<<endl;
-            #endif
+            engine->debug->PrintString( "join request\n" );
             
             bool alreadyInList = false;
             for( unsigned int i = 0; i < incomingAddresses.size(); i++ )
@@ -321,16 +284,12 @@ void NetEngineWinSocketsUDP::ReceivePackets()
         {
             //if a join ack is beeing received connected to server is set to true
             //and the client does not send join requests any more
-            #ifdef debug
-                cout<<"   received Join Ack"<<endl;
-            #endif
+            engine->debug->PrintString( "   received join ack\n" );
             isConnected = true;
         }
         else if( receivePacket->type == NET_PACKET_TYPE_DISCONNECT_REQUEST && !isServer )
         {
-            #ifdef debug
-                cout<<"   received Disconnect Request"<<endl;
-            #endif
+            engine->debug->PrintString( "   received disconnect request\n" );
 
             for( unsigned int i = 0; i < incomingAddresses.size(); i++ )
             {
@@ -345,9 +304,8 @@ void NetEngineWinSocketsUDP::ReceivePackets()
         {
             //the packet has nothing to do with the implementation
             //so its put in the inbox for the gameclient to grab it.
-            #ifdef debug
-                cout<<"   received regular game packet - adding to inbox"<<endl;
-            #endif
+            engine->debug->PrintString( "   received regular game packet - adding to inbox...\n" );
+            
             inbox.push_back( receivePacket );
         }
     }

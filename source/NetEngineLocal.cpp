@@ -1,7 +1,7 @@
 //NetEngineLocal.cpp
 
 #include "NetEngineLocal.h"
-
+#include "GameEngine.h"
 
 //======== global Variables ==========
 vector<NetEngineLocal*> netNodes;
@@ -9,7 +9,7 @@ vector<NetEngineLocal*> netNodes;
 
 
 
-NetEngineLocal::NetEngineLocal()
+NetEngineLocal::NetEngineLocal( GameEngine* engine ) : NetEngine( engine )
 {
     isServer = false;
 }

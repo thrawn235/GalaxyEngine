@@ -11,11 +11,12 @@ GameClient::GameClient()
         engine->net->SetAddress( 1 );
         engine->net->Connect( 2 );
     }
-    if( engine->net->GetType() == NET_TYPE_LINUX_SOCKETS_UDP || engine->net->GetType() == NET_TYPE_LINUX_SOCKETS_TCP )
+    if( engine->net->GetType() == NET_TYPE_LINUX_SOCKETS_UDP || engine->net->GetType() == NET_TYPE_LINUX_SOCKETS_TCP || engine->net->GetType() == NET_TYPE_WIN_SOCKETS_TCP )
     {
-        #ifdef linux
-            engine->net->InitClient();
-            engine->debug->PrintString( "connecting to server (join request)...\n" );
+        engine->net->InitClient();
+        engine->debug->PrintString( "connecting to server (join request)...\n" );
+        //the ifndef is needed because the local buffer doesnt know inet_addr
+        #ifndef dos
             engine->net->Connect( inet_addr( "127.0.0.1" ) );
         #endif
     }

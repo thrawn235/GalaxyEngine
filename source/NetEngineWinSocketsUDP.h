@@ -51,7 +51,7 @@ protected:
 
 public:
     //---------- Constructor / Destructor ------------
-                                NetEngineWinSocketsUDP      ();
+                                NetEngineWinSocketsUDP      ( GameEngine* engine );
                                 ~NetEngineWinSocketsUDP     ();
 
     //-------------- Network Methods -----------------

@@ -22,6 +22,7 @@ using namespace std;
 //====================================
 
 //======= forward declarations =======
+class GameEngine;
 //====================================
 
 //============= defines ==============
@@ -57,16 +58,14 @@ public:
 
 
 
-
-
 class NetEngine
 {
 protected:
-
+    GameEngine* engine;
 public:
     //---------- Constructor / Destructor ------------
-                                NetEngine                   ()                                          {};
-    virtual                     ~NetEngine                  ()                                          {};
+                                NetEngine                   ( GameEngine* engine );
+    virtual                     ~NetEngine                  ();
 
     //-------------- Network Methods -----------------
     virtual void                SetAddress                  ( uint64_t address )                        = 0;
