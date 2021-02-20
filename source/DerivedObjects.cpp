@@ -107,3 +107,91 @@ void Enemy::Render()
 {
 	engine->text->PrintString( "Render: Object UID:%i; Type:%i(Enemy); Pos:%f:%f NetAddr:%i (client)\n", netStats->uid, netStats->type, netStats->pos.x, netStats->pos.y, engine->net->GetAddress() );
 }
+
+
+
+
+
+MainMenu::MainMenu( GameEngine* engine, GameServer* server ) : Object( engine )
+{
+	baseNetStats = (NetStats*)realloc( baseNetStats, sizeof( MainMenuStats ) );
+
+    netStats = (MainMenuStats*)baseNetStats;
+    netStats->size = sizeof( MainMenuStats );
+
+	netStats->type = OBJECT_TYPE_MAIN_MENU;
+
+	this->server = server;
+	hidden = false;
+}
+void MainMenu::GameLogic()
+{
+	//Main menu i not supposed to even be replicated to the server
+	//
+}
+void MainMenu::ClientSideUpdate()
+{
+	
+}
+void MainMenu::UpdateServerIndependend()
+{
+	if( !hidden )
+	{
+		engine->text->PrintString( "========== Galaxy Engine ==========\n" );
+		engine->text->PrintString( "============ Main Menu ============\n" );
+		engine->text->PrintString( "   1: New Game\n" );
+		engine->text->PrintString( "   2: Multiplayer\n" );
+		engine->text->PrintString( "   3: Options\n" );
+		engine->text->PrintString( "   4: Help\n" );
+		engine->text->PrintString( "   5: Quit\n" );
+		engine->text->PrintString( "===================================\n" );
+		engine->text->PrintString( "  input> " );
+		mainInput = engine->text->InputString();
+		if( mainInput == "1" || mainInput == "New Game" )
+		{
+			//1. create server
+			//2. load all game objects
+			//3. hide main menu
+
+			//create server
+			if( server != NULL )
+			{
+				delete server;
+			}
+			server = new GameServer();
+
+			//hide main menu
+			hidden = true;
+		}
+		else if( mainInput == "2" || mainInput == "Multiplayer" )
+		{
+
+		}
+		else if( mainInput == "3" || mainInput == "Options" )
+		{
+			
+		}
+		else if( mainInput == "4" || mainInput == "Help" )
+		{
+			
+		}
+		else if( mainInput == "5" || mainInput == "Quit" )
+		{
+			
+		}
+	}
+	else
+	{
+		engine->text->PrintString( "== Main Menu ==\n" );
+		engine->text->PrintString( "  input m for menu > " );
+		mainInput = engine->text->InputString();
+		if( mainInput == "m" || mainInput == "Main Menu" )
+		{
+			hidden = false;
+		}
+	}
+}
+void MainMenu::Render()
+{
+	
+}

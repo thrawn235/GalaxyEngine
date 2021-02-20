@@ -19,55 +19,43 @@ int main()
 {
     cout<<"Galaxy Engine: Main Client"<<endl<<endl;
 
-    bool serverActive = true;
+    bool serverActive = false;
     bool clientActive = true;
 
     GameClient* client = NULL;
     GameServer* server = NULL;
 
+    //server is NOT active at start bc main menu will create it
     if( serverActive )
     {
         server = new GameServer();
     }
     if( clientActive )
     {
-        client = new GameClient();
+        //Client needs to know *server for network settings etc
+        client = new GameClient( server );
     }
 
     
+    //----------------- Main Loop --------------------
     long int rounds = 0;
-    int subRounds = 0;
-    bool exit = false;
     cout<<"entering main loop..."<<endl;
-    while( !exit )
+    while( !client->GetExit() )
     {
         if( client != NULL )
         {
             client->Run();
         }
 
-        if( subRounds >= 3 )
+        if( server != NULL )
         {
-            if( server != NULL )
-            {
-                server->Run();
-            }
-            subRounds = 0;
+            server->Run();
         }
 
-       
-        cout<<"wating for input:";
-        char input;
-        cin>>input;
-        if( input == 'q' )
-        {
-            exit = true;
-        }
-        cout<<endl;
         rounds ++;
-        subRounds ++;
         cout<<"end of round "<<rounds<<endl;
     }
+    //-------------------------------------------------
 
     delete client;
     delete server;

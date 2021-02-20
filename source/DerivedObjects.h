@@ -9,15 +9,18 @@
 //====================================
 
 //========== stdlib includes =========
+#include <string>
 using namespace std;
 //====================================
 
 //========= galaxy includes ==========
 #include "Object.h"
+#include "GameServer.h"
 //#include "GameEngine.h"
 //====================================
 
 //======= forward declarations =======
+class GameServer;
 //====================================
 
 struct PlayerStats : ObjectStats
@@ -56,6 +59,30 @@ public:
 					Enemy				( GameEngine* engine );
 	virtual void 	GameLogic			();
 	virtual void	Render				();
+};
+
+
+struct MainMenuStats : ObjectStats
+{
+	
+};
+
+class MainMenu : public Object
+{
+private:
+	
+protected:
+	MainMenuStats*	netStats;
+	string 			mainInput;
+	bool			hidden;
+	GameServer*		server;
+public:
+					MainMenu				( GameEngine* engine, GameServer* server );
+	virtual void 	GameLogic				();
+	virtual void 	ClientSideUpdate		();
+	virtual void	UpdateServerIndependend	();
+	virtual void	Render					();
+	//--------------- MainMenu specific -----------------
 };
 
 #endif

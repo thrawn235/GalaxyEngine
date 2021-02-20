@@ -523,7 +523,7 @@
 			"file": "ToDo.txt",
 			"settings":
 			{
-				"buffer_size": 68,
+				"buffer_size": 54,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -532,7 +532,7 @@
 			"file": "source/DedicatedServer.cpp",
 			"settings":
 			{
-				"buffer_size": 1144,
+				"buffer_size": 1150,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -541,7 +541,7 @@
 			"file": "source/main.cpp",
 			"settings":
 			{
-				"buffer_size": 1579,
+				"buffer_size": 1538,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -550,7 +550,7 @@
 			"file": "makefile",
 			"settings":
 			{
-				"buffer_size": 10178,
+				"buffer_size": 11619,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -669,7 +669,7 @@
 	],
 	"find":
 	{
-		"height": 38.0
+		"height": 25.0
 	},
 	"find_in_files":
 	{
@@ -714,15 +714,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 68,
+						"buffer_size": 54,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								68,
-								68
+								0,
+								0
 							]
 						],
 						"settings":
@@ -742,7 +742,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1144,
+						"buffer_size": 1150,
 						"regions":
 						{
 						},
@@ -755,7 +755,9 @@
 						],
 						"settings":
 						{
-							"syntax": "Packages/C++/C++.sublime-syntax"
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -770,15 +772,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1579,
+						"buffer_size": 1538,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								156,
-								156
+								727,
+								750
 							]
 						],
 						"settings":
@@ -788,7 +790,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 193.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
@@ -800,15 +802,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 10178,
+						"buffer_size": 11619,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								9280,
-								9280
+								0,
+								0
 							]
 						],
 						"settings":
@@ -828,7 +830,7 @@
 	],
 	"incremental_find":
 	{
-		"height": 26.0
+		"height": 25.0
 	},
 	"input":
 	{
@@ -865,7 +867,7 @@
 	"project": "GalaxyEngine.sublime-project",
 	"replace":
 	{
-		"height": 68.0
+		"height": 46.0
 	},
 	"save_all_on_build": true,
 	"select_file":
@@ -903,7 +905,7 @@
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 271.0,
+	"side_bar_width": 250.0,
 	"status_bar_visible": true,
 	"template_settings":
 	{

@@ -2,7 +2,7 @@
 
 #include "GameClient.h"
 
-GameClient::GameClient()
+GameClient::GameClient( GameServer* server )
 {
     engine = new GameEngine;
 
@@ -21,7 +21,7 @@ GameClient::GameClient()
         #endif
     }
 
-    engine->SetHighestUID( 1000 );
+    engine->SetHighestUID( 10000 );
     
     //network variables
     waitingForUpdate            = false;
@@ -30,12 +30,24 @@ GameClient::GameClient()
     tickRate                    = 1;
     clientTicksSinceLogicTick   = 0;
 
+    //main communication
+    exit = false;
+
+    //initial game objects
+    MainMenu* mainMenu = new MainMenu( engine, server );
+    engine->AddObject( mainMenu );
+
     engine->debug->PrintString( "\n\n" );
 }
 GameClient::~GameClient()
 {
     engine->debug->PrintString( "destroying gameclient...\n" );
     delete engine;
+}
+
+bool GameClient::GetExit()
+{
+    return exit;
 }
 
 void GameClient::Run()
@@ -109,7 +121,7 @@ void GameClient::Run()
         engine->ClientSideUpdateAll();
         waitingForUpdate = true;
     }
-
+    engine->UpdateServerIndependend();
     engine->PredictAll( tickRate );
     engine->RenderAll();
 

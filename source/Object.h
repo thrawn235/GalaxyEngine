@@ -21,9 +21,10 @@ using namespace std;
 //====================================
 
 //============= defines ==============
-#define OBJECT_TYPE_OBJECT  0
-#define OBJECT_TYPE_PLAYER  1
-#define OBJECT_TYPE_ENEMY   2
+#define OBJECT_TYPE_OBJECT      0
+#define OBJECT_TYPE_PLAYER      1
+#define OBJECT_TYPE_ENEMY       2
+#define OBJECT_TYPE_MAIN_MENU   3
 //====================================
 
 //======= forward declarations =======
@@ -60,41 +61,45 @@ public:
     
 
     //------------ Constructor/Destructor: --------------------
-                                Object             ( GameEngine* engine );
-                                ~Object            ();
+                                Object                  ( GameEngine* engine );
+                                ~Object                 ();
 
     //---------------------- Get/Set --------------------------
-            void                SetEngine          ( GameEngine* engine );
-            GameEngine*         GetEngine          ();
-            unsigned long int   GetUID             ();
-            void                SetUID             ( unsigned long uid );
-            unsigned int        GetType            ();
-            void                SetType            ( unsigned int type );
-            bool                GetVisible         ();
-            bool                GetActive          ();
-            bool                GetPredict         ();
-            bool                GetClientActive    ();
-            void                SetVisible         ( bool visible );
-            void                SetActive          ( bool active );
-            void                SetPredict         ( bool predict );
-            void                SetClientActive    ( bool clientActive );
-            Vector2D            GetPos             ();
-            void                SetPos             ( Vector2D pos );
-            Vector2D            GetMovement        ();
-            void                SetMovement        ( Vector2D movement );
+            void                SetEngine               ( GameEngine* engine );
+            GameEngine*         GetEngine               ();
+            unsigned long int   GetUID                  ();
+            void                SetUID                  ( unsigned long uid );
+            unsigned int        GetType                 ();
+            void                SetType                 ( unsigned int type );
+            bool                GetVisible              ();
+            bool                GetActive               ();
+            bool                GetPredict              ();
+            bool                GetClientActive         ();
+            void                SetVisible              ( bool visible );
+            void                SetActive               ( bool active );
+            void                SetPredict              ( bool predict );
+            void                SetClientActive         ( bool clientActive );
+            Vector2D            GetPos                  ();
+            void                SetPos                  ( Vector2D pos );
+            Vector2D            GetMovement             ();
+            void                SetMovement             ( Vector2D movement );
 
-    virtual void                PrintStats        ();
+    virtual void                PrintStats              ();
 
     //-------------------- Network ----------------------------
-    virtual void                SendStatus         ();                          //serialize all attributes and send them over the net
-    virtual void                LoadStatus         ( void* data );              //get data from the net and update all attributes
+    virtual void                SendStatus              ();                          //serialize all attributes and send them over the net
+    virtual void                LoadStatus              ( void* data );              //get data from the net and update all attributes
 
     //-- Base Engine Funcions (called by engine every Frame) --
-    virtual void                Update             ();                          //is called every tick (usually on the server)
-    virtual void                GameLogic          ();                          //is called from Update. handles just the GameLogic (minus netupdate etc)
-    virtual void                ClientSideUpdate   ();
-    virtual void                Predict            ( float tickRate );
-    virtual void                Render             ();
+    virtual void                Update                  ();                          //is called every tick (usually on the server)
+    virtual void                GameLogic               ();                          //is called from Update. handles just the GameLogic (minus netupdate etc)
+    virtual void                ClientSideUpdate        ();
+    virtual void                UpdateServerIndependend ();
+    virtual void                Predict                 ( float tickRate );
+    virtual void                Render                  ();
+
+    // ---------------- Object Selection Methods --------------
+    //GetAllObjects
 };
 
 #endif

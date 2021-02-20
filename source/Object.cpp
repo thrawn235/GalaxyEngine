@@ -161,6 +161,10 @@ void Object::ClientSideUpdate()
 
     //SendStatus();
 }
+void Object::UpdateServerIndependend()
+{
+    
+}
 void Object::Predict( float tickRate )
 {
     engine->text->PrintString( "Predict: " );

@@ -94,6 +94,17 @@ void GameEngine::ClientSideUpdateAll()
         }
     }
 }
+
+void GameEngine::UpdateServerIndependend()
+{
+    for( unsigned int i = 0; i < objects.size(); i++ )
+    {
+        if( objects[i]->GetClientActive() )
+        {
+            objects[i]->UpdateServerIndependend();
+        }
+    }
+}
 void GameEngine::PredictAll( float tickRate )
 {
     for( unsigned int i = 0; i < objects.size(); i++ )

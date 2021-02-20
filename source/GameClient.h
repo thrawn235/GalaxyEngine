@@ -19,6 +19,7 @@ using namespace std;
 //====================================
 
 //======= forward declarations =======
+class GameServer;
 //====================================
 
 class GameClient
@@ -27,11 +28,15 @@ protected:
 	bool			waitingForUpdate;
 	unsigned int	clientTicksSinceLogicTick;
 	float			tickRate;
+	bool			exit;
     GameEngine* 	engine;
 
 public:
-            GameClient              ();     //Constructor
+            GameClient              ( GameServer* server );     //Constructor
             ~GameClient             ();     //Destructor
+    //------------ communication with main -----------------
+    bool	GetExit					();
+    //------------------------------------------------------
     void    Run                     ();     //everything is done here
 };
 

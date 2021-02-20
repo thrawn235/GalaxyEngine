@@ -3,3 +3,5 @@ To Do:
 DOS Network implementation
 MemoryEngine
 DLLs ?
+
+ClientSideUpdate and UpdateServerIndependend is potentially slow and inefficient
