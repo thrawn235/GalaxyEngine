@@ -32,7 +32,7 @@ protected:
     GameEngine* 	engine;
 
 public:
-            GameClient              ( GameServer* server );     //Constructor
+            GameClient              ( GameServer** server );     //Constructor
             ~GameClient             ();     //Destructor
     //------------ communication with main -----------------
     bool	GetExit					();

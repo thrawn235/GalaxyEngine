@@ -9,18 +9,20 @@ GameEngine::GameEngine()
     #ifdef linux
         text = new TextEngineIOStream;
         debug = new TextEngineIOStream;
-        net = new NetEngineLinuxSocketsUDP( this );
+        //net = new NetEngineLinuxSocketsUDP( this );
     #endif
     #ifdef win
         text = new TextEngineIOStream;
         debug = new TextEngineIOStream;
-        net = new NetEngineWinSocketsUDP( this );
+        //net = new NetEngineWinSocketsUDP( this );
     #endif
     #ifdef dos
         text = new TextEngineSTDIO;
         debug = new TextEngineSTDIO;
-        net = new NetEngineLocal( this );
+        //net = new NetEngineLocal( this );
     #endif
+
+    net = new NetEngineLocal( this );
 
     engines.push_back( this );
 
@@ -45,12 +47,59 @@ unsigned long int GameEngine::GetHighestUIDAndInc()
     highestUID++;
     return highestUID - 1;
 }
+vector<int> GameEngine::GetAvailableNetTypes()
+{
+    vector<int> availableModes;
+
+    availableModes.push_back( NET_TYPE_LOCAL_BUFFER );
+    
+    #ifdef linux
+        availableModes.push_back( NET_TYPE_LINUX_SOCKETS_UDP );
+        availableModes.push_back( NET_TYPE_LINUX_SOCKETS_TCP );
+    #endif
+    #ifdef win
+        availableModes.push_back( NET_TYPE_WIN_SOCKETS_UDP );
+    #endif
+    #ifdef dos
+    #endif
+
+    return availableModes;
+}
+void GameEngine::SetNetType( int netType )
+{
+    if( net != NULL )
+    {
+        delete net;
+    }
+
+    if( netType == NET_TYPE_LOCAL_BUFFER )
+    {
+        net = new NetEngineLocal( this );
+    }
+    #ifdef linux
+        else if( netType == NET_TYPE_LINUX_SOCKETS_UDP )
+        {
+            net = new NetEngineLinuxSocketsUDP( this );
+        }
+        else if( netType == NET_TYPE_LINUX_SOCKETS_TCP )
+        {
+            net = new NetEngineLinuxSocketsTCP( this );   
+        }
+    #endif
+    #ifdef win
+        else if( netType == NET_TYPE_WIN_SOCKETS_UDP )
+        {
+            net = new NetEngineWinSocketsUDP( this );
+        }
+    #endif
+}
 
 void GameEngine::Quit()
 {
     for( unsigned int i = 0; i < engines.size(); i++ )
     {
         delete engines[i];
+        i++;
     }
     exit( EXIT_FAILURE );
 }

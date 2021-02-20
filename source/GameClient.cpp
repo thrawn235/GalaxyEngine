@@ -2,26 +2,20 @@
 
 #include "GameClient.h"
 
-GameClient::GameClient( GameServer* server )
+GameClient::GameClient( GameServer** server )
 {
     engine = new GameEngine;
 
     if( engine->net->GetType() == NET_TYPE_LOCAL_BUFFER )
     {
         engine->net->SetAddress( 1 );
-        engine->net->Connect( 2 );
     }
     if( engine->net->GetType() == NET_TYPE_LINUX_SOCKETS_UDP || engine->net->GetType() == NET_TYPE_LINUX_SOCKETS_TCP || engine->net->GetType() == NET_TYPE_WIN_SOCKETS_TCP )
     {
         engine->net->InitClient();
-        engine->debug->PrintString( "connecting to server (join request)...\n" );
-        //the ifndef is needed because the local buffer doesnt know inet_addr
-        #ifndef dos
-            engine->net->Connect( inet_addr( "127.0.0.1" ) );
-        #endif
     }
 
-    engine->SetHighestUID( 10000 );
+    engine->SetHighestUID( 100000 );
     
     //network variables
     waitingForUpdate            = false;
@@ -54,6 +48,22 @@ void GameClient::Run()
 {
     //debug:
     engine->debug->PrintString( "===================== client ==================\n" );
+
+    if( !engine->net->GetIsConnected() )
+    {
+        if( engine->net->GetType() == NET_TYPE_LOCAL_BUFFER )
+        {
+            engine->net->Connect( 2 );
+        }
+        if( engine->net->GetType() == NET_TYPE_LINUX_SOCKETS_UDP || engine->net->GetType() == NET_TYPE_LINUX_SOCKETS_TCP || engine->net->GetType() == NET_TYPE_WIN_SOCKETS_TCP )
+        {
+            engine->debug->PrintString( "connecting to server (join request)...\n" );
+            //the ifndef is needed because the local buffer doesnt know inet_addr
+            #ifndef dos
+                engine->net->Connect( inet_addr( "127.0.0.1" ) );
+            #endif   
+        }
+    }
 
     //count ticks (for prediction step)
     clientTicksSinceLogicTick++;

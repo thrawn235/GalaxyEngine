@@ -26,9 +26,10 @@ protected:
     GameEngine* engine;
 
 public:
-            GameServer  ();
-            ~GameServer ();
-    void    Run         ();
+            	GameServer  ();
+            	~GameServer ();
+    GameEngine*	GetEngine	();
+    void    	Run         ();
 };
 
 #endif

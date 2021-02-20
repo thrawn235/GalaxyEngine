@@ -33,7 +33,7 @@ int main()
     if( clientActive )
     {
         //Client needs to know *server for network settings etc
-        client = new GameClient( server );
+        client = new GameClient( &server );
     }
 
     

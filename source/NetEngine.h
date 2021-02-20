@@ -68,28 +68,28 @@ public:
     virtual                     ~NetEngine                  ();
 
     //-------------- Network Methods -----------------
-    virtual void                SetAddress                  ( uint64_t address )                        = 0;
-    virtual uint64_t            GetAddress                  ()                                          = 0;
-    virtual int                 GetType                     ()                                          = 0;        //Get the Type of the Net Implementation (ex. local buffer of ethernet )
-    virtual unsigned int        GetNumPacketsInInbox        ()                                          = 0;
-    virtual bool                GetIsServer                 ()                                          = 0;
-    virtual void                Send                        ( Packet* packet )                          = 0;
-    virtual Packet*             GetFirstPacketFromInbox     ()                                          = 0;
-    virtual vector<Packet*>*    GetInbox                    ()                                          = 0;
-    virtual bool                InboxEmpty                  ()                                          = 0;
+    virtual void                SetAddress                  ( uint64_t address )    = 0;
+    virtual uint64_t            GetAddress                  ()                      = 0;
+    virtual int                 GetType                     ()                      = 0;        //Get the Type of the Net Implementation (ex. local buffer of ethernet )
+    virtual unsigned int        GetNumPacketsInInbox        ()                      = 0;
+    virtual bool                GetIsServer                 ()                      = 0;
+    virtual void                Send                        ( Packet* packet )      = 0;
+    virtual Packet*             GetFirstPacketFromInbox     ()                      = 0;
+    virtual vector<Packet*>*    GetInbox                    ()                      = 0;
+    virtual bool                InboxEmpty                  ()                      = 0;
 
     //-------------------- Client --------------------
-    virtual void                InitClient                  ()                                          = 0;
-    virtual void                Connect                     ( uint64_t target )                         = 0;
-    virtual void                Disconnect                  ()                                          = 0;
-    virtual bool                GetIsConnected              ()                                          = 0;
+    virtual void                InitClient                  ()                      = 0;
+    virtual void                Connect                     ( uint64_t target )     = 0;
+    virtual void                Disconnect                  ()                      = 0;
+    virtual bool                GetIsConnected              ()                      = 0;
 
     //-------------------- Server --------------------
-    virtual void                InitServer                  ()                                          = 0;
-    virtual vector<uint64_t>    GetClientAddresses          ()                                          = 0;
+    virtual void                InitServer                  ()                      = 0;
+    virtual vector<uint64_t>    GetClientAddresses          ()                      = 0;
 
 
-    virtual void                Update                      ()                                          = 0;        //runs in every game loop
+    virtual void                Update                      ()                      = 0;        //runs in every game loop
 };
 
 #endif

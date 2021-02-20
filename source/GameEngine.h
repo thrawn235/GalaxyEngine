@@ -66,6 +66,8 @@ public:
     void                SetHighestUID           ( unsigned long int UID );
     unsigned long int   GetHighestUID           ();
     unsigned long int   GetHighestUIDAndInc     ();
+    vector<int>         GetAvailableNetTypes    ();
+    void                SetNetType              ( int netType );
 
     //------------------- Auxilary Methods ------------
     void                Quit                    ();

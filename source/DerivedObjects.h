@@ -75,9 +75,11 @@ protected:
 	MainMenuStats*	netStats;
 	string 			mainInput;
 	bool			hidden;
-	GameServer*		server;
+	bool			optionsMenu;
+	int 			netType;
+	GameServer**	server;
 public:
-					MainMenu				( GameEngine* engine, GameServer* server );
+					MainMenu				( GameEngine* engine, GameServer** server );
 	virtual void 	GameLogic				();
 	virtual void 	ClientSideUpdate		();
 	virtual void	UpdateServerIndependend	();

@@ -30,6 +30,10 @@ GameServer::~GameServer()
     engine->debug->PrintString( "destroying gameserver...\n" );
     delete engine;
 }
+GameEngine* GameServer::GetEngine()
+{
+    return engine;
+}
 void GameServer::Run()
 {
     engine->text->PrintString( "================ server ===============:\n" );

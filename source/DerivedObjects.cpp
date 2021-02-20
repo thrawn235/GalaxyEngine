@@ -112,7 +112,7 @@ void Enemy::Render()
 
 
 
-MainMenu::MainMenu( GameEngine* engine, GameServer* server ) : Object( engine )
+MainMenu::MainMenu( GameEngine* engine, GameServer** server ) : Object( engine )
 {
 	baseNetStats = (NetStats*)realloc( baseNetStats, sizeof( MainMenuStats ) );
 
@@ -123,6 +123,8 @@ MainMenu::MainMenu( GameEngine* engine, GameServer* server ) : Object( engine )
 
 	this->server = server;
 	hidden = false;
+	optionsMenu = false;
+	netType = NET_TYPE_LOCAL_BUFFER;
 }
 void MainMenu::GameLogic()
 {
@@ -149,36 +151,107 @@ void MainMenu::UpdateServerIndependend()
 		mainInput = engine->text->InputString();
 		if( mainInput == "1" || mainInput == "New Game" )
 		{
+			//0. delete all client game objects (except the main menu)
 			//1. create server
-			//2. load all game objects
-			//3. hide main menu
+			//2. make sure it uses local buffer networking for single player
+			//3. load all game objects
+			//4. hide main menu
 
 			//create server
-			if( server != NULL )
+			if( *server != NULL )
 			{
-				delete server;
+				delete *server;
 			}
-			server = new GameServer();
+			*server = new GameServer();
+
+			//setting local buffer networking
+			GameServer* pServer = *server;
+			pServer->GetEngine()->SetNetType( NET_TYPE_LOCAL_BUFFER );
+
 
 			//hide main menu
 			hidden = true;
 		}
 		else if( mainInput == "2" || mainInput == "Multiplayer" )
 		{
+			//0. delete all client game objects (except the main menu)
+			//1. create server
+			//2. make sure it uses the networking method specified by options
+			//3. load all game objects
+			//4. hide main menu
 
+			//create server
+			if( *server != NULL )
+			{
+				delete *server;
+			}
+			*server = new GameServer();
+
+			//setting networking
+			GameServer* pServer = *server;
+			pServer->GetEngine()->SetNetType( netType );
+
+
+			//hide main menu
+			hidden = true;
 		}
 		else if( mainInput == "3" || mainInput == "Options" )
 		{
-			
+			engine->text->PrintString( "entering options menu...\n" );
+			optionsMenu = true;
+			hidden = true;
 		}
 		else if( mainInput == "4" || mainInput == "Help" )
 		{
-			
+			engine->text->PrintString( "help is not available right now! \n" );
 		}
 		else if( mainInput == "5" || mainInput == "Quit" )
 		{
-			
+			engine->Quit();
 		}
+	}
+	else if( optionsMenu )
+	{
+		engine->text->PrintString( "=========== Options Menu ==========\n" );
+		engine->text->PrintString( "======= Choose Network Type: ======\n" );
+		vector<int> netTypes = engine->GetAvailableNetTypes();
+		for( unsigned int i = 0; i < netTypes.size(); i++ )
+		{
+			if( netTypes[i] == NET_TYPE_LOCAL_BUFFER )
+			{
+				engine->text->PrintString( "   %i: Local Buffer\n", i );
+			}
+			if( netTypes[i] == NET_TYPE_LINUX_SOCKETS_UDP )
+			{
+				engine->text->PrintString( "   %i: Linux UDP\n", i );
+			}
+			if( netTypes[i] == NET_TYPE_LINUX_SOCKETS_TCP )
+			{
+				engine->text->PrintString( "   %i: Linux TCP\n", i );
+			}
+			if( netTypes[i] == NET_TYPE_WIN_SOCKETS_UDP )
+			{
+				engine->text->PrintString( "   %i: Windows UDP\n", i );	
+			}
+			if( netTypes[i] == NET_TYPE_WIN_SOCKETS_TCP )
+			{
+				engine->text->PrintString( "   %i: Windows TCP\n", i );
+			}
+		}
+		engine->text->PrintString( "===================================\n" );
+		engine->text->PrintString( "  input> " );
+		int optionsInput = engine->text->InputInt();
+		if( optionsInput >= 0 && optionsInput < netTypes.size() )
+		{
+			GameServer* pServer = *server;
+			netType = netTypes[optionsInput];
+		}
+		else
+		{
+			engine->text->PrintString( "invalid selection\n" );
+		}
+		optionsMenu = false;
+		hidden = false;
 	}
 	else
 	{

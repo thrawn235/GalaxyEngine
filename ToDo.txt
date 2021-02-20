@@ -1,5 +1,8 @@
 To Do:
 
+Quit() is broken
+New Game causes crash if game is already running
+TCP implementation crashes bc connect is calles multiple times
 DOS Network implementation
 MemoryEngine
 DLLs ?
