@@ -36,6 +36,7 @@ protected:
 
 public:
                                 NetEngineLocal              ( GameEngine* engine );
+                                ~NetEngineLocal             ();
     
     //-------------- Network Methods -----------------
     virtual void                SetAddress                  ( uint64_t address );

@@ -19,22 +19,13 @@ int main()
 {
     cout<<"Galaxy Engine: Main Client"<<endl<<endl;
 
-    bool serverActive = false;
-    bool clientActive = true;
-
     GameClient* client = NULL;
     GameServer* server = NULL;
 
     //server is NOT active at start bc main menu will create it
-    if( serverActive )
-    {
-        server = new GameServer();
-    }
-    if( clientActive )
-    {
-        //Client needs to know *server for network settings etc
-        client = new GameClient( &server );
-    }
+
+    //Client needs to know *server for network settings etc
+    client = new GameClient( &server );
 
     
     //----------------- Main Loop --------------------
@@ -58,7 +49,6 @@ int main()
     //-------------------------------------------------
 
     delete client;
-    delete server;
 
     cout<<"good bye!"<<endl;
     return 0;

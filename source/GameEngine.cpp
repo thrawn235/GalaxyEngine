@@ -30,6 +30,10 @@ GameEngine::GameEngine()
 }
 GameEngine::~GameEngine()
 {
+    PurgeAllObjects( true );
+    ClearDeletedObjects();
+    //engines.erase( this );
+
     delete net;
     delete text;
     delete debug;
@@ -99,7 +103,7 @@ void GameEngine::Quit()
     for( unsigned int i = 0; i < engines.size(); i++ )
     {
         delete engines[i];
-        i++;
+        i--;
     }
     exit( EXIT_FAILURE );
 }
@@ -123,6 +127,170 @@ void GameEngine::AddObject( Object* object )
 {
     objects.push_back( object );
 }
+
+
+void GameEngine::DeleteObject( Object* object )
+{
+    for( unsigned int i = 0; i < objects.size(); i++ )
+    {
+        if( objects[i] == object )
+        {
+            deletedObjects.push_back( objects[i] );
+            objects.erase( objects.begin() + i );
+            i--;
+        }
+    }
+}
+void GameEngine::DeleteObject( unsigned long uid )
+{
+    for( unsigned int i = 0; i < objects.size(); i++ )
+    {
+        if( objects[i]->GetUID() == uid )
+        {
+            deletedObjects.push_back( objects[i] );
+            objects.erase( objects.begin() + i );
+            i--;
+        }
+    }
+}
+void GameEngine::DeleteObjects( vector<Object*> objects )
+{
+    for( unsigned int i = 0; i < objects.size(); i++ )
+    {
+        for( unsigned int u = 0; u < this->objects.size(); u++ )
+        {
+            if( this->objects[i] == objects[u] )
+            {
+                deletedObjects.push_back( objects[i] );
+                objects.erase( objects.begin() + i );
+                i--;
+            }
+        }
+    }
+}
+void GameEngine::DeleteObjects( vector<unsigned long> uids )
+{
+    for( unsigned int i = 0; i < uids.size(); i++ )
+    {
+        for( unsigned int u = 0; u < objects.size(); u++ )
+        {
+            if( objects[u]->GetUID() == uids[i] )
+            {
+                deletedObjects.push_back( objects[i] );
+                objects.erase( objects.begin() + i );
+                i--;
+            }
+        }
+    }
+}
+void GameEngine::PurgeObject( Object* object )
+{
+    for( unsigned int i = 0; i < objects.size(); i++ )
+    {
+        if( objects[i] == object )
+        {
+            objects.erase( objects.begin() + i );
+            i--;
+        }
+    }
+}
+void GameEngine::PurgeObject( unsigned long uid )
+{
+    for( unsigned int i = 0; i < objects.size(); i++ )
+    {
+        if( objects[i]->GetUID() == uid )
+        {
+            objects.erase( objects.begin() + i );
+            i--;
+        }
+    }
+}
+void GameEngine::PurgeObjects( vector<Object*> objects )
+{
+    for( unsigned int u = 0; u < objects.size(); u++ )
+    {
+        for( unsigned int i = 0; i < this->objects.size(); i++ )
+        {
+            if( this->objects[i] == objects[u] )
+            {
+                objects.erase( objects.begin() + i );
+                i--;
+            }
+        }
+    }
+}
+void GameEngine::PurgeObjects( vector<unsigned long> uids )
+{
+    for( unsigned int u = 0; u < uids.size(); u++ )
+    {
+        for( unsigned int i = 0; i < objects.size(); i++ )
+        {
+            if( objects[i]->GetUID() == uids[u] )
+            {
+                objects.erase( objects.begin() + i );
+                i--;
+            }
+        }
+    }
+}
+void GameEngine::ClearDeletedObjects()     
+{
+    deletedObjects.clear();
+}
+void GameEngine::DeleteAllObjects( bool includePersistent )
+{
+    for( unsigned int i = 0; i < objects.size(); i++ )
+    {
+        if( !objects[i]->GetPersistent() || includePersistent )
+        {
+            deletedObjects.push_back( objects[i] );
+            objects.erase( objects.begin() + i );
+            i--;   
+        }
+    }
+}
+void GameEngine::DeleteAllObjectsExcept( Object* object, bool includePersistent )
+{
+    for( unsigned int i = 0; i < objects.size(); i++ )
+    {
+        if( !objects[i]->GetPersistent() || includePersistent )
+        {
+            if( objects[i] != object )
+            {
+                deletedObjects.push_back( objects[i] );
+                objects.erase( objects.begin() + i );
+                i--;
+            }   
+        }
+    }
+}
+void GameEngine::PurgeAllObjects( bool includePersistent )
+{
+    for( unsigned int i = 0; i < objects.size(); i++ )
+    {
+        if( !objects[i]->GetPersistent() || includePersistent )
+        {
+            objects.erase( objects.begin() + i );
+            i--;   
+        }
+    }
+}
+void GameEngine::PurgeAllObjectsExcept( Object* object, bool includePersistent )
+{
+    for( unsigned int i = 0; i < objects.size(); i++ )
+    {
+        if( !objects[i]->GetPersistent() || includePersistent )
+        {
+            if( objects[i] != object )
+            {
+                objects.erase( objects.begin() + i );
+                i--;
+            }   
+        }
+    }
+}
+
+
 void GameEngine::UpdateAll()
 {
     for( unsigned int i = 0; i < objects.size(); i++ )

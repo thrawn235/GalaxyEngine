@@ -48,15 +48,16 @@ class NetEngine;
 class GameEngine
 {
 protected:
-    vector<Object*> objects;
+    vector<Object*>     objects;
+    vector<Object*>     deletedObjects;
 
-    unsigned long int highestUID;
+    unsigned long int   highestUID;
 
 public:
     //-------------- Engine Components ----------------
-    TextEngine*     text;
-    TextEngine*     debug;
-    NetEngine*      net;
+    TextEngine*         text;
+    TextEngine*         debug;
+    NetEngine*          net;
 
     //------------- Constructor / Destructor -----------
                         GameEngine              ();
@@ -77,6 +78,20 @@ public:
     Object*             GetObjectByUID          ( unsigned long int uid );
 
     void                AddObject               ( Object* object );
+
+    void                DeleteObject            ( Object* object );             //move Object to deleteList (graveyard) 
+    void                DeleteObject            ( unsigned long uid );
+    void                DeleteObjects           ( vector<Object*> objects );
+    void                DeleteObjects           ( vector<unsigned long> uids );
+    void                PurgeObject             ( Object* object );             //delete Object immediatly without moving it to the graveyard first. use at your own risk!
+    void                PurgeObject             ( unsigned long uid );
+    void                PurgeObjects            ( vector<Object*> objects );
+    void                PurgeObjects            ( vector<unsigned long> uids );
+    void                ClearDeletedObjects     ();       
+    void                DeleteAllObjects        ( bool includePersistent );
+    void                DeleteAllObjectsExcept  ( Object* object, bool includePersistent );
+    void                PurgeAllObjects         ( bool includePersistent );
+    void                PurgeAllObjectsExcept   ( Object* object, bool includePersistent );
 
     //---------------- Object Update Functions --------
     void                UpdateAll               ();                             //all the gamelogic happens here. Usually on the Server side

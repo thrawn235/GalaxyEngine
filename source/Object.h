@@ -47,6 +47,7 @@ struct ObjectStats : NetStats
             bool                active;
             bool                predict;
             bool                clientActive;
+            bool                persistent;
 };
 
 class Object
@@ -75,10 +76,12 @@ public:
             bool                GetActive               ();
             bool                GetPredict              ();
             bool                GetClientActive         ();
+            bool                GetPersistent           ();
             void                SetVisible              ( bool visible );
             void                SetActive               ( bool active );
             void                SetPredict              ( bool predict );
             void                SetClientActive         ( bool clientActive );
+            void                SetPersistent           ( bool persistent );
             Vector2D            GetPos                  ();
             void                SetPos                  ( Vector2D pos );
             Vector2D            GetMovement             ();

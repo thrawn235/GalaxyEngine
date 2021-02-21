@@ -1,8 +1,9 @@
 To Do:
 
+test Delete and Purge Methods
 Quit() is broken
 New Game causes crash if game is already running
-TCP implementation crashes bc connect is calles multiple times
+TCP implementation crashes bc connect is called multiple times
 DOS Network implementation
 MemoryEngine
 DLLs ?

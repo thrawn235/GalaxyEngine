@@ -18,6 +18,7 @@ Object::Object( GameEngine* engine )
     netStats->clientActive    = true;
     netStats->predict         = true;
     netStats->visible         = true;
+    netStats->persistent      = false;
 
     netStats->type            = OBJECT_TYPE_OBJECT;
 }
@@ -75,6 +76,11 @@ bool Object::GetClientActive()
     //
     return netStats->active;
 }
+bool Object::GetPersistent()
+{
+    //
+    return netStats->persistent;
+}
 void Object::SetVisible( bool visible )
 {
     //
@@ -94,6 +100,11 @@ void Object::SetClientActive( bool clientActive )
 {
     //
     netStats->clientActive = clientActive;
+}
+void Object::SetPersistent( bool persistent )
+{
+    //
+    netStats->persistent = persistent;
 }
 Vector2D Object::GetPos()
 {

@@ -5,6 +5,8 @@
 
 //======== global Variables ==========
 vector<NetEngineLocal*> netNodes;
+unsigned int            highestAdress = 1;
+unsigned int            serverAdress = 0;
 //====================================
 
 
@@ -12,6 +14,17 @@ vector<NetEngineLocal*> netNodes;
 NetEngineLocal::NetEngineLocal( GameEngine* engine ) : NetEngine( engine )
 {
     isServer = false;
+}
+NetEngineLocal::~NetEngineLocal()
+{
+    for( unsigned int i = 0; i < netNodes.size(); i++ )
+    {
+        if( netNodes[i] == this )
+        {
+            netNodes.erase( netNodes.begin() + i );
+            break;
+        }
+    }
 }
 
 void NetEngineLocal::SetAddress( uint64_t address )
@@ -36,10 +49,21 @@ bool NetEngineLocal::GetIsServer()
 }
 void NetEngineLocal::Send( Packet* packet )
 {
-    if( isConnected  || isServer )
+    packet->FixData();
+
+    if( isServer )
     {
-        packet->FixData();
-        
+        //send to all nodes except your self
+        for( unsigned int i = 0; i < netNodes.size(); i++ )
+        {
+            if( netNodes[i]->GetAddress() != address )
+            {
+                netNodes[i]->GetInbox()->push_back( packet );
+            }
+        }
+    }
+    else if( isConnected )
+    {
         for( unsigned int i = 0; i < netNodes.size(); i++ )
         {
             if( netNodes[i]->GetAddress() == target )
@@ -84,6 +108,8 @@ void NetEngineLocal::Connect( uint64_t target )
         this->target = target;
 
         isConnected = true;
+        SetAddress( highestAdress );
+        highestAdress++;
         netNodes.push_back(this);
     }
 }
@@ -107,6 +133,7 @@ bool NetEngineLocal::GetIsConnected()
 void NetEngineLocal::InitServer()
 {
     isServer = true;
+    SetAddress( 0 );
 }
 vector<uint64_t> NetEngineLocal::GetClientAddresses()
 {

@@ -4,6 +4,34 @@
 		"selected_items":
 		[
 			[
+				"main",
+				"mainInput"
+			],
+			[
+				"options",
+				"optionsMenu"
+			],
+			[
+				"net",
+				"netType"
+			],
+			[
+				"Game",
+				"GameEngine"
+			],
+			[
+				"Add",
+				"AddObject"
+			],
+			[
+				"Gae",
+				"GameServer"
+			],
+			[
+				"Inp",
+				"InputInt"
+			],
+			[
 				"client",
 				"clientActive\tabc"
 			],
@@ -486,71 +514,87 @@
 			[
 				"e",
 				"end\tabc"
-			],
-			[
-				"MM",
-				"MMNode.data\tabc"
-			],
-			[
-				"mm",
-				"mmStart\tabc"
-			],
-			[
-				"origin",
-				"_originalpNext"
-			],
-			[
-				"p",
-				"pNext\tabc"
-			],
-			[
-				"MMNode",
-				"MMNode.data\tabc"
-			],
-			[
-				"PrintShortIntAcc",
-				"PrintShortIntAccuSave\tabc"
-			],
-			[
-				"PrintShortIn",
-				"PrintShortIntAccuSave\tabc"
 			]
 		]
 	},
 	"buffers":
 	[
 		{
-			"file": "ToDo.txt",
-			"settings":
-			{
-				"buffer_size": 54,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "source/DedicatedServer.cpp",
-			"settings":
-			{
-				"buffer_size": 1150,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
+			"contents": "//====================================\n// main.cpp\n// the Main Client contains a server and a client part\n// the server part can be disabled in network play\n//====================================\n\n//========== stdlib includes =========\n#include <iostream>\nusing namespace std;\n//====================================\n\n//========= galaxy includes ==========\n#include \"GameEngine.h\"\n#include \"GameServer.h\"\n#include \"GameClient.h\"\n//====================================\n\nint main()\n{\n    cout<<\"Galaxy Engine: Main Client\"<<endl<<endl;\n\n    GameClient* client = NULL;\n    GameServer* server = NULL;\n\n    //Client needs to know *server for network settings etc\n    client = new GameClient( &server );\n\n    \n    //----------------- Main Loop --------------------\n    long int rounds = 0;\n    cout<<\"entering main loop...\"<<endl;\n    while( !client->GetExit() )\n    {\n        if( client != NULL )\n        {\n            client->Run();\n        }\n\n        if( server != NULL )\n        {\n            server->Run();\n        }\n\n        rounds ++;\n        cout<<\"end of round \"<<rounds<<endl;\n    }\n    //-------------------------------------------------\n\n    delete client;\n\n    cout<<\"good bye!\"<<endl;\n    return 0;\n}",
 			"file": "source/main.cpp",
+			"file_size": 1207,
+			"file_write_time": 132583823946339604,
 			"settings":
 			{
-				"buffer_size": 1538,
+				"buffer_size": 1207,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "makefile",
+			"file": "source/GameClient.cpp",
 			"settings":
 			{
-				"buffer_size": 11619,
+				"buffer_size": 4439,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "//GameServer.cpp\n\n#include \"GameServer.h\"\n\nGameServer::GameServer()\n{\n    engine = new GameEngine;\n\n    //init local networking\n    engine->InitNetType( NET_TYPE_LOCAL_BUFFER, true );\n    engine->net->SetAddress( 2 );\n    \n    //create game objects\n    Object* tmp = new Enemy( engine );\n    engine->AddObject( tmp );\n    tmp = new Enemy( engine );\n    engine->AddObject( tmp );\n    tmp = new Player( engine );\n    engine->AddObject( tmp );\n\n    engine->text->PrintString( \"\\n\\n\" );\n}\nGameServer::~GameServer()\n{\n    engine->debug->PrintString( \"destroying gameserver...\\n\" );\n    delete engine;\n}\nGameEngine* GameServer::GetEngine()\n{\n    return engine;\n}\nvoid GameServer::Run()\n{\n    engine->text->PrintString( \"================ server ===============:\\n\" );\n    \n    engine->text->PrintString( \"checking the net for packtes\\n\" );\n    engine->net->Update();\n    engine->debug->PrintString( \"Ive got %i Packets\\n\", engine->net->GetNumPacketsInInbox() );\n\n    while( !engine->net->InboxEmpty() )\n    {\n        Packet* pkt = engine->net->GetFirstPacketFromInbox();\n        if( pkt->type == NET_PACKET_TYPE_OBJECT_UPDATE )\n        {\n            engine->debug->PrintString( \"packet type: update...\\n\" );\n            NetStats* newStatus = (NetStats*)pkt->data;\n                     \n            Object* foundObject = engine->GetObjectByUID( newStatus->uid );\n            if( foundObject != NULL )\n            {\n                engine->debug->PrintString( \"   found object and update...\\n\" );\n                foundObject->LoadStatus( newStatus );\n                foundObject->Render();\n            }\n            else\n            {\n                //Object is not already in the list, so create one\n                if( newStatus->type == OBJECT_TYPE_OBJECT )\n                {\n                    engine->text->PrintString( \"   Adding new Object\" );\n                    Object* newObject = new Object( engine );\n                    newObject->LoadStatus( newStatus );\n                    engine->AddObject( newObject );\n                }\n                if( newStatus->type == OBJECT_TYPE_PLAYER )\n                {\n                    engine->text->PrintString( \"   Adding new Player\" );\n                    Object* newObject = new Player( engine );\n                    newObject->LoadStatus( newStatus );\n                    engine->AddObject( newObject );\n                }\n                if( newStatus->type == OBJECT_TYPE_ENEMY )\n                {\n                    engine->text->PrintString( \"   Adding new Enemy\" );\n                    Object* newObject = new Enemy( engine );\n                    newObject->LoadStatus( newStatus );\n                    engine->AddObject( newObject );\n                }\n            }\n        pkt->~Packet();\n        }\n    }\n\n    //Game Logic for all Objects\n    engine->UpdateAll();\n\n    //create and send GameLogic complete packet\n    Packet* ack = new Packet;\n    ack->type = NET_PACKET_TYPE_SEND_COMPLETE;\n    engine->net->Send( ack );\n\n    engine->debug->PrintString( \"======================================:\\n\\n\\n\" );\n}",
+			"file": "source/GameServer.cpp",
+			"file_size": 3061,
+			"file_write_time": 132583831336084505,
+			"settings":
+			{
+				"buffer_size": 3061,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "//DerivedObjects.cpp\n\n#include \"DerivedObjects.h\"\n#include \"GameEngine.h\"\n\nPlayer::Player( GameEngine* engine ) : Object( engine )\n{\n\tbaseNetStats = (NetStats*)realloc( baseNetStats, sizeof( PlayerStats ) );\n   \n    netStats = (PlayerStats*)baseNetStats;\n    netStats->size = sizeof( PlayerStats );\n\n\tnetStats->type = OBJECT_TYPE_PLAYER;\n\n\tnetStats->up = netStats->down = netStats->left = netStats->right = netStats->fire = false;\n}\nvoid Player::GameLogic()\n{\n\tnetStats->movement.Zero();\n\n\tif( netStats->up )\n\t{\n\t\tnetStats->movement.y = +1;\n\t}\n\telse if( netStats->down )\n\t{\n\t\tnetStats->movement.y = -1;\n\t}\n\telse if( netStats->left )\n\t{\n\t\tnetStats->movement.x = -1;\n\t}\n\telse if( netStats->right )\n\t{\n\t\tnetStats->movement.x = + 1;\n\t}\n\n\tnetStats->pos = netStats->pos + netStats->movement;\n\n\tengine->text->PrintString( \"Game Logic: Object UID:%i; Type:%i(Player); Pos:%f:%f Mov:%f:%f NetAddr:%i (server)\\n\", netStats->uid, netStats->type, netStats->pos.x, netStats->pos.y, netStats->movement.x, netStats->movement.y, engine->net->GetAddress() );\n}\nvoid Player::ClientSideUpdate()\n{\n\tnetStats->up = netStats->down = netStats->left = netStats->right = netStats->fire = false;\n\n\tengine->text->PrintString( \"Player Menu:\\n\" );\n\tengine->text->PrintString( \"   Commands:\\n\" );\n\tengine->text->PrintString( \"      move  = m\\n\" );\n\tengine->text->PrintString( \"      fire  = f \\n\" );\n\tchar input = engine->text->InputChar();\n\tif( input == 'm' )\n\t{\n\t\tengine->text->PrintString( \"      up:   = u\\n\" );\n\t\tengine->text->PrintString( \"      down  = d\\n\" );\n\t\tengine->text->PrintString( \"      left  = l\\n\" );\n\t\tengine->text->PrintString( \"      right = r\\n\" );\n\t\tchar inputMove = engine->text->InputChar();\n\t\tif( inputMove == 'u')\n\t\t{\n\t\t\tnetStats->up = true;\n\t\t}\n\t\telse if( inputMove == 'd' )\n\t\t{\n\t\t\tnetStats->down = true;\n\t\t}\n\t\telse if( inputMove == 'l' )\n\t\t{\n\t\t\tnetStats->left = true;\n\t\t}\n\t\telse if( inputMove == 'r' )\n\t\t{\n\t\t\tnetStats->right = true;\n\t\t}\n\t}\n\telse if( input == 'f' )\n\t{\n\t\tengine->text->PrintString( \"      enter target uid:   = u\\n\" );\n\t\tnetStats->target = engine->text->InputInt();\n\t\tnetStats->fire = true;\n\t}\n\n\tSendStatus();\n}\nvoid Player::Render()\n{\n\tengine->text->PrintString( \"Render: Object UID:%i; Type:%i(Player); Pos:%f:%f Mov:%f:%f NetAddr:%i (client)\\n\", netStats->uid, netStats->type, netStats->pos.x, netStats->pos.y, netStats->movement.x, netStats->movement.y, engine->net->GetAddress() );\n}\n\n\n\n\n\nEnemy::Enemy( GameEngine* engine ) : Object( engine )\n{\n\tbaseNetStats = (NetStats*)realloc( baseNetStats, sizeof( EnemyStats ) );\n\n    netStats = (EnemyStats*)baseNetStats;\n    netStats->size = sizeof( EnemyStats );\n\n\tnetStats->type = OBJECT_TYPE_ENEMY;\n}\nvoid Enemy::GameLogic()\n{\n\tengine->text->PrintString( \"Game Logic: Object UID:%i; Type:%i(Enemy); Pos:%f:%f NetAddr:%i (server)\\n\", netStats->uid, netStats->type, netStats->pos.x, netStats->pos.y, engine->net->GetAddress() );\n}\nvoid Enemy::Render()\n{\n\tengine->text->PrintString( \"Render: Object UID:%i; Type:%i(Enemy); Pos:%f:%f NetAddr:%i (client)\\n\", netStats->uid, netStats->type, netStats->pos.x, netStats->pos.y, engine->net->GetAddress() );\n}\n\n\n\n\n\nMainMenu::MainMenu( GameEngine* engine, GameServer** server ) : Object( engine )\n{\n\tbaseNetStats = (NetStats*)realloc( baseNetStats, sizeof( MainMenuStats ) );\n\n    netStats = (MainMenuStats*)baseNetStats;\n    netStats->size = sizeof( MainMenuStats );\n\n\tnetStats->type = OBJECT_TYPE_MAIN_MENU;\n\n\tthis->server = server;\n\thidden = false;\n\toptionsMenu = false;\n\tnetType = NET_TYPE_LOCAL_BUFFER;\n}\nMainMenu::~MainMenu()\n{\n\tif( *server != NULL )\n\t{\n\t\tdelete *server;\n\t}\n}\nvoid MainMenu::GameLogic()\n{\n\t//Main menu i not supposed to even be replicated to the server\n\t//\n}\nvoid MainMenu::ClientSideUpdate()\n{\n\t\n}\nvoid MainMenu::UpdateServerIndependend()\n{\n\tif( !hidden )\n\t{\n\t\tengine->text->PrintString( \"========== Galaxy Engine ==========\\n\" );\n\t\tengine->text->PrintString( \"============ Main Menu ============\\n\" );\n\t\tengine->text->PrintString( \"   1: New Game\\n\" );\n\t\tengine->text->PrintString( \"   2: Multiplayer\\n\" );\n\t\tengine->text->PrintString( \"   3: Options\\n\" );\n\t\tengine->text->PrintString( \"   4: Help\\n\" );\n\t\tengine->text->PrintString( \"   5: Quit\\n\" );\n\t\tengine->text->PrintString( \"===================================\\n\" );\n\t\tengine->text->PrintString( \"  input> \" );\n\t\tmainInput = engine->text->InputString();\n\t\tif( mainInput == \"1\" || mainInput == \"New Game\" )\n\t\t{\n\t\t\t//0. delete all client game objects (except the main menu)\n\t\t\t//1. create server\n\t\t\t//2. make sure it uses local buffer networking for single player\n\t\t\t//3. load all game objects\n\t\t\t//4. hide main menu\n\n\t\t\t//create server\n\t\t\tif( *server != NULL )\n\t\t\t{\n\t\t\t\tdelete *server;\n\t\t\t}\n\t\t\t*server = new GameServer();\n\n\t\t\t//setting local buffer networking\n\t\t\tGameServer* pServer = *server;\n\t\t\tpServer->GetEngine()->InitNetType( NET_TYPE_LOCAL_BUFFER, true );\n\t\t\tengine->net->Connect( 2 );\n\n\n\t\t\t//hide main menu\n\t\t\thidden = true;\n\t\t}\n\t\telse if( mainInput == \"2\" || mainInput == \"Multiplayer\" )\n\t\t{\n\t\t\t//0. delete all client game objects (except the main menu)\n\t\t\t//1. create server\n\t\t\t//2. make sure it uses the networking method specified by options\n\t\t\t//3. load all game objects\n\t\t\t//4. hide main menu\n\n\t\t\t//create server\n\t\t\tif( *server != NULL )\n\t\t\t{\n\t\t\t\tdelete *server;\n\t\t\t}\n\t\t\t*server = new GameServer();\n\n\t\t\t//setting networking\n\t\t\tGameServer* pServer = *server;\n\t\t\tpServer->GetEngine()->InitNetType( netType, true );\n\t\t\tpServer->GetEngine()->net->InitServer();\n\n\n\t\t\t//hide main menu\n\t\t\thidden = true;\n\t\t}\n\t\telse if( mainInput == \"3\" || mainInput == \"Options\" )\n\t\t{\n\t\t\tengine->text->PrintString( \"entering options menu...\\n\" );\n\t\t\toptionsMenu = true;\n\t\t\thidden = true;\n\t\t}\n\t\telse if( mainInput == \"4\" || mainInput == \"Help\" )\n\t\t{\n\t\t\tengine->text->PrintString( \"help is not available right now! \\n\" );\n\t\t}\n\t\telse if( mainInput == \"5\" || mainInput == \"Quit\" )\n\t\t{\n\t\t\tengine->Quit();\n\t\t}\n\t}\n\telse if( optionsMenu )\n\t{\n\t\tengine->text->PrintString( \"=========== Options Menu ==========\\n\" );\n\t\tengine->text->PrintString( \"======= Choose Network Type: ======\\n\" );\n\t\tvector<int> netTypes = engine->GetAvailableNetTypes();\n\t\tfor( unsigned int i = 0; i < netTypes.size(); i++ )\n\t\t{\n\t\t\tif( netTypes[i] == NET_TYPE_LOCAL_BUFFER )\n\t\t\t{\n\t\t\t\tengine->text->PrintString( \"   %i: Local Buffer\\n\", i );\n\t\t\t}\n\t\t\tif( netTypes[i] == NET_TYPE_LINUX_SOCKETS_UDP )\n\t\t\t{\n\t\t\t\tengine->text->PrintString( \"   %i: Linux UDP\\n\", i );\n\t\t\t}\n\t\t\tif( netTypes[i] == NET_TYPE_LINUX_SOCKETS_TCP )\n\t\t\t{\n\t\t\t\tengine->text->PrintString( \"   %i: Linux TCP\\n\", i );\n\t\t\t}\n\t\t\tif( netTypes[i] == NET_TYPE_WIN_SOCKETS_UDP )\n\t\t\t{\n\t\t\t\tengine->text->PrintString( \"   %i: Windows UDP\\n\", i );\t\n\t\t\t}\n\t\t\tif( netTypes[i] == NET_TYPE_WIN_SOCKETS_TCP )\n\t\t\t{\n\t\t\t\tengine->text->PrintString( \"   %i: Windows TCP\\n\", i );\n\t\t\t}\n\t\t}\n\t\tengine->text->PrintString( \"===================================\\n\" );\n\t\tengine->text->PrintString( \"  input> \" );\n\t\tint optionsInput = engine->text->InputInt();\n\t\tif( optionsInput >= 0 && optionsInput < netTypes.size() )\n\t\t{\n\t\t\tGameServer* pServer = *server;\n\t\t\tnetType = netTypes[optionsInput];\n\t\t}\n\t\telse\n\t\t{\n\t\t\tengine->text->PrintString( \"invalid selection\\n\" );\n\t\t}\n\t\toptionsMenu = false;\n\t\thidden = false;\n\t}\n\telse\n\t{\n\t\tengine->text->PrintString( \"== Main Menu ==\\n\" );\n\t\tengine->text->PrintString( \"  input m for menu > \" );\n\t\tmainInput = engine->text->InputString();\n\t\tif( mainInput == \"m\" || mainInput == \"Main Menu\" )\n\t\t{\n\t\t\thidden = false;\n\t\t}\n\t}\n}\nvoid MainMenu::Render()\n{\n\t\n}",
+			"file": "source/DerivedObjects.cpp",
+			"file_size": 7454,
+			"file_write_time": 132583841897094209,
+			"settings":
+			{
+				"buffer_size": 7454,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "//====================================\n// DerivedObjects.h\n// All Game Objects are derived from the object base class (Object.h)\n//====================================\n\n//========== include guard ===========\n#ifndef DERIVED_OBJECTS\n#define DERIVED_OBJECTS\n//====================================\n\n//========== stdlib includes =========\n#include <string>\nusing namespace std;\n//====================================\n\n//========= galaxy includes ==========\n#include \"Object.h\"\n#include \"GameServer.h\"\n//#include \"GameEngine.h\"\n//====================================\n\n//======= forward declarations =======\nclass GameServer;\n//====================================\n\nstruct PlayerStats : ObjectStats\n{\n\tbool up, down, left, right;\n\tbool fire;\n\tint target;\n};\n\nclass Player : public Object\n{\nprivate:\n\t\nprotected:\n\tPlayerStats*\tnetStats;\npublic:\n\t\t\t\t\tPlayer\t\t\t\t( GameEngine* engine );\n\tvirtual void \tGameLogic\t\t\t();\n\tvirtual void \tClientSideUpdate\t();\n\tvirtual void\tRender\t\t\t\t();\n};\n\n\nstruct EnemyStats : ObjectStats\n{\n\t\n};\n\nclass Enemy : public Object\n{\nprivate:\n\t\nprotected:\n\tEnemyStats*\t\tnetStats;\npublic:\n\t\t\t\t\tEnemy\t\t\t\t( GameEngine* engine );\n\tvirtual void \tGameLogic\t\t\t();\n\tvirtual void\tRender\t\t\t\t();\n};\n\n\nstruct MainMenuStats : ObjectStats\n{\n\t\n};\n\nclass MainMenu : public Object\n{\nprivate:\n\t\nprotected:\n\tMainMenuStats*\tnetStats;\n\tstring \t\t\tmainInput;\n\tbool\t\t\thidden;\n\tbool\t\t\toptionsMenu;\n\tint \t\t\tnetType;\n\tGameServer**\tserver;\npublic:\n\t\t\t\t\tMainMenu\t\t\t\t( GameEngine* engine, GameServer** server );\n\t\t\t\t\t~MainMenu\t\t\t\t();\n\tvirtual void \tGameLogic\t\t\t\t();\n\tvirtual void \tClientSideUpdate\t\t();\n\tvirtual void\tUpdateServerIndependend\t();\n\tvirtual void\tRender\t\t\t\t\t();\n\t//--------------- MainMenu specific -----------------\n};\n\n#endif",
+			"file": "source/DerivedObjects.h",
+			"file_size": 1722,
+			"file_write_time": 132583835057802925,
+			"settings":
+			{
+				"buffer_size": 1722,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "//====================================\n// GameEngine.h\n// the game engine handles all game objects (basically everything in game)\n// all objects have a pointer to it and all communication with other objects is handled though that pointer\n// you can ask the game engine for objects (pointers) based on various criteria\n// for example what game object is at Pos X/Y, or what game objects are closer then Z units from X/Y etc.\n//====================================\n\n//========== include guard ===========\n#ifndef GAMEENGINE\n#define GAMEENGINE\n//====================================\n\n//========== stdlib includes =========\n#include <vector>\n#include <cstring>\n#include <stdlib.h>\nusing namespace std;\n//====================================\n\n//========= galaxy includes ==========\n#include \"Object.h\"\n#include \"DerivedObjects.h\"\n#include \"TextEngine.h\"\n#ifdef win\n    #include \"NetEngineWinSocketsUDP.h\"\n    #include \"NetEngineLocal.h\"\n    #include \"TextEngineIOStream.h\"\n#endif\n#ifdef linux\n    #include \"NetEngineLinuxSocketsUDP.h\"\n    #include \"NetEngineLinuxSocketsTCP.h\"\n    #include \"NetEngineLocal.h\"\n    #include \"TextEngineIOStream.h\"\n#endif\n#ifdef dos\n    #include \"NetEngineLocal.h\"\n    #include \"TextEngineSTDIO.h\"\n#endif\n#include \"Vector2D.h\"\n//====================================\n\n//======= forward declarations =======\nclass Object;\nclass NetEngine;\n//====================================\n\nclass GameEngine\n{\nprotected:\n    vector<Object*> objects;\n\n    unsigned long int highestUID;\n\npublic:\n    //-------------- Engine Components ----------------\n    TextEngine*     text;\n    TextEngine*     debug;\n    NetEngine*      net;\n\n    //------------- Constructor / Destructor -----------\n                        GameEngine              ();\n                        ~GameEngine             ();\n\n    // ------------------ Set / Get --------------------\n    void                SetHighestUID           ( unsigned long int UID );\n    unsigned long int   GetHighestUID           ();\n    unsigned long int   GetHighestUIDAndInc     ();\n    vector<int>         GetAvailableNetTypes    ();\n    void                InitNetType             ( int netType, bool isServer );\n\n    //------------------- Auxilary Methods ------------\n    void                Quit                    ();\n\n    //---------------- Main Engine Fuctions -----------\n    vector<Object*>     GetAllObjects           ();\n    Object*             GetObjectByUID          ( unsigned long int uid );\n\n    void                AddObject               ( Object* object );\n\n    //---------------- Object Update Functions --------\n    void                UpdateAll               ();                             //all the gamelogic happens here. Usually on the Server side\n    void                ClientSideUpdateAll     ();                             //gamelogic update on the client side. use with caution\n    void                UpdateServerIndependend ();\n    void                PredictAll              ( float tickRate );             //moves all objects on along its movement vector based on frametime. this is for visual smoothness only\n    void                RenderAll               ();                             //draw all objects\n\n    //------------------- Network ---------------------\n    //void                UpdateGamestateFromNet  ();\n};\n\n//include Guard End\n#endif",
+			"file": "source/GameEngine.h",
+			"file_size": 3342,
+			"file_write_time": 132583828815496984,
+			"settings":
+			{
+				"buffer_size": 3342,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "#include \"GameEngine.h\"\n\n//global list of all Game Engines. Its prmarily used for ungraceful program termination\nvector<GameEngine*> engines;\n\n\nGameEngine::GameEngine()\n{\n    #ifdef linux\n        text = new TextEngineIOStream;\n        debug = new TextEngineIOStream;\n        //net = new NetEngineLinuxSocketsUDP( this );\n    #endif\n    #ifdef win\n        text = new TextEngineIOStream;\n        debug = new TextEngineIOStream;\n        //net = new NetEngineWinSocketsUDP( this );\n    #endif\n    #ifdef dos\n        text = new TextEngineSTDIO;\n        debug = new TextEngineSTDIO;\n        //net = new NetEngineLocal( this );\n    #endif\n\n    //net = new NetEngineLocal( this );\n\n    engines.push_back( this );\n\n    highestUID = 1;\n}\nGameEngine::~GameEngine()\n{\n    delete net;\n    delete text;\n    delete debug;\n}\nvoid GameEngine::SetHighestUID( unsigned long int UID )\n{\n    highestUID = UID;\n}\nunsigned long int GameEngine::GetHighestUID()\n{\n    return highestUID;\n}\nunsigned long int GameEngine::GetHighestUIDAndInc()\n{\n    highestUID++;\n    return highestUID - 1;\n}\nvector<int> GameEngine::GetAvailableNetTypes()\n{\n    vector<int> availableModes;\n\n    availableModes.push_back( NET_TYPE_LOCAL_BUFFER );\n    \n    #ifdef linux\n        availableModes.push_back( NET_TYPE_LINUX_SOCKETS_UDP );\n        availableModes.push_back( NET_TYPE_LINUX_SOCKETS_TCP );\n    #endif\n    #ifdef win\n        availableModes.push_back( NET_TYPE_WIN_SOCKETS_UDP );\n    #endif\n    #ifdef dos\n    #endif\n\n    return availableModes;\n}\nvoid GameEngine::InitNetType( int netType, bool isServer )\n{\n    if( net != NULL )\n    {\n        delete net;\n    }\n\n    if( netType == NET_TYPE_LOCAL_BUFFER )\n    {\n        net = new NetEngineLocal( this, isServer );\n    }\n    #ifdef linux\n        else if( netType == NET_TYPE_LINUX_SOCKETS_UDP )\n        {\n            net = new NetEngineLinuxSocketsUDP( this, isServer );\n        }\n        else if( netType == NET_TYPE_LINUX_SOCKETS_TCP )\n        {\n            net = new NetEngineLinuxSocketsTCP( this, isServer );   \n        }\n    #endif\n    #ifdef win\n        else if( netType == NET_TYPE_WIN_SOCKETS_UDP )\n        {\n            net = new NetEngineWinSocketsUDP( this, isServer );\n        }\n    #endif\n}\n\nvoid GameEngine::Quit()\n{\n    for( unsigned int i = 0; i < engines.size(); i++ )\n    {\n        delete engines[i];\n        i++;\n    }\n    exit( EXIT_FAILURE );\n}\n\nvector<Object*> GameEngine::GetAllObjects()\n{\n    return objects;\n}\nObject* GameEngine::GetObjectByUID( unsigned long int uid )\n{\n    for( unsigned int i = 0; i < objects.size(); i++ )\n    {\n        if( objects[i]->GetUID() == uid )\n        {\n            return objects[i];\n        }\n    }\n    return NULL;\n}\nvoid GameEngine::AddObject( Object* object )\n{\n    objects.push_back( object );\n}\nvoid GameEngine::UpdateAll()\n{\n    for( unsigned int i = 0; i < objects.size(); i++ )\n    {\n        if( objects[i]->GetActive() )\n        {\n            objects[i]->Update();\n        }\n    }\n}\nvoid GameEngine::ClientSideUpdateAll()\n{\n    for( unsigned int i = 0; i < objects.size(); i++ )\n    {\n        if( objects[i]->GetClientActive() )\n        {\n            objects[i]->ClientSideUpdate();\n        }\n    }\n}\n\nvoid GameEngine::UpdateServerIndependend()\n{\n    for( unsigned int i = 0; i < objects.size(); i++ )\n    {\n        if( objects[i]->GetClientActive() )\n        {\n            objects[i]->UpdateServerIndependend();\n        }\n    }\n}\nvoid GameEngine::PredictAll( float tickRate )\n{\n    for( unsigned int i = 0; i < objects.size(); i++ )\n    {\n        if( objects[i]->GetPredict() )\n        {\n            objects[i]->Predict( tickRate );\n        }\n    }\n}\nvoid GameEngine::RenderAll()\n{\n    for( unsigned int i = 0; i < objects.size(); i++ )\n    {\n        if( objects[i]->GetVisible() )\n        {\n            objects[i]->Render();\n        }\n    }\n}",
+			"file": "source/GameEngine.cpp",
+			"file_size": 3821,
+			"file_write_time": 132583829001762815,
+			"settings":
+			{
+				"buffer_size": 3821,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -592,37 +636,41 @@
 	},
 	"expanded_folders":
 	[
-		"/home/sebastian/Programming/GalaxyEngine",
-		"/home/sebastian/Programming/GalaxyEngine/source",
-		"/home/sebastian/Programming/GalaxyEngine/source/dos",
-		"/home/sebastian/Programming/GalaxyEngine/source/linux"
+		"/home/sebastian/Programming/GalaxyEngine"
 	],
 	"file_history":
 	[
-		"/home/sebastian/Programming/GalaxyEngine/source/NetEngine.h",
-		"/home/sebastian/Programming/GalaxyEngine/source/Object.cpp",
-		"/home/sebastian/Programming/GalaxyEngine/source/Object.h",
-		"/home/sebastian/Programming/GalaxyEngine/source/DerivedObjects.cpp",
 		"/home/sebastian/Programming/GalaxyEngine/source/DerivedObjects.h",
+		"/home/sebastian/Programming/GalaxyEngine/source/main.cpp",
+		"/home/sebastian/Programming/GalaxyEngine/source/GameClient.h",
 		"/home/sebastian/Programming/GalaxyEngine/source/GameClient.cpp",
-		"/home/sebastian/Programming/GalaxyEngine/source/GameServer.cpp",
-		"/home/sebastian/Programming/GalaxyEngine/source/NetEngineLocal.h",
-		"/home/sebastian/Programming/GalaxyEngine/source/NetEngineLocal.cpp",
-		"/home/sebastian/Programming/GalaxyEngine/source/NetEngine.cpp",
-		"/home/sebastian/Programming/GalaxyEngine/makefile",
-		"/home/sebastian/Programming/GalaxyEngine/source/Packet.h",
+		"/home/sebastian/Programming/GalaxyEngine/source/Object.h",
 		"/home/sebastian/Programming/GalaxyEngine/source/GameEngine.h",
 		"/home/sebastian/Programming/GalaxyEngine/source/GameEngine.cpp",
+		"/home/sebastian/Programming/GalaxyEngine/source/Object.cpp",
+		"/home/sebastian/Programming/GalaxyEngine/source/DerivedObjects.cpp",
+		"/home/sebastian/Programming/GalaxyEngine/source/NetEngine.h",
+		"/home/sebastian/Programming/GalaxyEngine/source/NetEngine.cpp",
+		"/home/sebastian/Programming/GalaxyEngine/source/NetEngineLinuxSocketsTCP.h",
+		"/home/sebastian/Programming/GalaxyEngine/source/NetEngineLinuxSocketsTCP.cpp",
+		"/home/sebastian/Programming/GalaxyEngine/source/NetEngineLinuxSocketsUDP.h",
+		"/home/sebastian/Programming/GalaxyEngine/source/NetEngineLinuxSocketsUDP.cpp",
+		"/home/sebastian/Programming/GalaxyEngine/source/NetEngineWinSocketsUDP.h",
+		"/home/sebastian/Programming/GalaxyEngine/source/NetEngineLocal.h",
+		"/home/sebastian/Programming/GalaxyEngine/source/NetEngineLocal.cpp",
+		"/home/sebastian/Programming/GalaxyEngine/source/NetEngineWinSocketsUDP.cpp",
 		"/home/sebastian/Programming/GalaxyEngine/ToDo.txt",
-		"/home/sebastian/Programming/GalaxyEngine/source/GameClient.h",
-		"/home/sebastian/Programming/GalaxyEngine/source/main.cpp",
+		"/home/sebastian/Programming/GalaxyEngine/source/GameServer.h",
+		"/home/sebastian/Programming/GalaxyEngine/source/GameServer.cpp",
+		"/home/sebastian/Programming/GalaxyEngine/source/DedicatedServer.cpp",
+		"/home/sebastian/Programming/GalaxyEngine/makefile",
+		"/home/sebastian/Programming/GalaxyEngine/source/Packet.h",
 		"/home/sebastian/Programming/GalaxyEngine/source/TextEngineSTDIO.cpp",
 		"/home/sebastian/Programming/GalaxyEngine/source/TextEngine.h",
 		"/home/sebastian/Programming/GalaxyEngine/source/TextEngineIOStream.cpp",
 		"/home/sebastian/Programming/GalaxyEngine/source/TextEngineIOStream.h",
 		"/home/sebastian/Programming/GalaxyEngine/source/TextEngineSTDIO.h",
 		"/home/sebastian/Programming/GalaxyEngine/GalaxyEngine.sublime-project",
-		"/home/sebastian/Programming/GalaxyEngine/source/GameServer.h",
 		"/home/sebastian/Programming/GalaxyEngine/source/Vector2D.h",
 		"/home/sebastian/.config/sublime-text-3/Packages/User/Preferences.sublime-settings",
 		"/home/sebastian/.config/sublime-text-3/Packages/Default/Preferences.sublime-settings",
@@ -705,82 +753,24 @@
 	"groups":
 	[
 		{
-			"selected": 2,
+			"selected": 1,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "ToDo.txt",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 54,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Text/Plain text.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 3,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "source/DedicatedServer.cpp",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1150,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
 					"file": "source/main.cpp",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1538,
+						"buffer_size": 1207,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								727,
-								750
+								1161,
+								1161
 							]
 						],
 						"settings":
@@ -791,38 +781,187 @@
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "source/GameClient.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4439,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1651,
+								1651
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 3.0,
+						"translation.y": 653.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
 					"type": "text"
 				},
 				{
-					"buffer": 3,
-					"file": "makefile",
+					"buffer": 2,
+					"file": "source/GameServer.cpp",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 11619,
+						"buffer_size": 3061,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								214,
+								214
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Makefile/Makefile.sublime-syntax",
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 10.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "source/DerivedObjects.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 7454,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4845,
+								4845
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 236.0,
+						"translation.y": 2228.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "source/DerivedObjects.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1722,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1514,
+								1514
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 752.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "source/GameEngine.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3342,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2125,
+								2125
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 636.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "source/GameEngine.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3821,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1528,
+								1528
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 545.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
 					"type": "text"
 				}
 			]

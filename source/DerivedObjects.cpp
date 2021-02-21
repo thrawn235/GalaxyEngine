@@ -121,10 +121,16 @@ MainMenu::MainMenu( GameEngine* engine, GameServer** server ) : Object( engine )
 
 	netStats->type = OBJECT_TYPE_MAIN_MENU;
 
+	netStats->persistent = true;
+
 	this->server = server;
 	hidden = false;
 	optionsMenu = false;
 	netType = NET_TYPE_LOCAL_BUFFER;
+}
+MainMenu::~MainMenu()
+{
+	delete *server;
 }
 void MainMenu::GameLogic()
 {
@@ -157,9 +163,12 @@ void MainMenu::UpdateServerIndependend()
 			//3. load all game objects
 			//4. hide main menu
 
+			engine->PurgeAllObjectsExcept( this, true );
+
 			//create server
 			if( *server != NULL )
 			{
+				engine->net->Disconnect();
 				delete *server;
 			}
 			*server = new GameServer();
@@ -167,7 +176,8 @@ void MainMenu::UpdateServerIndependend()
 			//setting local buffer networking
 			GameServer* pServer = *server;
 			pServer->GetEngine()->SetNetType( NET_TYPE_LOCAL_BUFFER );
-
+			pServer->GetEngine()->net->InitServer();
+			engine->SetNetType( NET_TYPE_LOCAL_BUFFER );
 
 			//hide main menu
 			hidden = true;
@@ -180,9 +190,12 @@ void MainMenu::UpdateServerIndependend()
 			//3. load all game objects
 			//4. hide main menu
 
+			engine->PurgeAllObjectsExcept( this, true );
+
 			//create server
 			if( *server != NULL )
 			{
+				engine->net->Disconnect();
 				delete *server;
 			}
 			*server = new GameServer();
@@ -190,7 +203,8 @@ void MainMenu::UpdateServerIndependend()
 			//setting networking
 			GameServer* pServer = *server;
 			pServer->GetEngine()->SetNetType( netType );
-
+			pServer->GetEngine()->net->InitServer();
+			engine->SetNetType( netType );
 
 			//hide main menu
 			hidden = true;
@@ -241,9 +255,9 @@ void MainMenu::UpdateServerIndependend()
 		engine->text->PrintString( "===================================\n" );
 		engine->text->PrintString( "  input> " );
 		int optionsInput = engine->text->InputInt();
-		if( optionsInput >= 0 && optionsInput < netTypes.size() )
+		if( optionsInput >= 0 && (unsigned int)optionsInput < netTypes.size() )
 		{
-			GameServer* pServer = *server;
+			//GameServer* pServer = *server;
 			netType = netTypes[optionsInput];
 		}
 		else

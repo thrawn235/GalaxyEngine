@@ -80,6 +80,7 @@ protected:
 	GameServer**	server;
 public:
 					MainMenu				( GameEngine* engine, GameServer** server );
+					~MainMenu				();
 	virtual void 	GameLogic				();
 	virtual void 	ClientSideUpdate		();
 	virtual void	UpdateServerIndependend	();
