@@ -32,6 +32,7 @@ class GameEngine;
 #define NET_TYPE_WIN_SOCKETS_TCP            4
 #define NET_TYPE_LINUX_SOCKETS_UDP          5
 #define NET_TYPE_LINUX_SOCKETS_TCP          6
+#define NET_TYPE_DOS_PACKET_DRIVER_UDP      7
 
 #define NET_PACKET_TYPE_OBJECT_UPDATE       1
 #define NET_PACKET_TYPE_SEND_COMPLETE       2

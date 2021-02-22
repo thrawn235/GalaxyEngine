@@ -65,6 +65,7 @@ vector<int> GameEngine::GetAvailableNetTypes()
         availableModes.push_back( NET_TYPE_WIN_SOCKETS_UDP );
     #endif
     #ifdef dos
+        availableModes.push_back( NET_TYPE_DOS_PACKET_DRIVER_UDP );
     #endif
 
     return availableModes;

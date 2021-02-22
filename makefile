@@ -60,11 +60,14 @@ $(sourceDir)dos/GameServer.o: $(sourceDir)GameServer.cpp $(sourceDir)GameServer.
 $(sourceDir)dos/NetEngineLocal.o: $(sourceDir)NetEngineLocal.cpp $(sourceDir)NetEngineLocal.h $(sourceDir)dos/GameEngine.o
 	$(CompilerDos) $(CFLAGS) $(CFLAGSDos) -o $@ -c $<
 
-$(binDir)dos/main.exe: $(sourceDir)main.cpp $(sourceDir)dos/Object.o $(sourceDir)dos/GameEngine.o $(sourceDir)dos/TextEngineSTDIO.o $(sourceDir)dos/GameClient.o $(sourceDir)dos/GameServer.o $(sourceDir)dos/NetEngineLocal.o $(sourceDir)dos/DerivedObjects.o $(sourceDir)dos/NetEngine.o
+$(sourceDir)dos/NetEngineDosPacketDriverUDP.o: $(sourceDir)NetEngineDosPacketDriverUDP.cpp $(sourceDir)NetEngineDosPacketDriverUDP.h $(sourceDir)dos/GameEngine.o
+	$(CompilerDos) $(CFLAGS) $(CFLAGSDos) -o $@ -c $<
+
+$(binDir)dos/main.exe: $(sourceDir)main.cpp $(sourceDir)dos/Object.o $(sourceDir)dos/GameEngine.o $(sourceDir)dos/TextEngineSTDIO.o $(sourceDir)dos/GameClient.o $(sourceDir)dos/GameServer.o $(sourceDir)dos/NetEngineLocal.o $(sourceDir)dos/NetEngineDosPacketDriverUDP.o $(sourceDir)dos/DerivedObjects.o $(sourceDir)dos/NetEngine.o
 	$(CompilerDos) $(CFLAGS) $(CFLAGSDos) -o $@ $^
 	cp $(assetsDir)* $(binDir)dos/
 
-$(binDir)dos/DedicatedServer.exe: $(sourceDir)DedicatedServer.cpp $(sourceDir)dos/Object.o $(sourceDir)dos/GameEngine.o $(sourceDir)dos/TextEngineSTDIO.o $(sourceDir)dos/GameClient.o $(sourceDir)dos/GameServer.o $(sourceDir)dos/NetEngineLocal.o $(sourceDir)dos/DerivedObjects.o $(sourceDir)dos/NetEngine.o
+$(binDir)dos/DedicatedServer.exe: $(sourceDir)DedicatedServer.cpp $(sourceDir)dos/Object.o $(sourceDir)dos/GameEngine.o $(sourceDir)dos/TextEngineSTDIO.o $(sourceDir)dos/GameClient.o $(sourceDir)dos/GameServer.o $(sourceDir)dos/NetEngineLocal.o $(sourceDir)dos/NetEngineDosPacketDriverUDP.o $(sourceDir)dos/DerivedObjects.o $(sourceDir)dos/NetEngine.o
 	$(CompilerDos) $(CFLAGS) $(CFLAGSDos) -o $@ $^
 	cp $(assetsDir)* $(binDir)dos/
 
