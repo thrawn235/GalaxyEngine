@@ -50,13 +50,12 @@ public:
     virtual bool                InboxEmpty                  ();
 
     //-------------------- Client --------------------
-    virtual void                InitClient                  ();
     virtual void                Connect                     ( uint64_t target );
     virtual void                Disconnect                  ();
     virtual bool                GetIsConnected              ();
 
     //-------------------- Server --------------------
-    virtual void                InitServer                  ();
+    virtual void                ConfigureAsServer           ();
     virtual vector<uint64_t>    GetClientAddresses          ();
 
 

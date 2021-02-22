@@ -103,9 +103,9 @@ void GameEngine::Quit()
     for( unsigned int i = 0; i < engines.size(); i++ )
     {
         delete engines[i];
-        i--;
     }
-    exit( EXIT_FAILURE );
+    engines.clear();
+    exit( EXIT_SUCCESS );
 }
 
 vector<Object*> GameEngine::GetAllObjects()

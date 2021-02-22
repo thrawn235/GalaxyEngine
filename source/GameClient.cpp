@@ -14,7 +14,6 @@ GameClient::GameClient( GameServer** server )
     {
         engine->net->InitClient();
     }*/
-    engine->net->InitClient();
 
     engine->SetHighestUID( 100000 );
     

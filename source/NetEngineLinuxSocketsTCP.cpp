@@ -105,10 +105,6 @@ bool NetEngineLinuxSocketsTCP::InboxEmpty()
 
 
 
-void NetEngineLinuxSocketsTCP::InitClient()
-{
-    
-}
 void NetEngineLinuxSocketsTCP::Connect( uint64_t target )
 {
     this->target = target;
@@ -147,7 +143,7 @@ bool NetEngineLinuxSocketsTCP::GetIsConnected()
 
 
 
-void NetEngineLinuxSocketsTCP::InitServer()
+void NetEngineLinuxSocketsTCP::ConfigureAsServer()
 {
     isServer = true;
 

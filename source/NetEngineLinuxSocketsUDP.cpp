@@ -110,11 +110,6 @@ bool NetEngineLinuxSocketsUDP::InboxEmpty()
 
 
 
-void NetEngineLinuxSocketsUDP::InitClient()
-{
-    //
-    //nothing to do
-}
 void NetEngineLinuxSocketsUDP::Connect( uint64_t target )
 {
     this->target = target;
@@ -146,7 +141,7 @@ bool NetEngineLinuxSocketsUDP::GetIsConnected()
 }
 
 
-void NetEngineLinuxSocketsUDP::InitServer()
+void NetEngineLinuxSocketsUDP::ConfigureAsServer()
 {
     isServer = true;
 

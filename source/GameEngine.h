@@ -67,10 +67,12 @@ public:
     void                SetHighestUID           ( unsigned long int UID );
     unsigned long int   GetHighestUID           ();
     unsigned long int   GetHighestUIDAndInc     ();
+
+    //-------------- Auxilary Network Mthods ----------
     vector<int>         GetAvailableNetTypes    ();
     void                SetNetType              ( int netType );
 
-    //------------------- Auxilary Methods ------------
+    //----------------- Auxilary Methods --------------
     void                Quit                    ();
 
     //---------------- Main Engine Fuctions -----------

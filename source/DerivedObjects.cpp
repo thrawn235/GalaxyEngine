@@ -176,7 +176,7 @@ void MainMenu::UpdateServerIndependend()
 			//setting local buffer networking
 			GameServer* pServer = *server;
 			pServer->GetEngine()->SetNetType( NET_TYPE_LOCAL_BUFFER );
-			pServer->GetEngine()->net->InitServer();
+			pServer->GetEngine()->net->ConfigureAsServer();
 			engine->SetNetType( NET_TYPE_LOCAL_BUFFER );
 
 			//hide main menu
@@ -203,7 +203,7 @@ void MainMenu::UpdateServerIndependend()
 			//setting networking
 			GameServer* pServer = *server;
 			pServer->GetEngine()->SetNetType( netType );
-			pServer->GetEngine()->net->InitServer();
+			pServer->GetEngine()->net->ConfigureAsServer();
 			engine->SetNetType( netType );
 
 			//hide main menu

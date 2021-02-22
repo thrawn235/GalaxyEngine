@@ -97,10 +97,6 @@ bool NetEngineLocal::InboxEmpty()
 }
 
 
-void NetEngineLocal::InitClient()
-{
-
-}
 void NetEngineLocal::Connect( uint64_t target )
 {
     if( !isConnected )
@@ -130,7 +126,7 @@ bool NetEngineLocal::GetIsConnected()
 }
 
 
-void NetEngineLocal::InitServer()
+void NetEngineLocal::ConfigureAsServer()
 {
     isServer = true;
     SetAddress( 0 );

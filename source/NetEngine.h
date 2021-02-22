@@ -79,13 +79,12 @@ public:
     virtual bool                InboxEmpty                  ()                      = 0;
 
     //-------------------- Client --------------------
-    virtual void                InitClient                  ()                      = 0;
     virtual void                Connect                     ( uint64_t target )     = 0;
     virtual void                Disconnect                  ()                      = 0;
     virtual bool                GetIsConnected              ()                      = 0;
 
     //-------------------- Server --------------------
-    virtual void                InitServer                  ()                      = 0;
+    virtual void                ConfigureAsServer           ()                      = 0;
     virtual vector<uint64_t>    GetClientAddresses          ()                      = 0;
 
 

@@ -121,11 +121,6 @@ bool NetEngineWinSocketsUDP::InboxEmpty()
 
 
 
-void NetEngineWinSocketsUDP::InitClient()
-{
-    //
-    //nothing to do
-}
 void NetEngineWinSocketsUDP::Connect( uint64_t target )
 {
     this->target = target;
@@ -157,7 +152,7 @@ bool NetEngineWinSocketsUDP::GetIsConnected()
 }
 
 
-void NetEngineWinSocketsUDP::InitServer()
+void NetEngineWinSocketsUDP::ConfigureAsServer()
 {
     isServer = true;
 

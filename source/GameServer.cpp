@@ -13,7 +13,7 @@ GameServer::GameServer()
     }
     if( engine->net->GetType() == NET_TYPE_WIN_SOCKETS_UDP || engine->net->GetType() == NET_TYPE_LINUX_SOCKETS_UDP || engine->net->GetType() == NET_TYPE_LINUX_SOCKETS_TCP )
     {
-        engine->net->InitServer();
+        engine->net->ConfigureAsServer();
     }
 
     Object* tmp = new Enemy( engine );
