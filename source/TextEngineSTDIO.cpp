@@ -72,13 +72,14 @@ char TextEngineSTDIO::InputChar()
 }
 string TextEngineSTDIO::InputString()
 {
+    printf("input string...\n");
     string out;
     if( output )
     {
-        char* str = NULL;
-        scanf( "%s", str );
-        out = str;
-        return out;
+        scanf( "%s", stringInputBuffer );
+        printf("read%s\n", stringInputBuffer );
+        out.assign(stringInputBuffer);
+        //printf("read%sjhjh\n", out.c_str() );
     }
     return out;
 }

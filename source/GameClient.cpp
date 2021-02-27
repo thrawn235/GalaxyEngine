@@ -6,11 +6,11 @@ GameClient::GameClient( GameServer** server )
 {
     engine = new GameEngine;
 
-    /*if( engine->net->GetType() == NET_TYPE_LOCAL_BUFFER )
+    if( engine->net->GetType() == NET_TYPE_LOCAL_BUFFER )
     {
         engine->net->SetAddress( 1 );
     }
-    if( engine->net->GetType() == NET_TYPE_LINUX_SOCKETS_UDP || engine->net->GetType() == NET_TYPE_LINUX_SOCKETS_TCP || engine->net->GetType() == NET_TYPE_WIN_SOCKETS_TCP )
+    /*if( engine->net->GetType() == NET_TYPE_LINUX_SOCKETS_UDP || engine->net->GetType() == NET_TYPE_LINUX_SOCKETS_TCP || engine->net->GetType() == NET_TYPE_WIN_SOCKETS_TCP )
     {
         engine->net->InitClient();
     }*/

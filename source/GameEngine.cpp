@@ -7,18 +7,20 @@ vector<GameEngine*> engines;
 GameEngine::GameEngine()
 {
     #ifdef linux
-        text = new TextEngineIOStream;
-        debug = new TextEngineIOStream;
+        text = new TextEngineSTDIO;
+        debug = new TextEngineSTDIO;
+        input = new InputEngineSDL( this );
         //net = new NetEngineLinuxSocketsUDP( this );
     #endif
     #ifdef win
         text = new TextEngineIOStream;
         debug = new TextEngineIOStream;
+        input = new InputEngineSDL( this );
         //net = new NetEngineWinSocketsUDP( this );
     #endif
     #ifdef dos
-        text = new TextEngineSTDIO;
-        debug = new TextEngineSTDIO;
+        text = new TextEngineIOStream;
+        debug = new TextEngineIOStream;
         //net = new NetEngineLocal( this );
     #endif
 

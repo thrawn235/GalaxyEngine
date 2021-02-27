@@ -162,21 +162,26 @@ void MainMenu::UpdateServerIndependend()
 			//2. make sure it uses local buffer networking for single player
 			//3. load all game objects
 			//4. hide main menu
-
+			engine->debug->PrintString( "purge...\n" );
 			engine->PurgeAllObjectsExcept( this, true );
 
 			//create server
 			if( *server != NULL )
 			{
+				engine->debug->PrintString( "disconnect...\n" );
 				engine->net->Disconnect();
 				delete *server;
 			}
+			engine->debug->PrintString( "new server...\n" );
 			*server = new GameServer();
 
 			//setting local buffer networking
 			GameServer* pServer = *server;
+			engine->debug->PrintString( "set client local buffer...\n" );
 			pServer->GetEngine()->SetNetType( NET_TYPE_LOCAL_BUFFER );
+			engine->debug->PrintString( "configure as server...\n" );
 			pServer->GetEngine()->net->ConfigureAsServer();
+			engine->debug->PrintString( "set server local buffer...\n" );
 			engine->SetNetType( NET_TYPE_LOCAL_BUFFER );
 
 			//hide main menu

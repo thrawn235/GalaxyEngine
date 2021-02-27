@@ -13,6 +13,7 @@ unsigned int            serverAdress = 0;
 
 NetEngineLocal::NetEngineLocal( GameEngine* engine ) : NetEngine( engine )
 {
+    engine->debug->PrintString( "net engine local: constructor...\n" );
     isServer = false;
 }
 NetEngineLocal::~NetEngineLocal()
@@ -49,25 +50,32 @@ bool NetEngineLocal::GetIsServer()
 }
 void NetEngineLocal::Send( Packet* packet )
 {
+    engine->debug->PrintString( "sending data...\n" );
+
+    engine->debug->PrintString( "fixing data...\n" );
     packet->FixData();
 
     if( isServer )
     {
         //send to all nodes except your self
+        engine->debug->PrintString( "server...\n" );
         for( unsigned int i = 0; i < netNodes.size(); i++ )
         {
             if( netNodes[i]->GetAddress() != address )
             {
+                engine->debug->PrintString( "adding packet to inbox...\n" );
                 netNodes[i]->GetInbox()->push_back( packet );
             }
         }
     }
     else if( isConnected )
     {
+        engine->debug->PrintString( "client...\n" );
         for( unsigned int i = 0; i < netNodes.size(); i++ )
         {
             if( netNodes[i]->GetAddress() == target )
             {
+                engine->debug->PrintString( "addng packet to inbox...\n" );
                 netNodes[i]->GetInbox()->push_back( packet );
             }
         }

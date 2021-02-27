@@ -1,8 +1,7 @@
 To Do:
 
-dos is broken
+InputEngine
 test Delete and Purge Methods
-TCP implementation crashes bc connect is called multiple times
 DOS Network implementation
 MemoryEngine
 DLLs ?

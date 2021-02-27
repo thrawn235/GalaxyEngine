@@ -23,9 +23,10 @@ class TextEngineSTDIO : public TextEngine
 {
 protected:
     bool output;
+    char stringInputBuffer[64];
 public:
     //------------------ Constructor / Destructor ----------------------
-                    TextEngineSTDIO();
+                    TextEngineSTDIO ();
 
     //------------------------ Set / Get -------------------------------
     virtual void    DisableOutput   ();

@@ -6,6 +6,9 @@
 Packet::Packet()
 {
     data = NULL;
+    dataLength = 0;
+    sender = 0;
+    type = 0;
 }
 
 Packet::~Packet()
@@ -15,10 +18,13 @@ Packet::~Packet()
 
 void Packet::FixData()
 {
-    void* tmp;
-    tmp = malloc( dataLength );
-    memcpy( tmp, data, dataLength );
-    data = tmp;
+	if( data != NULL )
+	{
+	    void* tmp;
+	    tmp = malloc( dataLength );
+	    memcpy( tmp, data, dataLength );
+	    data = tmp;
+	}
 }
 
 

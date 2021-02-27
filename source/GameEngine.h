@@ -22,20 +22,25 @@ using namespace std;
 #include "Object.h"
 #include "DerivedObjects.h"
 #include "TextEngine.h"
+#include "InputEngine.h"
 #ifdef win
     #include "NetEngineWinSocketsUDP.h"
     #include "NetEngineLocal.h"
     #include "TextEngineIOStream.h"
+    #include "InputEngineSDL.h"
 #endif
 #ifdef linux
     #include "NetEngineLinuxSocketsUDP.h"
     #include "NetEngineLinuxSocketsTCP.h"
     #include "NetEngineLocal.h"
     #include "TextEngineIOStream.h"
+    #include "TextEngineSTDIO.h"
+    #include "InputEngineSDL.h"
 #endif
 #ifdef dos
     #include "NetEngineLocal.h"
     #include "TextEngineSTDIO.h"
+    #include "TextEngineIOStream.h"
 #endif
 #include "Vector2D.h"
 //====================================
@@ -43,6 +48,7 @@ using namespace std;
 //======= forward declarations =======
 class Object;
 class NetEngine;
+class InputEngine;
 //====================================
 
 class GameEngine
@@ -58,6 +64,7 @@ public:
     TextEngine*         text;
     TextEngine*         debug;
     NetEngine*          net;
+    InputEngine*        input;
 
     //------------- Constructor / Destructor -----------
                         GameEngine              ();

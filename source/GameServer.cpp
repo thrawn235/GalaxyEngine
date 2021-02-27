@@ -6,11 +6,11 @@ GameServer::GameServer()
 {
     engine = new GameEngine;
     
-    if( engine->net->GetType() == NET_TYPE_LOCAL_BUFFER )
+    /*if( engine->net->GetType() == NET_TYPE_LOCAL_BUFFER )
     {
         engine->net->SetAddress( 2 );
         engine->net->Connect( 1 );
-    }
+    }*/
     if( engine->net->GetType() == NET_TYPE_WIN_SOCKETS_UDP || engine->net->GetType() == NET_TYPE_LINUX_SOCKETS_UDP || engine->net->GetType() == NET_TYPE_LINUX_SOCKETS_TCP )
     {
         engine->net->ConfigureAsServer();
@@ -87,21 +87,21 @@ void GameServer::Run()
     }
 
     
-    /*engine->text->PrintString( "these are my objects:\n" );
+    engine->debug->PrintString( "these are my objects:\n" );
     vector<Object*> objects = engine->GetAllObjects();
     for( unsigned int i = 0; i < objects.size(); i++ )
     {
         engine->debug->PrintString( "   UID: %i\n", objects[i]->GetUID() );
-    }*/
+    }
 
     //Game Logic for all Objects
     engine->UpdateAll();
 
     //create and send GameLogic complete packet
+    engine->debug->PrintString( "sending Gamelogic comlete packet\n" );
     Packet* ack = new Packet;
     ack->type = NET_PACKET_TYPE_SEND_COMPLETE;
     engine->net->Send( ack );
 
     engine->debug->PrintString( "======================================:\n\n\n" );
-
 }
