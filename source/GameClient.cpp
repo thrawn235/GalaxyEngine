@@ -49,6 +49,8 @@ void GameClient::Run()
     //debug:
     engine->debug->PrintString( "===================== client ==================\n" );
 
+    engine->input->Update();
+
     if( !engine->net->GetIsConnected() )
     {
         if( engine->net->GetType() == NET_TYPE_LOCAL_BUFFER )

@@ -57,13 +57,13 @@ public:
     virtual void                DeleteAction    ( Action* action )                      = 0;
     virtual void                DeleteAction    ( unsigned int uid )                    = 0;
     virtual Action              GetAction       ( unsigned int uid )                    = 0;
-    virtual vector<Action>      GetAllActions   ()                                      = 0;
+    virtual vector<Action*>     GetAllActions   ()                                      = 0;
     virtual void                SetAction       ( unsigned int uid, Action* action )    = 0;
     virtual bool                ActionActive    ( unsigned int uid )                    = 0;
     virtual bool                ActionActive    ( Action* action )                      = 0;
 
     //----------------- Inputs -----------------------
-    virtual vector<Input>       GetAllInputs    ()                                      = 0;
+    virtual vector<Input*>      GetAllInputs    ()                                      = 0;
 
     //---------------- Keyboard ----------------------
     virtual bool                KeyDown         ( unsigned char scancode )              = 0;

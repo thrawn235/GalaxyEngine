@@ -47,13 +47,13 @@ public:
     void                DeleteAction    ( Action* action );
     void                DeleteAction    ( unsigned int uid );
     Action              GetAction       ( unsigned int uid );
-    vector<Action>      GetAllActions   ();
+    vector<Action*>     GetAllActions   ();
     void                SetAction       ( unsigned int uid, Action* action );
     bool                ActionActive    ( unsigned int uid );
     bool                ActionActive    ( Action* action );
 
     //----------------- Inputs -----------------------
-    vector<Input>       GetAllInputs    ();
+    vector<Input*>      GetAllInputs    ();
 
     //---------------- Keyboard ----------------------
     bool                KeyDown         ( unsigned char scancode );
