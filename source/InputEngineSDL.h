@@ -43,12 +43,11 @@ public:
                         ~InputEngineSDL ();
 
     //----------------- Events -----------------------
-    unsigned int        AddAction       ( unsigned int input );
+    void                AddAction       ( Action action );
     void                DeleteAction    ( Action* action );
     void                DeleteAction    ( unsigned int uid );
-    Action              GetAction       ( unsigned int uid );
+    Action*             GetAction       ( unsigned int uid );
     vector<Action*>     GetAllActions   ();
-    void                SetAction       ( unsigned int uid, Action* action );
     bool                ActionActive    ( unsigned int uid );
     bool                ActionActive    ( Action* action );
 

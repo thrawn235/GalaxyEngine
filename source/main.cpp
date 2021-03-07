@@ -15,7 +15,7 @@ using namespace std;
 #include "GameClient.h"
 //====================================
 
-int main()
+int main( int argc, char *argv[] )
 {
     cout<<"Galaxy Engine: Main Client"<<endl<<endl;
 

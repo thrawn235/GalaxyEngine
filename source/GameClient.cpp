@@ -49,7 +49,7 @@ void GameClient::Run()
     //debug:
     engine->debug->PrintString( "===================== client ==================\n" );
 
-    engine->input->Update();
+    //engine->input->Update();
 
     if( !engine->net->GetIsConnected() )
     {

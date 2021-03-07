@@ -20,11 +20,11 @@ CompilerLinux   = g++
 CompilerWin     = x86_64-w64-mingw32-g++
 Compiler        = $(CompilerDosDir)i586-pc-msdosdjgpp-g++
 CFLAGS          = -Wall -O3 -s
-CFLAGSWin       = -static-libgcc -static-libstdc++ -static -Dwin -lws2_32
-CFLAGSDos       = -Ddos
-CFLAGSLinux     = -Dlinux -lSDL2
+CFLAGSWin       = -static-libgcc -static-libstdc++ -DTARGET_WIN -lws2_32 -lmingw32 -lSDL2main -lSDL2
+CFLAGSDos       = -DTARGET_DOS
+CFLAGSLinux     = -DTARGET_LINUX -lSDL2
 emulator        = dosbox
-EFLAGS          = -conf $(emuDir)dosbox.conf #-exit
+EFLAGS          = -conf $(emuDir)dosbox.conf -exit
 sourceFiles     = $(wildcard $(sourceDir)*.cpp)
 objectFiles     = $(sourceFiles:.cpp=.o)
 #VPATH          = $(sourceDir)
@@ -65,11 +65,11 @@ $(sourceDir)dos/NetEngineDosPacketDriverUDP.o: $(sourceDir)NetEngineDosPacketDri
 
 $(binDir)dos/main.exe: $(sourceDir)main.cpp $(sourceDir)dos/Object.o $(sourceDir)dos/GameEngine.o $(sourceDir)dos/TextEngineSTDIO.o $(sourceDir)dos/TextEngineIOStream.o $(sourceDir)dos/GameClient.o $(sourceDir)dos/GameServer.o $(sourceDir)dos/NetEngineLocal.o $(sourceDir)dos/NetEngineDosPacketDriverUDP.o $(sourceDir)dos/DerivedObjects.o $(sourceDir)dos/NetEngine.o
 	$(CompilerDos) $(CFLAGS) $(CFLAGSDos) -o $@ $^
-	cp $(assetsDir)* $(binDir)dos/
+	cp $(assetsDir)dos/* $(binDir)dos/
 
 $(binDir)dos/DedicatedServer.exe: $(sourceDir)DedicatedServer.cpp $(sourceDir)dos/Object.o $(sourceDir)dos/GameEngine.o $(sourceDir)dos/TextEngineSTDIO.o $(sourceDir)dos/TextEngineIOStream.o $(sourceDir)dos/GameClient.o $(sourceDir)dos/GameServer.o $(sourceDir)dos/NetEngineLocal.o $(sourceDir)dos/NetEngineDosPacketDriverUDP.o $(sourceDir)dos/DerivedObjects.o $(sourceDir)dos/NetEngine.o
 	$(CompilerDos) $(CFLAGS) $(CFLAGSDos) -o $@ $^
-	cp $(assetsDir)* $(binDir)dos/
+	cp $(assetsDir)dos/* $(binDir)dos/
 
 .PHONY: dos
 dos: $(binDir)dos/main.exe
@@ -96,7 +96,7 @@ $(sourceDir)win/TextEngineIOStream.o: $(sourceDir)TextEngineIOStream.cpp $(sourc
 $(sourceDir)win/TextEnginSTDIOe.o: $(sourceDir)TextEngineSTDIO.cpp $(sourceDir)TextEngineSTDIO.h $(sourceDir)TextEngine.h
 	$(CompilerWin) $(CFLAGS) $(CFLAGSWin) -o $@ -c $<
 
-$(sourceDir)win/GameEngine.o: $(sourceDir)GameEngine.cpp $(sourceDir)GameEngine.h
+$(sourceDir)win/GameEngine.o: $(sourceDir)GameEngine.cpp $(sourceDir)GameEngine.h $(sourceDir)win/NetEngine.o
 	$(CompilerWin) $(CFLAGS) $(CFLAGSWin) -o $@ -c $<
 
 $(sourceDir)win/GameClient.o: $(sourceDir)GameClient.cpp $(sourceDir)GameClient.h $(sourceDir)win/GameEngine.o $(sourceDir)win/NetEngine.o
@@ -114,11 +114,13 @@ $(sourceDir)win/NetEngineWinSocketsUDP.o: $(sourceDir)NetEngineWinSocketsUDP.cpp
 $(sourceDir)win/InputEngineSDL.o: $(sourceDir)InputEngineSDL.cpp $(sourceDir)InputEngineSDL.h $(sourceDir)InputEngine.h $(sourceDir)win/GameEngine.o
 	$(CompilerWin) $(CFLAGS) $(CFLAGSWin) -o $@ -c $<
 
-$(binDir)win/main.exe: $(sourceDir)main.cpp $(sourceDir)win/Object.o $(sourceDir)win/GameEngine.o $(sourceDir)win/InputEngineSDL.o $(sourceDir)win/TextEngineIOStream.o $(sourceDir)win/GameClient.o $(sourceDir)win/GameServer.o $(sourceDir)win/NetEngineLocal.o $(sourceDir)win/NetEngineWinSocketsUDP.o $(sourceDir)win/DerivedObjects.o $(sourceDir)win/NetEngine.o
+$(binDir)win/main.exe: $(sourceDir)main.cpp $(sourceDir)win/Object.o $(sourceDir)win/GameEngine.o $(sourceDir)win/TextEngineIOStream.o $(sourceDir)win/GameClient.o $(sourceDir)win/GameServer.o $(sourceDir)win/NetEngineLocal.o $(sourceDir)win/NetEngineWinSocketsUDP.o $(sourceDir)win/DerivedObjects.o $(sourceDir)win/NetEngine.o
 	$(CompilerWin) $(CFLAGS) -o $@ $^ $(CFLAGSWin)
+	cp $(assetsDir)win/* $(binDir)win/
 
 $(binDir)win/DedicatedServer.exe: $(sourceDir)DedicatedServer.cpp $(sourceDir)win/Object.o $(sourceDir)win/GameEngine.o $(sourceDir)win/InputEngineSDL.o $(sourceDir)win/TextEngineIOStream.o $(sourceDir)win/GameClient.o $(sourceDir)win/GameServer.o $(sourceDir)win/NetEngineLocal.o $(sourceDir)win/NetEngineWinSocketsUDP.o $(sourceDir)win/DerivedObjects.o $(sourceDir)win/NetEngine.o
 	$(CompilerWin) $(CFLAGS) -o $@ $^ $(CFLAGSWin)
+	cp $(assetsDir)win/* $(binDir)win/
 
 .PHONY: win
 win: $(binDir)win/main.exe

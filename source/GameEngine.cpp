@@ -15,7 +15,7 @@ GameEngine::GameEngine()
     #ifdef win
         text = new TextEngineIOStream;
         debug = new TextEngineIOStream;
-        input = new InputEngineSDL( this );
+        //input = new InputEngineSDL( this );
         //net = new NetEngineWinSocketsUDP( this );
     #endif
     #ifdef dos

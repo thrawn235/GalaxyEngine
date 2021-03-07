@@ -23,13 +23,14 @@ using namespace std;
 #include "DerivedObjects.h"
 #include "TextEngine.h"
 #include "InputEngine.h"
-#ifdef win
+#include "NetEngine.h"
+#ifdef TARGET_WIN
     #include "NetEngineWinSocketsUDP.h"
     #include "NetEngineLocal.h"
     #include "TextEngineIOStream.h"
     #include "InputEngineSDL.h"
 #endif
-#ifdef linux
+#ifdef TARGET_LINUX
     #include "NetEngineLinuxSocketsUDP.h"
     #include "NetEngineLinuxSocketsTCP.h"
     #include "NetEngineLocal.h"
@@ -37,7 +38,7 @@ using namespace std;
     #include "TextEngineSTDIO.h"
     #include "InputEngineSDL.h"
 #endif
-#ifdef dos
+#ifdef TARGET_DOS
     #include "NetEngineLocal.h"
     #include "TextEngineSTDIO.h"
     #include "TextEngineIOStream.h"

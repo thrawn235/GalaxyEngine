@@ -476,37 +476,66 @@ InputEngineSDL::~InputEngineSDL()
 }
 
 
-unsigned int InputEngineSDL::AddAction( unsigned int input )
+void InputEngineSDL::AddAction( Action action )
 {
-
+	actions.push_back( &action );
 }
 void InputEngineSDL::DeleteAction( Action* action )
 {
-
+	for( unsigned int i = 0; i < actions.size(); i++ )
+	{
+		if( actions[i] == action )
+		{
+			actions.erase( actions.begin() + i );
+		}
+	}
 }
 void InputEngineSDL::DeleteAction( unsigned int uid )
 {
-
+	for( unsigned int i = 0; i < actions.size(); i++ )
+	{
+		if( actions[i]->uid == uid )
+		{
+			actions.erase( actions.begin() + i );
+		}
+	}
 }
-Action InputEngineSDL::GetAction( unsigned int uid )
+Action* InputEngineSDL::GetAction( unsigned int uid )
 {
-
+	for( unsigned int i = 0; i < actions.size(); i++ )
+	{
+		if( actions[i]->uid == uid )
+		{
+			return actions[i];
+		}
+	}
+	return NULL;
 }
 vector<Action*> InputEngineSDL::GetAllActions()
 {
-
-}
-void InputEngineSDL::SetAction( unsigned int uid, Action* action )
-{
-
+	return actions;
 }
 bool InputEngineSDL::ActionActive( unsigned int uid )
 {
-
+	for( unsigned int i = 0; i < actions.size(); i++ )
+	{
+		if( actions[i]->uid == uid )
+		{
+			return actions[i]->active;
+		}
+	}
+	return false;
 }
 bool InputEngineSDL::ActionActive( Action* action )
 {
-
+	for( unsigned int i = 0; i < actions.size(); i++ )
+	{
+		if( actions[i] == action )
+		{
+			return actions[i]->active;
+		}
+	}
+	return false;
 }
 
 
