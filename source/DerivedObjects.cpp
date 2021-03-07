@@ -13,6 +13,8 @@ Player::Player( GameEngine* engine ) : Object( engine )
 	netStats->type = OBJECT_TYPE_PLAYER;
 
 	netStats->up = netStats->down = netStats->left = netStats->right = netStats->fire = false;
+
+	engine->text->PrintString( "Player Constructor: Object UID:%i; Type:%i(Player); Pos:%f:%f Mov:%f:%f NetAddr:%i (server)\n", netStats->uid, netStats->type, netStats->pos.x, netStats->pos.y, netStats->movement.x, netStats->movement.y, engine->net->GetAddress() );
 }
 void Player::GameLogic()
 {
@@ -112,7 +114,7 @@ void Enemy::Render()
 
 
 
-MainMenu::MainMenu( GameEngine* engine, GameServer** server ) : Object( engine )
+MainMenu::MainMenu( GameEngine* engine ) : Object( engine )
 {
 	baseNetStats = (NetStats*)realloc( baseNetStats, sizeof( MainMenuStats ) );
 
@@ -123,14 +125,13 @@ MainMenu::MainMenu( GameEngine* engine, GameServer** server ) : Object( engine )
 
 	netStats->persistent = true;
 
-	this->server = server;
 	hidden = false;
 	optionsMenu = false;
 	netType = NET_TYPE_LOCAL_BUFFER;
 }
 MainMenu::~MainMenu()
 {
-	delete *server;
+	delete server;
 }
 void MainMenu::GameLogic()
 {
@@ -166,21 +167,20 @@ void MainMenu::UpdateServerIndependend()
 			engine->PurgeAllObjectsExcept( this, true );
 
 			//create server
-			if( *server != NULL )
+			if( server != NULL )
 			{
 				engine->debug->PrintString( "disconnect...\n" );
 				engine->net->Disconnect();
-				delete *server;
+				delete server;
 			}
 			engine->debug->PrintString( "new server...\n" );
-			*server = new GameServer();
+			server = new GameServer();
 
 			//setting local buffer networking
-			GameServer* pServer = *server;
 			engine->debug->PrintString( "set client local buffer...\n" );
-			pServer->GetEngine()->SetNetType( NET_TYPE_LOCAL_BUFFER );
+			server->GetEngine()->SetNetType( NET_TYPE_LOCAL_BUFFER );
 			engine->debug->PrintString( "configure as server...\n" );
-			pServer->GetEngine()->net->ConfigureAsServer();
+			server->GetEngine()->net->ConfigureAsServer();
 			engine->debug->PrintString( "set server local buffer...\n" );
 			engine->SetNetType( NET_TYPE_LOCAL_BUFFER );
 
@@ -198,17 +198,16 @@ void MainMenu::UpdateServerIndependend()
 			engine->PurgeAllObjectsExcept( this, true );
 
 			//create server
-			if( *server != NULL )
+			if( server != NULL )
 			{
 				engine->net->Disconnect();
-				delete *server;
+				delete server;
 			}
-			*server = new GameServer();
+			server = new GameServer();
 
 			//setting networking
-			GameServer* pServer = *server;
-			pServer->GetEngine()->SetNetType( netType );
-			pServer->GetEngine()->net->ConfigureAsServer();
+			server->GetEngine()->SetNetType( netType );
+			server->GetEngine()->net->ConfigureAsServer();
 			engine->SetNetType( netType );
 
 			//hide main menu

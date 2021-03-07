@@ -23,6 +23,10 @@ using namespace std;
 class GameServer;
 //====================================
 
+//=========== global =================
+extern GameServer* server;
+//====================================
+
 struct PlayerStats : ObjectStats
 {
 	bool up, down, left, right;
@@ -77,9 +81,8 @@ protected:
 	bool			hidden;
 	bool			optionsMenu;
 	int 			netType;
-	GameServer**	server;
 public:
-					MainMenu				( GameEngine* engine, GameServer** server );
+					MainMenu				( GameEngine* engine );
 					~MainMenu				();
 	virtual void 	GameLogic				();
 	virtual void 	ClientSideUpdate		();

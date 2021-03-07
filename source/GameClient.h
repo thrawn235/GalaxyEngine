@@ -25,14 +25,15 @@ class GameServer;
 class GameClient
 {
 protected:
-	bool			waitingForUpdate;
-	unsigned int	clientTicksSinceLogicTick;
-	float			tickRate;
+	bool			waitingForUpdate;              //true if the server hasnt responded
+	unsigned int	clientTicksSinceLogicTick;     //for prediction
+	float			tickRate;                      //for prediction
 	bool			exit;
+    
     GameEngine* 	engine;
 
 public:
-            GameClient              ( GameServer** server );     //Constructor
+            GameClient              ();     //Constructor
             ~GameClient             ();     //Destructor
     //------------ communication with main -----------------
     bool	GetExit					();

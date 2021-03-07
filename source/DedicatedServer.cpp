@@ -18,11 +18,15 @@ using namespace std;
 //======= forward declarations =======
 //====================================
 
+//============= globals ==============
+GameServer* server = NULL;
+//====================================
+
 int main( int argc, char *argv[] )
 {
     cout<<"Galaxy Engine: DedicatedServer"<<endl;
     cout<<"creatinig server..."<<endl;
-    GameServer* server = new GameServer();
+    server = new GameServer();
 
     
     long int rounds = 0;

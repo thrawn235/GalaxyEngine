@@ -15,18 +15,18 @@ using namespace std;
 #include "GameClient.h"
 //====================================
 
+//========= global variables =========
+//client needs to know server because GameMenu needs to be able to create it. one of the rare cases where a global is justified imho
+GameClient* client = NULL;
+//server is NOT active at start bc main menu will create it
+GameServer* server = NULL;
+//====================================
+
 int main( int argc, char *argv[] )
 {
     cout<<"Galaxy Engine: Main Client"<<endl<<endl;
 
-    GameClient* client = NULL;
-    GameServer* server = NULL;
-
-    //server is NOT active at start bc main menu will create it
-
-    //Client needs to know *server for network settings etc
-    client = new GameClient( &server );
-
+    client = new GameClient();
     
     //----------------- Main Loop --------------------
     long int rounds = 0;
@@ -49,6 +49,10 @@ int main( int argc, char *argv[] )
     //-------------------------------------------------
 
     delete client;
+    if( server != NULL )
+    {
+        delete server;
+    }
 
     cout<<"good bye!"<<endl;
     return 0;

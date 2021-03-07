@@ -15,13 +15,14 @@ GameEngine::GameEngine()
     #ifdef TARGET_WIN
         text = new TextEngineIOStream;
         debug = new TextEngineIOStream;
-        //input = new InputEngineSDL( this );
+        input = new InputEngineSDL( this );
         //net = new NetEngineWinSocketsUDP( this );
     #endif
     #ifdef TARGET_DOS
         text = new TextEngineIOStream;
         debug = new TextEngineIOStream;
         //net = new NetEngineLocal( this );
+        input = NULL;
     #endif
 
     net = new NetEngineLocal( this );
@@ -36,6 +37,7 @@ GameEngine::~GameEngine()
     ClearDeletedObjects();
     //engines.erase( this );
 
+    delete input;
     delete net;
     delete text;
     delete debug;

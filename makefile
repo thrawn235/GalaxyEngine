@@ -24,7 +24,7 @@ CFLAGSWin       = -static-libgcc -static-libstdc++ -DTARGET_WIN -lws2_32 -lmingw
 CFLAGSDos       = -DTARGET_DOS
 CFLAGSLinux     = -DTARGET_LINUX -lSDL2
 emulator        = dosbox
-EFLAGS          = -conf $(emuDir)dosbox.conf -exit
+EFLAGS          = -conf $(emuDir)dosbox.conf #-exit
 sourceFiles     = $(wildcard $(sourceDir)*.cpp)
 objectFiles     = $(sourceFiles:.cpp=.o)
 #VPATH          = $(sourceDir)

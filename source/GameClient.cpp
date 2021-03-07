@@ -2,18 +2,9 @@
 
 #include "GameClient.h"
 
-GameClient::GameClient( GameServer** server )
+GameClient::GameClient()
 {
     engine = new GameEngine;
-
-    if( engine->net->GetType() == NET_TYPE_LOCAL_BUFFER )
-    {
-        engine->net->SetAddress( 1 );
-    }
-    /*if( engine->net->GetType() == NET_TYPE_LINUX_SOCKETS_UDP || engine->net->GetType() == NET_TYPE_LINUX_SOCKETS_TCP || engine->net->GetType() == NET_TYPE_WIN_SOCKETS_TCP )
-    {
-        engine->net->InitClient();
-    }*/
 
     engine->SetHighestUID( 100000 );
     
@@ -28,7 +19,7 @@ GameClient::GameClient( GameServer** server )
     exit = false;
 
     //initial game objects
-    MainMenu* mainMenu = new MainMenu( engine, server );
+    MainMenu* mainMenu = new MainMenu( engine );
     engine->AddObject( mainMenu );
 
     engine->debug->PrintString( "\n\n" );
@@ -49,13 +40,16 @@ void GameClient::Run()
     //debug:
     engine->debug->PrintString( "===================== client ==================\n" );
 
-    //engine->input->Update();
+    if( engine->input != NULL )
+    {
+        engine->input->Update();
+    }
 
     if( !engine->net->GetIsConnected() )
     {
         if( engine->net->GetType() == NET_TYPE_LOCAL_BUFFER )
         {
-            engine->net->Connect( 2 );
+            engine->net->Connect( 0 );  //0 is the default server address for local buffer
         }
         if( engine->net->GetType() == NET_TYPE_LINUX_SOCKETS_UDP || engine->net->GetType() == NET_TYPE_LINUX_SOCKETS_TCP || engine->net->GetType() == NET_TYPE_WIN_SOCKETS_TCP )
         {
@@ -125,6 +119,7 @@ void GameClient::Run()
 
         //clear memory for the packet
         pkt->~Packet();
+        delete pkt;
     }
 
     //only update if the server has send a Ack Packet

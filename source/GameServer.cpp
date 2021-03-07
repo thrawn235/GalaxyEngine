@@ -6,15 +6,7 @@ GameServer::GameServer()
 {
     engine = new GameEngine;
     
-    /*if( engine->net->GetType() == NET_TYPE_LOCAL_BUFFER )
-    {
-        engine->net->SetAddress( 2 );
-        engine->net->Connect( 1 );
-    }*/
-    if( engine->net->GetType() == NET_TYPE_WIN_SOCKETS_UDP || engine->net->GetType() == NET_TYPE_LINUX_SOCKETS_UDP || engine->net->GetType() == NET_TYPE_LINUX_SOCKETS_TCP )
-    {
-        engine->net->ConfigureAsServer();
-    }
+    engine->net->ConfigureAsServer();
 
     Object* tmp = new Enemy( engine );
     engine->AddObject( tmp );
