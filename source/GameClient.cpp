@@ -61,7 +61,7 @@ void GameClient::Run()
         {
             engine->debug->PrintString( "connecting to server (join request)...\n" );
             //the ifndef is needed because the local buffer doesnt know inet_addr
-            #ifndef dos
+            #ifndef TARGET_DOS
                 engine->net->Connect( inet_addr( "127.0.0.1" ) );
             #endif   
         }

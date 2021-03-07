@@ -18,7 +18,7 @@ using namespace std;
 //======= forward declarations =======
 //====================================
 
-int main()
+int main( int argc, char *argv[] )
 {
     cout<<"Galaxy Engine: DedicatedServer"<<endl;
     cout<<"creatinig server..."<<endl;

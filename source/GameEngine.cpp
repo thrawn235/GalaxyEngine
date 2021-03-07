@@ -6,19 +6,19 @@ vector<GameEngine*> engines;
 
 GameEngine::GameEngine()
 {
-    #ifdef linux
+    #ifdef TARGET_LINUX
         text = new TextEngineSTDIO;
         debug = new TextEngineSTDIO;
         input = new InputEngineSDL( this );
         //net = new NetEngineLinuxSocketsUDP( this );
     #endif
-    #ifdef win
+    #ifdef TARGET_WIN
         text = new TextEngineIOStream;
         debug = new TextEngineIOStream;
         //input = new InputEngineSDL( this );
         //net = new NetEngineWinSocketsUDP( this );
     #endif
-    #ifdef dos
+    #ifdef TARGET_DOS
         text = new TextEngineIOStream;
         debug = new TextEngineIOStream;
         //net = new NetEngineLocal( this );
@@ -59,14 +59,14 @@ vector<int> GameEngine::GetAvailableNetTypes()
 
     availableModes.push_back( NET_TYPE_LOCAL_BUFFER );
     
-    #ifdef linux
+    #ifdef TARGET_LINUX
         availableModes.push_back( NET_TYPE_LINUX_SOCKETS_UDP );
         availableModes.push_back( NET_TYPE_LINUX_SOCKETS_TCP );
     #endif
-    #ifdef win
+    #ifdef TARGET_WIN
         availableModes.push_back( NET_TYPE_WIN_SOCKETS_UDP );
     #endif
-    #ifdef dos
+    #ifdef TARGET_DOS
         availableModes.push_back( NET_TYPE_DOS_PACKET_DRIVER_UDP );
     #endif
 
@@ -83,7 +83,7 @@ void GameEngine::SetNetType( int netType )
     {
         net = new NetEngineLocal( this );
     }
-    #ifdef linux
+    #ifdef TARGET_LINUX
         else if( netType == NET_TYPE_LINUX_SOCKETS_UDP )
         {
             net = new NetEngineLinuxSocketsUDP( this );
@@ -93,7 +93,7 @@ void GameEngine::SetNetType( int netType )
             net = new NetEngineLinuxSocketsTCP( this );   
         }
     #endif
-    #ifdef win
+    #ifdef TARGET_WIN
         else if( netType == NET_TYPE_WIN_SOCKETS_UDP )
         {
             net = new NetEngineWinSocketsUDP( this );

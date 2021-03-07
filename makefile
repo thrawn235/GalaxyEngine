@@ -114,7 +114,7 @@ $(sourceDir)win/NetEngineWinSocketsUDP.o: $(sourceDir)NetEngineWinSocketsUDP.cpp
 $(sourceDir)win/InputEngineSDL.o: $(sourceDir)InputEngineSDL.cpp $(sourceDir)InputEngineSDL.h $(sourceDir)InputEngine.h $(sourceDir)win/GameEngine.o
 	$(CompilerWin) $(CFLAGS) $(CFLAGSWin) -o $@ -c $<
 
-$(binDir)win/main.exe: $(sourceDir)main.cpp $(sourceDir)win/Object.o $(sourceDir)win/GameEngine.o $(sourceDir)win/TextEngineIOStream.o $(sourceDir)win/GameClient.o $(sourceDir)win/GameServer.o $(sourceDir)win/NetEngineLocal.o $(sourceDir)win/NetEngineWinSocketsUDP.o $(sourceDir)win/DerivedObjects.o $(sourceDir)win/NetEngine.o
+$(binDir)win/main.exe: $(sourceDir)main.cpp $(sourceDir)win/Object.o $(sourceDir)win/GameEngine.o $(sourceDir)win/TextEngineIOStream.o $(sourceDir)win/GameClient.o $(sourceDir)win/GameServer.o $(sourceDir)win/NetEngineLocal.o $(sourceDir)win/NetEngineWinSocketsUDP.o $(sourceDir)win/DerivedObjects.o $(sourceDir)win/NetEngine.o $(sourceDir)win/InputEngineSDL.o
 	$(CompilerWin) $(CFLAGS) -o $@ $^ $(CFLAGSWin)
 	cp $(assetsDir)win/* $(binDir)win/
 
