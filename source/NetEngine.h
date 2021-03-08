@@ -26,6 +26,7 @@ class GameEngine;
 //====================================
 
 //============= defines ==============
+#define NET_TYPE_DUMMY                      0
 #define NET_TYPE_LOCAL_BUFFER               1
 #define NET_TYPE_WIN_SOCKETS                2
 #define NET_TYPE_WIN_SOCKETS_UDP            3

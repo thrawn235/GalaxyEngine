@@ -1,5 +1,8 @@
 To Do:
 
+Main Menu needs a "return to game" option
+add scenes to engine
+GameNode (Server/Client) should be able to add objects in a generic way without knowing all the types
 InputEngine
 test Delete and Purge Methods
 DOS Network implementation

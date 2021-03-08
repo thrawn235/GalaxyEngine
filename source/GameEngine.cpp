@@ -22,7 +22,7 @@ GameEngine::GameEngine()
         text = new TextEngineIOStream;
         debug = new TextEngineIOStream;
         //net = new NetEngineLocal( this );
-        input = NULL;
+        input = new InputEngineDummy( this );
     #endif
 
     net = new NetEngineLocal( this );
@@ -60,6 +60,7 @@ vector<int> GameEngine::GetAvailableNetTypes()
     vector<int> availableModes;
 
     availableModes.push_back( NET_TYPE_LOCAL_BUFFER );
+    availableModes.push_back( NET_TYPE_DUMMY );
     
     #ifdef TARGET_LINUX
         availableModes.push_back( NET_TYPE_LINUX_SOCKETS_UDP );
@@ -84,6 +85,10 @@ void GameEngine::SetNetType( int netType )
     if( netType == NET_TYPE_LOCAL_BUFFER )
     {
         net = new NetEngineLocal( this );
+    }
+    if( netType == NET_TYPE_DUMMY )
+    {
+        net = new NetEngineDummy( this );
     }
     #ifdef TARGET_LINUX
         else if( netType == NET_TYPE_LINUX_SOCKETS_UDP )

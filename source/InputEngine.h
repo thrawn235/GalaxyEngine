@@ -15,10 +15,10 @@ using namespace std;
 //====================================
 
 //========= galaxy includes ==========
-#include "GameEngine.h"
 //====================================
 
 //======= forward declarations =======
+class GameEngine;
 //====================================
 
 //============= defines ==============

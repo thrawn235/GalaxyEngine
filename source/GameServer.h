@@ -4,8 +4,8 @@
 //====================================
 
 //========== include guard ===========
-#ifndef GAMESERVER
-#define GAMESERVER
+#ifndef GAME_SERVER
+#define GAME_SERVER
 //====================================
 
 //========== stdlib includes =========
@@ -15,21 +15,23 @@ using namespace std;
 //========= galaxy includes ==========
 #include "GameEngine.h"
 #include "NetEngine.h"
+#include "GameNode.h"
 //====================================
 
 //======= forward declarations =======
+class GameNode;
 //====================================
 
-class GameServer
+class GameServer : public GameNode
 {
 protected:
     GameEngine* engine;
 
 public:
-            	GameServer  ();
-            	~GameServer ();
-    GameEngine*	GetEngine	();
-    void    	Run         ();
+            			GameServer  ();
+    virtual	       		~GameServer ();
+    		GameEngine*	GetEngine	();
+    		void    	Run         ();
 };
 
 #endif

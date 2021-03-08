@@ -24,6 +24,9 @@ using namespace std;
 #include "TextEngine.h"
 #include "InputEngine.h"
 #include "NetEngine.h"
+#include "TextEngineDummy.h"
+#include "InputEngineDummy.h"
+#include "NetEngineDummy.h"
 #ifdef TARGET_WIN
     #include "NetEngineWinSocketsUDP.h"
     #include "NetEngineLocal.h"

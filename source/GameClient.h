@@ -16,13 +16,14 @@ using namespace std;
 //========= galaxy includes ==========
 #include "GameEngine.h"
 #include "NetEngine.h"
+#include "GameNode.h"
 //====================================
 
 //======= forward declarations =======
 class GameServer;
 //====================================
 
-class GameClient
+class GameClient : public GameNode
 {
 protected:
 	bool			waitingForUpdate;              //true if the server hasnt responded
@@ -33,12 +34,13 @@ protected:
     GameEngine* 	engine;
 
 public:
-            GameClient              ();     //Constructor
-            ~GameClient             ();     //Destructor
+                    GameClient              ();     //Constructor
+    virtual         ~GameClient             ();     //Destructor
     //------------ communication with main -----------------
-    bool	GetExit					();
+            bool	GetExit					();
     //------------------------------------------------------
-    void    Run                     ();     //everything is done here
+            void    Run                     ();     //everything is done here
+            void    ConnectToServer         ();
 };
 
 //#endif
