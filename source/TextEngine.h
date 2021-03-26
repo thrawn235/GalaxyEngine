@@ -22,6 +22,12 @@ using namespace std;
 //======= forward declarations =======
 //====================================
 
+//============= defines ==============
+#define TEXT_TYPE_DUMMY     0
+#define TEXT_TYPE_IOSTREAM  1
+#define TEXT_TYPE_STDIO     2
+//====================================
+
 
 class TextEngine
 {

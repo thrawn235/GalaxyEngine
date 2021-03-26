@@ -11,18 +11,21 @@ GameEngine::GameEngine()
         debug = new TextEngineSTDIO;
         input = new InputEngineSDL( this );
         //net = new NetEngineLinuxSocketsUDP( this );
+        graphics = new GraphicsEngineDummy( this );
     #endif
     #ifdef TARGET_WIN
         text = new TextEngineIOStream;
         debug = new TextEngineIOStream;
         input = new InputEngineSDL( this );
         //net = new NetEngineWinSocketsUDP( this );
+        graphics = new GraphicsEngineDummy( this );
     #endif
     #ifdef TARGET_DOS
         text = new TextEngineIOStream;
         debug = new TextEngineIOStream;
         //net = new NetEngineLocal( this );
         input = new InputEngineDummy( this );
+        graphics = new GraphicsEngineDummy( this );
     #endif
 
     net = new NetEngineLocal( this );
@@ -106,6 +109,72 @@ void GameEngine::SetNetType( int netType )
             net = new NetEngineWinSocketsUDP( this );
         }
     #endif
+}
+vector<int> GameEngine::GetAvailableTextTypes()
+{
+    vector<int> availableModes;
+
+    availableModes.push_back( TEXT_TYPE_DUMMY );
+    availableModes.push_back( TEXT_TYPE_IOSTREAM );
+    availableModes.push_back( TEXT_TYPE_STDIO );
+
+    return availableModes;
+}
+void GameEngine::SetTextType( int textType )
+{
+    delete text;
+
+    if( textType == TEXT_TYPE_DUMMY )
+    {
+        text = new TextEngineDummy;
+    }
+    else if( textType == TEXT_TYPE_STDIO )
+    {
+        text = new TextEngineSTDIO;
+    }
+    else if( textType == TEXT_TYPE_IOSTREAM )
+    {
+        text = new TextEngineIOStream;
+    }
+}
+void GameEngine::SetDebugType( int textType )
+{
+    delete debug;
+
+    if( textType == TEXT_TYPE_DUMMY )
+    {
+        debug = new TextEngineDummy;
+    }
+    else if( textType == TEXT_TYPE_STDIO )
+    {
+        debug = new TextEngineSTDIO;
+    }
+    else if( textType == TEXT_TYPE_IOSTREAM )
+    {
+        debug = new TextEngineIOStream;
+    }
+}
+vector<int> GameEngine::GetAvailableInputTypes()
+{
+    vector<int> availableModes;
+
+    availableModes.push_back( INPUT_TYPE_DUMMY );
+    availableModes.push_back( INPUT_TYPE_SDL );
+
+    return availableModes;
+}
+void GameEngine::SetInputType( int inputType )
+{
+    delete input;
+
+    if( inputType == INPUT_TYPE_DUMMY )
+    {
+        input = new InputEngineDummy( this );
+    }
+    else if( inputType == INPUT_TYPE_SDL )
+    {
+        input = new InputEngineSDL( this );
+    }
 }
 
 void GameEngine::Quit()

@@ -49,6 +49,9 @@ void GameClient::Run()
     engine->input->Update();
     //-----------------------------------------------------------
 
+    engine->graphics->Update();
+    engine->graphics->Clear();
+
 
     //Try to connect to server (if not connected already)--------
     if( !engine->net->GetIsConnected() )
@@ -112,6 +115,10 @@ void GameClient::Run()
 
     //Render-----------------------------------------------------
     engine->RenderAll();
+    //-----------------------------------------------------------
+
+    //Graphics Flip----------------------------------------------
+    engine->graphics->Flip();
     //-----------------------------------------------------------
 
     engine->debug->PrintString( "===============================================\n\n\n" );

@@ -27,11 +27,13 @@ using namespace std;
 #include "TextEngineDummy.h"
 #include "InputEngineDummy.h"
 #include "NetEngineDummy.h"
+#include "GraphicsEngineDummy.h"
 #ifdef TARGET_WIN
     #include "NetEngineWinSocketsUDP.h"
     #include "NetEngineLocal.h"
     #include "TextEngineIOStream.h"
     #include "InputEngineSDL.h"
+    //#include "GraphicsEngineSDL.h"
 #endif
 #ifdef TARGET_LINUX
     #include "NetEngineLinuxSocketsUDP.h"
@@ -40,6 +42,7 @@ using namespace std;
     #include "TextEngineIOStream.h"
     #include "TextEngineSTDIO.h"
     #include "InputEngineSDL.h"
+    //#include "GraphicsEngineSDL.h"
 #endif
 #ifdef TARGET_DOS
     #include "NetEngineLocal.h"
@@ -69,6 +72,7 @@ public:
     TextEngine*         debug;
     NetEngine*          net;
     InputEngine*        input;
+    GraphicsEngine*     graphics;
 
     //------------- Constructor / Destructor -----------
                         GameEngine              ();
@@ -79,9 +83,14 @@ public:
     unsigned long int   GetHighestUID           ();
     unsigned long int   GetHighestUIDAndInc     ();
 
-    //-------------- Auxilary Network Mthods ----------
+    //-------------- Auxilary Engine Methods ----------
     vector<int>         GetAvailableNetTypes    ();
     void                SetNetType              ( int netType );
+    vector<int>         GetAvailableTextTypes   ();
+    void                SetTextType             ( int TextType );
+    void                SetDebugType            ( int TextType );
+    vector<int>         GetAvailableInputTypes  ();
+    void                SetInputType            ( int InputType );
 
     //----------------- Auxilary Methods --------------
     void                Quit                    ();
@@ -112,9 +121,6 @@ public:
     void                UpdateServerIndependend ();
     void                PredictAll              ( float tickRate );             //moves all objects on along its movement vector based on frametime. this is for visual smoothness only
     void                RenderAll               ();                             //draw all objects
-
-    //------------------- Network ---------------------
-    //void                UpdateGamestateFromNet  ();
 };
 
 //include Guard End

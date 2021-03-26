@@ -148,6 +148,7 @@ void MainMenu::UpdateServerIndependend()
 	{
 		engine->text->PrintString( "========== Galaxy Engine ==========\n" );
 		engine->text->PrintString( "============ Main Menu ============\n" );
+		engine->text->PrintString( "   0: Return to Game\n" );
 		engine->text->PrintString( "   1: New Game\n" );
 		engine->text->PrintString( "   2: Multiplayer\n" );
 		engine->text->PrintString( "   3: Options\n" );
@@ -156,6 +157,13 @@ void MainMenu::UpdateServerIndependend()
 		engine->text->PrintString( "===================================\n" );
 		engine->text->PrintString( "  input> " );
 		mainInput = engine->text->InputString();
+		if( mainInput == "0" || mainInput == "New Game" )
+		{
+			//game already running ?
+
+			//hide main menu
+			hidden = true;
+		}
 		if( mainInput == "1" || mainInput == "New Game" )
 		{
 			//0. delete all client game objects (except the main menu)
@@ -273,10 +281,14 @@ void MainMenu::UpdateServerIndependend()
 	}
 	else
 	{
-		engine->text->PrintString( "== Main Menu ==\n" );
+		/*engine->text->PrintString( "== Main Menu ==\n" );
 		engine->text->PrintString( "  input m for menu > " );
 		mainInput = engine->text->InputString();
 		if( mainInput == "m" || mainInput == "Main Menu" )
+		{
+			hidden = false;
+		}*/
+		if( engine->input->AnyKeyDown() )
 		{
 			hidden = false;
 		}

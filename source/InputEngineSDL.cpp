@@ -9,6 +9,17 @@ InputEngineSDL::InputEngineSDL( GameEngine* engine ) : InputEngine( engine )
 {
     this->engine = engine;
 
+    Uint32 subsystem_init = SDL_WasInit(SDL_INIT_EVERYTHING);
+    if( subsystem_init == 0 )
+    {
+        SDL_Init( 0 );
+    }
+    if( !(subsystem_init & SDL_INIT_EVENTS) )
+    {
+        SDL_InitSubSystem( SDL_INIT_EVENTS );
+    }
+
+
     Input* input 		= new Input;
     input->uid 			= SDL_SCANCODE_0;
     input->description	= "0";
