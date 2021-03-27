@@ -111,10 +111,13 @@ $(sourceDir)win/TextEngineDummy.o: $(sourceDir)TextEngineDummy.cpp $(sourceDir)T
 $(sourceDir)win/GraphicsEngineDummy.o: $(sourceDir)GraphicsEngineDummy.cpp $(sourceDir)GraphicsEngineDummy.h $(sourceDir)GraphicsEngine.h
 	$(CompilerWin) $(CFLAGS) $(CFLAGSWin) -o $@ -c $<
 
+$(sourceDir)win/GraphicsEngineSDL.o: $(sourceDir)GraphicsEngineSDL.cpp $(sourceDir)GraphicsEngineSDL.h $(sourceDir)GraphicsEngine.h
+	$(CompilerWin) $(CFLAGS) $(CFLAGSWin) -o $@ -c $<
+
 $(sourceDir)win/TextEngineIOStream.o: $(sourceDir)TextEngineIOStream.cpp $(sourceDir)TextEngineIOStream.h $(sourceDir)TextEngine.h
 	$(CompilerWin) $(CFLAGS) $(CFLAGSWin) -o $@ -c $<
 
-$(sourceDir)win/TextEnginSTDIOe.o: $(sourceDir)TextEngineSTDIO.cpp $(sourceDir)TextEngineSTDIO.h $(sourceDir)TextEngine.h
+$(sourceDir)win/TextEngineSTDIO.o: $(sourceDir)TextEngineSTDIO.cpp $(sourceDir)TextEngineSTDIO.h $(sourceDir)TextEngine.h
 	$(CompilerWin) $(CFLAGS) $(CFLAGSWin) -o $@ -c $<
 
 $(sourceDir)win/GameEngine.o: $(sourceDir)GameEngine.cpp $(sourceDir)GameEngine.h $(sourceDir)win/NetEngine.o
@@ -144,11 +147,11 @@ $(sourceDir)win/InputEngineDummy.o: $(sourceDir)InputEngineDummy.cpp $(sourceDir
 $(sourceDir)win/InputEngineSDL.o: $(sourceDir)InputEngineSDL.cpp $(sourceDir)InputEngineSDL.h $(sourceDir)InputEngine.h $(sourceDir)win/GameEngine.o
 	$(CompilerWin) $(CFLAGS) $(CFLAGSWin) -o $@ -c $<
 
-$(binDir)win/main.exe: $(sourceDir)main.cpp $(sourceDir)win/Object.o $(sourceDir)win/GameEngine.o $(sourceDir)win/GraphicsEngineDummy.o $(sourceDir)win/InputEngineDummy.o $(sourceDir)win/NetEngineDummy.o $(sourceDir)win/TextEngineDummy.o $(sourceDir)win/GameNode.o $(sourceDir)win/TextEngineIOStream.o $(sourceDir)win/GameClient.o $(sourceDir)win/GameServer.o $(sourceDir)win/NetEngineLocal.o $(sourceDir)win/NetEngineWinSocketsUDP.o $(sourceDir)win/DerivedObjects.o $(sourceDir)win/NetEngine.o $(sourceDir)win/InputEngineSDL.o
+$(binDir)win/main.exe: $(sourceDir)main.cpp $(sourceDir)win/Object.o $(sourceDir)win/GameEngine.o $(sourceDir)win/GraphicsEngineDummy.o $(sourceDir)win/GraphicsEngineSDL.o $(sourceDir)win/InputEngineDummy.o $(sourceDir)win/NetEngineDummy.o $(sourceDir)win/TextEngineDummy.o $(sourceDir)win/GameNode.o $(sourceDir)win/TextEngineIOStream.o $(sourceDir)win/TextEngineSTDIO.o $(sourceDir)win/GameClient.o $(sourceDir)win/GameServer.o $(sourceDir)win/NetEngineLocal.o $(sourceDir)win/NetEngineWinSocketsUDP.o $(sourceDir)win/DerivedObjects.o $(sourceDir)win/NetEngine.o $(sourceDir)win/InputEngineSDL.o
 	$(CompilerWin) $(CFLAGS) -o $@ $^ $(CFLAGSWin)
 	cp $(assetsDir)win/* $(binDir)win/
 
-$(binDir)win/DedicatedServer.exe: $(sourceDir)DedicatedServer.cpp $(sourceDir)win/Object.o $(sourceDir)win/InputEngineDummy.o $(sourceDir)win/GraphicsEngineDummy.o $(sourceDir)win/NetEngineDummy.o $(sourceDir)win/GameEngine.o $(sourceDir)win/TextEngineDummy.o $(sourceDir)win/GameNode.o $(sourceDir)win/InputEngineSDL.o $(sourceDir)win/TextEngineIOStream.o $(sourceDir)win/GameClient.o $(sourceDir)win/GameServer.o $(sourceDir)win/NetEngineLocal.o $(sourceDir)win/NetEngineWinSocketsUDP.o $(sourceDir)win/DerivedObjects.o $(sourceDir)win/NetEngine.o
+$(binDir)win/DedicatedServer.exe: $(sourceDir)DedicatedServer.cpp $(sourceDir)win/Object.o $(sourceDir)win/InputEngineDummy.o $(sourceDir)win/GraphicsEngineDummy.o $(sourceDir)win/GraphicsEngineSDL.o $(sourceDir)win/NetEngineDummy.o $(sourceDir)win/GameEngine.o $(sourceDir)win/TextEngineDummy.o $(sourceDir)win/GameNode.o $(sourceDir)win/InputEngineSDL.o $(sourceDir)win/TextEngineIOStream.o $(sourceDir)win/TextEngineSTDIO.o $(sourceDir)win/GameClient.o $(sourceDir)win/GameServer.o $(sourceDir)win/NetEngineLocal.o $(sourceDir)win/NetEngineWinSocketsUDP.o $(sourceDir)win/DerivedObjects.o $(sourceDir)win/NetEngine.o
 	$(CompilerWin) $(CFLAGS) -o $@ $^ $(CFLAGSWin)
 	cp $(assetsDir)win/* $(binDir)win/
 
@@ -175,6 +178,9 @@ $(sourceDir)linux/TextEngineDummy.o: $(sourceDir)TextEngineDummy.cpp $(sourceDir
 	$(CompilerLinux) $(CFLAGS) $(CFLAGSLinux) -o $@ -c $<
 
 $(sourceDir)linux/GraphicsEngineDummy.o: $(sourceDir)GraphicsEngineDummy.cpp $(sourceDir)GraphicsEngineDummy.h $(sourceDir)GraphicsEngine.h
+	$(CompilerLinux) $(CFLAGS) $(CFLAGSLinux) -o $@ -c $<
+
+$(sourceDir)linux/GraphicsEngineSDL.o: $(sourceDir)GraphicsEngineSDL.cpp $(sourceDir)GraphicsEngineSDL.h $(sourceDir)GraphicsEngine.h
 	$(CompilerLinux) $(CFLAGS) $(CFLAGSLinux) -o $@ -c $<
 
 $(sourceDir)linux/TextEngineIOStream.o: $(sourceDir)TextEngineIOStream.cpp $(sourceDir)TextEngineIOStream.h $(sourceDir)TextEngine.h
@@ -213,10 +219,10 @@ $(sourceDir)linux/InputEngineSDL.o: $(sourceDir)InputEngineSDL.cpp $(sourceDir)I
 $(sourceDir)linux/NetEngineLinuxSocketsTCP.o: $(sourceDir)NetEngineLinuxSocketsTCP.cpp $(sourceDir)NetEngineLinuxSocketsTCP.h $(sourceDir)NetEngineLocal.h $(sourceDir)linux/GameEngine.o
 	$(CompilerLinux) $(CFLAGS) $(CFLAGSLinux) -o $@ -c $<
 
-$(binDir)linux/main: $(sourceDir)main.cpp $(sourceDir)linux/Object.o $(sourceDir)linux/GameEngine.o $(sourceDir)linux/InputEngineDummy.o $(sourceDir)linux/GraphicsEngineDummy.o $(sourceDir)linux/NetEngineDummy.o $(sourceDir)linux/TextEngineDummy.o $(sourceDir)linux/GameNode.o $(sourceDir)linux/InputEngineSDL.o $(sourceDir)linux/TextEngineIOStream.o $(sourceDir)linux/TextEngineSTDIO.o $(sourceDir)linux/GameClient.o $(sourceDir)linux/GameServer.o $(sourceDir)linux/NetEngineLinuxSocketsUDP.o $(sourceDir)linux/NetEngineLocal.o $(sourceDir)linux/NetEngineLinuxSocketsTCP.o $(sourceDir)linux/DerivedObjects.o $(sourceDir)linux/NetEngine.o
+$(binDir)linux/main: $(sourceDir)main.cpp $(sourceDir)linux/Object.o $(sourceDir)linux/GameEngine.o $(sourceDir)linux/InputEngineDummy.o $(sourceDir)linux/GraphicsEngineDummy.o $(sourceDir)linux/GraphicsEngineSDL.o $(sourceDir)linux/NetEngineDummy.o $(sourceDir)linux/TextEngineDummy.o $(sourceDir)linux/GameNode.o $(sourceDir)linux/InputEngineSDL.o $(sourceDir)linux/TextEngineIOStream.o $(sourceDir)linux/TextEngineSTDIO.o $(sourceDir)linux/GameClient.o $(sourceDir)linux/GameServer.o $(sourceDir)linux/NetEngineLinuxSocketsUDP.o $(sourceDir)linux/NetEngineLocal.o $(sourceDir)linux/NetEngineLinuxSocketsTCP.o $(sourceDir)linux/DerivedObjects.o $(sourceDir)linux/NetEngine.o
 	$(CompilerLinux) $(CFLAGS) $(CFLAGSLinux) -o $@ $^
 
-$(binDir)linux/DedicatedServer: $(sourceDir)DedicatedServer.cpp $(sourceDir)linux/Object.o $(sourceDir)linux/GraphicsEngineDummy.o $(sourceDir)linux/NetEngineDummy.o $(sourceDir)linux/InputEngineDummy.o $(sourceDir)linux/GameNode.o $(sourceDir)linux/TextEngineDummy.o $(sourceDir)linux/GameEngine.o $(sourceDir)linux/InputEngineSDL.o $(sourceDir)linux/TextEngineIOStream.o $(sourceDir)linux/TextEngineSTDIO.o $(sourceDir)linux/GameClient.o $(sourceDir)linux/GameServer.o $(sourceDir)linux/NetEngineLinuxSocketsUDP.o $(sourceDir)linux/NetEngineLocal.o $(sourceDir)linux/NetEngineLinuxSocketsTCP.o $(sourceDir)linux/DerivedObjects.o $(sourceDir)linux/NetEngine.o
+$(binDir)linux/DedicatedServer: $(sourceDir)DedicatedServer.cpp $(sourceDir)linux/Object.o $(sourceDir)linux/GraphicsEngineDummy.o $(sourceDir)linux/GraphicsEngineSDL.o $(sourceDir)linux/NetEngineDummy.o $(sourceDir)linux/InputEngineDummy.o $(sourceDir)linux/GameNode.o $(sourceDir)linux/TextEngineDummy.o $(sourceDir)linux/GameEngine.o $(sourceDir)linux/InputEngineSDL.o $(sourceDir)linux/TextEngineIOStream.o $(sourceDir)linux/TextEngineSTDIO.o $(sourceDir)linux/GameClient.o $(sourceDir)linux/GameServer.o $(sourceDir)linux/NetEngineLinuxSocketsUDP.o $(sourceDir)linux/NetEngineLocal.o $(sourceDir)linux/NetEngineLinuxSocketsTCP.o $(sourceDir)linux/DerivedObjects.o $(sourceDir)linux/NetEngine.o
 	$(CompilerLinux) $(CFLAGS) $(CFLAGSLinux) -o $@ $^
 
 .PHONY: linux

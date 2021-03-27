@@ -5,6 +5,7 @@
 GameClient::GameClient()
 {
     engine = new GameEngine;
+    engine->SetGraphicsType( GRAPHICS_TYPE_SDL );
 
     engine->SetHighestUID( 100000 );
     

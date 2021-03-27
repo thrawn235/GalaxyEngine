@@ -33,7 +33,8 @@ using namespace std;
     #include "NetEngineLocal.h"
     #include "TextEngineIOStream.h"
     #include "InputEngineSDL.h"
-    //#include "GraphicsEngineSDL.h"
+    #include "GraphicsEngineSDL.h"
+    #include "TextEngineSTDIO.h"
 #endif
 #ifdef TARGET_LINUX
     #include "NetEngineLinuxSocketsUDP.h"
@@ -42,7 +43,7 @@ using namespace std;
     #include "TextEngineIOStream.h"
     #include "TextEngineSTDIO.h"
     #include "InputEngineSDL.h"
-    //#include "GraphicsEngineSDL.h"
+    #include "GraphicsEngineSDL.h"
 #endif
 #ifdef TARGET_DOS
     #include "NetEngineLocal.h"
@@ -75,52 +76,54 @@ public:
     GraphicsEngine*     graphics;
 
     //------------- Constructor / Destructor -----------
-                        GameEngine              ();
-                        ~GameEngine             ();
+                        GameEngine                  ();
+                        ~GameEngine                 ();
 
     // ------------------ Set / Get --------------------
-    void                SetHighestUID           ( unsigned long int UID );
-    unsigned long int   GetHighestUID           ();
-    unsigned long int   GetHighestUIDAndInc     ();
+    void                SetHighestUID               ( unsigned long int UID );
+    unsigned long int   GetHighestUID               ();
+    unsigned long int   GetHighestUIDAndInc         ();
 
     //-------------- Auxilary Engine Methods ----------
-    vector<int>         GetAvailableNetTypes    ();
-    void                SetNetType              ( int netType );
-    vector<int>         GetAvailableTextTypes   ();
-    void                SetTextType             ( int TextType );
-    void                SetDebugType            ( int TextType );
-    vector<int>         GetAvailableInputTypes  ();
-    void                SetInputType            ( int InputType );
+    vector<int>         GetAvailableNetTypes        ();
+    void                SetNetType                  ( int netType );
+    vector<int>         GetAvailableTextTypes       ();
+    void                SetTextType                 ( int TextType );
+    void                SetDebugType                ( int TextType );
+    vector<int>         GetAvailableInputTypes      ();
+    void                SetInputType                ( int InputType );
+    vector<int>         GetAvailableGraphicsTypes   ();
+    void                SetGraphicsType             ( int graphicsType );
 
     //----------------- Auxilary Methods --------------
-    void                Quit                    ();
+    void                Quit                        ();
 
     //---------------- Main Engine Fuctions -----------
-    vector<Object*>     GetAllObjects           ();
-    Object*             GetObjectByUID          ( unsigned long int uid );
+    vector<Object*>     GetAllObjects               ();
+    Object*             GetObjectByUID              ( unsigned long int uid );
 
-    void                AddObject               ( Object* object );
+    void                AddObject                   ( Object* object );
 
-    void                DeleteObject            ( Object* object );             //move Object to deleteList (graveyard) 
-    void                DeleteObject            ( unsigned long uid );
-    void                DeleteObjects           ( vector<Object*> objects );
-    void                DeleteObjects           ( vector<unsigned long> uids );
-    void                PurgeObject             ( Object* object );             //delete Object immediatly without moving it to the graveyard first. use at your own risk!
-    void                PurgeObject             ( unsigned long uid );
-    void                PurgeObjects            ( vector<Object*> objects );
-    void                PurgeObjects            ( vector<unsigned long> uids );
-    void                ClearDeletedObjects     ();       
-    void                DeleteAllObjects        ( bool includePersistent );
-    void                DeleteAllObjectsExcept  ( Object* object, bool includePersistent );
-    void                PurgeAllObjects         ( bool includePersistent );
-    void                PurgeAllObjectsExcept   ( Object* object, bool includePersistent );
+    void                DeleteObject                ( Object* object );             //move Object to deleteList (graveyard) 
+    void                DeleteObject                ( unsigned long uid );
+    void                DeleteObjects               ( vector<Object*> objects );
+    void                DeleteObjects               ( vector<unsigned long> uids );
+    void                PurgeObject                 ( Object* object );             //delete Object immediatly without moving it to the graveyard first. use at your own risk!
+    void                PurgeObject                 ( unsigned long uid );
+    void                PurgeObjects                ( vector<Object*> objects );
+    void                PurgeObjects                ( vector<unsigned long> uids );
+    void                ClearDeletedObjects         ();       
+    void                DeleteAllObjects            ( bool includePersistent );
+    void                DeleteAllObjectsExcept      ( Object* object, bool includePersistent );
+    void                PurgeAllObjects             ( bool includePersistent );
+    void                PurgeAllObjectsExcept       ( Object* object, bool includePersistent );
 
     //---------------- Object Update Functions --------
-    void                UpdateAll               ();                             //all the gamelogic happens here. Usually on the Server side
-    void                ClientSideUpdateAll     ();                             //gamelogic update on the client side. use with caution
-    void                UpdateServerIndependend ();
-    void                PredictAll              ( float tickRate );             //moves all objects on along its movement vector based on frametime. this is for visual smoothness only
-    void                RenderAll               ();                             //draw all objects
+    void                UpdateAll                   ();                             //all the gamelogic happens here. Usually on the Server side
+    void                ClientSideUpdateAll         ();                             //gamelogic update on the client side. use with caution
+    void                UpdateServerIndependend     ();
+    void                PredictAll                  ( float tickRate );             //moves all objects on along its movement vector based on frametime. this is for visual smoothness only
+    void                RenderAll                   ();                             //draw all objects
 };
 
 //include Guard End

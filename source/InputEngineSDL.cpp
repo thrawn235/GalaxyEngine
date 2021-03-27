@@ -484,7 +484,14 @@ InputEngineSDL::InputEngineSDL( GameEngine* engine ) : InputEngine( engine )
 }
 InputEngineSDL::~InputEngineSDL()
 {
+    SDL_QuitSubSystem( SDL_INIT_EVENTS );
 
+    // Clean up
+    Uint32 subsystem_init = SDL_WasInit(SDL_INIT_EVERYTHING);
+    if( subsystem_init == 0 )
+    {
+        SDL_Quit();
+    } 
 }
 
 

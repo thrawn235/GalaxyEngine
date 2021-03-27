@@ -176,6 +176,28 @@ void GameEngine::SetInputType( int inputType )
         input = new InputEngineSDL( this );
     }
 }
+vector<int> GameEngine::GetAvailableGraphicsTypes()
+{
+    vector<int> availableModes;
+
+    availableModes.push_back( GRAPHICS_TYPE_DUMMY );
+    availableModes.push_back( GRAPHICS_TYPE_SDL );
+
+    return availableModes;
+}
+void GameEngine::SetGraphicsType( int graphicsType )
+{
+    delete graphics;
+
+    if( graphicsType == GRAPHICS_TYPE_DUMMY )
+    {
+        graphics = new GraphicsEngineDummy( this );
+    }
+    else if( graphicsType == GRAPHICS_TYPE_SDL )
+    {
+        graphics = new GraphicsEngineSDL( this );
+    }
+}
 
 void GameEngine::Quit()
 {
