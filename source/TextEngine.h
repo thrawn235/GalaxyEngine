@@ -52,6 +52,9 @@ public:
     virtual float   InputFloat      ()                      = 0;
     virtual char    InputChar       ()                      = 0;
     virtual string  InputString     ()                      = 0;
+
+    //------------------------ String Creation -------------------------
+    virtual string  SPrintString    ( string format, ... )  = 0;
 };
 
 //include Guard End

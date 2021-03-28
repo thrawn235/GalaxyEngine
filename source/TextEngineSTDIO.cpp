@@ -83,3 +83,24 @@ string TextEngineSTDIO::InputString()
     }
     return out;
 }
+string TextEngineSTDIO::SPrintString( string format, ... )
+{
+    va_list args;
+    va_start( args, format );
+
+    string out;
+    char buffer[256];
+    const char* cstr = format.c_str();
+
+    vsprintf( buffer, cstr, args );
+    
+    //printf("%s\n", buffer );
+
+    out.append( buffer );
+
+    //printf("stdio %s\n", out.c_str() );
+    
+    va_end( args );
+
+    return out;
+}

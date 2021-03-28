@@ -46,3 +46,8 @@ string TextEngineDummy::InputString()
 	string out;
     return out;
 }
+
+string TextEngineDummy::SPrintString( string format, ... )
+{
+	
+}

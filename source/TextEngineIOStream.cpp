@@ -109,3 +109,50 @@ string TextEngineIOStream::InputString()
     }
     return out;
 }
+string TextEngineIOStream::SPrintString( string format, ... )
+{
+    va_list args;
+    va_start( args, format );
+
+    std::ostringstream out; 
+
+    const char* formatCStr = format.c_str();
+
+    if( output )
+    {
+        while (*formatCStr != '\0') 
+        {
+            if (*formatCStr == '%')
+            {
+                ++formatCStr;
+
+                if (*formatCStr == 'd' || *formatCStr == 'i' )
+                {
+                    int i = va_arg(args, int);
+                    out << i;
+                }
+                else if (*formatCStr == 'c')
+                {
+                    // note automatic conversion to integral type
+                    int c = va_arg(args, int);
+                    out << static_cast<char>(c);
+                }
+                else if (*formatCStr == 'f')
+                {
+                    double d = va_arg(args, double);
+                    out << d;
+                }
+            }
+            else
+            {
+                out<< (char)*formatCStr;
+            }
+            ++formatCStr;
+        }
+    }
+    va_end(args);
+
+    cout<<out.str();
+
+    return out.str();
+}

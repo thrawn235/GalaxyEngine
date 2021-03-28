@@ -8,6 +8,7 @@
 #include <string>
 #include <cstdarg>
 #include <stdio.h>
+#include <cstring>
 using namespace std;
 //====================================
 
@@ -43,6 +44,9 @@ public:
     virtual float   InputFloat      ();
     virtual char    InputChar       ();
     virtual string  InputString     ();
+
+    //------------------------ String Creation -------------------------
+    virtual string  SPrintString    ( string format, ... );
 };
 
 //include Guard End

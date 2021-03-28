@@ -18,7 +18,11 @@ vector<DisplayMode> GraphicsEngineDummy::GetAvailableDisplayModes()
 	vector<DisplayMode> modes;
 	return modes;
 }
-void GraphicsEngineDummy::SetDisplayMode()
+void GraphicsEngineDummy::SetDisplayMode( DisplayMode mode )
+{
+	
+}
+void GraphicsEngineDummy::SetFullScreen( bool fullScreen )
 {
 	
 }
@@ -42,7 +46,7 @@ void GraphicsEngineDummy::Flip()
 {
 	
 }
-void GraphicsEngineDummy::DrawPixel( Vector2D pos )
+void GraphicsEngineDummy::DrawPixel( Vector2D pos, unsigned char color )
 {
 	
 }

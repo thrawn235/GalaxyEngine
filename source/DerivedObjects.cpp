@@ -86,6 +86,7 @@ void Player::ClientSideUpdate()
 void Player::Render()
 {
 	engine->text->PrintString( "Render: Object UID:%i; Type:%i(Player); Pos:%f:%f Mov:%f:%f NetAddr:%i (client)\n", netStats->uid, netStats->type, netStats->pos.x, netStats->pos.y, netStats->movement.x, netStats->movement.y, engine->net->GetAddress() );
+	engine->graphics->DrawPixel( Vector2D( 5, 5 ), COLOR_RED );
 }
 
 

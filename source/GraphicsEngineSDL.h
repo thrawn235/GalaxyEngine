@@ -28,13 +28,22 @@ class GameEngine;
 //============= defines ==============
 //====================================
 
+class Color
+{
+public:
+	unsigned char r, g, b, a;
+};
+
 
 class GraphicsEngineSDL : public GraphicsEngine
 {
 protected:
-	GameEngine* engine;
+	GameEngine* 	engine;
 
-	SDL_Window* window;
+	SDL_Window* 	window;
+	SDL_Renderer*	renderer;
+
+	Color			colors[16];
 
 public:
 										GraphicsEngineSDL 			( GameEngine* engine );
@@ -43,7 +52,8 @@ public:
 	virtual 	void 					InitGraphics 				();
 
 	virtual		vector<DisplayMode> 	GetAvailableDisplayModes	();
-	virtual 	void 					SetDisplayMode				();
+	virtual 	void 					SetDisplayMode				( DisplayMode mode );
+	virtual 	void 					SetFullScreen				( bool fullScreen );
 
 	virtual 	unsigned int 			GetScreenWidth 				();
 	virtual 	unsigned int 			GetScreenHeight 			();
@@ -52,7 +62,7 @@ public:
 	virtual 	void 					Clear						();
 	virtual 	void 					Flip						();
 
-	virtual 	void 					DrawPixel					( Vector2D pos );
+	virtual 	void 					DrawPixel					( Vector2D pos, unsigned char color );
 };
 
 #endif
