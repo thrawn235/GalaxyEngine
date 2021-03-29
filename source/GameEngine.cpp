@@ -211,6 +211,7 @@ void GameEngine::Quit()
 
 vector<Object*> GameEngine::GetAllObjects()
 {
+    debug->PrintString( "Get objects, i have %i\n", objects.size() );
     return objects;
 }
 Object* GameEngine::GetObjectByUID( unsigned long int uid )
@@ -227,6 +228,7 @@ Object* GameEngine::GetObjectByUID( unsigned long int uid )
 void GameEngine::AddObject( Object* object )
 {
     objects.push_back( object );
+    debug->PrintString( "Add object, i have %i\n", objects.size() );
 }
 
 
@@ -439,6 +441,7 @@ void GameEngine::RenderAll()
     {
         if( objects[i]->GetVisible() )
         {
+            text->PrintString("render...\n");
             objects[i]->Render();
         }
     }

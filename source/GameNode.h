@@ -33,9 +33,9 @@ protected:
 public:
                         GameNode                ();
     virtual             ~GameNode               ();
-            GameEngine* GetEngine               ();
+    		GameEngine* GetEngine               ();
     virtual void        Run                     ();
-    virtual void        UpdateObjectsFromNet    ( Packet* pkt );
+    void        		UpdateObjectFromNet     ( Packet* pkt );
 };
 
 #endif

@@ -4,7 +4,6 @@
 
 GameClient::GameClient()
 {
-    engine = new GameEngine;
     engine->SetGraphicsType( GRAPHICS_TYPE_SDL );
 
     engine->SetHighestUID( 100000 );
@@ -41,6 +40,13 @@ void GameClient::Run()
     //debug:
     engine->debug->PrintString( "===================== client ==================\n" );
 
+    engine->debug->PrintString( "these are my objects:\n" );
+    vector<Object*> objects = engine->GetAllObjects();
+    engine->debug->PrintString( "ive got %i objects\n", objects.size() );
+    for( unsigned int i = 0; i < objects.size(); i++ )
+    {
+        engine->debug->PrintString( "   UID: %i\n", objects[i]->GetUID() );
+    }
 
     //count ticks (for prediction step)
     clientTicksSinceLogicTick++;
@@ -53,11 +59,16 @@ void GameClient::Run()
     engine->graphics->Update();
     engine->graphics->Clear();
 
-
     //Try to connect to server (if not connected already)--------
+    engine->debug->PrintString( "trying to connect... " );
     if( !engine->net->GetIsConnected() )
     {
+        engine->debug->PrintString( "not connected yet, connecting...\n " );
         ConnectToServer();
+    }
+    else
+    {
+        engine->debug->PrintString( "already connected\n " );
     }
     //-----------------------------------------------------------
 
@@ -71,14 +82,15 @@ void GameClient::Run()
         engine->text->PrintString( "received Packet: " );
 
         Packet* pkt = engine->net->GetFirstPacketFromInbox();
-        NetStats* newStatus = (NetStats*)pkt->data;
+        //NetStats* newStatus = (NetStats*)pkt->data;
         if( pkt->type == NET_PACKET_TYPE_OBJECT_UPDATE )
         {
-            UpdateObjectsFromNet( pkt );
+            engine->debug->PrintString( "GameObject update!\n");
+            UpdateObjectFromNet( pkt );
         }
         else if( pkt->type == NET_PACKET_TYPE_SEND_COMPLETE )
         {
-            engine->debug->PrintString( "   Packet: Gameround done!\n");
+            engine->debug->PrintString( "Gameround done!\n");
             waitingForUpdate = false;
 
 
@@ -88,7 +100,7 @@ void GameClient::Run()
         }
 
         //clear memory for the packet
-        pkt->~Packet();
+        //pkt->~Packet();
         delete pkt;
     }
     //-----------------------------------------------------------

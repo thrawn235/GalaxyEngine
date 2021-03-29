@@ -15,6 +15,7 @@ NetEngineLocal::NetEngineLocal( GameEngine* engine ) : NetEngine( engine )
 {
     engine->debug->PrintString( "net engine local: constructor...\n" );
     isServer = false;
+    isConnected = false;
 }
 NetEngineLocal::~NetEngineLocal()
 {
@@ -115,6 +116,7 @@ void NetEngineLocal::Connect( uint64_t target )
         SetAddress( highestAdress );
         highestAdress++;
         netNodes.push_back(this);
+        engine->debug->PrintString( "put address in local network list\n " );
     }
 }
 void NetEngineLocal::Disconnect()

@@ -25,7 +25,6 @@ class GameNode;
 class GameServer : public GameNode
 {
 protected:
-    GameEngine* engine;
 
 public:
             			GameServer  ();

@@ -3,9 +3,7 @@
 #include "GameServer.h"
 
 GameServer::GameServer()
-{
-    engine = new GameEngine;
-    
+{  
     engine->net->ConfigureAsServer();
 
     Object* tmp = new Enemy( engine );
@@ -39,7 +37,7 @@ void GameServer::Run()
         Packet* pkt = engine->net->GetFirstPacketFromInbox();
         if( pkt->type == NET_PACKET_TYPE_OBJECT_UPDATE )
         {
-            UpdateObjectsFromNet( pkt );
+            UpdateObjectFromNet( pkt );
         }
         pkt->~Packet();
     }

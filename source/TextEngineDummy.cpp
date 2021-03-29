@@ -49,5 +49,6 @@ string TextEngineDummy::InputString()
 
 string TextEngineDummy::SPrintString( string format, ... )
 {
-	
+	string out;
+	return out;
 }

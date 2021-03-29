@@ -30,8 +30,6 @@ protected:
 	unsigned int	clientTicksSinceLogicTick;     //for prediction
 	float			tickRate;                      //for prediction
 	bool			exit;
-    
-    GameEngine* 	engine;
 
 public:
                     GameClient              ();     //Constructor

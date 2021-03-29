@@ -598,7 +598,7 @@ void InputEngineSDL::Update()
 		{
 			for( unsigned int i = 0; i < inputs.size(); i++ )
 			{
-				if( event.key.keysym.sym == inputs[i]->uid )
+				if( (unsigned int)event.key.keysym.sym == inputs[i]->uid )
 				{
 					if( event.type == SDL_KEYDOWN )
 					{

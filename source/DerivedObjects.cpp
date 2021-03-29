@@ -14,7 +14,7 @@ Player::Player( GameEngine* engine ) : Object( engine )
 
 	netStats->up = netStats->down = netStats->left = netStats->right = netStats->fire = false;
 
-	engine->text->PrintString( "Player Constructor: Object UID:%i; Type:%i(Player); Pos:%f:%f Mov:%f:%f NetAddr:%i (server)\n", netStats->uid, netStats->type, netStats->pos.x, netStats->pos.y, netStats->movement.x, netStats->movement.y, engine->net->GetAddress() );
+	engine->text->PrintString( "Player Constructor: Object UID:%i; Type:%i(Player); Pos:%f:%f Mov:%f:%f NetAddr:%i\n", netStats->uid, netStats->type, netStats->pos.x, netStats->pos.y, netStats->movement.x, netStats->movement.y, engine->net->GetAddress() );
 }
 void Player::GameLogic()
 {
@@ -136,7 +136,7 @@ MainMenu::~MainMenu()
 }
 void MainMenu::GameLogic()
 {
-	//Main menu i not supposed to even be replicated to the server
+	//Main menu is not supposed to even be replicated to the server
 	//
 }
 void MainMenu::ClientSideUpdate()
@@ -181,6 +181,7 @@ void MainMenu::UpdateServerIndependend()
 				engine->debug->PrintString( "disconnect...\n" );
 				engine->net->Disconnect();
 				delete server;
+				server = NULL;
 			}
 			engine->debug->PrintString( "new server...\n" );
 			server = new GameServer();
@@ -282,13 +283,13 @@ void MainMenu::UpdateServerIndependend()
 	}
 	else
 	{
-		/*engine->text->PrintString( "== Main Menu ==\n" );
+		engine->text->PrintString( "== Main Menu ==\n" );
 		engine->text->PrintString( "  input m for menu > " );
 		mainInput = engine->text->InputString();
 		if( mainInput == "m" || mainInput == "Main Menu" )
 		{
 			hidden = false;
-		}*/
+		}
 		if( engine->input->AnyKeyDown() )
 		{
 			hidden = false;

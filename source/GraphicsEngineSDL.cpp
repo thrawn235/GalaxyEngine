@@ -119,7 +119,7 @@ GraphicsEngineSDL::GraphicsEngineSDL( GameEngine* engine ) : GraphicsEngine( eng
 
 
     SetDisplayMode( modes[30] );
-    SetFullScreen( true );
+    //SetFullScreen( true );
 }
 GraphicsEngineSDL::~GraphicsEngineSDL()
 {
