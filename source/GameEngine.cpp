@@ -171,10 +171,12 @@ void GameEngine::SetInputType( int inputType )
     {
         input = new InputEngineDummy( this );
     }
-    else if( inputType == INPUT_TYPE_SDL )
-    {
-        input = new InputEngineSDL( this );
-    }
+    #ifndef TARGET_DOS
+        else if( inputType == INPUT_TYPE_SDL )
+        {
+            input = new InputEngineSDL( this );
+        }
+    #endif
 }
 vector<int> GameEngine::GetAvailableGraphicsTypes()
 {
@@ -193,10 +195,18 @@ void GameEngine::SetGraphicsType( int graphicsType )
     {
         graphics = new GraphicsEngineDummy( this );
     }
-    else if( graphicsType == GRAPHICS_TYPE_SDL )
-    {
-        graphics = new GraphicsEngineSDL( this );
-    }
+    #if defined TARGET_WIN || TARGET_LINUX
+        else if( graphicsType == GRAPHICS_TYPE_SDL )
+        {
+            graphics = new GraphicsEngineSDL( this );
+        }
+    #endif
+    #ifdef TARGET_DOS
+        else if( graphicsType == GRAPHICS_TYPE_VESA )
+        {
+            graphics = new GraphicsEngineVESA( this );
+        }
+    #endif
 }
 
 void GameEngine::Quit()

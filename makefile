@@ -45,7 +45,10 @@ $(sourceDir)dos/Object.o: $(sourceDir)Object.cpp $(sourceDir)Object.h $(sourceDi
 $(sourceDir)dos/TextEngineDummy.o: $(sourceDir)TextEngineDummy.cpp $(sourceDir)TextEngineDummy.h $(sourceDir)TextEngine.h
 	$(CompilerDos) $(CFLAGS) $(CFLAGSDos) -o $@ -c $<
 
-$(sourceDir)dos/GraphicsEngineDummy.o: $(sourceDir)GraphicaEngineDummy.cpp $(sourceDir)GraphicsEngineDummy.h $(sourceDir)GraphicsEngine.h
+$(sourceDir)dos/GraphicsEngineDummy.o: $(sourceDir)GraphicsEngineDummy.cpp $(sourceDir)GraphicsEngineDummy.h $(sourceDir)GraphicsEngine.h
+	$(CompilerDos) $(CFLAGS) $(CFLAGSDos) -o $@ -c $<
+
+$(sourceDir)dos/GraphicsEngineVESA.o: $(sourceDir)GraphicsEngineVESA.cpp $(sourceDir)GraphicsEngineVESA.h $(sourceDir)GraphicsEngine.h
 	$(CompilerDos) $(CFLAGS) $(CFLAGSDos) -o $@ -c $<
 
 $(sourceDir)dos/TextEngineIOStream.o: $(sourceDir)TextEngineIOStream.cpp $(sourceDir)TextEngineIOStream.h $(sourceDir)TextEngine.h
@@ -78,7 +81,7 @@ $(sourceDir)dos/NetEngineDosPacketDriverUDP.o: $(sourceDir)NetEngineDosPacketDri
 $(sourceDir)dos/InputEngineDummy.o: $(sourceDir)InputEngineDummy.cpp $(sourceDir)InputEngineDummy.h $(sourceDir)dos/GameEngine.o
 	$(CompilerDos) $(CFLAGS) $(CFLAGSDos) -o $@ -c $<
 
-$(binDir)dos/main.exe: $(sourceDir)main.cpp $(sourceDir)dos/Object.o $(sourceDir)dos/GameEngine.o $(sourceDir)dos/GraphicsEngineDummy.o $(sourceDir)dos/InputEngineDummy.o $(sourceDir)dos/GameNode.o $(sourceDir)dos/TextEngineDummy.o $(sourceDir)dos/NetEngineDummy.o $(sourceDir)dos/GameEngine.o $(sourceDir)dos/TextEngineSTDIO.o $(sourceDir)dos/TextEngineIOStream.o $(sourceDir)dos/GameClient.o $(sourceDir)dos/GameServer.o $(sourceDir)dos/NetEngineLocal.o $(sourceDir)dos/NetEngineDosPacketDriverUDP.o $(sourceDir)dos/DerivedObjects.o $(sourceDir)dos/NetEngine.o
+$(binDir)dos/main.exe: $(sourceDir)main.cpp $(sourceDir)dos/Object.o $(sourceDir)dos/GameEngine.o $(sourceDir)dos/GraphicsEngineDummy.o $(sourceDir)dos/InputEngineDummy.o $(sourceDir)dos/GraphicsEngineDummy.o $(sourceDir)dos/GraphicsEngineVESA.o $(sourceDir)dos/GameNode.o $(sourceDir)dos/TextEngineDummy.o $(sourceDir)dos/NetEngineDummy.o $(sourceDir)dos/GameEngine.o $(sourceDir)dos/TextEngineSTDIO.o $(sourceDir)dos/TextEngineIOStream.o $(sourceDir)dos/GameClient.o $(sourceDir)dos/GameServer.o $(sourceDir)dos/NetEngineLocal.o $(sourceDir)dos/NetEngineDosPacketDriverUDP.o $(sourceDir)dos/DerivedObjects.o $(sourceDir)dos/NetEngine.o
 	$(CompilerDos) $(CFLAGS) $(CFLAGSDos) -o $@ $^
 	cp $(assetsDir)dos/* $(binDir)dos/
 

@@ -4,8 +4,16 @@
 
 GameClient::GameClient()
 {
-    engine->SetGraphicsType( GRAPHICS_TYPE_SDL );
-
+    #ifdef TARGET_DOS
+        engine->SetGraphicsType( GRAPHICS_TYPE_VESA );
+    #endif
+    #ifdef TARGET_LINUX
+        engine->SetGraphicsType( GRAPHICS_TYPE_SDL );
+    #endif
+    #ifdef TARGET_WIN
+        engine->SetGraphicsType( GRAPHICS_TYPE_SDL );
+    #endif
+        
     engine->SetHighestUID( 100000 );
     
     //network variables

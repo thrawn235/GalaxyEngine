@@ -49,6 +49,7 @@ using namespace std;
     #include "NetEngineLocal.h"
     #include "TextEngineSTDIO.h"
     #include "TextEngineIOStream.h"
+    #include "GraphicsEngineVESA.h"
 #endif
 #include "Vector2D.h"
 //====================================

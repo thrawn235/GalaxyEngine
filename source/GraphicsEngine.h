@@ -25,6 +25,7 @@ class GameEngine;
 //============= defines ==============
 #define GRAPHICS_TYPE_DUMMY   	0
 #define GRAPHICS_TYPE_SDL     	1
+#define GRAPHICS_TYPE_VESA     	2
 
 #define COLOR_BLACK				0
 #define COLOR_BLUE 				1
