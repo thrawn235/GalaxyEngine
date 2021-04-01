@@ -21,22 +21,8 @@ GraphicsEngineVESA::~GraphicsEngineVESA()
 }
 void GraphicsEngineVESA::InitGraphics()
 {
-	struct VbeInfoBlock
-	{
-		unsigned char 	VbeSignature[4];
-		unsigned short	VbeVersion;
-		unsigned long	OemStrPtr;
-		unsigned char	Capabilities[4];
-		unsigned long	VideoModePtr;
-		unsigned short	TotalMemory;
-		unsigned short	OemSoftwareRev;
-		unsigned long	OemVendorNamePtr;
-		unsigned long	OemProductNamePtr;
-		unsigned long	OemProductRevPtr;
-		unsigned char	Reserved[222];
-		unsigned char	OemData[256];
-	}__attribute__( ( packed ) );
 
+	//Get Graphics Card Infos----------------------------------
 	long dosBuffer;
 	dosBuffer = __tb & 0xFFFFF;
 
@@ -46,9 +32,8 @@ void GraphicsEngineVESA::InitGraphics()
     r.x.di = dosBuffer & 0xF;
 	__dpmi_int( 0x10, &r );
 
-	VbeInfoBlock vbeInfoBlock;
-
-	dosmemget( dosBuffer, sizeof( VbeInfoBlock ), &vbeInfoBlock );	
+	dosmemget( dosBuffer, sizeof( VbeInfoBlock ), &vbeInfoBlock );
+	//---------------------------------------------------------	
 
 	long mode_ptr; 
 	printf( "VBE Signature: %s\n", vbeInfoBlock.VbeSignature );
@@ -66,6 +51,33 @@ void GraphicsEngineVESA::InitGraphics()
 	mode_ptr = ( ( vbeInfoBlock.OemProductRevPtr & 0xFFFF0000 ) >> 12 ) + ( vbeInfoBlock.OemProductRevPtr & 0xFFFF );
 	printf( "Product Rev: %s \n", ( char* )mode_ptr + __djgpp_conventional_base );
 	getchar();
+	
+
+
+
+	//Get Old Mode:
+	r.x.ax = 0x4F03;
+	__dpmi_int( 0x10, &r );
+	oldMode = r.x.bx;
+
+	printf( "oldMode: %x \n", oldMode );
+
+
+
+
+	vector<DisplayMode> modes = GetAvailableDisplayModes();
+    for( unsigned int i = 0; i < modes.size(); i++ )
+    {
+        engine->debug->PrintString( "%s\n", modes[i].name.c_str() );
+    }
+
+}
+vector<DisplayMode> GraphicsEngineVESA::GetAvailableDisplayModes()
+{
+	vector<DisplayMode> modes;
+
+	long dosBuffer;
+	dosBuffer = __tb & 0xFFFFF;
 
 	__djgpp_nearptr_enable();
 	unsigned long segment = ( vbeInfoBlock.VideoModePtr & 0xFFFF0000 ) >> 12;
@@ -74,6 +86,8 @@ void GraphicsEngineVESA::InitGraphics()
 	printf("seg:%p, off:%p, linear:%p, final:%p\n", segment, offset, segment+offset, final );
 	getchar();
 
+
+	__dpmi_regs r;
 	
 	uint16_t* mode = (uint16_t*)final;
 	printf( "modeptr %p\n", mode );
@@ -82,42 +96,6 @@ void GraphicsEngineVESA::InitGraphics()
 	{
 		printf("Mode %i: %X\n", i, mode[i] );
 		uint16_t newMode = mode[i];
-
-		struct ModeInfoBlock
-		{
-			unsigned short	ModeAttributes;
-			unsigned char	WinAAttributes;
-			unsigned char	WinBAttributes;
-			unsigned short	WinGranularity;
-			unsigned short	WinSize;
-			unsigned short	WinASegment;
-			unsigned short	WinBSegment;
-			unsigned long	WinFuncPtr;
-			unsigned short	BytesPerScanLine;
-			unsigned short	XResolution;
-			unsigned short	YResolution;
-			unsigned char	XCharSize;
-			unsigned char	YCharSize;
-			unsigned char	NumberOfPlanes;
-			unsigned char	BitsPerPixel;
-			unsigned char	NumberOfBanks;
-			unsigned char	MemoryModel;
-			unsigned char	BankSize;
-			unsigned char	NumberOfImagesPages;
-			unsigned char	Reserved1;
-			unsigned char	RedMaskSize;
-			unsigned char	RedFieldPosition;
-			unsigned char	GreenMaskSize;
-			unsigned char	GreenFieldPosition;
-			unsigned char	BlueMaskSize;
-			unsigned char	BlueFieldPosition;
-			unsigned char	RsvdMaskSize;
-			unsigned char	RsvdFieldPosition;
-			unsigned char 	DirectColorModeInfo;
-			unsigned long	PhysBasePtr;
-			unsigned long	OffScreenMemOffset;
-			unsigned char	Reserved2[206];
-		}__attribute__( ( packed ) );
 
 		dosBuffer = __tb & 0xFFFFF;
 
@@ -147,7 +125,7 @@ void GraphicsEngineVESA::InitGraphics()
 		printf( "PhysBasePtr: %p \n", 		( void* )modeInfoBlock.PhysBasePtr 	);
 		printf( "ModeAttributes: %u \n", 	modeInfoBlock.ModeAttributes 		);
 		
-		vector<DisplayMode> modes;
+		
 		DisplayMode gMode;
 		gMode.name.clear();
 	    gMode.width = modeInfoBlock.XResolution;
@@ -160,20 +138,8 @@ void GraphicsEngineVESA::InitGraphics()
 		i++;
 		getchar();
 	}
-	getchar();
 	__djgpp_nearptr_disable();
 
-	//Get Old Mode:
-	r.x.ax = 0x4F03;
-	__dpmi_int( 0x10, &r );
-	oldMode = r.x.bx;
-
-	printf( "oldMode: %x \n", oldMode );
-
-}
-vector<DisplayMode> GraphicsEngineVESA::GetAvailableDisplayModes()
-{
-	vector<DisplayMode> modes;
 	return modes;
 }
 void GraphicsEngineVESA::SetDisplayMode( DisplayMode mode )
