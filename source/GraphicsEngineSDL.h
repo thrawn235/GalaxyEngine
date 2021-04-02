@@ -31,38 +31,38 @@ class GameEngine;
 class Color
 {
 public:
-	unsigned char r, g, b, a;
+    unsigned char r, g, b, a;
 };
 
 
 class GraphicsEngineSDL : public GraphicsEngine
 {
 protected:
-	GameEngine* 	engine;
+    GameEngine*     engine;
 
-	SDL_Window* 	window;
-	SDL_Renderer*	renderer;
+    SDL_Window*     window;
+    SDL_Renderer*   renderer;
 
-	Color			colors[16];
+    Color           colors[16];
 
 public:
-										GraphicsEngineSDL 			( GameEngine* engine );
-	virtual 							~GraphicsEngineSDL 			();
+                                        GraphicsEngineSDL           ( GameEngine* engine );
+    virtual                             ~GraphicsEngineSDL          ();
 
-	virtual 	void 					InitGraphics 				();
+    virtual     void                    InitGraphics                ();
 
-	virtual		vector<DisplayMode> 	GetAvailableDisplayModes	();
-	virtual 	void 					SetDisplayMode				( DisplayMode mode );
-	virtual 	void 					SetFullScreen				( bool fullScreen );
+    virtual     vector<DisplayMode>     GetAvailableDisplayModes    ();
+    virtual     void                    SetDisplayMode              ( DisplayMode mode );
+    virtual     void                    SetFullScreen               ( bool fullScreen );
 
-	virtual 	unsigned int 			GetScreenWidth 				();
-	virtual 	unsigned int 			GetScreenHeight 			();
-	
-	virtual 	void 					Update						();
-	virtual 	void 					Clear						();
-	virtual 	void 					Flip						();
+    virtual     unsigned int            GetScreenWidth              ();
+    virtual     unsigned int            GetScreenHeight             ();
+    
+    virtual     void                    Update                      ();
+    virtual     void                    Clear                       ();
+    virtual     void                    Flip                        ();
 
-	virtual 	void 					DrawPixel					( Vector2D pos, unsigned char color );
+    virtual     void                    DrawPixel                   ( Vector2D pos, unsigned char color );
 };
 
 #endif

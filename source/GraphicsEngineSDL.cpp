@@ -84,7 +84,7 @@ GraphicsEngineSDL::GraphicsEngineSDL( GameEngine* engine ) : GraphicsEngine( eng
     colors[15].b = 255;
     colors[15].a = 255;
 
-	this->engine = engine;
+    this->engine = engine;
 
     Uint32 subsystem_init = SDL_WasInit(SDL_INIT_EVERYTHING);
     if( subsystem_init == 0 )
@@ -123,7 +123,7 @@ GraphicsEngineSDL::GraphicsEngineSDL( GameEngine* engine ) : GraphicsEngine( eng
 }
 GraphicsEngineSDL::~GraphicsEngineSDL()
 {
-	// Close and destroy the window
+    // Close and destroy the window
     SDL_DestroyWindow(window);
 
     SDL_QuitSubSystem( SDL_INIT_VIDEO );
@@ -137,17 +137,17 @@ GraphicsEngineSDL::~GraphicsEngineSDL()
 }
 void GraphicsEngineSDL::InitGraphics()
 {
-	
+    
 }
 vector<DisplayMode> GraphicsEngineSDL::GetAvailableDisplayModes()
 {
-	vector<DisplayMode> modes;
+    vector<DisplayMode> modes;
 
-	DisplayMode mode;
+    DisplayMode mode;
 
-	SDL_DisplayMode SDLmode;
-	Uint32 f;
-	unsigned int displayModeCount = SDL_GetNumDisplayModes( 0 );
+    SDL_DisplayMode SDLmode;
+    Uint32 f;
+    unsigned int displayModeCount = SDL_GetNumDisplayModes( 0 );
     if( displayModeCount < 1 )
     {
         engine->debug->PrintString("SDL_GetNumDisplayModes failed: %s", SDL_GetError());
@@ -160,26 +160,26 @@ vector<DisplayMode> GraphicsEngineSDL::GetAvailableDisplayModes()
         if( SDL_GetDisplayMode( 0, i, &SDLmode ) != 0 )
         {
             engine->debug->PrintString("SDL_GetNumDisplayModes failed: %s", SDL_GetError());
-        	engine->Quit();
+            engine->Quit();
         }
         f = SDLmode.format;
 
         //engine->debug->PrintString("Mode %i\tbpp %i\t%s\t%i x %i\n", i, SDL_BITSPERPIXEL(f), SDL_GetPixelFormatName(f), SDLmode.w, SDLmode.h );
     
         mode.name.clear();
-	    mode.width = SDLmode.w;
-		mode.height = SDLmode.h;
-		mode.colorDepth = SDL_BITSPERPIXEL(f);
-		mode.name.append( engine->text->SPrintString( "%i x %i x %ibpp", SDLmode.w, SDLmode.h, SDL_BITSPERPIXEL(f) ) );
-		//engine->text->PrintString( "%s\n", mode.name.c_str() );
+        mode.width = SDLmode.w;
+        mode.height = SDLmode.h;
+        mode.colorDepth = SDL_BITSPERPIXEL(f);
+        mode.name.append( engine->text->SPrintString( "%i x %i x %ibpp", SDLmode.w, SDLmode.h, SDL_BITSPERPIXEL(f) ) );
+        //engine->text->PrintString( "%s\n", mode.name.c_str() );
         modes.push_back( mode );
     }
 
-	return modes;
+    return modes;
 }
 void GraphicsEngineSDL::SetDisplayMode( DisplayMode mode )
 {
-	//
+    //
 
     SDL_DisplayMode SDLmode;
     Uint32 f;
@@ -227,25 +227,25 @@ unsigned int GraphicsEngineSDL::GetScreenWidth()
 {
     int w;
     SDL_GetWindowSize( window, &w, NULL );
-	return (unsigned int)w;	
+    return (unsigned int)w; 
 }
 unsigned int GraphicsEngineSDL::GetScreenHeight()
 {
-	int h;
+    int h;
     SDL_GetWindowSize( window, NULL, &h );
     return (unsigned int)h;   
 }
 void GraphicsEngineSDL::Update()
 {
-	
+    
 }
 void GraphicsEngineSDL::Clear()
 {
-	SDL_RenderClear( renderer );
+    SDL_RenderClear( renderer );
 }
 void GraphicsEngineSDL::Flip()
 {
-	SDL_RenderPresent( renderer );
+    SDL_RenderPresent( renderer );
 }
 void GraphicsEngineSDL::DrawPixel( Vector2D pos, unsigned char color )
 {
