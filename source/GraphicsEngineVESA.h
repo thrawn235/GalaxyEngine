@@ -1,6 +1,6 @@
 //====================================
 // GraphicsEngineVESA.h
-// 2D Graphics engine. uses VESA
+// 2D Graphics engine. uses VESA 3.0
 //====================================
 
 //========== include guard ===========

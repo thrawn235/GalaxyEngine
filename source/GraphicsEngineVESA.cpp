@@ -4,9 +4,10 @@
 
 GraphicsEngineVESA::GraphicsEngineVESA( GameEngine* engine ) : GraphicsEngine( engine )
 {
-	//seems like there is nothing to do
+	this->engine = engine;
+
 	screenPadding 	= 64;
-	//__djgpp_nearptr_enable();
+
 	backBuffer 		= NULL;
 	screenMemory 	= NULL;
 	flip 			= false;
@@ -75,6 +76,7 @@ void GraphicsEngineVESA::InitGraphics()
 vector<DisplayMode> GraphicsEngineVESA::GetAvailableDisplayModes()
 {
 	vector<DisplayMode> modes;
+	DisplayMode displayMode;
 
 	long dosBuffer;
 	dosBuffer = __tb & 0xFFFFF;
@@ -83,19 +85,18 @@ vector<DisplayMode> GraphicsEngineVESA::GetAvailableDisplayModes()
 	unsigned long segment = ( vbeInfoBlock.VideoModePtr & 0xFFFF0000 ) >> 12;
 	unsigned long offset = vbeInfoBlock.VideoModePtr & 0x0000FFFF;
 	unsigned long final = segment + offset + __djgpp_conventional_base; 
-	printf("seg:%p, off:%p, linear:%p, final:%p\n", segment, offset, segment+offset, final );
-	getchar();
-
+	printf("seg:%p, off:%p, linear:%p, final:%p\n", (void*)segment, (void*)offset, (void*)(segment+offset), (void*)final );
+	__djgpp_nearptr_disable();
 
 	__dpmi_regs r;
 	
-	uint16_t* mode = (uint16_t*)final;
-	printf( "modeptr %p\n", mode );
+	uint16_t* vesaModes = (uint16_t*)final;
+	printf( "modeptr %p\n", vesaModes );
 	unsigned int i = 0;
-	while( mode[i] != 0xFFFF )
+	while( vesaModes[i] != 0xFFFF )
 	{
-		printf("Mode %i: %X\n", i, mode[i] );
-		uint16_t newMode = mode[i];
+		printf("Mode %i: %X\n", i, vesaModes[i] );
+		uint16_t newMode = vesaModes[i];
 
 		dosBuffer = __tb & 0xFFFFF;
 
@@ -105,10 +106,11 @@ vector<DisplayMode> GraphicsEngineVESA::GetAvailableDisplayModes()
 	    r.x.di = dosBuffer & 0xF;
 		__dpmi_int( 0x10, &r );
 
+
 		ModeInfoBlock modeInfoBlock;
 
 		dosmemget( dosBuffer, sizeof( ModeInfoBlock ), &modeInfoBlock );
-
+		printf("Mode %i: %X\n", i, vesaModes[i] );
 		printf( "ModeAttributes: %u \n", 	modeInfoBlock.ModeAttributes 		);
 		printf( "WinSize: %u \n", 			modeInfoBlock.WinSize 				);
 		printf( "WinFuncPtr: %p \n", 		( void* )modeInfoBlock.WinFuncPtr 	);
@@ -125,20 +127,15 @@ vector<DisplayMode> GraphicsEngineVESA::GetAvailableDisplayModes()
 		printf( "PhysBasePtr: %p \n", 		( void* )modeInfoBlock.PhysBasePtr 	);
 		printf( "ModeAttributes: %u \n", 	modeInfoBlock.ModeAttributes 		);
 		
-		
-		DisplayMode gMode;
-		gMode.name.clear();
-	    gMode.width = modeInfoBlock.XResolution;
-		gMode.height = modeInfoBlock.YResolution;
-		gMode.colorDepth = modeInfoBlock.BitsPerPixel;
-		gMode.name.append( engine->text->SPrintString( "%X", mode[i] ) );
-		engine->text->PrintString( "%s\n", gMode.name.c_str() );
-        modes.push_back( gMode );
-
+		displayMode.name.clear();
+	    displayMode.width = modeInfoBlock.XResolution;
+		displayMode.height = modeInfoBlock.YResolution;
+		displayMode.colorDepth = modeInfoBlock.BitsPerPixel;
+		displayMode.name.append( engine->text->SPrintString( "%X", vesaModes[i] ) );
+		engine->text->PrintString( "%X\n", vesaModes[i] );
+        modes.push_back( displayMode );
 		i++;
-		getchar();
-	}
-	__djgpp_nearptr_disable();
+	}	
 
 	return modes;
 }
