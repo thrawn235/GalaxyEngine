@@ -235,20 +235,54 @@ unsigned int GraphicsEngineSDL::GetScreenHeight()
     SDL_GetWindowSize( window, NULL, &h );
     return (unsigned int)h;   
 }
-void GraphicsEngineSDL::Update()
+void GraphicsEngineSDL::PreFrame()
 {
-    
+    //
+    ClearScreen();   
 }
-void GraphicsEngineSDL::Clear()
+void GraphicsEngineSDL::PostFrame()
 {
+    //
+    SDL_RenderPresent( renderer );
+}
+
+//Camera
+Vector2D GraphicsEngineSDL::GetCamPos()
+{
+   //
+    return camPos;
+}
+void GraphicsEngineSDL::SetCamPos( Vector2D newPos )
+{
+   //
+    camPos = newPos;
+}
+void GraphicsEngineSDL::SetCamCenter( Vector2D newPos )
+{
+    newPos.x = newPos.x - (  GetScreenWidth() / 2  );
+    newPos.y = newPos.y - (  GetScreenHeight() / 2  );
+    camPos = newPos;
+}
+Vector2D GraphicsEngineSDL::GetCamCenter()
+{
+    //
+    return Vector2D( camPos.x + (  GetScreenWidth() / 2  ), camPos.y + (  GetScreenHeight() / 2  ) );
+}
+
+void GraphicsEngineSDL::ClearScreen()
+{
+    unsigned char color = COLOR_BLACK;
+    SDL_SetRenderDrawColor( renderer, colors[color].r, colors[color].g, colors[color].b, colors[color].a );
     SDL_RenderClear( renderer );
 }
-void GraphicsEngineSDL::Flip()
+void GraphicsEngineSDL::ClearScreen( unsigned char color )
 {
-    SDL_RenderPresent( renderer );
+    SDL_SetRenderDrawColor( renderer, colors[color].r, colors[color].g, colors[color].b, colors[color].a );
+    SDL_RenderClear( renderer );
 }
 void GraphicsEngineSDL::DrawPixel( Vector2D pos, unsigned char color )
 {
+    pos = pos - camPos;
     SDL_SetRenderDrawColor( renderer, colors[color].r, colors[color].g, colors[color].b, colors[color].a );
     SDL_RenderDrawPoint( renderer, pos.x, pos.y );
 }

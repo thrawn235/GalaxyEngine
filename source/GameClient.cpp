@@ -64,8 +64,7 @@ void GameClient::Run()
     engine->input->Update();
     //-----------------------------------------------------------
 
-    engine->graphics->Update();
-    engine->graphics->Clear();
+    engine->graphics->PreFrame();
 
     //Try to connect to server (if not connected already)--------
     engine->debug->PrintString( "trying to connect... " );
@@ -139,7 +138,7 @@ void GameClient::Run()
     //-----------------------------------------------------------
 
     //Graphics Flip----------------------------------------------
-    engine->graphics->Flip();
+    engine->graphics->PostFrame();
     //-----------------------------------------------------------
 
     engine->debug->PrintString( "===============================================\n\n\n" );

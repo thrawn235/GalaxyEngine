@@ -38,12 +38,15 @@ public:
 class GraphicsEngineSDL : public GraphicsEngine
 {
 protected:
-    GameEngine*     engine;
+    GameEngine*         engine;
 
-    SDL_Window*     window;
-    SDL_Renderer*   renderer;
+    SDL_Window*         window;
+    SDL_Renderer*       renderer;
 
-    Color           colors[16];
+    Color               colors[16];
+
+    //camera
+    Vector2D            camPos;
 
 public:
                                         GraphicsEngineSDL           ( GameEngine* engine );
@@ -58,10 +61,17 @@ public:
     virtual     unsigned int            GetScreenWidth              ();
     virtual     unsigned int            GetScreenHeight             ();
     
-    virtual     void                    Update                      ();
-    virtual     void                    Clear                       ();
-    virtual     void                    Flip                        ();
+    virtual     void                    PreFrame                    ();
+    virtual     void                    PostFrame                   ();
 
+    //Camera
+    virtual     Vector2D                GetCamPos                   ();
+    virtual     void                    SetCamPos                   ( Vector2D newPos );
+    virtual     void                    SetCamCenter                ( Vector2D newPos );
+    virtual     Vector2D                GetCamCenter                ();
+
+    virtual     void                    ClearScreen                 ();
+    virtual     void                    ClearScreen                 ( unsigned char color );
     virtual     void                    DrawPixel                   ( Vector2D pos, unsigned char color );
 };
 
