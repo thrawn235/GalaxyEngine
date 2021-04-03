@@ -11,6 +11,10 @@ GameServer::GameServer()
     tmp = new Enemy( engine );
     engine->AddObject( tmp );
     tmp = new Player( engine );
+    tmp->PrintStats();
+    engine->AddObject( tmp );
+    tmp->PrintStats();
+    tmp = new Enemy( engine );
     engine->AddObject( tmp );
 
     engine->text->PrintString( "\n\n" );

@@ -9,8 +9,8 @@ GameNode::GameNode()
 }
 GameNode::~GameNode()
 {
-    engine->debug->PrintString( "destroying GameNode...\n" );
-    delete engine;
+    //engine->debug->PrintString( "destroying GameNode...\n" ); //cant print if its already deleted...
+    //delete engine; //cant delete it twice...
 }
 GameEngine* GameNode::GetEngine()
 {

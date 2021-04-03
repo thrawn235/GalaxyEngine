@@ -24,6 +24,7 @@ class GameEngine;
 //============= defines ==============
 #define INPUT_TYPE_DUMMY    0
 #define INPUT_TYPE_SDL      1
+#define INPUT_TYPE_DOS      2
 //====================================
 
 

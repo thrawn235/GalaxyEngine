@@ -3,11 +3,11 @@
 
 Object::Object( GameEngine* engine )
 { 
+    this->engine              = engine;
+
     baseNetStats = new ObjectStats;
     netStats = (ObjectStats*)baseNetStats;
     netStats->size = sizeof( ObjectStats );
-
-    this->engine              = engine;
 
     netStats->uid             = engine->GetHighestUIDAndInc();
 

@@ -45,7 +45,7 @@ void Player::ClientSideUpdate()
 {
 	netStats->up = netStats->down = netStats->left = netStats->right = netStats->fire = false;
 
-	engine->text->PrintString( "Player Menu:\n" );
+	/*engine->text->PrintString( "Player Menu:\n" );
 	engine->text->PrintString( "   Commands:\n" );
 	engine->text->PrintString( "      move  = m\n" );
 	engine->text->PrintString( "      fire  = f \n" );
@@ -79,7 +79,7 @@ void Player::ClientSideUpdate()
 		engine->text->PrintString( "      enter target uid:   = u\n" );
 		netStats->target = engine->text->InputInt();
 		netStats->fire = true;
-	}
+	}*/
 
 	SendStatus();
 }
@@ -181,6 +181,7 @@ void MainMenu::UpdateServerIndependend()
 				engine->debug->PrintString( "disconnect...\n" );
 				engine->net->Disconnect();
 				delete server;
+				engine->debug->PrintString( "server gone!\n" );
 				server = NULL;
 			}
 			engine->debug->PrintString( "new server...\n" );
@@ -283,13 +284,13 @@ void MainMenu::UpdateServerIndependend()
 	}
 	else
 	{
-		engine->text->PrintString( "== Main Menu ==\n" );
+		/*engine->text->PrintString( "== Main Menu ==\n" );
 		engine->text->PrintString( "  input m for menu > " );
 		mainInput = engine->text->InputString();
 		if( mainInput == "m" || mainInput == "Main Menu" )
 		{
 			hidden = false;
-		}
+		}*/
 		if( engine->input->AnyKeyDown() )
 		{
 			hidden = false;

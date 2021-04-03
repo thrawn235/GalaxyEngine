@@ -24,7 +24,7 @@ GameEngine::GameEngine()
         text = new TextEngineIOStream;
         debug = new TextEngineIOStream;
         //net = new NetEngineLocal( this );
-        input = new InputEngineDummy( this );
+        input = new InputEngineDOS( this );
         graphics = new GraphicsEngineDummy( this );
     #endif
 
@@ -36,13 +36,29 @@ GameEngine::GameEngine()
 }
 GameEngine::~GameEngine()
 {
+    debug->PrintString( "Purge all objects... \n" );
     PurgeAllObjects( true );
+    debug->PrintString( "Clear deleted objects... \n" );
     ClearDeletedObjects();
-    //engines.erase( this );
+    debug->PrintString( "erase this engine from engines list... \n" );
+    for( unsigned int i = 0; i < engines.size(); i++ )
+    {
+        if( engines[i] == this )
+        {
+            engines.erase( engines.begin() + i );
+            break;
+        }
+    }
 
+    debug->PrintString( "delete graphics... \n" );
+    delete graphics;
+    debug->PrintString( "delete input... \n" );
     delete input;
+    debug->PrintString( "delete net... \n" );
     delete net;
+    debug->PrintString( "delete text... \n" );
     delete text;
+    debug->PrintString( "delete debug... \n" );
     delete debug;
 }
 void GameEngine::SetHighestUID( unsigned long int UID )
@@ -159,7 +175,17 @@ vector<int> GameEngine::GetAvailableInputTypes()
     vector<int> availableModes;
 
     availableModes.push_back( INPUT_TYPE_DUMMY );
-    availableModes.push_back( INPUT_TYPE_SDL );
+
+    #ifdef TARGET_DOS
+        availableModes.push_back( INPUT_TYPE_DOS );
+    #endif
+    #ifdef TARGET_LINUX
+        availableModes.push_back( INPUT_TYPE_SDL );
+    #endif
+    #ifdef TARGET_WIN
+        availableModes.push_back( INPUT_TYPE_SDL );
+    #endif
+    
 
     return availableModes;
 }
@@ -171,10 +197,16 @@ void GameEngine::SetInputType( int inputType )
     {
         input = new InputEngineDummy( this );
     }
-    #ifndef TARGET_DOS
+    #if defined TARGET_WIN || TARGET_LINUX
         else if( inputType == INPUT_TYPE_SDL )
         {
             input = new InputEngineSDL( this );
+        }
+    #endif
+    #ifdef TARGET_DOS
+        if( inputType == INPUT_TYPE_DOS )
+        {
+            input = new InputEngineDOS( this );
         }
     #endif
 }

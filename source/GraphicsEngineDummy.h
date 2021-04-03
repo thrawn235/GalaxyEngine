@@ -57,6 +57,14 @@ public:
     virtual     void                    ClearScreen                 ();
     virtual     void                    ClearScreen                 ( unsigned char color );
     virtual     void                    DrawPixel                   ( Vector2D pos, unsigned char color );
+    virtual     void                    DrawLine                    ( Vector2D start, Vector2D end, unsigned char color );
+    virtual     void                    DrawHLine                   ( Vector2D start, int length, unsigned char color );
+    virtual     void                    DrawVLine                   ( Vector2D start, int length, unsigned char color );
+    virtual     void                    DrawRect                    ( Vector2D pos, int width, int height, unsigned char color );
+    virtual     void                    DrawFilledRect              ( Vector2D pos, int width, int height, unsigned char color );
+    virtual     void                    DrawCircle                  ( Vector2D pos, int radius, unsigned char color );
+    virtual     void                    DrawFilledCircle            ( Vector2D pos, int radius, unsigned char color );
+    virtual     void                    DrawVector                  ( Vector2D pos, Vector2D vec, float scale, unsigned char color );
 };
 
 #endif

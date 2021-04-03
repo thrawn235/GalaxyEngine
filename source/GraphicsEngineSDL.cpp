@@ -286,3 +286,68 @@ void GraphicsEngineSDL::DrawPixel( Vector2D pos, unsigned char color )
     SDL_SetRenderDrawColor( renderer, colors[color].r, colors[color].g, colors[color].b, colors[color].a );
     SDL_RenderDrawPoint( renderer, pos.x, pos.y );
 }
+void GraphicsEngineSDL::DrawLine( Vector2D start, Vector2D end, unsigned char color )
+{
+    start = start - camPos;
+    end = end - camPos;
+    SDL_SetRenderDrawColor( renderer, colors[color].r, colors[color].g, colors[color].b, colors[color].a );
+    SDL_RenderDrawLine( renderer, start.x, start.y, end.x, end. y);
+}
+void GraphicsEngineSDL::DrawHLine( Vector2D start, int length, unsigned char color )
+{
+    start = start - camPos;
+    SDL_SetRenderDrawColor( renderer, colors[color].r, colors[color].g, colors[color].b, colors[color].a );
+    SDL_RenderDrawLine( renderer, start.x, start.y, start.x + length, start.y );   
+}
+void GraphicsEngineSDL::DrawVLine( Vector2D start, int length, unsigned char color )
+{
+    start = start - camPos;
+    SDL_SetRenderDrawColor( renderer, colors[color].r, colors[color].g, colors[color].b, colors[color].a );
+    SDL_RenderDrawLine( renderer, start.x, start.y, start.x, start.y + length );
+}
+void GraphicsEngineSDL::DrawRect( Vector2D pos, int width, int height, unsigned char color )
+{
+    pos = pos - camPos;
+    SDL_SetRenderDrawColor( renderer, colors[color].r, colors[color].g, colors[color].b, colors[color].a );
+    SDL_RenderDrawLine( renderer, pos.x, pos.y, pos.x + width, pos.y );
+    SDL_RenderDrawLine( renderer, pos.x + width, pos.y, pos.x + width, pos.y + height );
+    SDL_RenderDrawLine( renderer, pos.x, pos.y, pos.x , pos.y + height );
+    SDL_RenderDrawLine( renderer, pos.x, pos.y + height, pos.x + width, pos.y + height );
+}
+void GraphicsEngineSDL::DrawFilledRect( Vector2D pos, int width, int height, unsigned char color )
+{
+    pos = pos + camPos;
+    SDL_SetRenderDrawColor( renderer, colors[color].r, colors[color].g, colors[color].b, colors[color].a );
+    SDL_Rect rect;
+    rect.x = pos.x;
+    rect.y = pos.y;
+    rect.w = width;
+    rect.h = height;
+    SDL_RenderDrawRect( renderer, &rect );
+}
+void GraphicsEngineSDL::DrawCircle( Vector2D pos, int radius, unsigned char color )
+{
+    
+}
+void GraphicsEngineSDL::DrawFilledCircle( Vector2D pos, int radius, unsigned char color )
+{
+    
+}
+void GraphicsEngineSDL::DrawVector( Vector2D pos, Vector2D vec, float scale, unsigned char color )
+{
+    pos = pos - camPos;
+
+    //Draw Dot at origin
+    DrawPixel( Vector2D( pos.x-1, pos.y-1 ), color );
+    DrawPixel( Vector2D( pos.x, pos.y-1   ), color );
+    DrawPixel( Vector2D( pos.x+1, pos.y-1 ), color );
+    DrawPixel( Vector2D( pos.x-1, pos.y   ), color );
+    DrawPixel( Vector2D( pos.x, pos.y     ), color );
+    DrawPixel( Vector2D( pos.x+1, pos.y   ), color );
+    DrawPixel( Vector2D( pos.x-1, pos.y+1 ), color );
+    DrawPixel( Vector2D( pos.x, pos.y+1   ), color );
+    DrawPixel( Vector2D( pos.x+1, pos.y+1 ), color );
+
+    //Draw Line for Direction
+    DrawLine( pos, ( vec * scale )+pos, color );
+}

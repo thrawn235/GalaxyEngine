@@ -11,6 +11,7 @@ GraphicsEngineVESA::GraphicsEngineVESA( GameEngine* engine ) : GraphicsEngine( e
     backBuffer      = NULL;
     screenMemory    = NULL;
     fullScreen      = true; //always true for dos
+    initialized     = false;
 
     InitGraphics();
 }
@@ -71,7 +72,7 @@ void GraphicsEngineVESA::InitGraphics()
         engine->debug->PrintString( "%s\n", modes[i].name.c_str() );
     }
 
-    SetDisplayMode( modes[1] );
+    //SetDisplayMode( modes[1] );
 
 }
 vector<DisplayMode> GraphicsEngineVESA::GetAvailableDisplayModes()
@@ -236,6 +237,9 @@ void GraphicsEngineVESA::SetDisplayMode( DisplayMode mode )
             r.x.dx = screenPadding;
             __dpmi_int( 0x10, &r );
 
+
+            initialized = true;
+
             return;
         }
 
@@ -274,34 +278,37 @@ void GraphicsEngineVESA::PostFrame()
 }
 void GraphicsEngineVESA::Flip()
 {
-    WaitForRetrace();
-
-    __dpmi_regs r;
-    if( currentScreenMemory == screenMemory )
+    if( initialized )
     {
-        currentScreenMemory = backBuffer;
-        currentBackBuffer = screenMemory;
+        WaitForRetrace();
+
+        __dpmi_regs r;
+        if( currentScreenMemory == screenMemory )
+        {
+            currentScreenMemory = backBuffer;
+            currentBackBuffer = screenMemory;
 
 
-        r.x.ax = 0x4F07;
-        r.h.bh = 0;
-        r.h.bl = 0;
-        r.x.cx = screenPadding;
-        r.x.dx = logicalScreenHeight + screenPadding;
-        __dpmi_int( 0x10, &r );
-    }
-    else
-    {
-        currentScreenMemory = screenMemory;
-        currentBackBuffer = backBuffer;
+            r.x.ax = 0x4F07;
+            r.h.bh = 0;
+            r.h.bl = 0;
+            r.x.cx = screenPadding;
+            r.x.dx = logicalScreenHeight + screenPadding;
+            __dpmi_int( 0x10, &r );
+        }
+        else
+        {
+            currentScreenMemory = screenMemory;
+            currentBackBuffer = backBuffer;
 
 
-        r.x.ax = 0x4F07;
-        r.h.bh = 0;
-        r.h.bl = 0;
-        r.x.cx = screenPadding;
-        r.x.dx = screenPadding;
-        __dpmi_int( 0x10, &r );
+            r.x.ax = 0x4F07;
+            r.h.bh = 0;
+            r.h.bl = 0;
+            r.x.cx = screenPadding;
+            r.x.dx = screenPadding;
+            __dpmi_int( 0x10, &r );
+        }
     }
 }
 
@@ -318,9 +325,12 @@ void GraphicsEngineVESA::SetCamPos( Vector2D newPos )
 }
 void GraphicsEngineVESA::SetCamCenter( Vector2D newPos )
 {
-    newPos.x = newPos.x - (  screenWidth / 2  );
-    newPos.y = newPos.y - (  screenHeight / 2  );
-    camPos = newPos;
+    if( initialized )
+    {
+        newPos.x = newPos.x - (  screenWidth / 2  );
+        newPos.y = newPos.y - (  screenHeight / 2  );
+        camPos = newPos;
+    }
 }
 Vector2D GraphicsEngineVESA::GetCamCenter()
 {
@@ -331,55 +341,63 @@ Vector2D GraphicsEngineVESA::GetCamCenter()
 void GraphicsEngineVESA::ClearScreen()
 {
     //color black, color index 0
+    if( initialized )
+    {
+        int startAddress = ( int )currentBackBuffer + ( screenPadding * logicalScreenWidth + screenPadding );
+        int endAddress = startAddress + ( screenHeight * logicalScreenWidth );
 
-    int startAddress = ( int )currentBackBuffer + ( screenPadding * logicalScreenWidth + screenPadding );
-    int endAddress = startAddress + ( screenHeight * logicalScreenWidth );
-
-    asm( "mov $0, %%al;"
-         "shl $8, %%eax;"
-         "mov $0, %%al;"
-         "shl $8, %%eax;"
-         "mov $0, %%al;"
-         "shl $8, %%eax;"
-         "mov $0, %%al;"
-         "loop%=:;"
-         "   mov %%eax, ( %%edi );"
-         "   add $4, %%edi;"
-         "   cmp %1, %%edi;"
-         "   jb loop%=;"
-         :
-         :"D"( startAddress ), "m"( endAddress )
-         :"eax", "memory" );
+        asm( "mov $0, %%al;"
+             "shl $8, %%eax;"
+             "mov $0, %%al;"
+             "shl $8, %%eax;"
+             "mov $0, %%al;"
+             "shl $8, %%eax;"
+             "mov $0, %%al;"
+             "loop%=:;"
+             "   mov %%eax, ( %%edi );"
+             "   add $4, %%edi;"
+             "   cmp %1, %%edi;"
+             "   jb loop%=;"
+             :
+             :"D"( startAddress ), "m"( endAddress )
+             :"eax", "memory" );
+    }
 }
 void GraphicsEngineVESA::ClearScreen( unsigned char color )
 {
-    int startAddress = ( int )currentBackBuffer + ( screenPadding * logicalScreenWidth + screenPadding );
-    int endAddress = startAddress + ( screenHeight * logicalScreenWidth );
+    if( initialized )
+    {
+        int startAddress = ( int )currentBackBuffer + ( screenPadding * logicalScreenWidth + screenPadding );
+        int endAddress = startAddress + ( screenHeight * logicalScreenWidth );
 
-    asm( "mov %2, %%al;"
-         "shl $8, %%eax;"
-         "mov %2, %%al;"
-         "shl $8, %%eax;"
-         "mov %2, %%al;"
-         "shl $8, %%eax;"
-         "mov %2, %%al;"
-         "loop%=:;"
-         "   mov %%eax, ( %%edi );"
-         "   add $4, %%edi;"
-         "   cmp %1, %%edi;"
-         "   jb loop%=;"
-         :
-         :"D"( startAddress ), "m"( endAddress ), "m"( color )
-         :"eax", "memory" );
+        asm( "mov %2, %%al;"
+             "shl $8, %%eax;"
+             "mov %2, %%al;"
+             "shl $8, %%eax;"
+             "mov %2, %%al;"
+             "shl $8, %%eax;"
+             "mov %2, %%al;"
+             "loop%=:;"
+             "   mov %%eax, ( %%edi );"
+             "   add $4, %%edi;"
+             "   cmp %1, %%edi;"
+             "   jb loop%=;"
+             :
+             :"D"( startAddress ), "m"( endAddress ), "m"( color )
+             :"eax", "memory" );
+    }
 }
 void GraphicsEngineVESA::DrawPixel( Vector2D pos, unsigned char color )
 {
-    pos = pos + screenPadding;
-    pos = pos - camPos;
-    //and assembly
-    if( pos.x > 0 && pos.y > 0 && pos.x < logicalScreenWidth && pos.y < logicalScreenHeight )
+    if( initialized )
     {
-        currentBackBuffer[( int )( ( int )pos.y * logicalScreenWidth+ ( int )pos.x )] = color;
+        pos = pos + screenPadding;
+        pos = pos - camPos;
+        //and assembly
+        if( pos.x > 0 && pos.y > 0 && pos.x < logicalScreenWidth && pos.y < logicalScreenHeight )
+        {
+            currentBackBuffer[( int )( ( int )pos.y * logicalScreenWidth+ ( int )pos.x )] = color;
+        }
     }
 }
 
@@ -396,4 +414,247 @@ void GraphicsEngineVESA::WaitForRetrace()
     while  ( ( inportb( 0x03da ) & 0x08 ) != 8 ) {};
     /* wait until done refreshing */
     while ( ( inportb( 0x03da ) & 0x08 ) == 8 ) {};
+}
+void GraphicsEngineVESA::DrawLine( Vector2D start, Vector2D end, unsigned char color )
+{
+    //not by me. method is from brakeen
+    //no boundary checks
+    start = start + screenPadding;
+    end = end + screenPadding;
+    start = start - camPos;
+    end = end - camPos;
+
+    if(     start.x > 0 && start.y > 0 && start.x < logicalScreenWidth && start.y < logicalScreenHeight &&
+        end.x > 0 && end.y > 0 && end.x < logicalScreenWidth && end.y < logicalScreenHeight )
+    {
+        #define sgn( x ) ( ( x<0 )?-1:( ( x>0 )?1:0 ) )
+
+        
+
+        int x1 = start.x;
+        int y1 = start.y;
+        int x2 = end.x;
+        int y2 = end.y;
+
+        int i,dx,dy,sdx,sdy,dxabs,dyabs,x,y,px,py;
+
+        dx=x2-x1;      /* the horizontal distance of the line */
+        dy=y2-y1;      /* the vertical distance of the line */
+        dxabs=abs( dx );
+        dyabs=abs( dy );
+        sdx=sgn( dx );
+        sdy=sgn( dy );
+        x=dyabs>>1;
+        y=dxabs>>1;
+        px=x1;
+        py=y1;
+
+        //VGA[( py<<8 )+( py<<6 )+px]=color;
+        currentBackBuffer[py * logicalScreenWidth + px] = color;
+
+        if ( dxabs>=dyabs ) /* the line is more horizontal than vertical */
+        {
+            for( i=0;i<dxabs;i++ )
+            {
+                y+=dyabs;
+                if ( y>=dxabs )
+                {
+                    y-=dxabs;
+                    py+=sdy;
+                }
+                px+=sdx;
+                //plot_pixel( px,py,color );
+                currentBackBuffer[py * logicalScreenWidth + px] = color;
+            }
+        }
+        else /* the line is more vertical than horizontal */
+        {
+            for( i=0;i<dyabs;i++ )
+            {
+                x+=dxabs;
+                if ( x>=dyabs )
+                {
+                    x-=dyabs;
+                    px+=sdx;
+                }
+                py+=sdy;
+                //plot_pixel( px,py,color );
+                currentBackBuffer[py * logicalScreenWidth + px] = color;
+            }
+        }
+    }
+}
+void GraphicsEngineVESA::DrawHLine( Vector2D start, int length, unsigned char color )
+{
+    //assembly and long pointers could speed it up. probably not worth it though
+    start = start + screenPadding;
+    start = start - camPos;
+    
+    if(     start.x > 0 && start.y > 0 && start.x < logicalScreenWidth && start.y < logicalScreenHeight &&
+        start.x + length > 0 && start.x + length < logicalScreenWidth )
+    {
+        
+        int startAddress = ( int )start.y * logicalScreenWidth + ( int )start.x;
+        for( int i = 0; i < length; i++ )
+        {
+            currentBackBuffer[startAddress+i] = color;
+        }
+    }
+}
+void GraphicsEngineVESA::DrawVLine( Vector2D start, int length, unsigned char color )
+{
+    start = start + screenPadding;
+    start = start - camPos;
+
+    if(     start.x > 0 && start.y > 0 && start.x < logicalScreenWidth && start.y < logicalScreenHeight &&
+        start.y + length > 0 && start.y + length < logicalScreenHeight )
+    {
+        
+        int startAddress = ( int )start.y * logicalScreenWidth + ( int )start.x;
+        for( int i = 0; i < length; i++ )
+        {
+            currentBackBuffer[startAddress] = color;
+            startAddress = startAddress + logicalScreenWidth;
+        }
+    }
+}
+void GraphicsEngineVESA::DrawRect( Vector2D pos, int width, int height, unsigned char color )
+{
+    //Boundary Checks are done in Line Methods
+    DrawVLine( pos, height+1, color );
+    DrawVLine( Vector2D( pos.x+width, pos.y ), height+1, color );
+    DrawHLine( pos, width, color );
+    DrawHLine( Vector2D( pos.x, pos.y+height ), width, color );
+}
+void GraphicsEngineVESA::DrawFilledRect( Vector2D pos, int width, int height, unsigned char color )
+{
+    pos = pos + screenPadding;
+    pos = pos - camPos;
+
+    if( pos.x > 0 && pos.y > 0 && pos.x < logicalScreenWidth && pos.y < logicalScreenHeight )
+    {
+        if( pos.x+width > 0 && pos.y+height > 0 && pos.x+width < logicalScreenWidth && pos.y+height < logicalScreenHeight )
+        {
+            if( width % 4 == 0 )
+            {
+                int startAddress = ( int )currentBackBuffer + ( ( int )pos.y * logicalScreenWidth + ( int )pos.x );
+                asm( "mov %2, %%al;"
+                    "shl $8, %%eax;"
+                    "mov %2, %%al;"
+                    "shl $8, %%eax;"
+                    "mov %2, %%al;"
+                    "shl $8, %%eax;"
+                    "mov %2, %%al;"
+                    "mov $0, %%ebx;"
+                    "loop1%=:;"
+                    "   mov $0, %%ecx;"
+                    "   loop2%=:;"
+                    "       mov %%eax, ( %%edi, %%ecx );"
+                    "       add $4, %%ecx;"
+                    "       cmp %2, %%ecx;"
+                    "       jb loop2%=;"
+                    "   add %1, %%edi;"
+                    "   inc %%ebx;"
+                    "   cmp %3, %%ebx;"
+                    "   jb loop1%=;"
+                    :
+                    :"D"( startAddress ), "m"( logicalScreenWidth ), "m"( width ), "m"( height )
+                    :"eax", "ebx", "ecx", "memory" ); 
+            }
+            else
+            {
+                int startAddress = ( int )currentBackBuffer + ( ( int )pos.y * logicalScreenWidth + ( int )pos.x );
+                int widthMinus4 = width - 4;
+                asm( "mov %2, %%al;"
+                    "shl $8, %%eax;"
+                    "mov %2, %%al;"
+                    "shl $8, %%eax;"
+                    "mov %2, %%al;"
+                    "shl $8, %%eax;"
+                    "mov %2, %%al;"
+                    "mov $0, %%ebx;"
+                    "loop1%=:;"
+                    "   mov $0, %%ecx;"
+                    "   loop2%=:;"
+                    "       mov %%eax, ( %%edi, %%ecx );"
+                    "       add $4, %%ecx;"
+                    "       cmp %2, %%ecx;"
+                    "       jb loop2%=;"
+                    "   loop3%=:;"
+                    "       movb %%al, ( %%edi, %%ecx );"
+                    "       inc %%ecx;"
+                    "       cmp %4, %%ecx;"
+                    "       jb loop3%=;"
+                    "   add %1, %%edi;"
+                    "   inc %%ebx;"
+                    "   cmp %3, %%ebx;"
+                    "   jb loop1%=;"
+                    :
+                    :"D"( startAddress ), "m"( logicalScreenWidth ), "m"( widthMinus4 ), "m"( height ), "m"( width )
+                    :"eax", "ebx", "ecx", "memory" ); 
+            }
+        }
+    }
+}
+void GraphicsEngineVESA::DrawCircle( Vector2D pos, int radius, unsigned char color )
+{
+    //incredibly dumb and horrendously slow!
+
+    pos = pos + screenPadding;
+    pos = pos - camPos;
+
+    Vector2D startCoord( pos.x - radius, pos.y - radius );
+    if(     startCoord.x > 0 && startCoord.y > 0 && startCoord.x < logicalScreenWidth && startCoord.y < logicalScreenHeight &&
+        startCoord.x + ( 2*radius ) > 0 && startCoord.y + ( 2*radius ) > 0 && startCoord.x + ( 2*radius ) < logicalScreenWidth && startCoord.y + ( 2*radius ) < logicalScreenHeight )
+    {
+        for( int x = startCoord.x; x <= startCoord.x + ( 2*radius ); x++ )
+        {
+            for( int y = startCoord.y; y <= startCoord.y + ( 2*radius ); y++ )
+            {
+                if( ( int )pos.DistanceFrom( Vector2D( x,y ) ) == radius )
+                {
+                    currentBackBuffer[y * logicalScreenWidth + x] = color;
+                }
+            }
+        } 
+    }
+}
+void GraphicsEngineVESA::DrawFilledCircle( Vector2D pos, int radius, unsigned char color )
+{
+    //incredibly dumb and horrendously slow!
+
+    pos = pos + screenPadding;
+    pos = pos - camPos;
+
+    Vector2D startCoord( pos.x - radius, pos.y - radius );
+    if(     startCoord.x > 0 && startCoord.y > 0 && startCoord.x < logicalScreenWidth && startCoord.y < logicalScreenHeight &&
+        startCoord.x + ( 2*radius ) > 0 && startCoord.y + ( 2*radius ) > 0 && startCoord.x + ( 2*radius ) < logicalScreenWidth && startCoord.y + ( 2*radius ) < logicalScreenHeight )
+    {
+        for( int x = startCoord.x; x <= startCoord.x + ( 2*radius ); x++ )
+        {
+            for( int y = startCoord.y; y <= startCoord.y + ( 2*radius ); y++ )
+            {
+                if( ( int )pos.DistanceFrom( Vector2D( x,y ) ) <= radius )
+                {
+                    currentBackBuffer[y * logicalScreenWidth + x] = color;
+                }
+            }
+        } 
+    }
+}
+void GraphicsEngineVESA::DrawVector( Vector2D pos, Vector2D vec, float scale, unsigned char color )
+{
+    //Draw Dot at origin
+    DrawPixel( Vector2D( pos.x-1, pos.y-1 ), color );
+    DrawPixel( Vector2D( pos.x, pos.y-1   ), color );
+    DrawPixel( Vector2D( pos.x+1, pos.y-1 ), color );
+    DrawPixel( Vector2D( pos.x-1, pos.y   ), color );
+    DrawPixel( Vector2D( pos.x, pos.y     ), color );
+    DrawPixel( Vector2D( pos.x+1, pos.y   ), color );
+    DrawPixel( Vector2D( pos.x-1, pos.y+1 ), color );
+    DrawPixel( Vector2D( pos.x, pos.y+1   ), color );
+    DrawPixel( Vector2D( pos.x+1, pos.y+1 ), color );
+
+    //Draw Line for Direction
+    DrawLine( pos, ( vec * scale )+pos, color );
 }

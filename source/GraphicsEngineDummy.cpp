@@ -74,3 +74,35 @@ void GraphicsEngineDummy::DrawPixel( Vector2D pos, unsigned char color )
 {
 	
 }
+void GraphicsEngineDummy::DrawLine( Vector2D start, Vector2D end, unsigned char color )
+{
+
+}
+void GraphicsEngineDummy::DrawHLine( Vector2D start, int length, unsigned char color )
+{
+
+}
+void GraphicsEngineDummy::DrawVLine( Vector2D start, int length, unsigned char color )
+{
+
+}
+void GraphicsEngineDummy::DrawRect( Vector2D pos, int width, int height, unsigned char color )
+{
+
+}
+void GraphicsEngineDummy::DrawFilledRect( Vector2D pos, int width, int height, unsigned char color )
+{
+
+}
+void GraphicsEngineDummy::DrawCircle( Vector2D pos, int radius, unsigned char color )
+{
+
+}
+void GraphicsEngineDummy::DrawFilledCircle( Vector2D pos, int radius, unsigned char color )
+{
+
+}
+void GraphicsEngineDummy::DrawVector( Vector2D pos, Vector2D vec, float scale, unsigned char color )
+{
+
+}
