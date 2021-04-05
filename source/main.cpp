@@ -44,7 +44,7 @@ int main( int argc, char *argv[] )
         }
 
         rounds ++;
-        cout<<"end of round "<<rounds<<endl;
+        //cout<<"end of round "<<rounds<<endl;
     }
     //-------------------------------------------------
 

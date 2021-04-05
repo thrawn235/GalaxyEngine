@@ -1,6 +1,7 @@
 //GameServer.cpp
 
 #include "GameServer.h"
+#include "GameEngine.h"
 
 GameServer::GameServer()
 {  
@@ -17,7 +18,7 @@ GameServer::GameServer()
     tmp = new Enemy( engine );
     engine->AddObject( tmp );
 
-    engine->text->PrintString( "\n\n" );
+    engine->debug->PrintString( "\n\n" );
 }
 GameServer::~GameServer()
 {
@@ -30,9 +31,9 @@ GameEngine* GameServer::GetEngine()
 }
 void GameServer::Run()
 {
-    engine->text->PrintString( "================ server ===============:\n" );
+    engine->debug->PrintString( "================ server ===============:\n" );
     
-    engine->text->PrintString( "checking the net for packtes\n" );
+    engine->debug->PrintString( "checking the net for packtes\n" );
     engine->net->Update();
     engine->debug->PrintString( "Ive got %i Packets\n", engine->net->GetNumPacketsInInbox() );
 

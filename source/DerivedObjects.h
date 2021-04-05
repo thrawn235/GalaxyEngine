@@ -15,7 +15,7 @@ using namespace std;
 
 //========= galaxy includes ==========
 #include "Object.h"
-#include "GameServer.h"
+//#include "GameServer.h"
 //#include "GameEngine.h"
 //====================================
 

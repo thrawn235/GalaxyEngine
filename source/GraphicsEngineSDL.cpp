@@ -86,6 +86,9 @@ GraphicsEngineSDL::GraphicsEngineSDL( GameEngine* engine ) : GraphicsEngine( eng
 
     this->engine = engine;
 
+    screenWidth = screenHeight = 0;
+    screenPadding   = 64;
+
     Uint32 subsystem_init = SDL_WasInit(SDL_INIT_EVERYTHING);
     if( subsystem_init == 0 )
     {
@@ -204,8 +207,13 @@ void GraphicsEngineSDL::SetDisplayMode( DisplayMode mode )
             SDL_SetWindowDisplayMode( window, &SDLmode );
             SDL_SetWindowSize( window, mode.width, mode.height );
 
-            renderer = SDL_CreateRenderer( window, -1, 0 );
+            screenWidth = mode.width;
+            screenHeight = mode.height;
+            //set logical screen width
+            logicalScreenWidth = screenWidth + ( screenPadding * 2 );
+            logicalScreenHeight = screenHeight + ( screenPadding * 2 );
 
+            renderer = SDL_CreateRenderer( window, -1, 0 );
 
             return;
         }
@@ -283,47 +291,74 @@ void GraphicsEngineSDL::ClearScreen( unsigned char color )
 void GraphicsEngineSDL::DrawPixel( Vector2D pos, unsigned char color )
 {
     pos = pos - camPos;
-    SDL_SetRenderDrawColor( renderer, colors[color].r, colors[color].g, colors[color].b, colors[color].a );
-    SDL_RenderDrawPoint( renderer, pos.x, pos.y );
+    if( pos.x >= 0 && pos.x < screenWidth && pos.y >= 0 && pos.y < screenHeight )
+    {
+        SDL_SetRenderDrawColor( renderer, colors[color].r, colors[color].g, colors[color].b, colors[color].a );
+        SDL_RenderDrawPoint( renderer, pos.x, pos.y );
+    }
 }
 void GraphicsEngineSDL::DrawLine( Vector2D start, Vector2D end, unsigned char color )
 {
     start = start - camPos;
     end = end - camPos;
-    SDL_SetRenderDrawColor( renderer, colors[color].r, colors[color].g, colors[color].b, colors[color].a );
-    SDL_RenderDrawLine( renderer, start.x, start.y, end.x, end. y);
+    if( start.x >= 0 && start.x < logicalScreenWidth && start.y >= 0 && start.y < logicalScreenHeight &&
+        end.x >= 0 && end.x < logicalScreenWidth && end.y >= 0 && end.y < logicalScreenHeight)
+    {
+        SDL_SetRenderDrawColor( renderer, colors[color].r, colors[color].g, colors[color].b, colors[color].a );
+        SDL_RenderDrawLine( renderer, start.x, start.y, end.x, end. y);
+    }
 }
 void GraphicsEngineSDL::DrawHLine( Vector2D start, int length, unsigned char color )
 {
     start = start - camPos;
-    SDL_SetRenderDrawColor( renderer, colors[color].r, colors[color].g, colors[color].b, colors[color].a );
-    SDL_RenderDrawLine( renderer, start.x, start.y, start.x + length, start.y );   
+    Vector2D end( start.x + length, start.y );
+    if( start.x >= 0 && start.x < logicalScreenWidth && start.y >= 0 && start.y < logicalScreenHeight &&
+        end.x >= 0 && end.x < logicalScreenWidth && end.y >= 0 && end.y < logicalScreenHeight)
+    {
+        SDL_SetRenderDrawColor( renderer, colors[color].r, colors[color].g, colors[color].b, colors[color].a );
+        SDL_RenderDrawLine( renderer, start.x, start.y, start.x + length, start.y );
+    }  
 }
 void GraphicsEngineSDL::DrawVLine( Vector2D start, int length, unsigned char color )
 {
     start = start - camPos;
-    SDL_SetRenderDrawColor( renderer, colors[color].r, colors[color].g, colors[color].b, colors[color].a );
-    SDL_RenderDrawLine( renderer, start.x, start.y, start.x, start.y + length );
+    Vector2D end( start.x, start.y + length );
+    if( start.x >= 0 && start.x < logicalScreenWidth && start.y >= 0 && start.y < logicalScreenHeight &&
+        end.x >= 0 && end.x < logicalScreenWidth && end.y >= 0 && end.y < logicalScreenHeight)
+    {
+        SDL_SetRenderDrawColor( renderer, colors[color].r, colors[color].g, colors[color].b, colors[color].a );
+        SDL_RenderDrawLine( renderer, start.x, start.y, start.x, start.y + length );
+    }
 }
 void GraphicsEngineSDL::DrawRect( Vector2D pos, int width, int height, unsigned char color )
 {
     pos = pos - camPos;
-    SDL_SetRenderDrawColor( renderer, colors[color].r, colors[color].g, colors[color].b, colors[color].a );
-    SDL_RenderDrawLine( renderer, pos.x, pos.y, pos.x + width, pos.y );
-    SDL_RenderDrawLine( renderer, pos.x + width, pos.y, pos.x + width, pos.y + height );
-    SDL_RenderDrawLine( renderer, pos.x, pos.y, pos.x , pos.y + height );
-    SDL_RenderDrawLine( renderer, pos.x, pos.y + height, pos.x + width, pos.y + height );
+    Vector2D end( pos.x + width, pos.y + height );
+    if( pos.x >= 0 && pos.x < logicalScreenWidth && pos.y >= 0 && pos.y < logicalScreenHeight &&
+        end.x >= 0 && end.x < logicalScreenWidth && end.y >= 0 && end.y < logicalScreenHeight)
+    {
+        SDL_SetRenderDrawColor( renderer, colors[color].r, colors[color].g, colors[color].b, colors[color].a );
+        SDL_RenderDrawLine( renderer, pos.x, pos.y, pos.x + width, pos.y );
+        SDL_RenderDrawLine( renderer, pos.x + width, pos.y, pos.x + width, pos.y + height );
+        SDL_RenderDrawLine( renderer, pos.x, pos.y, pos.x , pos.y + height );
+        SDL_RenderDrawLine( renderer, pos.x, pos.y + height, pos.x + width, pos.y + height );
+    }
 }
 void GraphicsEngineSDL::DrawFilledRect( Vector2D pos, int width, int height, unsigned char color )
 {
     pos = pos + camPos;
-    SDL_SetRenderDrawColor( renderer, colors[color].r, colors[color].g, colors[color].b, colors[color].a );
-    SDL_Rect rect;
-    rect.x = pos.x;
-    rect.y = pos.y;
-    rect.w = width;
-    rect.h = height;
-    SDL_RenderDrawRect( renderer, &rect );
+    Vector2D end( pos.x + width, pos.y + height );
+    if( pos.x >= 0 && pos.x < logicalScreenWidth && pos.y >= 0 && pos.y < logicalScreenHeight &&
+        end.x >= 0 && end.x < logicalScreenWidth && end.y >= 0 && end.y < logicalScreenHeight)
+    {
+        SDL_SetRenderDrawColor( renderer, colors[color].r, colors[color].g, colors[color].b, colors[color].a );
+        SDL_Rect rect;
+        rect.x = pos.x;
+        rect.y = pos.y;
+        rect.w = width;
+        rect.h = height;
+        SDL_RenderDrawRect( renderer, &rect );
+    }
 }
 void GraphicsEngineSDL::DrawCircle( Vector2D pos, int radius, unsigned char color )
 {
@@ -336,18 +371,20 @@ void GraphicsEngineSDL::DrawFilledCircle( Vector2D pos, int radius, unsigned cha
 void GraphicsEngineSDL::DrawVector( Vector2D pos, Vector2D vec, float scale, unsigned char color )
 {
     pos = pos - camPos;
+    if( pos.x >= 0 && pos.x < screenWidth && pos.y >= 0 && pos.y < screenHeight )
+    {
+        //Draw Dot at origin
+        DrawPixel( Vector2D( pos.x-1, pos.y-1 ), color );
+        DrawPixel( Vector2D( pos.x, pos.y-1   ), color );
+        DrawPixel( Vector2D( pos.x+1, pos.y-1 ), color );
+        DrawPixel( Vector2D( pos.x-1, pos.y   ), color );
+        DrawPixel( Vector2D( pos.x, pos.y     ), color );
+        DrawPixel( Vector2D( pos.x+1, pos.y   ), color );
+        DrawPixel( Vector2D( pos.x-1, pos.y+1 ), color );
+        DrawPixel( Vector2D( pos.x, pos.y+1   ), color );
+        DrawPixel( Vector2D( pos.x+1, pos.y+1 ), color );
 
-    //Draw Dot at origin
-    DrawPixel( Vector2D( pos.x-1, pos.y-1 ), color );
-    DrawPixel( Vector2D( pos.x, pos.y-1   ), color );
-    DrawPixel( Vector2D( pos.x+1, pos.y-1 ), color );
-    DrawPixel( Vector2D( pos.x-1, pos.y   ), color );
-    DrawPixel( Vector2D( pos.x, pos.y     ), color );
-    DrawPixel( Vector2D( pos.x+1, pos.y   ), color );
-    DrawPixel( Vector2D( pos.x-1, pos.y+1 ), color );
-    DrawPixel( Vector2D( pos.x, pos.y+1   ), color );
-    DrawPixel( Vector2D( pos.x+1, pos.y+1 ), color );
-
-    //Draw Line for Direction
-    DrawLine( pos, ( vec * scale )+pos, color );
+        //Draw Line for Direction
+        DrawLine( pos, ( vec * scale )+pos, color );
+    }
 }

@@ -7,8 +7,8 @@
 //====================================
 
 //========== include guard ===========
-#ifndef GAMEENGINE
-#define GAMEENGINE
+#ifndef GAME_ENGINE
+#define GAME_ENGINE
 //====================================
 
 //========== stdlib includes =========
@@ -19,46 +19,36 @@ using namespace std;
 //====================================
 
 //========= galaxy includes ==========
-#include "Object.h"
-#include "DerivedObjects.h"
 #include "TextEngine.h"
 #include "InputEngine.h"
 #include "NetEngine.h"
-#include "TextEngineDummy.h"
-#include "InputEngineDummy.h"
-#include "NetEngineDummy.h"
-#include "GraphicsEngineDummy.h"
-#ifdef TARGET_WIN
-    #include "NetEngineWinSocketsUDP.h"
-    #include "NetEngineLocal.h"
-    #include "TextEngineIOStream.h"
-    #include "InputEngineSDL.h"
-    #include "GraphicsEngineSDL.h"
-    #include "TextEngineSTDIO.h"
-#endif
+#include "GraphicsEngine.h"
 #ifdef TARGET_LINUX
-    #include "NetEngineLinuxSocketsUDP.h"
-    #include "NetEngineLinuxSocketsTCP.h"
-    #include "NetEngineLocal.h"
-    #include "TextEngineIOStream.h"
-    #include "TextEngineSTDIO.h"
-    #include "InputEngineSDL.h"
-    #include "GraphicsEngineSDL.h"
+#include "NetEngineLinuxSocketsUDP.h"
+#include "NetEngineLinuxSocketsTCP.h"
+#include "InputEngineSDL.h"
+#endif
+#ifdef TARGET_WIN
+#include "NetEngineWinSocketsUDP.h"
+#include "InputEngineSDL.h"
 #endif
 #ifdef TARGET_DOS
-    #include "NetEngineLocal.h"
-    #include "TextEngineSTDIO.h"
-    #include "TextEngineIOStream.h"
-    #include "InputEngineDOS.h"
-    #include "GraphicsEngineVESA.h"
+#include "InputEngineDOS.h"
 #endif
+
+
 #include "Vector2D.h"
+//#include "Object.h"
+#include "DerivedObjects.h"
 //====================================
 
 //======= forward declarations =======
 class Object;
 class NetEngine;
 class InputEngine;
+class NetEngine;
+class GraphicsEngine;
+class TextEngine;
 //====================================
 
 class GameEngine

@@ -86,7 +86,7 @@ void GameClient::Run()
 
     while( !engine->net->InboxEmpty() )
     {
-        engine->text->PrintString( "received Packet: " );
+        engine->debug->PrintString( "received Packet: " );
 
         Packet* pkt = engine->net->GetFirstPacketFromInbox();
         //NetStats* newStatus = (NetStats*)pkt->data;

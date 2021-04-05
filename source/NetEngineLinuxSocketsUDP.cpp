@@ -179,7 +179,10 @@ void* NetEngineLinuxSocketsUDP::SerializePacketData( Packet* packet, int* dataLe
 Packet* NetEngineLinuxSocketsUDP::DeSerializePacketData( void* data, int dataLength )
 {
     Packet* packet = new Packet;
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wclass-memaccess"
     memcpy( packet, data, sizeof( Packet ) );
+    #pragma GCC diagnostic pop
     packet->data = malloc( packet->dataLength );
     memcpy( packet->data, (char*)data + sizeof( Packet), packet->dataLength );
     return packet;

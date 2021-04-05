@@ -13,8 +13,6 @@ using namespace std;
 //====================================
 
 //========= galaxy includes ==========
-#include "GameEngine.h"
-#include "NetEngine.h"
 #include "GameNode.h"
 //====================================
 

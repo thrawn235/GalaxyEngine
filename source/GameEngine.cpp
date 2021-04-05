@@ -1,5 +1,34 @@
 #include "GameEngine.h"
 
+#include "TextEngineDummy.h"
+#include "InputEngineDummy.h"
+#include "NetEngineDummy.h"
+#include "GraphicsEngineDummy.h"
+#ifdef TARGET_WIN
+    #include "NetEngineWinSocketsUDP.h"
+    #include "NetEngineLocal.h"
+    #include "TextEngineIOStream.h"
+    #include "InputEngineSDL.h"
+    #include "GraphicsEngineSDL.h"
+    #include "TextEngineSTDIO.h"
+#endif
+#ifdef TARGET_LINUX
+    #include "NetEngineLinuxSocketsUDP.h"
+    #include "NetEngineLinuxSocketsTCP.h"
+    #include "NetEngineLocal.h"
+    #include "TextEngineIOStream.h"
+    #include "TextEngineSTDIO.h"
+    #include "InputEngineSDL.h"
+    #include "GraphicsEngineSDL.h"
+#endif
+#ifdef TARGET_DOS
+    #include "NetEngineLocal.h"
+    #include "TextEngineSTDIO.h"
+    #include "TextEngineIOStream.h"
+    #include "InputEngineDOS.h"
+    #include "GraphicsEngineVESA.h"
+#endif
+
 //global list of all Game Engines. Its prmarily used for ungraceful program termination
 vector<GameEngine*> engines;
 
@@ -22,7 +51,7 @@ GameEngine::GameEngine()
     #endif
     #ifdef TARGET_DOS
         text = new TextEngineIOStream;
-        debug = new TextEngineIOStream;
+        debug = new TextEngineDummy;
         //net = new NetEngineLocal( this );
         input = new InputEngineDOS( this );
         graphics = new GraphicsEngineDummy( this );
@@ -483,7 +512,7 @@ void GameEngine::RenderAll()
     {
         if( objects[i]->GetVisible() )
         {
-            text->PrintString("render...\n");
+            //text->PrintString("render...\n");
             objects[i]->Render();
         }
     }

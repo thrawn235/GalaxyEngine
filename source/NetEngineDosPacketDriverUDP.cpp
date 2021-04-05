@@ -47,12 +47,11 @@ bool NetEngineDosPacketDriverUDP::GetIsServer()
 }
 void NetEngineDosPacketDriverUDP::Send( Packet* packet )
 {
-    engine->debug->PrintString( "sending...\n" );
+    /*engine->debug->PrintString( "sending...\n" );
     int dataLength = 0;
     void* data = SerializePacketData( packet, &dataLength );
     
-    engine->debug->PrintString( "   %i bytes...\n", dataLength );
-
+    engine->debug->PrintString( "   %i bytes...\n", dataLength );*
     if( isServer )
     {
         //the server sends packages to all clients
@@ -62,7 +61,7 @@ void NetEngineDosPacketDriverUDP::Send( Packet* packet )
     {
         //the client only sends packets to the server (peerAddress)
         
-    }
+    }*/
 }
 Packet* NetEngineDosPacketDriverUDP::GetFirstPacketFromInbox()
 {
@@ -147,7 +146,10 @@ void* NetEngineDosPacketDriverUDP::SerializePacketData( Packet* packet, int* dat
 Packet* NetEngineDosPacketDriverUDP::DeSerializePacketData( void* data, int dataLength )
 {
     Packet* packet = new Packet;
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wclass-memaccess"
     memcpy( packet, data, sizeof( Packet ) );
+    #pragma GCC diagnostic pop
     packet->data = malloc( packet->dataLength );
     memcpy( packet->data, (char*)data + sizeof( Packet), packet->dataLength );
     return packet;

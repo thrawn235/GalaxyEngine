@@ -43,6 +43,9 @@ protected:
     SDL_Window*         window;
     SDL_Renderer*       renderer;
 
+    int                 screenWidth, screenHeight;
+    int                 logicalScreenWidth, logicalScreenHeight;
+    int                 screenPadding;
     Color               colors[16];
 
     //camera

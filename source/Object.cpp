@@ -162,12 +162,12 @@ void Object::Update()
 void Object::GameLogic()
 {
     //
-    engine->text->PrintString( "Game Logic: " );
+    engine->debug->PrintString( "Game Logic: " );
     PrintStats();
 }
 void Object::ClientSideUpdate()
 {
-    engine->text->PrintString( "Client Side: " );
+    engine->debug->PrintString( "Client Side: " );
     PrintStats();
 
     //SendStatus();
@@ -178,14 +178,14 @@ void Object::UpdateServerIndependend()
 }
 void Object::Predict( float tickRate )
 {
-    engine->text->PrintString( "Predict: " );
+    engine->debug->PrintString( "Predict: " );
     PrintStats();
-    engine->text->PrintString( "   tickRate: %f\n", tickRate );
+    engine->debug->PrintString( "   tickRate: %f\n", tickRate );
     netStats->pos = netStats->pos + netStats->movement * tickRate;
 }
 void Object::Render()
 {
     //
-    engine->text->PrintString( "Render: " );
+    engine->debug->PrintString( "Render: " );
     PrintStats();
 }

@@ -36,7 +36,7 @@ void GraphicsEngineVESA::InitGraphics()
     dosmemget( dosBuffer, sizeof( VbeInfoBlock ), &vbeInfoBlock );
     //--------------------------------------------------------- 
 
-    long mode_ptr; 
+    /*long mode_ptr; 
     printf( "VBE Signature: %s\n", vbeInfoBlock.VbeSignature );
     printf( "VBE Version: %hu \n", vbeInfoBlock.VbeVersion );
     mode_ptr = ( ( vbeInfoBlock.OemStrPtr & 0xFFFF0000 ) >> 12 ) + ( vbeInfoBlock.OemStrPtr & 0xFFFF );
@@ -51,9 +51,8 @@ void GraphicsEngineVESA::InitGraphics()
     printf( "Product Name: %s \n", ( char* )mode_ptr + __djgpp_conventional_base );
     mode_ptr = ( ( vbeInfoBlock.OemProductRevPtr & 0xFFFF0000 ) >> 12 ) + ( vbeInfoBlock.OemProductRevPtr & 0xFFFF );
     printf( "Product Rev: %s \n", ( char* )mode_ptr + __djgpp_conventional_base );
-    getchar();
+    getchar();*/
     
-
 
 
     //Get Old Mode:
@@ -61,9 +60,7 @@ void GraphicsEngineVESA::InitGraphics()
     __dpmi_int( 0x10, &r );
     oldMode = r.x.bx;
 
-    printf( "oldMode: %x \n", oldMode );
-
-
+    //printf( "oldMode: %x \n", oldMode );
 
 
     vector<DisplayMode> modes = GetAvailableDisplayModes();
@@ -72,8 +69,7 @@ void GraphicsEngineVESA::InitGraphics()
         engine->debug->PrintString( "%s\n", modes[i].name.c_str() );
     }
 
-    //SetDisplayMode( modes[1] );
-
+    SetDisplayMode( modes[1] );
 }
 vector<DisplayMode> GraphicsEngineVESA::GetAvailableDisplayModes()
 {
@@ -112,22 +108,22 @@ vector<DisplayMode> GraphicsEngineVESA::GetAvailableDisplayModes()
         ModeInfoBlock modeInfoBlock;
 
         dosmemget( dosBuffer, sizeof( ModeInfoBlock ), &modeInfoBlock );
-        printf("Mode %i: %X\n", i, vesaModes[i] );
-        printf( "ModeAttributes: %u \n",    modeInfoBlock.ModeAttributes        );
-        printf( "WinSize: %u \n",           modeInfoBlock.WinSize               );
-        printf( "WinFuncPtr: %p \n",        ( void* )modeInfoBlock.WinFuncPtr   );
-        printf( "BytesPerScanline: %u \n",  modeInfoBlock.BytesPerScanLine      );
+        //printf("Mode %i: %X\n", i, vesaModes[i] );
+        //printf( "ModeAttributes: %u \n",    modeInfoBlock.ModeAttributes        );
+        //printf( "WinSize: %u \n",           modeInfoBlock.WinSize               );
+        //printf( "WinFuncPtr: %p \n",        ( void* )modeInfoBlock.WinFuncPtr   );
+        //printf( "BytesPerScanline: %u \n",  modeInfoBlock.BytesPerScanLine      );
         printf( "XResolution: %hu \n",      modeInfoBlock.XResolution           );
         printf( "YResolution: %hu \n",      modeInfoBlock.YResolution           );
-        printf( "XCharSize: %hu \n",        modeInfoBlock.XCharSize             );
-        printf( "YCharSize: %hu \n",        modeInfoBlock.YCharSize             );
-        printf( "NumberOfPlanes: %hu \n",   modeInfoBlock.NumberOfPlanes        );
+        //printf( "XCharSize: %hu \n",        modeInfoBlock.XCharSize             );
+        //printf( "YCharSize: %hu \n",        modeInfoBlock.YCharSize             );
+        //printf( "NumberOfPlanes: %hu \n",   modeInfoBlock.NumberOfPlanes        );
         printf( "BitsPerPixel: %hu \n",     modeInfoBlock.BitsPerPixel          );
-        printf( "NumberOfBanks: %hu \n",    modeInfoBlock.NumberOfBanks         );
-        printf( "MemoryModel: %hu \n",      modeInfoBlock.MemoryModel           );
-        printf( "BankSize: %hu \n",         modeInfoBlock.BankSize              );
-        printf( "PhysBasePtr: %p \n",       ( void* )modeInfoBlock.PhysBasePtr  );
-        printf( "ModeAttributes: %u \n",    modeInfoBlock.ModeAttributes        );
+        //printf( "NumberOfBanks: %hu \n",    modeInfoBlock.NumberOfBanks         );
+        //printf( "MemoryModel: %hu \n",      modeInfoBlock.MemoryModel           );
+        //printf( "BankSize: %hu \n",         modeInfoBlock.BankSize              );
+        //printf( "PhysBasePtr: %p \n",       ( void* )modeInfoBlock.PhysBasePtr  );
+        //printf( "ModeAttributes: %u \n",    modeInfoBlock.ModeAttributes        );
         
         displayMode.name.clear();
         displayMode.width = modeInfoBlock.XResolution;
@@ -160,7 +156,7 @@ void GraphicsEngineVESA::SetDisplayMode( DisplayMode mode )
     unsigned int i = 0;
     while( vesaModes[i] != 0xFFFF )
     {
-        printf("Mode %i: %X\n", i, vesaModes[i] );
+        //printf("Mode %i: %X\n", i, vesaModes[i] );
         uint16_t newMode = vesaModes[i];
 
         dosBuffer = __tb & 0xFFFFF;
@@ -209,7 +205,7 @@ void GraphicsEngineVESA::SetDisplayMode( DisplayMode mode )
             printf( "logicalHeight:         %i \n",         logicalScreenHeight     );
             printf( "lWidth*lHeight:        %d \n",         logicalScreenWidth*logicalScreenHeight  );
             printf( "backBufferAddress:     %p \n",         ( void* )backBuffer     );
-            getchar();    
+            //getchar();    
 
 
             //set mode!
@@ -604,7 +600,7 @@ void GraphicsEngineVESA::DrawCircle( Vector2D pos, int radius, unsigned char col
     pos = pos - camPos;
 
     Vector2D startCoord( pos.x - radius, pos.y - radius );
-    if(     startCoord.x > 0 && startCoord.y > 0 && startCoord.x < logicalScreenWidth && startCoord.y < logicalScreenHeight &&
+    if( startCoord.x > 0 && startCoord.y > 0 && startCoord.x < logicalScreenWidth && startCoord.y < logicalScreenHeight &&
         startCoord.x + ( 2*radius ) > 0 && startCoord.y + ( 2*radius ) > 0 && startCoord.x + ( 2*radius ) < logicalScreenWidth && startCoord.y + ( 2*radius ) < logicalScreenHeight )
     {
         for( int x = startCoord.x; x <= startCoord.x + ( 2*radius ); x++ )
@@ -627,7 +623,7 @@ void GraphicsEngineVESA::DrawFilledCircle( Vector2D pos, int radius, unsigned ch
     pos = pos - camPos;
 
     Vector2D startCoord( pos.x - radius, pos.y - radius );
-    if(     startCoord.x > 0 && startCoord.y > 0 && startCoord.x < logicalScreenWidth && startCoord.y < logicalScreenHeight &&
+    if( startCoord.x > 0 && startCoord.y > 0 && startCoord.x < logicalScreenWidth && startCoord.y < logicalScreenHeight &&
         startCoord.x + ( 2*radius ) > 0 && startCoord.y + ( 2*radius ) > 0 && startCoord.x + ( 2*radius ) < logicalScreenWidth && startCoord.y + ( 2*radius ) < logicalScreenHeight )
     {
         for( int x = startCoord.x; x <= startCoord.x + ( 2*radius ); x++ )

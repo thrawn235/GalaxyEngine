@@ -205,7 +205,10 @@ vector<Packet*> NetEngineLinuxSocketsTCP::DeSerializePacketData( void* data, int
         engine->debug->PrintString( "      packetSize %i\n", packetSize );
         
         Packet* packet = new Packet;
+        #pragma GCC diagnostic push
+        #pragma GCC diagnostic ignored "-Wclass-memaccess"
         memcpy( packet, (char*)data + i + sizeof( uint16_t ), sizeof( Packet ) );
+        #pragma GCC diagnostic pop
         packet->data = malloc( packet->dataLength );
         memcpy( packet->data, (char*)data + i + sizeof( uint16_t ) + sizeof( Packet ), packet->dataLength );
 
@@ -255,7 +258,7 @@ void NetEngineLinuxSocketsTCP::ReceivePackets()
         {
             char str[INET_ADDRSTRLEN];
             inet_ntop(AF_INET, &(peerAddress.sin_addr), str, INET_ADDRSTRLEN);
-            cout<<"received "<<receiveLength<<" bytes from "<<str<<endl;
+            //cout<<"received "<<receiveLength<<" bytes from "<<str<<endl;
             engine->debug->PrintString( "received %i bytes from %s\n", receiveLength, str );
             
             vector<Packet*> packets = DeSerializePacketData( receiveBuffer, receiveLength );

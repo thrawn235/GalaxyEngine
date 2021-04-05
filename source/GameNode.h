@@ -14,7 +14,7 @@ using namespace std;
 //====================================
 
 //========= galaxy includes ==========
-#include "NetEngine.h"
+//#include "NetEngine.h"
 //====================================
 
 //======= forward declarations =======
@@ -22,6 +22,7 @@ using namespace std;
 
 //============= defines ==============
 class GameEngine;
+class Packet;
 //====================================
 
 
