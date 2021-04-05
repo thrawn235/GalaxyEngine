@@ -1,6 +1,7 @@
 //InputEngineDOS.h
 
 #include "InputEngineDOS.h"
+#include "GameEngine.h"
 
 
 //============= global Variables for the Interrupt Service Routine ========
@@ -102,6 +103,13 @@ vector<Input*> InputEngineDOS::GetAllInputs()
 }
 bool InputEngineDOS::KeyDown( unsigned char scancode )
 {
+	/*for( unsigned int i = 0; i < 255; i ++)
+	{
+		if( keys[i] == true )
+		{
+			engine->text->PrintString("key: %x; ", i );
+		}
+	}*/
 	return keys[scancode];
 	//	
 }

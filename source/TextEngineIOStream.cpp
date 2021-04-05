@@ -35,6 +35,16 @@ void TextEngineIOStream::PrintString( string format, ... )
 		            double d = va_arg(args, double);
 		            std::cout << d;
 		        }
+                else if (*formatCStr == 'x')
+                {
+                    int i = va_arg(args, int);
+                    std::cout << std::hex << i;
+                }
+                else if (*formatCStr == 'X')
+                {
+                    int i = va_arg(args, int);
+                    std::cout << std::uppercase << std::hex << i;
+                }
 		    }
 	        else
 	        {

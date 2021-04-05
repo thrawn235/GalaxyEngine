@@ -72,8 +72,10 @@ void NetEngineLocal::Send( Packet* packet )
     else if( isConnected )
     {
         engine->debug->PrintString( "client...\n" );
+        engine->debug->PrintString( "   target = %i, netNodes.size = %i\n", target, netNodes.size() );
         for( unsigned int i = 0; i < netNodes.size(); i++ )
         {
+            engine->debug->PrintString( "   netNodes[%i]->Addr = %i\n", i, netNodes[i]->GetAddress() );
             if( netNodes[i]->GetAddress() == target )
             {
                 engine->debug->PrintString( "addng packet to inbox...\n" );
@@ -139,7 +141,10 @@ bool NetEngineLocal::GetIsConnected()
 void NetEngineLocal::ConfigureAsServer()
 {
     isServer = true;
+    isConnected = true;
     SetAddress( 0 );
+    netNodes.push_back(this);
+    engine->debug->PrintString( "put address in local network list\n " );
 }
 vector<uint64_t> NetEngineLocal::GetClientAddresses()
 {

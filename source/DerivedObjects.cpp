@@ -20,7 +20,7 @@ Player::Player( GameEngine* engine ) : Object( engine )
 }
 void Player::GameLogic()
 {
-	/*netStats->movement.Zero();
+	netStats->movement.Zero();
 
 	if( netStats->up )
 	{
@@ -37,7 +37,7 @@ void Player::GameLogic()
 	if( netStats->right )
 	{
 		netStats->movement.x = +1;
-	}*/
+	}
 
 	netStats->pos = netStats->pos + netStats->movement;
 
@@ -53,13 +53,11 @@ void Player::ClientSideUpdate()
 		netStats->right = true;
 	}
 
-	netStats->movement.x = 20;
-
 	SendStatus();
 }
 void Player::Render()
 {
-	engine->text->PrintString( "Render: Object UID:%i; Type:%i(Player); Pos:%f:%f Mov:%f:%f NetAddr:%i (client)\n", netStats->uid, netStats->type, netStats->pos.x, netStats->pos.y, netStats->movement.x, netStats->movement.y, engine->net->GetAddress() );
+	//engine->text->PrintString( "Render: Object UID:%i; Type:%i(Player); Pos:%f:%f Mov:%f:%f NetAddr:%i (client)\n", netStats->uid, netStats->type, netStats->pos.x, netStats->pos.y, netStats->movement.x, netStats->movement.y, engine->net->GetAddress() );
 	engine->graphics->DrawRect( netStats->pos, 16, 16, COLOR_RED );
 }
 
