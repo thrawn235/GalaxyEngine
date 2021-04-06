@@ -4,6 +4,7 @@
 #include "InputEngineDummy.h"
 #include "NetEngineDummy.h"
 #include "GraphicsEngineDummy.h"
+#include "TimeEngineDummy.h"
 #ifdef TARGET_WIN
     #include "NetEngineWinSocketsUDP.h"
     #include "NetEngineLocal.h"
@@ -266,6 +267,37 @@ void GameEngine::SetGraphicsType( int graphicsType )
         else if( graphicsType == GRAPHICS_TYPE_VESA )
         {
             graphics = new GraphicsEngineVESA( this );
+        }
+    #endif
+}
+vector<int> GameEngine::GetAvailableTimeTypes()
+{
+    vector<int> availableModes;
+
+    availableModes.push_back( TIME_TYPE_DUMMY );
+    //availableModes.push_back( TIME_TYPE_SDL );
+    //availableModes.push_back( TIME_TYPE_DOS );
+
+    return availableModes;
+}
+void GameEngine::SetTimeType( int timeType )
+{
+    delete time;
+
+    if( timeType == GRAPHICS_TYPE_DUMMY )
+    {
+        time = new TimeEngineDummy( this );
+    }
+    #if defined TARGET_WIN || TARGET_LINUX
+        else if( timeType == TIME_TYPE_SDL )
+        {
+            //time = new TimeEngineSDL( this );
+        }
+    #endif
+    #ifdef TARGET_DOS
+        else if( timeType == TIME_TYPE_DOS )
+        {
+            //time = new TimeEngieDOS( this );
         }
     #endif
 }

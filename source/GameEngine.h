@@ -23,6 +23,7 @@ using namespace std;
 #include "InputEngine.h"
 #include "NetEngine.h"
 #include "GraphicsEngine.h"
+#include "TimeEngine.h"
 #ifdef TARGET_LINUX
 #include "NetEngineLinuxSocketsUDP.h"
 #include "NetEngineLinuxSocketsTCP.h"
@@ -49,6 +50,7 @@ class InputEngine;
 class NetEngine;
 class GraphicsEngine;
 class TextEngine;
+class TimeEngine;
 //====================================
 
 class GameEngine
@@ -66,6 +68,7 @@ public:
     NetEngine*          net;
     InputEngine*        input;
     GraphicsEngine*     graphics;
+    TimeEngine*         time;
 
     //------------- Constructor / Destructor -----------
                         GameEngine                  ();
@@ -86,6 +89,8 @@ public:
     void                SetInputType                ( int InputType );
     vector<int>         GetAvailableGraphicsTypes   ();
     void                SetGraphicsType             ( int graphicsType );
+    vector<int>         GetAvailableTimeTypes       ();
+    void                SetTimeType                 ( int timeType );
 
     //----------------- Auxilary Methods --------------
     void                Quit                        ();
