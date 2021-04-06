@@ -33,8 +33,8 @@ class GraphicsEngineDummy : public GraphicsEngine
 protected:
 
 public:
-                                        GraphicsEngineDummy         ( GameEngine* engine );
-    virtual                             ~GraphicsEngineDummy        ();
+                            GraphicsEngineDummy                     ( GameEngine* engine );
+    virtual                 ~GraphicsEngineDummy                    ();
 
     void                    InitGraphics                            ();
 

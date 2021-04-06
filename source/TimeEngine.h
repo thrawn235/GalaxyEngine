@@ -44,14 +44,6 @@ public:
                                     TimeEngine              ( GameEngine* engine )          {};
     virtual                         ~TimeEngine             ()                              {};
 
-
-    //Set
-    virtual     void                SetInterruptFrequency   ( int newInterruptFrequency )   = 0;
-
-    //Get
-    virtual     int                 GetInterruptFrequency   ()                              = 0;
-    virtual     int                 GetTicksPerSecond       ()                              = 0;
-
     //FrameTiming
     virtual     void                FrameStart              ()                              = 0;
     virtual     void                FrameEnd                ()                              = 0;

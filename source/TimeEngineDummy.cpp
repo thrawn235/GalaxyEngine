@@ -13,23 +13,6 @@ TimeEngineDummy::~TimeEngineDummy()
 
 }
 
-
-//Set
-void TimeEngineDummy::SetInterruptFrequency( int newInterruptFrequency )
-{
-
-}
-
-//Get
-int TimeEngineDummy::GetInterruptFrequency()
-{
-    return 0;
-}
-int TimeEngineDummy::GetTicksPerSecond()
-{
-    return 0;
-}
-
 //FrameTiming
 void TimeEngineDummy::FrameStart()
 {

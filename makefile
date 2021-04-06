@@ -51,6 +51,9 @@ $(sourceDir)dos/GraphicsEngineDummy.o:          $(sourceDir)GraphicsEngineDummy.
 $(sourceDir)dos/TimeEngineDummy.o:              $(sourceDir)TimeEngineDummy.cpp $(sourceDir)TimeEngineDummy.h $(sourceDir)TimeEngine.h
 	$(CompilerDos) $(CFLAGS) $(CFLAGSDos) -o $@ -c $<
 
+$(sourceDir)dos/TimeEngineDOS.o:              	$(sourceDir)TimeEngineDOS.cpp $(sourceDir)TimeEngineDOS.h $(sourceDir)TimeEngine.h
+	$(CompilerDos) $(CFLAGS) $(CFLAGSDos) -o $@ -c $<
+
 $(sourceDir)dos/GraphicsEngineVESA.o:           $(sourceDir)GraphicsEngineVESA.cpp $(sourceDir)GraphicsEngineVESA.h $(sourceDir)GraphicsEngine.h
 	$(CompilerDos) $(CFLAGS) $(CFLAGSDos) -o $@ -c $<
 
@@ -87,11 +90,11 @@ $(sourceDir)dos/InputEngineDummy.o:             $(sourceDir)InputEngineDummy.cpp
 $(sourceDir)dos/InputEngineDOS.o:               $(sourceDir)InputEngineDOS.cpp $(sourceDir)InputEngineDOS.h $(sourceDir)dos/GameEngine.o
 	$(CompilerDos) $(CFLAGS) $(CFLAGSDos) -o $@ -c $<
 
-$(binDir)dos/main.exe:                          $(sourceDir)main.cpp $(sourceDir)dos/Object.o $(sourceDir)dos/TimeEngineDummy.o $(sourceDir)dos/InputEngineDOS.o $(sourceDir)dos/GameEngine.o $(sourceDir)dos/InputEngineDummy.o $(sourceDir)dos/GraphicsEngineDummy.o $(sourceDir)dos/GraphicsEngineVESA.o $(sourceDir)dos/GameNode.o $(sourceDir)dos/TextEngineDummy.o $(sourceDir)dos/NetEngineDummy.o $(sourceDir)dos/GameEngine.o $(sourceDir)dos/TextEngineSTDIO.o $(sourceDir)dos/TextEngineIOStream.o $(sourceDir)dos/GameClient.o $(sourceDir)dos/GameServer.o $(sourceDir)dos/NetEngineLocal.o $(sourceDir)dos/NetEngineDosPacketDriverUDP.o $(sourceDir)dos/DerivedObjects.o $(sourceDir)dos/NetEngine.o
+$(binDir)dos/main.exe:                          $(sourceDir)main.cpp $(sourceDir)dos/Object.o $(sourceDir)dos/TimeEngineDummy.o $(sourceDir)dos/TimeEngineDOS.o $(sourceDir)dos/InputEngineDOS.o $(sourceDir)dos/GameEngine.o $(sourceDir)dos/InputEngineDummy.o $(sourceDir)dos/GraphicsEngineDummy.o $(sourceDir)dos/GraphicsEngineVESA.o $(sourceDir)dos/GameNode.o $(sourceDir)dos/TextEngineDummy.o $(sourceDir)dos/NetEngineDummy.o $(sourceDir)dos/GameEngine.o $(sourceDir)dos/TextEngineSTDIO.o $(sourceDir)dos/TextEngineIOStream.o $(sourceDir)dos/GameClient.o $(sourceDir)dos/GameServer.o $(sourceDir)dos/NetEngineLocal.o $(sourceDir)dos/NetEngineDosPacketDriverUDP.o $(sourceDir)dos/DerivedObjects.o $(sourceDir)dos/NetEngine.o
 	$(CompilerDos) $(CFLAGS) $(CFLAGSDos) -o $@ $^
 	cp $(assetsDir)dos/* $(binDir)dos/
 
-$(binDir)dos/DedicatedServer.exe:               $(sourceDir)DedicatedServer.cpp $(sourceDir)dos/InputEngineDOS.o $(sourceDir)dos/TimeEngineDummy.o $(sourceDir)dos/Object.o $(sourceDir)dos/GraphicsEngineVESA.o $(sourceDir)dos/GameNode.o $(sourceDir)dos/GraphicsEngineDummy.o $(sourceDir)dos/InputEngineDummy.o $(sourceDir)dos/NetEngineDummy.o $(sourceDir)dos/TextEngineDummy.o $(sourceDir)dos/GameEngine.o $(sourceDir)dos/GameEngine.o $(sourceDir)dos/TextEngineSTDIO.o $(sourceDir)dos/TextEngineIOStream.o $(sourceDir)dos/GameClient.o $(sourceDir)dos/GameServer.o $(sourceDir)dos/NetEngineLocal.o $(sourceDir)dos/NetEngineDosPacketDriverUDP.o $(sourceDir)dos/DerivedObjects.o $(sourceDir)dos/NetEngine.o
+$(binDir)dos/DedicatedServer.exe:               $(sourceDir)DedicatedServer.cpp $(sourceDir)dos/InputEngineDOS.o $(sourceDir)dos/TimeEngineDummy.o $(sourceDir)dos/TimeEngineDOS.o $(sourceDir)dos/Object.o $(sourceDir)dos/GraphicsEngineVESA.o $(sourceDir)dos/GameNode.o $(sourceDir)dos/GraphicsEngineDummy.o $(sourceDir)dos/InputEngineDummy.o $(sourceDir)dos/NetEngineDummy.o $(sourceDir)dos/TextEngineDummy.o $(sourceDir)dos/GameEngine.o $(sourceDir)dos/GameEngine.o $(sourceDir)dos/TextEngineSTDIO.o $(sourceDir)dos/TextEngineIOStream.o $(sourceDir)dos/GameClient.o $(sourceDir)dos/GameServer.o $(sourceDir)dos/NetEngineLocal.o $(sourceDir)dos/NetEngineDosPacketDriverUDP.o $(sourceDir)dos/DerivedObjects.o $(sourceDir)dos/NetEngine.o
 	$(CompilerDos) $(CFLAGS) $(CFLAGSDos) -o $@ $^
 	cp $(assetsDir)dos/* $(binDir)dos/
 

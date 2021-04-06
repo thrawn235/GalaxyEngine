@@ -28,6 +28,7 @@
     #include "TextEngineIOStream.h"
     #include "InputEngineDOS.h"
     #include "GraphicsEngineVESA.h"
+    #include "TimeEngineDOS.h"
 #endif
 
 //global list of all Game Engines. Its prmarily used for ungraceful program termination
@@ -56,6 +57,7 @@ GameEngine::GameEngine()
         //net = new NetEngineLocal( this );
         input = new InputEngineDOS( this );
         graphics = new GraphicsEngineDummy( this );
+        time = new TimeEngineDOS( this );
     #endif
 
     net = new NetEngineLocal( this );
@@ -276,7 +278,9 @@ vector<int> GameEngine::GetAvailableTimeTypes()
 
     availableModes.push_back( TIME_TYPE_DUMMY );
     //availableModes.push_back( TIME_TYPE_SDL );
-    //availableModes.push_back( TIME_TYPE_DOS );
+    #ifdef TARGET_DOS
+        availableModes.push_back( TIME_TYPE_DOS );
+    #endif
 
     return availableModes;
 }
@@ -297,7 +301,7 @@ void GameEngine::SetTimeType( int timeType )
     #ifdef TARGET_DOS
         else if( timeType == TIME_TYPE_DOS )
         {
-            //time = new TimeEngieDOS( this );
+            time = new TimeEngineDOS( this );
         }
     #endif
 }
