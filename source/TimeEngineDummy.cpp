@@ -49,7 +49,7 @@ int TimeEngineDummy::GetCurrentFrameTime()
 }
 
 //generalTiming
-int TimeEngineDummy::GetCurrentTime()
+unsigned int TimeEngineDummy::GetCurrentTicks()
 {
     return 0;
 }

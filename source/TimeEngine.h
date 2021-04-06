@@ -59,7 +59,7 @@ public:
     virtual     int                 GetCurrentFrameTime     ()                              = 0;
 
     //generalTiming
-    virtual     int                 GetCurrentTime          ()                              = 0;
+    virtual     unsigned int        GetCurrentTicks         ()                              = 0;
     virtual     float               GetCurrentTimeInMS      ()                              = 0;
 
     //Conversion

@@ -52,7 +52,7 @@ public:
     int                 GetCurrentFrameTime     ();
 
     //generalTiming
-    int                 GetCurrentTime          ();
+    unsigned int        GetCurrentTicks         ();
     float               GetCurrentTimeInMS      ();
 
     //Conversion
