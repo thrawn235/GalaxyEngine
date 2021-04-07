@@ -26,7 +26,7 @@ TimeEngineDOS::TimeEngineDOS( GameEngine* engine ) : TimeEngine( engine )
 	globalPTime = this;
 
 	frameStart 	= 0;
-	frameEnd  	= 0;
+	frameEnd  	= 10000;
 	frameTime 	= 0;
 
 	ticked = false;

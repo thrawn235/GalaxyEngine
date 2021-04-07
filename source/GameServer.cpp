@@ -31,38 +31,43 @@ GameEngine* GameServer::GetEngine()
 }
 void GameServer::Run()
 {
-    engine->debug->PrintString( "================ server ===============:\n" );
-    
-    engine->debug->PrintString( "checking the net for packtes\n" );
-    engine->net->Update();
-    engine->debug->PrintString( "Ive got %i Packets\n", engine->net->GetNumPacketsInInbox() );
-
-    while( !engine->net->InboxEmpty() )
+    if( engine->time->TicksToMilliSeconds( engine->time->GetCurrentFrameTime() )  > 100 )
     {
-        Packet* pkt = engine->net->GetFirstPacketFromInbox();
-        if( pkt->type == NET_PACKET_TYPE_OBJECT_UPDATE )
+        engine->time->FrameStart();
+        engine->debug->PrintString( "================ server ===============:\n" );
+        
+        engine->debug->PrintString( "checking the net for packtes\n" );
+        engine->net->Update();
+        engine->debug->PrintString( "Ive got %i Packets\n", engine->net->GetNumPacketsInInbox() );
+
+        while( !engine->net->InboxEmpty() )
         {
-            UpdateObjectFromNet( pkt );
+            Packet* pkt = engine->net->GetFirstPacketFromInbox();
+            if( pkt->type == NET_PACKET_TYPE_OBJECT_UPDATE )
+            {
+                UpdateObjectFromNet( pkt );
+            }
+            pkt->~Packet();
         }
-        pkt->~Packet();
+
+        
+        engine->debug->PrintString( "these are my objects:\n" );
+        vector<Object*> objects = engine->GetAllObjects();
+        for( unsigned int i = 0; i < objects.size(); i++ )
+        {
+            engine->debug->PrintString( "   UID: %i\n", objects[i]->GetUID() );
+        }
+
+        //Game Logic for all Objects
+        engine->UpdateAll();
+
+        //create and send GameLogic complete packet
+        engine->debug->PrintString( "sending Gamelogic comlete packet\n" );
+        Packet* ack = new Packet;
+        ack->type = NET_PACKET_TYPE_SEND_COMPLETE;
+        engine->net->Send( ack );
+
+        engine->time->FrameEnd();
+        engine->debug->PrintString( "======================================:\n\n\n" );
     }
-
-    
-    engine->debug->PrintString( "these are my objects:\n" );
-    vector<Object*> objects = engine->GetAllObjects();
-    for( unsigned int i = 0; i < objects.size(); i++ )
-    {
-        engine->debug->PrintString( "   UID: %i\n", objects[i]->GetUID() );
-    }
-
-    //Game Logic for all Objects
-    engine->UpdateAll();
-
-    //create and send GameLogic complete packet
-    engine->debug->PrintString( "sending Gamelogic comlete packet\n" );
-    Packet* ack = new Packet;
-    ack->type = NET_PACKET_TYPE_SEND_COMPLETE;
-    engine->net->Send( ack );
-
-    engine->debug->PrintString( "======================================:\n\n\n" );
 }

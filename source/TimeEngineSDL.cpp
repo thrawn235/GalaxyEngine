@@ -8,7 +8,7 @@ TimeEngineSDL::TimeEngineSDL( GameEngine* engine ) : TimeEngine( engine )
 {
 
 	frameStart 	= 0;
-	frameEnd  	= 0;
+	frameEnd  	= 10000;
 	frameTime 	= 0;
 
 	highestTimeStampID = 0;
@@ -71,7 +71,7 @@ float TimeEngineSDL::GetCurrentTimeInMS()
 float TimeEngineSDL::TicksToMilliSeconds( unsigned long long ticksIn )
 {
 	//
-	return ticksIn ;
+	return ticksIn;
 }
 float TimeEngineSDL::TicksToSeconds( unsigned long long ticksIn )
 {

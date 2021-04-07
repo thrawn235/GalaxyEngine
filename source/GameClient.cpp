@@ -45,6 +45,8 @@ bool GameClient::GetExit()
 
 void GameClient::Run()
 {
+    engine->time->FrameStart();
+
     //debug:
     engine->debug->PrintString( "===================== client ==================\n" );
 
@@ -140,7 +142,9 @@ void GameClient::Run()
     //Graphics Flip----------------------------------------------
     engine->graphics->PostFrame();
     //-----------------------------------------------------------
-
+    
+    engine->time->FrameEnd();
+    
     engine->debug->PrintString( "===============================================\n\n\n" );
 }
 
