@@ -5,6 +5,10 @@
 
 GameServer::GameServer()
 {  
+    engine->SetDebugType( TEXT_TYPE_DUMMY );
+    //Client and Server cant use the same Input engine. the client keyup might be used by the server and vice versa.
+    engine->SetInputType( INPUT_TYPE_DUMMY );
+
     engine->net->ConfigureAsServer();
 
     Object* tmp = new Enemy( engine );
@@ -31,7 +35,8 @@ GameEngine* GameServer::GetEngine()
 }
 void GameServer::Run()
 {
-    if( engine->time->TicksToMilliSeconds( engine->time->GetCurrentFrameTime() )  > 100 )
+    //engine->debug->PrintString( "server - frametime:%f", engine->time->TicksToMilliSeconds( engine->time->GetCurrentFrameTime() ) );
+    if( engine->time->TicksToMilliSeconds( engine->time->GetCurrentFrameTime() )  > 1000 )
     {
         engine->time->FrameStart();
         engine->debug->PrintString( "================ server ===============:\n" );

@@ -23,10 +23,6 @@ using namespace std;
 class GameServer;
 //====================================
 
-//=========== global =================
-extern GameServer* server;
-//====================================
-
 struct PlayerStats : ObjectStats
 {
 	bool up, down, left, right;

@@ -51,6 +51,7 @@ void Player::ClientSideUpdate()
 	if( engine->input->KeyDown( KEY_RIGHT ) )
 	{
 		netStats->right = true;
+		//engine->text->PrintString( "game logic - right key down\n" );
 	}
 
 	SendStatus();

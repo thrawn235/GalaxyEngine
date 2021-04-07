@@ -9,6 +9,7 @@ GameClient::GameClient()
     #endif
     #ifdef TARGET_LINUX
         engine->SetGraphicsType( GRAPHICS_TYPE_SDL );
+        engine->SetDebugType( TEXT_TYPE_DUMMY );
     #endif
     #ifdef TARGET_WIN
         engine->SetGraphicsType( GRAPHICS_TYPE_SDL );
@@ -144,7 +145,7 @@ void GameClient::Run()
     //-----------------------------------------------------------
     
     engine->time->FrameEnd();
-    
+
     engine->debug->PrintString( "===============================================\n\n\n" );
 }
 

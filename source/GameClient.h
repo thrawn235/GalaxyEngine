@@ -18,10 +18,6 @@ using namespace std;
 #include "GameNode.h"
 //====================================
 
-//======= forward declarations =======
-class GameServer;
-//====================================
-
 class GameClient : public GameNode
 {
 protected:

@@ -29,6 +29,13 @@ using namespace std;
 
 //======= forward declarations =======
 class GameEngine;
+class GameClient;
+class GameServer;
+//====================================
+
+//=========== global =================
+extern GameServer* server;
+extern GameClient* client;
 //====================================
 
 struct NetStats

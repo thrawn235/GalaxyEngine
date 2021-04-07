@@ -150,7 +150,19 @@ void InputEngineSDL::Update()
 		{
             if( event.type == SDL_KEYDOWN )
             {
-                keys.push_back( event.key.keysym.scancode );
+            	bool found = false;
+            	for( unsigned int i = 0; i < keys.size(); i++ )
+                {
+                    if( keys[i] == event.key.keysym.scancode )
+                    {
+                    	found = true;
+                    }
+                }
+                if( !found )
+                {
+	                keys.push_back( event.key.keysym.scancode );
+	                //engine->text->PrintString( "KeyDown:%x\n", event.key.keysym.scancode );
+	            }
             }
             else if( event.type == SDL_KEYUP )
             {
@@ -159,6 +171,7 @@ void InputEngineSDL::Update()
                     if( keys[i] == event.key.keysym.scancode )
                     {
                         keys.erase( keys.begin() + i );
+                        //engine->text->PrintString( "KeyUp:%x\n", event.key.keysym.scancode );
                         break;
                     }
                 }

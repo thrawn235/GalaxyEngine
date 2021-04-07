@@ -1,10 +1,8 @@
 To Do:
 
-new game isnt connecting to server
+Predict is not working
 add scenes to engine
 GameNode (Server/Client) should be able to add objects in a generic way without knowing all the types
-InputEngine
-DosInputEngine
 test Delete and Purge Methods
 DOS Network implementation
 MemoryEngine
