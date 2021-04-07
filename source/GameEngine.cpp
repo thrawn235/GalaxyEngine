@@ -12,6 +12,7 @@
     #include "InputEngineSDL.h"
     #include "GraphicsEngineSDL.h"
     #include "TextEngineSTDIO.h"
+    #include "TimeEngineSDL.h"
 #endif
 #ifdef TARGET_LINUX
     #include "NetEngineLinuxSocketsUDP.h"
@@ -21,6 +22,7 @@
     #include "TextEngineSTDIO.h"
     #include "InputEngineSDL.h"
     #include "GraphicsEngineSDL.h"
+    #include "TimeEngineSDL.h"
 #endif
 #ifdef TARGET_DOS
     #include "NetEngineLocal.h"
@@ -38,26 +40,28 @@ vector<GameEngine*> engines;
 GameEngine::GameEngine()
 {
     #ifdef TARGET_LINUX
-        text = new TextEngineSTDIO;
-        debug = new TextEngineSTDIO;
-        input = new InputEngineSDL( this );
-        //net = new NetEngineLinuxSocketsUDP( this );
-        graphics = new GraphicsEngineDummy( this );
+        text        = new TextEngineSTDIO;
+        debug       = new TextEngineSTDIO;
+        input       = new InputEngineSDL( this );
+        //net       = new NetEngineLinuxSocketsUDP( this );
+        graphics    = new GraphicsEngineDummy( this );
+        time        = new TimeEngineSDL( this );
     #endif
     #ifdef TARGET_WIN
-        text = new TextEngineIOStream;
-        debug = new TextEngineIOStream;
-        input = new InputEngineSDL( this );
-        //net = new NetEngineWinSocketsUDP( this );
-        graphics = new GraphicsEngineDummy( this );
+        text        = new TextEngineIOStream;
+        debug       = new TextEngineIOStream;
+        input       = new InputEngineSDL( this );
+        //net       = new NetEngineWinSocketsUDP( this );
+        graphics    = new GraphicsEngineDummy( this );
+        time        = new TimeEngineSDL( this );
     #endif
     #ifdef TARGET_DOS
-        text = new TextEngineIOStream;
-        debug = new TextEngineDummy;
-        //net = new NetEngineLocal( this );
-        input = new InputEngineDOS( this );
-        graphics = new GraphicsEngineDummy( this );
-        time = new TimeEngineDOS( this );
+        text        = new TextEngineIOStream;
+        debug       = new TextEngineDummy;
+        //net       = new NetEngineLocal( this );
+        input       = new InputEngineDOS( this );
+        graphics    = new GraphicsEngineDummy( this );
+        time        = new TimeEngineDOS( this );
     #endif
 
     net = new NetEngineLocal( this );
@@ -295,7 +299,7 @@ void GameEngine::SetTimeType( int timeType )
     #if defined TARGET_WIN || TARGET_LINUX
         else if( timeType == TIME_TYPE_SDL )
         {
-            //time = new TimeEngineSDL( this );
+            time = new TimeEngineSDL( this );
         }
     #endif
     #ifdef TARGET_DOS
