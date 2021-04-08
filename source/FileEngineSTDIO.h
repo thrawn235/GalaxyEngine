@@ -28,11 +28,20 @@ class GameEngine;
 //============= defines ==============
 //====================================
 
+class FileHandle
+{
+public:
+    unsigned int    ID;
+    FILE*           filePointer;
+};
 
 class FileEngineSTDIO : public FileEngine
 {
 protected:
-    GameEngine* engine;
+    GameEngine*         engine;
+
+    int                 highestID;
+    vector<FileHandle>  files;
 
 public:
     //---------- Constructor / Destructor ------------
@@ -44,10 +53,10 @@ public:
     unsigned int    Open                ( string filePath );
     void            Close               ( unsigned int fileID );
     char*           ReadWholeFile       ( unsigned int fileID );
-    char*           Read                ( unsigned int fileID );
+    char*           Read                ( unsigned int fileID, unsigned long length );
     char*           Read                ( unsigned int fileID, unsigned int start, unsigned long length );
-    void            Write               ( char* data, unsigned long length );
-    void            Write               ( char* data, unsigned long start, unsigned long length );
+    void            Write               ( unsigned int fileID, char* data, unsigned long length );
+    void            Write               ( unsigned int fileID, char* data, unsigned long start, unsigned long length );
 
     void            SetFilePos          ( unsigned int fileID, unsigned long pos );
     void            Rewind              ( unsigned int fileID );

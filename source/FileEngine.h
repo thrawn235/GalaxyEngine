@@ -36,23 +36,23 @@ protected:
 
 public:
     //---------- Constructor / Destructor ------------
-                            FileEngine      ( GameEngine* engine )                                              {};
-    virtual                 ~FileEngine     ()                                                                  {};
+                            FileEngine      ( GameEngine* engine )                                                          {};
+    virtual                 ~FileEngine     ()                                                                              {};
 
-    virtual void            Update          ()                                                                  = 0;        //runs in every game loop
+    virtual void            Update          ()                                                                              = 0;        //runs in every game loop
 
-    virtual unsigned int    Open            ( string filePath )                                                 = 0;
-    virtual void            Close           ( unsigned int fileID )                                             = 0;
-    virtual char*           ReadWholeFile   ( unsigned int fileID )                                             = 0;
-    virtual char*           Read            ( unsigned int fileID )                                             = 0;
-    virtual char*           Read            ( unsigned int fileID, unsigned int start, unsigned long length )   = 0;
-    virtual void            Write           ( char* data, unsigned long length )                                = 0;
-    virtual void            Write           ( char* data, unsigned long start, unsigned long length )           = 0;
+    virtual unsigned int    Open            ( string filePath )                                                             = 0;
+    virtual void            Close           ( unsigned int fileID )                                                         = 0;
+    virtual char*           ReadWholeFile   ( unsigned int fileID )                                                         = 0;
+    virtual char*           Read            ( unsigned int fileID, unsigned long length )                                   = 0;
+    virtual char*           Read            ( unsigned int fileID, unsigned int start, unsigned long length )               = 0;
+    virtual void            Write           ( unsigned int fileID, char* data, unsigned long length )                       = 0;
+    virtual void            Write           ( unsigned int fileID, char* data, unsigned long start, unsigned long length )  = 0;
 
-    virtual void            SetFilePos      ( unsigned int fileID, unsigned long pos )                          = 0;
-    virtual void            Rewind          ( unsigned int fileID )                                             = 0;
-    virtual void            SetFilePosEnd   ( unsigned int fileID )                                             = 0;
-    virtual void            ChangeFilePos   ( unsigned int fileID, unsigned long delta )                        = 0;
+    virtual void            SetFilePos      ( unsigned int fileID, unsigned long pos )                                      = 0;
+    virtual void            Rewind          ( unsigned int fileID )                                                         = 0;
+    virtual void            SetFilePosEnd   ( unsigned int fileID )                                                         = 0;
+    virtual void            ChangeFilePos   ( unsigned int fileID, unsigned long delta )                                    = 0;
 };
 
 #endif

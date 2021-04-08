@@ -275,10 +275,18 @@ linuxDedicatedServer: $(binDir)linux/DedicatedServer
 #==============================================================================================
 
 
+#=========================================== WADcreator =======================================
+./WADCreator/bin/WADCreator:                            ./WADCreator/source/main.cpp
+	$(CompilerLinux) -o $@ $^ `pkg-config --cflags --libs gtk4`
+
+.PHONY: WADCreator
+WADCreator: ./WADCreator/bin/WADCreator
+#==============================================================================================
+
 
 #============================================= all ============================================
 .PHONY: all
-all: dos dosDedicatedServer linux linuxDedicatedServer win winDedicatedServer
+all: dos dosDedicatedServer linux linuxDedicatedServer win winDedicatedServer WADCreator
 #==============================================================================================
 
 
@@ -310,6 +318,10 @@ runlinux:
 .PHONY: runlinuxDedicatedServer
 runlinuxDedicatedServer: 
 	$(binDir)linux/DedicatedServer
+
+.PHONY: runWADCreator
+runWADCreator: 
+	./WADCreator/bin/WADCreator
 #==============================================================================================
 
 
@@ -324,6 +336,7 @@ clean:
 	rm -Rf $(sourceDir)dos/*
 	rm -Rf $(sourceDir)win/*
 	rm -Rf $(sourceDir)linux/*
+	rm -Rf ./WADCreator/bin/*
 #==============================================================================================
 
 

@@ -26,7 +26,7 @@ char* FileEngineDummy::ReadWholeFile( unsigned int fileID )
 {
     return NULL;
 }
-char* FileEngineDummy::Read( unsigned int fileID )
+char* FileEngineDummy::Read( unsigned int fileID, unsigned long length )
 {
     return NULL;
 }
@@ -34,11 +34,11 @@ char* FileEngineDummy::Read( unsigned int fileID, unsigned int start, unsigned l
 {
     return NULL;
 }
-void FileEngineDummy::Write( char* data, unsigned long length )
+void FileEngineDummy::Write( unsigned int fileID, char* data, unsigned long length )
 {
 
 }
-void FileEngineDummy::Write( char* data, unsigned long start, unsigned long length )
+void FileEngineDummy::Write( unsigned int fileID, char* data, unsigned long start, unsigned long length )
 {
 
 }
