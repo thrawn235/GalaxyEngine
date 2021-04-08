@@ -178,9 +178,9 @@ void Object::UpdateServerIndependend()
 }
 void Object::Predict( float tickRate )
 {
-    engine->debug->PrintString( "Predict: " );
+    engine->text->PrintString( "Predict: " );
     PrintStats();
-    engine->debug->PrintString( "   tickRate: %f\n", tickRate );
+    engine->text->PrintString( "   tickRate: %f\n", tickRate );
     netStats->pos = netStats->pos + netStats->movement * tickRate;
 }
 void Object::Render()

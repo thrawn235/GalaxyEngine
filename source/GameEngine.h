@@ -24,6 +24,7 @@ using namespace std;
 #include "NetEngine.h"
 #include "GraphicsEngine.h"
 #include "TimeEngine.h"
+#include "FileEngine.h"
 #ifdef TARGET_LINUX
 #include "NetEngineLinuxSocketsUDP.h"
 #include "NetEngineLinuxSocketsTCP.h"
@@ -69,6 +70,7 @@ public:
     InputEngine*        input;
     GraphicsEngine*     graphics;
     TimeEngine*         time;
+    FileEngine*         file;
 
     //------------- Constructor / Destructor -----------
                         GameEngine                  ();
@@ -91,6 +93,8 @@ public:
     void                SetGraphicsType             ( int graphicsType );
     vector<int>         GetAvailableTimeTypes       ();
     void                SetTimeType                 ( int timeType );
+    vector<int>         GetAvailableFileTypes       ();
+    void                SetFileType                 ( int timeType );
 
     //----------------- Auxilary Methods --------------
     void                Quit                        ();

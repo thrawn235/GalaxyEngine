@@ -4,6 +4,130 @@
 		"selected_items":
 		[
 			[
+				"Time",
+				"TimeEngineSDL"
+			],
+			[
+				"TimeEn",
+				"TimeEngineDOS"
+			],
+			[
+				"TimeEngine",
+				"TimeEngineDummy"
+			],
+			[
+				"TimeE",
+				"TimeEngineDummy"
+			],
+			[
+				"ke",
+				"keys"
+			],
+			[
+				"Inp",
+				"InputEngineSDL"
+			],
+			[
+				"scree",
+				"screenHeight"
+			],
+			[
+				"in",
+				"input"
+			],
+			[
+				"INPU",
+				"INPUT_TYPE_DOS"
+			],
+			[
+				"input",
+				"inputType"
+			],
+			[
+				"TAR",
+				"TARGET_WIN"
+			],
+			[
+				"TA",
+				"TARGET_LINUX"
+			],
+			[
+				"vecto",
+				"Vector2D"
+			],
+			[
+				"GRap",
+				"GraphicsEngineVESA"
+			],
+			[
+				"Clea",
+				"ClearScreen"
+			],
+			[
+				"Grap",
+				"GraphicsEngineVESA"
+			],
+			[
+				"prn",
+				"printf\tprintf …"
+			],
+			[
+				"djg",
+				"__djgpp_nearptr_disable"
+			],
+			[
+				"__d",
+				"__djgpp_nearptr_enable"
+			],
+			[
+				"colo",
+				"colorDepth"
+			],
+			[
+				"u",
+				"uint16_t"
+			],
+			[
+				"__dj",
+				"__djgpp_nearptr_disable"
+			],
+			[
+				"off",
+				"offset"
+			],
+			[
+				"seg",
+				"segment"
+			],
+			[
+				"Vide",
+				"VideoModePtr"
+			],
+			[
+				"TARGET",
+				"TARGET_DOS"
+			],
+			[
+				"TARG",
+				"TARGET_LINUX"
+			],
+			[
+				"obj",
+				"objects"
+			],
+			[
+				"found",
+				"foundObject"
+			],
+			[
+				"Gra",
+				"GraphicsEngineSDL"
+			],
+			[
+				"SDL_INIT_E",
+				"SDL_INIT_EVENTS"
+			],
+			[
 				"TextEn",
 				"TextEngineIOStream"
 			],
@@ -22,10 +146,6 @@
 			[
 				"avi",
 				"availableModes"
-			],
-			[
-				"Inp",
-				"InputEngineDummy"
 			],
 			[
 				"Conne",
@@ -154,10 +274,6 @@
 			[
 				"move",
 				"movement\tabc"
-			],
-			[
-				"in",
-				"input\tabc"
 			],
 			[
 				"Gam",
@@ -398,195 +514,16 @@
 			[
 				"PrintHexShortS",
 				"PrintHexShortSignedAccu\t(textEngine.asm)"
-			],
-			[
-				"PrintSho",
-				"PrintHexShortAccu\tabc"
-			],
-			[
-				"PrintBin",
-				"PrintBinaryShortAccu\tabc"
-			],
-			[
-				"MPu",
-				"MPull\t(misc.asm)"
-			],
-			[
-				"Set",
-				"SetStrPtr\t(textEngine.asm)"
-			],
-			[
-				"M",
-				"MLoadR\t(misc.asm)"
-			],
-			[
-				"Pritn",
-				"PrintHexNibble\tabc"
-			],
-			[
-				"Hex",
-				"HexArray\tabc"
-			],
-			[
-				"PrintShortHe",
-				"PrintShortHex\t(textEngine.asm)"
-			],
-			[
-				"PrintStri",
-				"PrintString\t(textEngine.asm)"
-			],
-			[
-				"PrintLongIn",
-				"PrintLongInt\tabc"
-			],
-			[
-				"PrintLo",
-				"PrintLongSignedInt\tabc"
-			],
-			[
-				"PrintB",
-				"PrintLongBinary\tabc"
-			],
-			[
-				"PrintCh",
-				"PrintChar\tabc"
-			],
-			[
-				"filen",
-				"filenameEnd\tabc"
-			],
-			[
-				"asse",
-				"assetsDir\tabc"
-			],
-			[
-				"Link",
-				"LinkedListDelete\tabc"
-			],
-			[
-				"Obje",
-				"Object\tabc"
-			],
-			[
-				"_total",
-				"_totalFail\tabc"
-			],
-			[
-				"O",
-				"ObjectPrototype\tabc"
-			],
-			[
-				"En",
-				"EndLine\t(memoryEngine.asm)"
-			],
-			[
-				"memo",
-				"memory_copy\tabc"
-			],
-			[
-				"Obj",
-				"Object\tabc"
-			],
-			[
-				"Ob",
-				"Object.ID\tabc"
-			],
-			[
-				"Mou",
-				"MouseLeft\t(inputEngine.asm)"
-			],
-			[
-				"PrintShortHex",
-				"PrintShortHexAccu\t(textEngine.asm)"
-			],
-			[
-				"Mous",
-				"MouseGetPos\t(inputEngine.asm)"
-			],
-			[
-				"mouse",
-				"mouse_get\tabc"
-			],
-			[
-				"mous",
-				"mouse_config\tabc"
-			],
-			[
-				"j",
-				"joystick_get\tabc"
 			]
 		]
 	},
 	"buffers":
 	[
 		{
-			"file": "source/GameNode.cpp",
-			"settings":
-			{
-				"buffer_size": 1675,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "source/GameServer.cpp",
-			"settings":
-			{
-				"buffer_size": 1743,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
 			"file": "source/DerivedObjects.cpp",
 			"settings":
 			{
-				"buffer_size": 8458,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "source/GameClient.cpp",
-			"settings":
-			{
-				"buffer_size": 3887,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "ToDo.txt",
-			"settings":
-			{
-				"buffer_size": 351,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "source/GameEngine.h",
-			"settings":
-			{
-				"buffer_size": 5117,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "source/GameEngine.cpp",
-			"settings":
-			{
-				"buffer_size": 9870,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "source/InputEngine.h",
-			"settings":
-			{
-				"buffer_size": 2731,
+				"buffer_size": 7810,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -595,25 +532,34 @@
 			"file": "source/InputEngineSDL.cpp",
 			"settings":
 			{
-				"buffer_size": 14621,
+				"buffer_size": 3990,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "source/GraphicsEngine.h",
+			"file": "source/GameClient.cpp",
 			"settings":
 			{
-				"buffer_size": 1453,
+				"buffer_size": 5059,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "source/TextEngine.h",
+			"file": "source/GameServer.cpp",
 			"settings":
 			{
-				"buffer_size": 2014,
+				"buffer_size": 2477,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "ToDo.txt",
+			"settings":
+			{
+				"buffer_size": 312,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -657,61 +603,78 @@
 	[
 		"/home/sebastian/Programming/GalaxyEngine",
 		"/home/sebastian/Programming/GalaxyEngine/emulator",
-		"/home/sebastian/Programming/GalaxyEngine/source",
-		"/home/sebastian/Programming/GalaxyEngine/source/win"
+		"/home/sebastian/Programming/GalaxyEngine/source"
 	],
 	"file_history":
 	[
+		"/home/sebastian/Programming/GalaxyEngine/source/Object.h",
+		"/home/sebastian/Programming/GalaxyEngine/source/GameClient.h",
+		"/home/sebastian/Programming/GalaxyEngine/source/InputEngineSDL.cpp",
+		"/home/sebastian/Programming/GalaxyEngine/source/DerivedObjects.h",
+		"/home/sebastian/Programming/GalaxyEngine/source/GameEngine.h",
+		"/home/sebastian/Programming/GalaxyEngine/source/GameEngine.cpp",
+		"/home/sebastian/Programming/GalaxyEngine/source/TimeEngine.h",
+		"/home/sebastian/Programming/GalaxyEngine/source/TimeEngineDummy.h",
+		"/home/sebastian/Programming/GalaxyEngine/source/TimeEngineDummy.cpp",
+		"/home/sebastian/Programming/GalaxyEngine/source/GraphicsEngineDummy.h",
+		"/home/sebastian/Programming/GalaxyEngine/makefile",
+		"/home/sebastian/Programming/GalaxyEngine/source/TimeEngineDOS.h",
+		"/home/sebastian/Programming/GalaxyEngine/source/TimeEngineDOS.cpp",
+		"/home/sebastian/Programming/GalaxyEngine/source/TimeEngineSDL.h",
+		"/home/sebastian/Programming/GalaxyEngine/source/GameClient.cpp",
+		"/home/sebastian/Programming/GalaxyEngine/source/GameServer.cpp",
+		"/home/sebastian/Programming/GalaxyEngine/source/TimeEngineSDL.cpp",
+		"/home/sebastian/Programming/GalaxyEngine/source/GraphicsEngineVESA.cpp",
+		"/home/sebastian/Programming/GalaxyEngine/source/InputEngineDOS.cpp",
+		"/home/sebastian/Programming/GalaxyEngine/source/DerivedObjects.cpp",
+		"/home/sebastian/Programming/GalaxyEngine/source/NetEngineLocal.cpp",
+		"/home/sebastian/Programming/GalaxyEngine/source/InputEngineSDL.h",
+		"/home/sebastian/Programming/GalaxyEngine/source/InputEngineDOS.h",
+		"/home/sebastian/Programming/GalaxyEngine/source/TextEngineIOStream.cpp",
+		"/home/sebastian/Programming/GalaxyEngine/emulator/dosbox.conf",
+		"/home/sebastian/Programming/GalaxyEngine/source/NetEngineLinuxSocketsTCP.cpp",
+		"/home/sebastian/Programming/GalaxyEngine/source/NetEngineWinSocketsUDP.cpp",
+		"/home/sebastian/Programming/GalaxyEngine/source/NetEngineDosPacketDriverUDP.cpp",
+		"/home/sebastian/Programming/GalaxyEngine/source/GameServer.h",
+		"/home/sebastian/Programming/GalaxyEngine/source/GameNode.h",
+		"/home/sebastian/Programming/GalaxyEngine/source/GameNode.cpp",
+		"/home/sebastian/Programming/GalaxyEngine/source/NetEngineLinuxSocketsUDP.cpp",
+		"/home/sebastian/Programming/GalaxyEngine/source/GraphicsEngine.h",
+		"/home/sebastian/Programming/GalaxyEngine/source/GraphicsEngineDummy.cpp",
+		"/home/sebastian/Programming/GalaxyEngine/source/GraphicsEngineVESA.h",
+		"/home/sebastian/Programming/GalaxyEngine/source/GraphicsEngineSDL.h",
+		"/home/sebastian/Programming/GalaxyEngine/source/GraphicsEngineSDL.cpp",
+		"/home/sebastian/Programming/GalaxyEngine/source/main.cpp",
+		"/home/sebastian/Programming/GalaxyEngine/source/Object.cpp",
+		"/home/sebastian/Programming/GalaxyEngine/source/InputEngine.h",
+		"/home/sebastian/Programming/GalaxyEngine/.gitignore",
+		"/home/sebastian/Programming/GalaxyEngine/source/TextEngineDummy.cpp",
+		"/home/sebastian/Programming/GalaxyEngine/source/TextEngineSTDIO.cpp",
+		"/home/sebastian/Programming/GalaxyEngine/source/TextEngineSTDIO.h",
+		"/home/sebastian/Programming/GalaxyEngine/source/TextEngine.h",
+		"/home/sebastian/Programming/GalaxyEngine/source/TextEngineDummy.h",
+		"/home/sebastian/Programming/GalaxyEngine/source/TextEngineIOStream.h",
+		"/home/sebastian/Programming/GalaxyEngine/ToDo.txt",
 		"/home/sebastian/.dosbox/dosbox-0.74-3.conf",
 		"/home/sebastian/dosdrive/games/SimEarth/simearth.cfg",
 		"/home/sebastian/Programming/GalaxyEngine/source/NetEngineDummy.cpp",
-		"/home/sebastian/Programming/GalaxyEngine/source/InputEngineSDL.cpp",
-		"/home/sebastian/Programming/GalaxyEngine/source/InputEngine.h",
-		"/home/sebastian/Programming/GalaxyEngine/source/GameEngine.cpp",
-		"/home/sebastian/Programming/GalaxyEngine/makefile",
-		"/home/sebastian/Programming/GalaxyEngine/source/TextEngineDummy.h",
-		"/home/sebastian/Programming/GalaxyEngine/source/TextEngineDummy.cpp",
 		"/home/sebastian/Programming/GalaxyEngine/source/InputEngineDummy.h",
 		"/home/sebastian/Programming/GalaxyEngine/source/InputEngineDummy.cpp",
 		"/home/sebastian/Programming/GalaxyEngine/source/NetEngineDummy.h",
-		"/home/sebastian/Programming/GalaxyEngine/source/GameEngine.h",
 		"/home/sebastian/Programming/GalaxyEngine/source/NetEngine.h",
-		"/home/sebastian/Programming/GalaxyEngine/source/NetEngineLinuxSocketsUDP.cpp",
-		"/home/sebastian/Programming/GalaxyEngine/source/GameNode.h",
-		"/home/sebastian/Programming/GalaxyEngine/source/GameServer.h",
-		"/home/sebastian/Programming/GalaxyEngine/source/GameServer.cpp",
-		"/home/sebastian/Programming/GalaxyEngine/source/GameClient.cpp",
-		"/home/sebastian/Programming/GalaxyEngine/source/GameClient.h",
-		"/home/sebastian/Programming/GalaxyEngine/source/main.cpp",
-		"/home/sebastian/Programming/GalaxyEngine/source/DerivedObjects.cpp",
 		"/home/sebastian/Programming/GalaxyEngine/source/DedicatedServer.cpp",
-		"/home/sebastian/Programming/GalaxyEngine/source/DerivedObjects.h",
 		"/home/sebastian/Programming/SDLTest/makefile",
-		"/home/sebastian/Programming/GalaxyEngine/source/TextEngineSTDIO.h",
-		"/home/sebastian/Programming/GalaxyEngine/source/InputEngineSDL.h",
 		"/usr/x86_64-w64-mingw32/include/sddl.h",
 		"/usr/x86_64-w64-mingw32/include/SDL2/SDL.h",
 		"/home/sebastian/Programming/GalaxyEngine/source/InputEngineSDI.cpp",
 		"/home/sebastian/Programming/GalaxyEngine/source/InputEngineSDI.h",
-		"/home/sebastian/Programming/GalaxyEngine/ToDo.txt",
 		"/home/sebastian/Programming/GalaxyEngine/source/NetEngine.cpp",
-		"/home/sebastian/Programming/GalaxyEngine/emulator/dosbox.conf",
-		"/home/sebastian/Programming/GalaxyEngine/source/Object.cpp",
-		"/home/sebastian/Programming/GalaxyEngine/source/NetEngineLocal.cpp",
 		"/home/sebastian/Programming/GalaxyEngine/source/NetEngineDosPacketDriverUDP.h",
-		"/home/sebastian/Programming/GalaxyEngine/source/NetEngineDosPacketDriverUDP.cpp",
-		"/home/sebastian/Programming/GalaxyEngine/source/TextEngineSTDIO.cpp",
 		"/home/sebastian/Programming/GalaxyEngine/source/NetEngineLocal.h",
 		"/home/sebastian/Programming/GalaxyEngine/source/NetEngineWinSocketsUDP.h",
 		"/home/sebastian/Programming/GalaxyEngine/source/NetEngineLinuxSocketsTCP.h",
-		"/home/sebastian/Programming/GalaxyEngine/source/NetEngineLinuxSocketsTCP.cpp",
-		"/home/sebastian/Programming/GalaxyEngine/source/NetEngineWinSocketsUDP.cpp",
 		"/home/sebastian/Programming/GalaxyEngine/source/NetEngineLinuxSocketsUDP.h",
-		"/home/sebastian/Programming/GalaxyEngine/source/Object.h",
 		"/home/sebastian/Programming/GalaxyEngine/source/Packet.h",
-		"/home/sebastian/Programming/GalaxyEngine/source/TextEngine.h",
-		"/home/sebastian/Programming/GalaxyEngine/source/TextEngineIOStream.cpp",
-		"/home/sebastian/Programming/GalaxyEngine/source/TextEngineIOStream.h",
 		"/home/sebastian/Programming/GalaxyEngine/GalaxyEngine.sublime-project",
 		"/home/sebastian/Programming/GalaxyEngine/source/Vector2D.h",
 		"/home/sebastian/.config/sublime-text-3/Packages/User/Preferences.sublime-settings",
@@ -771,6 +734,12 @@
 		"case_sensitive": true,
 		"find_history":
 		[
+			"TimeEngineDOS",
+			"GraphicsEngineDummy",
+			"InputEngineDummy",
+			"__djgpp_nearptr_enable",
+			"graphica",
+			"GraphicsEngineDummy",
 			"InputEngineDummy",
 			"NetEngineLinuxSocketsUDP",
 			"InputEngineSDL",
@@ -793,6 +762,11 @@
 		"regex": false,
 		"replace_history":
 		[
+			"TimeEngineSDL",
+			"GraphicsEngineVESA",
+			"GraphicsEngineSDL",
+			"InputEngineDOS",
+			"GraphicsEngineVESA",
 			"NetEngineDummy",
 			"InputEngineDummy",
 			"TextEngineDummy",
@@ -809,84 +783,24 @@
 	"groups":
 	[
 		{
-			"selected": 9,
+			"selected": 4,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "source/GameNode.cpp",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1675,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								363,
-								363
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 173.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 10,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "source/GameServer.cpp",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1743,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1075,
-								1075
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 138.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 4,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
 					"file": "source/DerivedObjects.cpp",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 8458,
+						"buffer_size": 7810,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								8116,
-								8116
+								1515,
+								1515
 							]
 						],
 						"settings":
@@ -895,27 +809,55 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 4039.0,
+						"translation.y": 313.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
-					"buffer": 3,
-					"file": "source/GameClient.cpp",
+					"buffer": 1,
+					"file": "source/InputEngineSDL.cpp",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3887,
+						"buffer_size": 3990,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1958,
-								1958
+								3513,
+								3513
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 1796.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "source/GameClient.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5059,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								240,
+								240
 							]
 						],
 						"settings":
@@ -924,11 +866,41 @@
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
-						"translation.x": 4.0,
-						"translation.y": 486.0,
+						"translation.x": 0.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "source/GameServer.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2477,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1106,
+								1106
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 359.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
@@ -937,15 +909,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 351,
+						"buffer_size": 312,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								192,
-								192
+								30,
+								30
 							]
 						],
 						"settings":
@@ -956,185 +928,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "source/GameEngine.h",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 5117,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2909,
-								2909
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 589.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 7,
-					"type": "text"
-				},
-				{
-					"buffer": 6,
-					"file": "source/GameEngine.cpp",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 9870,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								4074,
-								4074
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 8,
-					"type": "text"
-				},
-				{
-					"buffer": 7,
-					"file": "source/InputEngine.h",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 2731,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 402.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 8,
-					"file": "source/InputEngineSDL.cpp",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 14621,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								72,
-								72
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 9,
-					"file": "source/GraphicsEngine.h",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1453,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1305,
-								1305
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 212.0,
-						"zoom_level": 1.0
-					},
 					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 10,
-					"file": "source/TextEngine.h",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 2014,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								770,
-								770
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 9,
 					"type": "text"
 				}
 			]

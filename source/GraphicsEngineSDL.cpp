@@ -213,7 +213,7 @@ void GraphicsEngineSDL::SetDisplayMode( DisplayMode mode )
             logicalScreenWidth = screenWidth + ( screenPadding * 2 );
             logicalScreenHeight = screenHeight + ( screenPadding * 2 );
 
-            renderer = SDL_CreateRenderer( window, -1, 0 );
+            renderer = SDL_CreateRenderer( window, -1, SDL_RENDERER_PRESENTVSYNC );
 
             return;
         }

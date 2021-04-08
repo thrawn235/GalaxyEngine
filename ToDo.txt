@@ -1,11 +1,15 @@
 To Do:
 
-Predict is not working
+Predict is not working (it is working but janky. maybe pos needs to be float ? )
 add scenes to engine
 GameNode (Server/Client) should be able to add objects in a generic way without knowing all the types
 test Delete and Purge Methods
 DOS Network implementation
 MemoryEngine
-DLLs ?
+DLLs dont work in DOS! so no DLLs
 
 ClientSideUpdate and UpdateServerIndependend is potentially slow and inefficient
+
+60f/s
+10f/s
+6

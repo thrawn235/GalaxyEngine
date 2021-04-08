@@ -5,6 +5,7 @@
 #include "NetEngineDummy.h"
 #include "GraphicsEngineDummy.h"
 #include "TimeEngineDummy.h"
+#include "FileEngineDummy.h"
 #ifdef TARGET_WIN
     #include "NetEngineWinSocketsUDP.h"
     #include "NetEngineLocal.h"
@@ -13,6 +14,7 @@
     #include "GraphicsEngineSDL.h"
     #include "TextEngineSTDIO.h"
     #include "TimeEngineSDL.h"
+    #include "FileEngineSTDIO.h"
 #endif
 #ifdef TARGET_LINUX
     #include "NetEngineLinuxSocketsUDP.h"
@@ -23,6 +25,7 @@
     #include "InputEngineSDL.h"
     #include "GraphicsEngineSDL.h"
     #include "TimeEngineSDL.h"
+    #include "FileEngineSTDIO.h"
 #endif
 #ifdef TARGET_DOS
     #include "NetEngineLocal.h"
@@ -31,6 +34,7 @@
     #include "InputEngineDOS.h"
     #include "GraphicsEngineVESA.h"
     #include "TimeEngineDOS.h"
+    #include "FileEngineSTDIO.h"
 #endif
 
 //global list of all Game Engines. Its prmarily used for ungraceful program termination
@@ -281,7 +285,10 @@ vector<int> GameEngine::GetAvailableTimeTypes()
     vector<int> availableModes;
 
     availableModes.push_back( TIME_TYPE_DUMMY );
-    //availableModes.push_back( TIME_TYPE_SDL );
+    #if defined TARGET_WIN || TARGET_LINUX
+        availableModes.push_back( TIME_TYPE_SDL );
+    #endif
+    
     #ifdef TARGET_DOS
         availableModes.push_back( TIME_TYPE_DOS );
     #endif
@@ -308,6 +315,28 @@ void GameEngine::SetTimeType( int timeType )
             time = new TimeEngineDOS( this );
         }
     #endif
+}
+vector<int> GameEngine::GetAvailableFileTypes()
+{
+    vector<int> availableModes;
+
+    availableModes.push_back( FILE_TYPE_DUMMY );
+    availableModes.push_back( FILE_TYPE_STDIO );
+
+    return availableModes;
+}
+void GameEngine::SetFileType( int fileType )
+{
+    delete file;
+
+    if( fileType == FILE_TYPE_DUMMY )
+    {
+        file = new FileEngineDummy( this );
+    }
+    else if( fileType == FILE_TYPE_STDIO )
+    {
+        file = new FileEngineSTDIO( this );
+    }
 }
 
 void GameEngine::Quit()

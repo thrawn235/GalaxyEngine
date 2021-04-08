@@ -105,7 +105,7 @@ void GameClient::Run()
 
 
             tickRate = 1.0 / clientTicksSinceLogicTick;
-            engine->debug->PrintString( "       tickrate:%f clientTicks:%i!\n", tickRate, clientTicksSinceLogicTick );
+            engine->text->PrintString( "       tickrate:%f clientTicks:%i!\n", tickRate, clientTicksSinceLogicTick );
             clientTicksSinceLogicTick = 0;
         }
 
@@ -114,6 +114,8 @@ void GameClient::Run()
         delete pkt;
     }
     //-----------------------------------------------------------
+
+    engine->text->PrintString( "       tickrate:%f clientTicks:%i!\n", tickRate, clientTicksSinceLogicTick );
 
 
     //Update Game Logic------------------------------------------

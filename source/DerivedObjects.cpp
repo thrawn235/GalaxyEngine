@@ -24,19 +24,19 @@ void Player::GameLogic()
 
 	if( netStats->up )
 	{
-		netStats->movement.y = +1;
+		netStats->movement.y = -10;
 	}
 	if( netStats->down )
 	{
-		netStats->movement.y = -1;
+		netStats->movement.y = +10;
 	}
 	if( netStats->left )
 	{
-		netStats->movement.x = -1;
+		netStats->movement.x = -10;
 	}
 	if( netStats->right )
 	{
-		netStats->movement.x = +1;
+		netStats->movement.x = +10;
 	}
 
 	netStats->pos = netStats->pos + netStats->movement;
@@ -48,9 +48,24 @@ void Player::ClientSideUpdate()
 {
 	netStats->up = netStats->down = netStats->left = netStats->right = netStats->fire = false;
 
+	if( engine->input->KeyDown( KEY_LEFT ) )
+	{
+		netStats->left = true;
+		//engine->text->PrintString( "game logic - right key down\n" );
+	}
 	if( engine->input->KeyDown( KEY_RIGHT ) )
 	{
 		netStats->right = true;
+		//engine->text->PrintString( "game logic - right key down\n" );
+	}
+	if( engine->input->KeyDown( KEY_UP ) )
+	{
+		netStats->up = true;
+		//engine->text->PrintString( "game logic - right key down\n" );
+	}
+	if( engine->input->KeyDown( KEY_DOWN ) )
+	{
+		netStats->down = true;
 		//engine->text->PrintString( "game logic - right key down\n" );
 	}
 
