@@ -276,11 +276,11 @@ linuxDedicatedServer: $(binDir)linux/DedicatedServer
 
 
 #=========================================== WADcreator =======================================
-./WADCreator/bin/WADCreator:                            ./WADCreator/source/main.cpp
-	$(CompilerLinux) -o $@ $^ `pkg-config --cflags --libs gtk4`
+./NGRCreator/bin/NGRCreator:	./NGRCreator/source/main.cpp
+	$(CompilerLinux) $^ -o $@ -std=c++20 `pkg-config gtkmm-4.0 --cflags --libs`
 
-.PHONY: WADCreator
-WADCreator: ./WADCreator/bin/WADCreator
+.PHONY: NGRCreator
+NGRCreator: ./NGRCreator/bin/NGRCreator
 #==============================================================================================
 
 
@@ -319,9 +319,9 @@ runlinux:
 runlinuxDedicatedServer: 
 	$(binDir)linux/DedicatedServer
 
-.PHONY: runWADCreator
-runWADCreator: 
-	./WADCreator/bin/WADCreator
+.PHONY: runNGRCreator
+runNGRCreator: 
+	./NGRCreator/bin/NGRCreator
 #==============================================================================================
 
 
