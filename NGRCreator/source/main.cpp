@@ -117,7 +117,6 @@ public:
     void    SelectedRowCallback                 ( const Gtk::TreeModel::iterator& iter );
     void    SelectionChanged                    ();
     void    CellsEdited                         ( string path, string newText );
-
 };
 
 NGRCreator::NGRCreator() : m_button( "Hello World" )   // creates a new button with label "Hello World".
@@ -167,8 +166,8 @@ NGRCreator::NGRCreator() : m_button( "Hello World" )   // creates a new button w
     treeView.set_reorderable();
 
     treeSelection = treeView.get_selection();
-    treeSelection->set_mode( Gtk::Selection::MULTIPLE );
-    treeSelection->selected_foreach_iter( sigc::mem_fun( *this, &NGRCreator::SelectedRowCallback ) );
+    treeSelection->set_mode( Gtk::SelectionMode::MULTIPLE );
+    //Selection->selected_foreach_iter( sigc::mem_fun( *this, &NGRCreator::SelectedRowCallback ) );
 
     treeView.append_column( "Index", columns.index );
     treeView.append_column( "Type", columns.type );
@@ -208,20 +207,30 @@ void NGRCreator::on_button_clicked()
 
 void NGRCreator::Exit()
 {
+    cout<<"exit"<<endl;
     //quit();
 }
 
 void NGRCreator::ImportFiles()
 {
+    cout<<"1";
     ClearTreeView();
+    cout<<"2";
     auto dialog = new Gtk::FileChooserDialog( "Please select Files", Gtk::FileChooser::Action::OPEN );
+    cout<<"3";
     dialog->set_transient_for( *this );
+    //dialog->set_modal(true);
     dialog->set_select_multiple( true );
+    cout<<"4";
 
     //Add response buttons the the dialog:
     dialog->add_button( "Cancel", Gtk::ResponseType::CANCEL );
     dialog->add_button( "Select", Gtk::ResponseType::OK );
+    cout<<"6";
     dialog->signal_response().connect( sigc::bind( sigc::mem_fun( *this, &NGRCreator::OnImportFileDialogResponse ), dialog ) );
+    cout<<"7";
+
+    dialog->show();
 }
 
 void NGRCreator::OnImportFileDialogResponse( int response_id, Gtk::FileChooserDialog* dialog )
@@ -233,7 +242,15 @@ void NGRCreator::OnImportFileDialogResponse( int response_id, Gtk::FileChooserDi
         {
             std::cout << "Open clicked." << std::endl;
 
-            vector<string> files = dialog->get_files();
+            vector<string> files;
+
+            auto objects = dialog->get_files();
+            for( unsigned int i = 0; i < objects->get_n_items(); i++ )
+            {
+                auto file = std::dynamic_pointer_cast<Gio::File>( objects->get_object(i) );
+                files.push_back( file->get_path() );
+            }
+
             ImportAllFiles( files );
             break;
         }
@@ -397,6 +414,8 @@ void NGRCreator::OpenFile()
     dialog->add_button( "Cancel", Gtk::ResponseType::CANCEL );
     dialog->add_button( "Select", Gtk::ResponseType::OK );
     dialog->signal_response().connect( sigc::bind( sigc::mem_fun( *this, &NGRCreator::OnOpenFileDialogResponse ), dialog ) );
+
+    dialog->show();
 }
 void NGRCreator::OnOpenFileDialogResponse( int response_id, Gtk::FileChooserDialog* dialog )
 {
@@ -405,7 +424,15 @@ void NGRCreator::OnOpenFileDialogResponse( int response_id, Gtk::FileChooserDial
     {
         case Gtk::ResponseType::OK:
         {
-            vector<string> files = dialog->get_filenames();
+            vector<string> files;
+
+            auto objects = dialog->get_files();
+            for( unsigned int i = 0; i < objects->get_n_items(); i++ )
+            {
+                auto file = std::dynamic_pointer_cast<Gio::File>( objects->get_object(i) );
+                files.push_back( file->get_path() );
+            }
+
             if( files.size() > 0 )
             {
                 ReadNGRFile( files[0] );
@@ -494,6 +521,8 @@ void NGRCreator::Save()
     dialog->add_button( "Cancel", Gtk::ResponseType::CANCEL );
     dialog->add_button( "Select", Gtk::ResponseType::OK );
     dialog->signal_response().connect( sigc::bind( sigc::mem_fun( *this, &NGRCreator::OnSaveFileDialogResponse ), dialog ) );
+
+    dialog->show();
 }
 void NGRCreator::OnSaveFileDialogResponse( int response_id, Gtk::FileChooserDialog* dialog )
 {
@@ -502,7 +531,14 @@ void NGRCreator::OnSaveFileDialogResponse( int response_id, Gtk::FileChooserDial
     {
         case Gtk::ResponseType::OK:
         {
-            vector<string> files = dialog->get_filenames();
+            vector<string> files;
+
+            auto objects = dialog->get_files();
+            for( unsigned int i = 0; i < objects->get_n_items(); i++ )
+            {
+                auto file = std::dynamic_pointer_cast<Gio::File>( objects->get_object(i) );
+                files.push_back( file->get_path() );
+            }
 
             if( files.size() > 0 )
             {
