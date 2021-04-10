@@ -28,6 +28,9 @@ EFLAGS          = -conf $(emuDir)dosbox.conf #-exit
 sourceFiles     = $(wildcard $(sourceDir)*.cpp)
 objectFiles     = $(sourceFiles:.cpp=.o)
 #VPATH          = $(sourceDir)
+
+LINKER_FLAGS_NGR = $(shell pkg-config --libs gtkmm-3.0 )
+CFLAGS_NGR = $(shell pkg-config --cflags gtkmm-3.0 )
 #==============================================================================================
 
 
@@ -276,17 +279,23 @@ linuxDedicatedServer: $(binDir)linux/DedicatedServer
 
 
 #=========================================== WADcreator =======================================
-./NGRCreator/bin/NGRCreator:	./NGRCreator/source/main.cpp
+./NGRCreator/bin/NGRCreator4:	./NGRCreator/source/main.cpp
 	$(CompilerLinux) $^ -o $@ -std=c++20 `pkg-config gtkmm-4.0 --cflags --libs`
 
-.PHONY: NGRCreator
-NGRCreator: ./NGRCreator/bin/NGRCreator
+.PHONY: NGRCreator4
+NGRCreator4: ./NGRCreator/bin/NGRCreator4
+
+./NGRCreator/bin/NGRCreator3:	./NGRCreator/source/NGRCreator3.cpp
+	$(CompilerLinux) $(CFLAGS_NGR) $^ -o $@ $(LINKER_FLAGS_NGR) $(CFLAGS)
+
+.PHONY: NGRCreator3
+NGRCreator3: ./NGRCreator/bin/NGRCreator3
 #==============================================================================================
 
 
 #============================================= all ============================================
 .PHONY: all
-all: dos dosDedicatedServer linux linuxDedicatedServer win winDedicatedServer WADCreator
+all: dos dosDedicatedServer linux linuxDedicatedServer win winDedicatedServer NGRCreator3
 #==============================================================================================
 
 
@@ -319,9 +328,13 @@ runlinux:
 runlinuxDedicatedServer: 
 	$(binDir)linux/DedicatedServer
 
-.PHONY: runNGRCreator
-runNGRCreator: 
-	./NGRCreator/bin/NGRCreator
+.PHONY: runNGRCreator4
+runNGRCreator4: 
+	./NGRCreator/bin/NGRCreator4
+
+.PHONY: runNGRCreator3
+runNGRCreator3: 
+	./NGRCreator/bin/NGRCreator3
 #==============================================================================================
 
 

@@ -213,22 +213,16 @@ void NGRCreator::Exit()
 
 void NGRCreator::ImportFiles()
 {
-    cout<<"1";
     ClearTreeView();
-    cout<<"2";
     auto dialog = new Gtk::FileChooserDialog( "Please select Files", Gtk::FileChooser::Action::OPEN );
-    cout<<"3";
     dialog->set_transient_for( *this );
     //dialog->set_modal(true);
     dialog->set_select_multiple( true );
-    cout<<"4";
 
     //Add response buttons the the dialog:
     dialog->add_button( "Cancel", Gtk::ResponseType::CANCEL );
     dialog->add_button( "Select", Gtk::ResponseType::OK );
-    cout<<"6";
     dialog->signal_response().connect( sigc::bind( sigc::mem_fun( *this, &NGRCreator::OnImportFileDialogResponse ), dialog ) );
-    cout<<"7";
 
     dialog->show();
 }
@@ -244,11 +238,16 @@ void NGRCreator::OnImportFileDialogResponse( int response_id, Gtk::FileChooserDi
 
             vector<string> files;
 
-            auto objects = dialog->get_files();
+            Glib::RefPtr<Gio::ListModel> objects = dialog->get_files();
+            cout<<"got files"<<endl;
+            cout<<"selected "<<objects->get_n_items()<<" items"<<endl;
             for( unsigned int i = 0; i < objects->get_n_items(); i++ )
             {
-                auto file = std::dynamic_pointer_cast<Gio::File>( objects->get_object(i) );
-                files.push_back( file->get_path() );
+                cout<<"tick";
+                Glib::RefPtr<Gio::File> file = std::dynamic_pointer_cast<Gio::File>(objects->get_object(i));
+                cout<<"tock";
+                //files.push_back( file->get_path() );
+                cout<<file->get_path()<<endl;
             }
 
             ImportAllFiles( files );
