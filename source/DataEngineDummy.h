@@ -35,6 +35,8 @@ public:
 
     void    Update          	();
 
+    void 	LoadArchiveFile 	( string filePath );
+
     void*   GetData         	( unsigned long id );
     void    FreeData        	( unsigned long id );
 

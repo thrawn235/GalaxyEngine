@@ -29,13 +29,14 @@ using namespace std;
 struct NGRHeader
 {
 	//fileheader
-	char 		ident[3] 	= {'N', 'G', 'R' };
+	char 		ident[3] 	= { 'N', 'G', 'R' };
 	uint16_t	numItems 	= 0;
 	uint32_t	offsetTOC	= 0;
 }__attribute__((__packed__));
 
 struct NGRDataBlock
 {
+	int id;
 	int size;
 	int type;
 	string name;
@@ -45,6 +46,7 @@ struct NGRDataBlock
 
 struct TOCEntry
 {
+	uint32_t 	id;
 	uint32_t	offset;
 	uint32_t	size;
 	uint32_t	type;
@@ -56,6 +58,7 @@ class ModelColumns : public Gtk::TreeModel::ColumnRecord
 {
 public:
 	Gtk::TreeModelColumn<unsigned int>		index;
+	Gtk::TreeModelColumn<unsigned int>		id;
 	Gtk::TreeModelColumn<unsigned int>		type;
 	Gtk::TreeModelColumn<Glib::ustring> 	typeAlias;
 	Gtk::TreeModelColumn<unsigned int> 		size;
@@ -65,6 +68,7 @@ public:
 	ModelColumns()
 	{
 		add( index );
+		add( id );
 		add( type );
 		add( typeAlias );
 		add( size );
@@ -83,6 +87,8 @@ protected:
 
 	vector<string>			filepaths;
 
+	int highestID;
+
 
 	//UI Stuff
 	//Gtk::Application app;
@@ -95,6 +101,9 @@ protected:
 	Gtk::Button newFileButton;
 	Gtk::Button removeButton;
 	Gtk::Button saveHeaderButton;
+
+	Gtk::Entry startIDEntry;
+
 	Gtk::Box verticalBox;
 	Gtk::Box horizontalBox;
 
@@ -109,6 +118,8 @@ protected:
 public:
 	NGREngine()
 	{
+		highestID = 0;
+
 		//Buttons
 		exitButton.set_label( "exit" );
 		exitButton.signal_clicked().connect( sigc::mem_fun( this, &NGREngine::Exit ) );
@@ -131,6 +142,9 @@ public:
 		saveHeaderButton.set_label( "save C Header" );
 		saveHeaderButton.signal_clicked().connect( sigc::mem_fun( this, &NGREngine::SaveHeader ) );
 
+		//etries
+		startIDEntry.set_text( "0" );
+
 		//verticalBox
 		verticalBox.set_orientation( Gtk::ORIENTATION_VERTICAL );
 		verticalBox.set_spacing( 10 );
@@ -140,6 +154,7 @@ public:
 		verticalBox.add( removeButton );
 		verticalBox.add( openFileButton );
 		verticalBox.add( saveButton );
+		verticalBox.add( startIDEntry );
 		verticalBox.add( saveHeaderButton );
 		verticalBox.add( exitButton );
 
@@ -152,6 +167,7 @@ public:
 		treeSelection->set_mode( Gtk::SELECTION_MULTIPLE );
 		treeSelection->selected_foreach_iter( sigc::mem_fun( this, &NGREngine::SelectedRowCallback ) );
 
+		treeView.append_column( "ID", columns.id );
 		treeView.append_column( "Index", columns.index );
 		treeView.append_column( "Type", columns.type );
 		treeView.append_column( "TypeAlias", columns.typeAlias );
@@ -208,6 +224,11 @@ public:
 		newFile.size = fileSize;
 		newFile.data = (char*)malloc( fileSize );
 		newFile.path = filePath;
+		highestID =  atoi( startIDEntry.get_text().c_str() );
+		newFile.id = highestID;
+		highestID = newFile.id;
+		highestID++;
+		startIDEntry.set_text( std::to_string( highestID ) );
 		int bytesRead = fread( newFile.data, 1, fileSize, file );
 
 		newFile.type = GetTypeFromDataBlock( newFile );
@@ -275,6 +296,7 @@ public:
 			row[columns.size] = data[i].size;
 			row[columns.filepath] = data[i].path;
 			row[columns.name] = data[i].name;
+			row[columns.id] = data[i].id;
 			
 		}
 	}
@@ -615,11 +637,11 @@ public:
 						"///////////////////////////////////////////////////////////////\n\n\n");
 
 		fprintf( file, "//============ defines ===============\n");
-		uint32_t dataOffset =sizeof(NGRHeader);
+		//uint32_t dataOffset =sizeof(NGRHeader);
 		for( unsigned int i = 0; i < data.size(); i++ )
 		{
-			fprintf( file, "#define %s %i\n", data[i].name.c_str(), dataOffset );
-			dataOffset = dataOffset + data[i].size;
+			fprintf( file, "#define %s %i\n", data[i].name.c_str(), data[i].id );
+			//dataOffset = dataOffset + data[i].size;
 		}
 		fprintf( file, "//====================================\n");
 		//write Footer

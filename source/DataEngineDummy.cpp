@@ -15,6 +15,10 @@ void DataEngineDummy::Update()
 {
 
 }
+void DataEngineDummy::LoadArchiveFile( string filePath )
+{
+	
+}
 void* DataEngineDummy::GetData( unsigned long id )
 {
 	return NULL;

@@ -39,6 +39,8 @@ public:
 
     virtual     void    Update          ()                      = 0;
 
+    virtual 	void 	LoadArchiveFile ( string filePath )		= 0;
+
     virtual     void*   GetData         ( unsigned long id )    = 0;
     virtual     void    FreeData        ( unsigned long id )    = 0;
 
