@@ -310,6 +310,13 @@ NGRCreator4: ./NGRCreator/bin/NGRCreator4
 NGRCreator3: ./NGRCreator/bin/NGRCreator3
 #==============================================================================================
 
+#=========================================== Converters =======================================
+./FileConversion/bin/stringConverter:	./FileConversion/source/stringConverter.cpp
+	$(CompilerLinux) $(CFLAGS) $^ -o $@
+
+.PHONY: stringConverter
+stringConverter: ./FileConversion/bin/stringConverter
+#==============================================================================================
 
 #============================================= all ============================================
 .PHONY: all

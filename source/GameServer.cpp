@@ -36,7 +36,7 @@ GameEngine* GameServer::GetEngine()
 void GameServer::Run()
 {
     //engine->debug->PrintString( "server - frametime:%f", engine->time->TicksToMilliSeconds( engine->time->GetCurrentFrameTime() ) );
-    if( engine->time->TicksToMilliSeconds( engine->time->GetCurrentFrameTime() )  > 1000 )
+    if( engine->time->TicksToMilliSeconds( engine->time->GetCurrentFrameTime() )  > 50 )
     {
         engine->time->FrameStart();
         engine->debug->PrintString( "================ server ===============:\n" );

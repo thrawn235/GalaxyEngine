@@ -23,6 +23,7 @@ using namespace std;
 #define TYPE_SPR 2
 #define TYPE_ANI 3
 #define TYPE_COL 4
+#define TYPE_STR 5
 
 
 struct NGRHeader
@@ -265,6 +266,10 @@ public:
 			{
 				row[columns.typeAlias] = "Animation";
 			}
+			if( data[i].type == TYPE_STR )
+			{
+				row[columns.typeAlias] = "String";
+			}
 			#pragma GCC diagnostic pop
 			
 			row[columns.size] = data[i].size;
@@ -329,11 +334,16 @@ public:
 		{
 			return TYPE_COL;
 		}
+		else if( compareBytes( dataBlock.data, "STR", 3 ) )
+		{
+			return TYPE_STR;
+		}
 		else
 		{
 			return TYPE_UNK;
 		}
 		#pragma GCC diagnostic pop
+		return TYPE_UNK;
 	}
 	void RunGui()
 	{

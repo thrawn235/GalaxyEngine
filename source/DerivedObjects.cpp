@@ -24,19 +24,19 @@ void Player::GameLogic()
 
 	if( netStats->up )
 	{
-		netStats->movement.y = -10;
+		netStats->movement.y = -3;
 	}
 	if( netStats->down )
 	{
-		netStats->movement.y = +10;
+		netStats->movement.y = +3;
 	}
 	if( netStats->left )
 	{
-		netStats->movement.x = -10;
+		netStats->movement.x = -3;
 	}
 	if( netStats->right )
 	{
-		netStats->movement.x = +10;
+		netStats->movement.x = +3;
 	}
 
 	netStats->pos = netStats->pos + netStats->movement;

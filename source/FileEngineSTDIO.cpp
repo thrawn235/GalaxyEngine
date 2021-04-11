@@ -20,7 +20,7 @@ void FileEngineSTDIO::Update()
 unsigned int FileEngineSTDIO::Open( string filePath )
 {
 	FileHandle file;
-	file.filePointer = fopen( filePath.c_str(), "rw" );
+	file.filePointer = fopen( filePath.c_str(), "rwb" );
 	file.ID = highestID;
 	highestID++;
 	files.push_back( file );
