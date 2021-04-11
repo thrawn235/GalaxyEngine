@@ -42,99 +42,6 @@ struct NGRDataBlock
 	char* data;
 };
 
-/*class NGRDataField
-{
-public:
-	char magic[3];
-
-
-	NGRDataField()
-	{
-		magic[0] = 'X';
-		magic[1] = 'X';
-		magic[2] = 'X';
-	}
-	~NGRDataField()
-	{
-
-	}
-};
-
-struct NGRPalette : public NGRDataField
-{
-public:
-	unsigned char	numColors;
-	uint32_t		pixelFormat;
-	char*			palette;
-
-	NGRPalette() : NGRDataField()
-	{
-		magic[0] = 'P';
-		magic[1] = 'A';
-		magic[2] = 'L';
-	}
-	~NGRPalette()
-	{
-
-	}
-};
-
-struct NGRSprite : public NGRDataField
-{
-public:
-	uint16_t 		width, height;
-	uint32_t		pixelFormat;
-	unsigned char	bitsPerPixel;
-	char* 			pixelData;
-
-
-	NGRSprite() : NGRDataField()
-	{
-		magic[0] = 'S';
-		magic[1] = 'P';
-		magic[2] = 'R';
-	}
-	~NGRSprite()
-	{
-
-	}
-};
-
-struct NGRAnimation : public NGRDataField
-{
-public:
-	unsigned char		numItems;
-	vector<NGRSprite> 	sprites;
-
-	NGRAnimation() : NGRDataField()
-	{
-		magic[0] = 'A';
-		magic[1] = 'N';
-		magic[2] = 'I';
-	}
-	~NGRAnimation()
-	{
-
-	}
-};
-
-
-struct NGRCollecton : public NGRAnimation
-{
-public:
-	NGRCollecton() : NGRAnimation()
-	{
-		magic[0] = 'C';
-		magic[1] = 'O';
-		magic[2] = 'L';
-	}
-	~NGRCollecton()
-	{
-
-	}
-};
-*/
-
 struct TOCEntry
 {
 	uint32_t	offset;
@@ -142,7 +49,6 @@ struct TOCEntry
 	uint32_t	type;
 	char		name[24];
 }__attribute__((__packed__));;
-
 
 
 class ModelColumns : public Gtk::TreeModel::ColumnRecord
@@ -154,7 +60,6 @@ public:
 	Gtk::TreeModelColumn<unsigned int> 		size;
 	Gtk::TreeModelColumn<Glib::ustring> 	name;
 	Gtk::TreeModelColumn<Glib::ustring> 	filepath;
-
 public:
 	ModelColumns()
 	{
@@ -166,6 +71,7 @@ public:
 		add( filepath );
 	}
 };
+
 
 class NGREngine
 {
@@ -187,6 +93,7 @@ protected:
 	Gtk::Button saveButton;
 	Gtk::Button newFileButton;
 	Gtk::Button removeButton;
+	Gtk::Button saveHeaderButton;
 	Gtk::Box verticalBox;
 	Gtk::Box horizontalBox;
 
@@ -220,6 +127,9 @@ public:
 		removeButton.set_label( "remove selected" );
 		removeButton.signal_clicked().connect( sigc::mem_fun( this, &NGREngine::RemoveItems ) );
 
+		saveHeaderButton.set_label( "save C Header" );
+		saveHeaderButton.signal_clicked().connect( sigc::mem_fun( this, &NGREngine::SaveHeader ) );
+
 		//verticalBox
 		verticalBox.set_orientation( Gtk::ORIENTATION_VERTICAL );
 		verticalBox.set_spacing( 10 );
@@ -229,6 +139,7 @@ public:
 		verticalBox.add( removeButton );
 		verticalBox.add( openFileButton );
 		verticalBox.add( saveButton );
+		verticalBox.add( saveHeaderButton );
 		verticalBox.add( exitButton );
 
 		//treeview
@@ -268,11 +179,12 @@ public:
 	}
 	~NGREngine()
 	{
-
+		//
+		//
 	}
-
 	Gtk::Window* GetWindow()
 	{
+		//
 		return &mainWindow;
 	}
 	void ImportFile( string filePath )
@@ -305,7 +217,6 @@ public:
 
 		data.push_back( newFile );
 	}
-
 	void ImportAllFiles( vector<string> filePaths )
 	{
 		for( unsigned int i = 0; i < filePaths.size(); i++ )
@@ -313,7 +224,6 @@ public:
 			ImportFile( filePaths[i] );
 		}
 	}
-
 	bool compareBytes( char* a, char* b, unsigned int length )
 	{
 		for( unsigned int i = 0; i < length; i++ )
@@ -325,7 +235,6 @@ public:
 		}
 		return true;
 	}
-
 	void AddAllDataBlocksToTreeView()
 	{
 		for( unsigned int i = 0; i < data.size(); i++ )
@@ -364,7 +273,6 @@ public:
 			
 		}
 	}
-
 	void ExtractNameFromPathForAllBlocks()
 	{
 		for( unsigned int i = 0; i < data.size(); i++ )
@@ -377,7 +285,6 @@ public:
 			data[i].name = data[i].path.substr( slashPos, dotPos - slashPos );
 		}
 	}
-
 	void freeAllDataBlocks()
 	{
 		for( unsigned int i = 0; i < data.size(); i++ )
@@ -386,7 +293,6 @@ public:
 		}
 		data.clear();
 	}
-
 	void ClearTreeView()
 	{
 		Gtk::TreeModel::Children children = treeModel->children();
@@ -403,7 +309,6 @@ public:
 		//children.clear();
 		//treeModel.children();	
 	}
-
 	int GetTypeFromDataBlock( NGRDataBlock dataBlock )
 	{
 		#pragma GCC diagnostic push
@@ -430,17 +335,16 @@ public:
 		}
 		#pragma GCC diagnostic pop
 	}
-
 	void RunGui()
 	{
+		//
 		//app.run( mainWindow );
 	}
-
 	void Exit()
 	{
 		//app.quit();
+		mainWindow.close();
 	}
-
 	void ImportFiles()
 	{
 		ClearTreeView();
@@ -478,7 +382,6 @@ public:
 		ExtractNameFromPathForAllBlocks();
 		AddAllDataBlocksToTreeView();
 	}
-
 	void OpenFile()
 	{
 		ClearTreeView();
@@ -518,7 +421,6 @@ public:
 
 		//AddAllDataBlocksToTreeView();
 	}
-
 	void ReadNGRFile( string filename )
 	{
 		cout<<"opening file..."<<endl;
@@ -569,19 +471,16 @@ public:
 		cout<<"done opening file!"<<endl;
 		fclose( file );
 	}
-
 	void NewFile()
 	{
 		freeAllDataBlocks();
 		ClearTreeView();
 	}
-
 	void DeleteEntry()
 	{
 		Gtk::TreeModel::Children children = treeModel->children();
 		//treeModel.get_selection();
 	}
-
 	void Save()
 	{
 		Gtk::FileChooserDialog dialog("Please select File", Gtk::FILE_CHOOSER_ACTION_SAVE);
@@ -619,7 +518,43 @@ public:
 			}
 		}
 	}
+	void SaveHeader()
+	{
+		Gtk::FileChooserDialog dialog("Please select File", Gtk::FILE_CHOOSER_ACTION_SAVE);
+		dialog.set_transient_for( mainWindow );
+		dialog.set_select_multiple(false);
 
+		//Add response buttons the the dialog:
+		dialog.add_button("_Cancel", Gtk::RESPONSE_CANCEL);
+		dialog.add_button("Select", Gtk::RESPONSE_OK);
+
+		int result = dialog.run();
+
+		//Handle the response:
+		switch(result)
+		{
+			case(Gtk::RESPONSE_OK):
+			{
+				vector<string> files = dialog.get_filenames();
+
+				if( files.size() > 0 )
+				{
+					SaveHeaderFile( files[0] );
+				}
+				break;
+			}
+			case(Gtk::RESPONSE_CANCEL):
+			{
+				std::cout << "Cancel clicked." << std::endl;
+				break;
+			}
+			default:
+			{
+				std::cout << "Unexpected button clicked." << std::endl;
+				break;
+			}
+		}
+	}
 	void SaveDataToFile( string filepath )
 	{
 		//if( filepath.find_first_of( "." ) == string::npos )
@@ -658,7 +593,30 @@ public:
 
 		fclose( file );
 	}
+	void SaveHeaderFile( string filepath )
+	{
+		FILE* file = fopen( filepath.c_str(), "wb" );
+		
+		//write Header
+		fprintf( file, 	"///////////////////////////////////////////////////////////////\n"
+						"//                                                           //\n"
+						"//                      NGR - Header                         //\n"
+						"//                                                           //\n"
+						"///////////////////////////////////////////////////////////////\n\n\n");
 
+		fprintf( file, "//============ defines ===============\n");
+		uint32_t dataOffset =sizeof(NGRHeader);
+		for( unsigned int i = 0; i < data.size(); i++ )
+		{
+			fprintf( file, "#define %s %i\n", data[i].name.c_str(), dataOffset );
+			dataOffset = dataOffset + data[i].size;
+		}
+		fprintf( file, "//====================================\n");
+		//write Footer
+		fprintf( file, "//------------------------- End -------------------------//\n");
+
+		fclose( file );
+	}
 	void RemoveItems()
 	{
 		vector<Gtk::TreeModel::Path> selectedItems = treeSelection->get_selected_rows();
@@ -674,18 +632,16 @@ public:
 		ClearTreeView();
 		AddAllDataBlocksToTreeView();
 	}
-
 	void SelectedRowCallback( const Gtk::TreeModel::iterator& iter )
 	{
 		Gtk::TreeModel::Row row = *iter;
 		cout<<row[columns.index]<<endl;
 	}
-
 	void SelectionChanged()
 	{
+		//
 		cout<<"changed";
 	}
-
 	void CellsEdited(string path, string newText)
 	{
 		int editIndex = atoi(path.c_str());

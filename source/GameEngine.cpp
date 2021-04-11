@@ -6,6 +6,7 @@
 #include "GraphicsEngineDummy.h"
 #include "TimeEngineDummy.h"
 #include "FileEngineDummy.h"
+#include "DataEngineDummy.h"
 #ifdef TARGET_WIN
     #include "NetEngineWinSocketsUDP.h"
     #include "NetEngineLocal.h"
@@ -15,6 +16,7 @@
     #include "TextEngineSTDIO.h"
     #include "TimeEngineSDL.h"
     #include "FileEngineSTDIO.h"
+    #include "DataEngineNGR.h"
 #endif
 #ifdef TARGET_LINUX
     #include "NetEngineLinuxSocketsUDP.h"
@@ -26,6 +28,7 @@
     #include "GraphicsEngineSDL.h"
     #include "TimeEngineSDL.h"
     #include "FileEngineSTDIO.h"
+    #include "DataEngineNGR.h"
 #endif
 #ifdef TARGET_DOS
     #include "NetEngineLocal.h"
@@ -35,6 +38,7 @@
     #include "GraphicsEngineVESA.h"
     #include "TimeEngineDOS.h"
     #include "FileEngineSTDIO.h"
+    #include "DataEngineNGR.h"
 #endif
 
 //global list of all Game Engines. Its prmarily used for ungraceful program termination
@@ -43,6 +47,7 @@ vector<GameEngine*> engines;
 
 GameEngine::GameEngine()
 {
+    //order is important!
     #ifdef TARGET_LINUX
         text        = new TextEngineSTDIO;
         debug       = new TextEngineSTDIO;
@@ -50,6 +55,8 @@ GameEngine::GameEngine()
         //net       = new NetEngineLinuxSocketsUDP( this );
         graphics    = new GraphicsEngineDummy( this );
         time        = new TimeEngineSDL( this );
+        file        = new FileEngineSTDIO( this );
+        data        = new DataEngineNGR( this );
     #endif
     #ifdef TARGET_WIN
         text        = new TextEngineIOStream;
@@ -58,6 +65,8 @@ GameEngine::GameEngine()
         //net       = new NetEngineWinSocketsUDP( this );
         graphics    = new GraphicsEngineDummy( this );
         time        = new TimeEngineSDL( this );
+        file        = new FileEngineSTDIO( this );
+        data        = new DataEngineNGR( this );
     #endif
     #ifdef TARGET_DOS
         text        = new TextEngineIOStream;
@@ -66,6 +75,8 @@ GameEngine::GameEngine()
         input       = new InputEngineDOS( this );
         graphics    = new GraphicsEngineDummy( this );
         time        = new TimeEngineDOS( this );
+        file        = new FileEngineSTDIO( this );
+        data        = new DataEngineNGR( this );
     #endif
 
     net = new NetEngineLocal( this );
@@ -336,6 +347,28 @@ void GameEngine::SetFileType( int fileType )
     else if( fileType == FILE_TYPE_STDIO )
     {
         file = new FileEngineSTDIO( this );
+    }
+}
+vector<int> GameEngine::GetAvailableDataTypes()
+{
+    vector<int> availableModes;
+
+    availableModes.push_back( DATA_TYPE_DUMMY );
+    availableModes.push_back( DATA_TYPE_NGR );
+
+    return availableModes;
+}
+void GameEngine::SetDataType( int dataType )
+{
+    delete data;
+
+    if( dataType == DATA_TYPE_DUMMY )
+    {
+        data = new DataEngineDummy( this );
+    }
+    else if( dataType == DATA_TYPE_NGR )
+    {
+        data = new DataEngineNGR( this );
     }
 }
 
