@@ -9,7 +9,7 @@ Object::Object( GameEngine* engine )
     netStats = (ObjectStats*)baseNetStats;
     netStats->size = sizeof( ObjectStats );
 
-    netStats->uid             = engine->GetHighestUIDAndInc();
+    netStats->uid             = engine->objects->GetHighestUIDAndInc();
 
     netStats->pos             = Vector2D( 0, 0 );
     netStats->movement        = Vector2D( 0, 0 );

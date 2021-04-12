@@ -15,7 +15,7 @@ GameClient::GameClient()
         engine->SetGraphicsType( GRAPHICS_TYPE_SDL );
     #endif
         
-    engine->SetHighestUID( 100000 );
+    engine->objects->SetHighestUID( 100000 );
     
     //network variables
     waitingForUpdate            = false;
@@ -29,7 +29,7 @@ GameClient::GameClient()
 
     //initial game objects
     MainMenu* mainMenu = new MainMenu( engine );
-    engine->AddObject( mainMenu );
+    engine->objects->AddObject( mainMenu );
 
     engine->debug->PrintString( "\n\n" );
 }
@@ -52,7 +52,7 @@ void GameClient::Run()
     engine->debug->PrintString( "===================== client ==================\n" );
 
     engine->debug->PrintString( "these are my objects:\n" );
-    vector<Object*> objects = engine->GetAllObjects();
+    vector<Object*> objects = engine->objects->GetAllObjects();
     engine->debug->PrintString( "ive got %i objects\n", objects.size() );
     for( unsigned int i = 0; i < objects.size(); i++ )
     {

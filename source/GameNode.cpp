@@ -24,7 +24,7 @@ void GameNode::UpdateObjectFromNet( Packet* pkt )
 {
     NetStats* newStatus = (NetStats*)pkt->data;
              
-    Object* foundObject = engine->GetObjectByUID( newStatus->uid );
+    Object* foundObject = engine->objects->GetObjectByID( newStatus->uid );
     if( foundObject != NULL )
     {
         engine->debug->PrintString( "   found object(%i) and update...\n", foundObject->GetUID() );
@@ -38,21 +38,21 @@ void GameNode::UpdateObjectFromNet( Packet* pkt )
             engine->text->PrintString( "   Adding new Object\n" );
             Object* newObject = new Object( engine );
             newObject->LoadStatus( newStatus );
-            engine->AddObject( newObject );
+            engine->objects->AddObject( newObject );
         }
         if( newStatus->type == OBJECT_TYPE_PLAYER )
         {
             engine->text->PrintString( "   Adding new Player\n" );
             Object* newObject = new Player( engine );
             newObject->LoadStatus( newStatus );
-            engine->AddObject( newObject );
+            engine->objects->AddObject( newObject );
         }
         if( newStatus->type == OBJECT_TYPE_ENEMY )
         {
             engine->text->PrintString( "   Adding new Enemy\n" );
             Object* newObject = new Enemy( engine );
             newObject->LoadStatus( newStatus );
-            engine->AddObject( newObject );
+            engine->objects->AddObject( newObject );
         }
     }
 }

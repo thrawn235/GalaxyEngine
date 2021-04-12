@@ -12,15 +12,15 @@ GameServer::GameServer()
     engine->net->ConfigureAsServer();
 
     Object* tmp = new Enemy( engine );
-    engine->AddObject( tmp );
+    engine->objects->AddObject( tmp );
     tmp = new Enemy( engine );
-    engine->AddObject( tmp );
+    engine->objects->AddObject( tmp );
     tmp = new Player( engine );
     tmp->PrintStats();
-    engine->AddObject( tmp );
+    engine->objects->AddObject( tmp );
     tmp->PrintStats();
     tmp = new Enemy( engine );
-    engine->AddObject( tmp );
+    engine->objects->AddObject( tmp );
 
     engine->debug->PrintString( "\n\n" );
 }
@@ -57,7 +57,7 @@ void GameServer::Run()
 
         
         engine->debug->PrintString( "these are my objects:\n" );
-        vector<Object*> objects = engine->GetAllObjects();
+        vector<Object*> objects = engine->objects->GetAllObjects();
         for( unsigned int i = 0; i < objects.size(); i++ )
         {
             engine->debug->PrintString( "   UID: %i\n", objects[i]->GetUID() );

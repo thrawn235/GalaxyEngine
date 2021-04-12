@@ -161,7 +161,7 @@ void MainMenu::UpdateServerIndependend()
 			//3. load all game objects
 			//4. hide main menu
 			engine->debug->PrintString( "purge...\n" );
-			engine->PurgeAllObjectsExcept( this, true );
+			engine->objects->PurgeAllObjectsExcept( this, true );
 
 			//create server
 			if( server != NULL )
@@ -194,7 +194,7 @@ void MainMenu::UpdateServerIndependend()
 			//3. load all game objects
 			//4. hide main menu
 
-			engine->PurgeAllObjectsExcept( this, true );
+			engine->objects->PurgeAllObjectsExcept( this, true );
 
 			//create server
 			if( server != NULL )

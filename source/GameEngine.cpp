@@ -7,6 +7,7 @@
 #include "TimeEngineDummy.h"
 #include "FileEngineDummy.h"
 #include "DataEngineDummy.h"
+#include "ObjectsEngineDummy.h"
 #ifdef TARGET_WIN
     #include "NetEngineWinSocketsUDP.h"
     #include "NetEngineLocal.h"
@@ -17,6 +18,7 @@
     #include "TimeEngineSDL.h"
     #include "FileEngineSTDIO.h"
     #include "DataEngineNGR.h"
+    #include "ObjectsEngineVector.h"
 #endif
 #ifdef TARGET_LINUX
     #include "NetEngineLinuxSocketsUDP.h"
@@ -29,6 +31,7 @@
     #include "TimeEngineSDL.h"
     #include "FileEngineSTDIO.h"
     #include "DataEngineNGR.h"
+    #include "ObjectsEngineVector.h"
 #endif
 #ifdef TARGET_DOS
     #include "NetEngineLocal.h"
@@ -39,6 +42,7 @@
     #include "TimeEngineDOS.h"
     #include "FileEngineSTDIO.h"
     #include "DataEngineNGR.h"
+    #include "ObjectsEngineVector.h"
 #endif
 
 //global list of all Game Engines. Its prmarily used for ungraceful program termination
@@ -57,6 +61,7 @@ GameEngine::GameEngine()
         time        = new TimeEngineSDL( this );
         file        = new FileEngineSTDIO( this );
         data        = new DataEngineNGR( this );
+        objects     = new ObjectsEngineVector( this );
     #endif
     #ifdef TARGET_WIN
         text        = new TextEngineIOStream;
@@ -67,6 +72,7 @@ GameEngine::GameEngine()
         time        = new TimeEngineSDL( this );
         file        = new FileEngineSTDIO( this );
         data        = new DataEngineNGR( this );
+        objects     = new ObjectsEngineVector( this );
     #endif
     #ifdef TARGET_DOS
         text        = new TextEngineIOStream;
@@ -77,20 +83,21 @@ GameEngine::GameEngine()
         time        = new TimeEngineDOS( this );
         file        = new FileEngineSTDIO( this );
         data        = new DataEngineNGR( this );
+        objects     = new ObjectsEngineVector( this );
     #endif
 
     net = new NetEngineLocal( this );
 
     engines.push_back( this );
 
-    highestUID = 1;
+    objects->SetHighestUID(1);
 }
 GameEngine::~GameEngine()
 {
     debug->PrintString( "Purge all objects... \n" );
-    PurgeAllObjects( true );
+    objects->PurgeAllObjects( true );
     debug->PrintString( "Clear deleted objects... \n" );
-    ClearDeletedObjects();
+    objects->ClearAllDeletedObjects();
     debug->PrintString( "erase this engine from engines list... \n" );
     for( unsigned int i = 0; i < engines.size(); i++ )
     {
@@ -112,7 +119,7 @@ GameEngine::~GameEngine()
     debug->PrintString( "delete debug... \n" );
     delete debug;
 }
-void GameEngine::SetHighestUID( unsigned long int UID )
+/*void GameEngine::SetHighestUID( unsigned long int UID )
 {
     highestUID = UID;
 }
@@ -124,7 +131,7 @@ unsigned long int GameEngine::GetHighestUIDAndInc()
 {
     highestUID++;
     return highestUID - 1;
-}
+}*/
 vector<int> GameEngine::GetAvailableNetTypes()
 {
     vector<int> availableModes;
@@ -371,6 +378,28 @@ void GameEngine::SetDataType( int dataType )
         data = new DataEngineNGR( this );
     }
 }
+vector<int> GameEngine::GetAvailableObjectsTypes()
+{
+    vector<int> availableModes;
+
+    availableModes.push_back( OBJECTS_TYPE_DUMMY );
+    availableModes.push_back( OBJECTS_TYPE_VECTOR );
+
+    return availableModes;
+}
+void GameEngine::SetObjectsType( int objectsType )
+{
+    delete data;
+
+    if( objectsType == OBJECTS_TYPE_DUMMY )
+    {
+        objects = new ObjectsEngineDummy( this );
+    }
+    else if( objectsType == OBJECTS_TYPE_VECTOR )
+    {
+        objects = new ObjectsEngineVector( this );
+    }
+}
 
 void GameEngine::Quit()
 {
@@ -382,7 +411,7 @@ void GameEngine::Quit()
     exit( EXIT_SUCCESS );
 }
 
-vector<Object*> GameEngine::GetAllObjects()
+/*vector<Object*> GameEngine::GetAllObjects()
 {
     debug->PrintString( "Get objects, i have %i\n", objects.size() );
     return objects;
@@ -564,11 +593,12 @@ void GameEngine::PurgeAllObjectsExcept( Object* object, bool includePersistent )
             }   
         }
     }
-}
+}*/
 
 
 void GameEngine::UpdateAll()
 {
+    vector<Object*> objects = this->objects->GetAllObjects();
     for( unsigned int i = 0; i < objects.size(); i++ )
     {
         if( objects[i]->GetActive() )
@@ -579,6 +609,7 @@ void GameEngine::UpdateAll()
 }
 void GameEngine::ClientSideUpdateAll()
 {
+    vector<Object*> objects = this->objects->GetAllObjects();
     for( unsigned int i = 0; i < objects.size(); i++ )
     {
         if( objects[i]->GetClientActive() )
@@ -590,6 +621,7 @@ void GameEngine::ClientSideUpdateAll()
 
 void GameEngine::UpdateServerIndependend()
 {
+    vector<Object*> objects = this->objects->GetAllObjects();
     for( unsigned int i = 0; i < objects.size(); i++ )
     {
         if( objects[i]->GetClientActive() )
@@ -600,6 +632,7 @@ void GameEngine::UpdateServerIndependend()
 }
 void GameEngine::PredictAll( float tickRate )
 {
+    vector<Object*> objects = this->objects->GetAllObjects();
     for( unsigned int i = 0; i < objects.size(); i++ )
     {
         if( objects[i]->GetPredict() )
@@ -610,6 +643,7 @@ void GameEngine::PredictAll( float tickRate )
 }
 void GameEngine::RenderAll()
 {
+    vector<Object*> objects = this->objects->GetAllObjects();
     for( unsigned int i = 0; i < objects.size(); i++ )
     {
         if( objects[i]->GetVisible() )

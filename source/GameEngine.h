@@ -26,6 +26,7 @@ using namespace std;
 #include "TimeEngine.h"
 #include "FileEngine.h"
 #include "DataEngine.h"
+#include "ObjectsEngine.h"
 #ifdef TARGET_LINUX
 #include "NetEngineLinuxSocketsUDP.h"
 #include "NetEngineLinuxSocketsTCP.h"
@@ -55,15 +56,13 @@ class TextEngine;
 class TimeEngine;
 class FileEngine;
 class DataEngine;
+class ObjectsEngine;
 //====================================
 
 class GameEngine
 {
 protected:
-    vector<Object*>     objects;
-    vector<Object*>     deletedObjects;
-
-    unsigned long int   highestUID;
+    
 
 public:
     //-------------- Engine Components ----------------
@@ -75,15 +74,16 @@ public:
     TimeEngine*         time;
     FileEngine*         file;
     DataEngine*         data;
+    ObjectsEngine*      objects;
 
     //------------- Constructor / Destructor -----------
                         GameEngine                  ();
                         ~GameEngine                 ();
 
     // ------------------ Set / Get --------------------
-    void                SetHighestUID               ( unsigned long int UID );
-    unsigned long int   GetHighestUID               ();
-    unsigned long int   GetHighestUIDAndInc         ();
+    //void                SetHighestUID               ( unsigned long int UID );
+    //unsigned long int   GetHighestUID               ();
+    //unsigned long int   GetHighestUIDAndInc         ();
 
     //-------------- Auxilary Engine Methods ----------
     vector<int>         GetAvailableNetTypes        ();
@@ -101,29 +101,11 @@ public:
     void                SetFileType                 ( int timeType );
     vector<int>         GetAvailableDataTypes       ();
     void                SetDataType                 ( int dataType );
+    vector<int>         GetAvailableObjectsTypes    ();
+    void                SetObjectsType              ( int objectsType );
 
     //----------------- Auxilary Methods --------------
     void                Quit                        ();
-
-    //---------------- Main Engine Fuctions -----------
-    vector<Object*>     GetAllObjects               ();
-    Object*             GetObjectByUID              ( unsigned long int uid );
-
-    void                AddObject                   ( Object* object );
-
-    void                DeleteObject                ( Object* object );             //move Object to deleteList (graveyard) 
-    void                DeleteObject                ( unsigned long uid );
-    void                DeleteObjects               ( vector<Object*> objects );
-    void                DeleteObjects               ( vector<unsigned long> uids );
-    void                PurgeObject                 ( Object* object );             //delete Object immediatly without moving it to the graveyard first. use at your own risk!
-    void                PurgeObject                 ( unsigned long uid );
-    void                PurgeObjects                ( vector<Object*> objects );
-    void                PurgeObjects                ( vector<unsigned long> uids );
-    void                ClearDeletedObjects         ();       
-    void                DeleteAllObjects            ( bool includePersistent );
-    void                DeleteAllObjectsExcept      ( Object* object, bool includePersistent );
-    void                PurgeAllObjects             ( bool includePersistent );
-    void                PurgeAllObjectsExcept       ( Object* object, bool includePersistent );
 
     //---------------- Object Update Functions --------
     void                UpdateAll                   ();                             //all the gamelogic happens here. Usually on the Server side
