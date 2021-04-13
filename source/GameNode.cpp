@@ -6,6 +6,7 @@
 GameNode::GameNode()
 {
     engine = new GameEngine;
+    engine->debug->PrintString( "gamenode constructor...\n" );
 }
 GameNode::~GameNode()
 {

@@ -40,6 +40,8 @@ using namespace std;
 #include "InputEngineDOS.h"
 #endif
 
+#include "assets.h"
+
 
 #include "Vector2D.h"
 //#include "Object.h"

@@ -61,7 +61,7 @@ class DataEngineNGR : public DataEngine
 protected:
 	GameEngine*			engine;
 	
-	vector<FILE*> 		files;
+	vector<int> 		files;
 	vector<DataBlock> 	dataBlocks;
 
 public:

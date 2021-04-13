@@ -6,6 +6,8 @@
 FileEngineSTDIO::FileEngineSTDIO( GameEngine* engine ) : FileEngine( engine )
 {
 	this->engine = engine;
+	this->engine->debug->PrintString( "file Engine STDIO constructor...\n" );
+
 
 	highestID = 1;
 }
@@ -19,8 +21,22 @@ void FileEngineSTDIO::Update()
 }
 unsigned int FileEngineSTDIO::Open( string filePath )
 {
+	this->engine->debug->PrintString( "open file %s...\n", filePath.c_str() );
+
 	FileHandle file;
-	file.filePointer = fopen( filePath.c_str(), "rwb" );
+	file.filePointer = NULL;
+	file.filePointer = fopen( filePath.c_str(), "rw" );
+	this->engine->debug->PrintString( "file ID: %i..\n", highestID );
+
+	if( file.filePointer != NULL )
+	{
+		this->engine->debug->PrintString( "file opend...\n" );
+	}
+	else
+	{
+		this->engine->debug->PrintString( "error couldnt open file error %i...\n", errno );
+	}
+
 	file.ID = highestID;
 	highestID++;
 	files.push_back( file );

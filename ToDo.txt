@@ -1,5 +1,8 @@
 To Do:
 
+change file engine to take pointer ref instead of returning a buffer. it creates memory leaks
+all engine parts should graceflly skip if they get a NULL pointer
+the data engine should throw a warning when a block of data is not found
 Predict is not working (it is working but janky. maybe pos needs to be float ? )
 add scenes to engine
 GameNode (Server/Client) should be able to add objects in a generic way without knowing all the types
@@ -9,7 +12,3 @@ MemoryEngine
 DLLs dont work in DOS! so no DLLs
 
 ClientSideUpdate and UpdateServerIndependend is potentially slow and inefficient
-
-60f/s
-10f/s
-6

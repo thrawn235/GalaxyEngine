@@ -7,6 +7,7 @@
 #include <vector>
 #include <locale>
 #include <stdlib.h>
+#include <algorithm>
 //#include <gtk/gtk.h>
 //#include <gtkmm/button.h>
 //#include <gtkmm/window.h>
@@ -640,7 +641,9 @@ public:
 		//uint32_t dataOffset =sizeof(NGRHeader);
 		for( unsigned int i = 0; i < data.size(); i++ )
 		{
-			fprintf( file, "#define %s %i\n", data[i].name.c_str(), data[i].id );
+			string defName = "DATA_"+data[i].name;
+			transform(defName.begin(), defName.end(), defName.begin(), ::toupper);
+			fprintf( file, "#define %s %i\n", defName.c_str(), data[i].id );
 			//dataOffset = dataOffset + data[i].size;
 		}
 		fprintf( file, "//====================================\n");

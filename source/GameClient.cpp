@@ -9,7 +9,7 @@ GameClient::GameClient()
     #endif
     #ifdef TARGET_LINUX
         engine->SetGraphicsType( GRAPHICS_TYPE_SDL );
-        engine->SetDebugType( TEXT_TYPE_DUMMY );
+        //engine->SetDebugType( TEXT_TYPE_DUMMY );
     #endif
     #ifdef TARGET_WIN
         engine->SetGraphicsType( GRAPHICS_TYPE_SDL );
@@ -30,6 +30,9 @@ GameClient::GameClient()
     //initial game objects
     MainMenu* mainMenu = new MainMenu( engine );
     engine->objects->AddObject( mainMenu );
+
+    engine->debug->PrintString(" loading NGR Assets - File\n ");
+    engine->data->LoadArchiveFile( "./assets/linux/assets.ngr" );
 
     engine->debug->PrintString( "\n\n" );
 }
@@ -105,7 +108,7 @@ void GameClient::Run()
 
 
             tickRate = 1.0 / clientTicksSinceLogicTick;
-            engine->text->PrintString( "       tickrate:%f clientTicks:%i!\n", tickRate, clientTicksSinceLogicTick );
+            //engine->text->PrintString( "       tickrate:%f clientTicks:%i!\n", tickRate, clientTicksSinceLogicTick );
             clientTicksSinceLogicTick = 0;
         }
 
@@ -115,7 +118,7 @@ void GameClient::Run()
     }
     //-----------------------------------------------------------
 
-    engine->text->PrintString( "       tickrate:%f clientTicks:%i!\n", tickRate, clientTicksSinceLogicTick );
+    //engine->text->PrintString( "       tickrate:%f clientTicks:%i!\n", tickRate, clientTicksSinceLogicTick );
 
 
     //Update Game Logic------------------------------------------
