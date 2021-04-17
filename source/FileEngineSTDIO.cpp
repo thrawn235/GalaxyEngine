@@ -54,54 +54,46 @@ void FileEngineSTDIO::Close( unsigned int fileID )
 		}
 	}
 }
-char* FileEngineSTDIO::ReadWholeFile( unsigned int fileID )
+void FileEngineSTDIO::ReadWholeFile( unsigned int fileID, char* buffer )
 {
-	char* buffer = NULL;
-
 	for( unsigned int i = 0; i < files.size(); i++ )
 	{
 		if( files[i].ID == fileID )
 		{
 			// obtain file size:
-			fseek ( files[i].filePointer , 0 , SEEK_END );
-			unsigned int fileSize = ftell ( files[i].filePointer );
-			rewind ( files[i].filePointer );
+			
 
 			// allocate memory to contain the whole file:
-			buffer = (char*) malloc ( sizeof(char) * fileSize );
+			/*buffer = (char*) malloc ( sizeof(char) * fileSize );
 			if (buffer == NULL) 
 			{
 				engine->debug->PrintString( "Memory error! " );
 				engine->Quit();
-			}
+			}*/
 
 			// copy the file into the buffer:
-			fread( buffer, 1, fileSize, files[i].filePointer );
+			fread( buffer, 1, GetFileSize( files[i].ID ), files[i].filePointer );
 			if (buffer == NULL) 
 			{
 				engine->debug->PrintString( "reading error! " );
 				engine->Quit();
 			}
-			break;
+			return;
 		}
 	}
-
-	return buffer;
 }
-char* FileEngineSTDIO::Read( unsigned int fileID, unsigned long length )
+void FileEngineSTDIO::Read( unsigned int fileID, char* buffer, unsigned long length )
 {
-	char* buffer = NULL;
-
 	for( unsigned int i = 0; i < files.size(); i++ )
 	{
 		if( files[i].ID == fileID )
 		{
-			buffer = (char*) malloc ( sizeof(char) * length );
+			/*buffer = (char*) malloc ( sizeof(char) * length );
 			if (buffer == NULL) 
 			{
 				engine->debug->PrintString( "Memory error! " );
 				engine->Quit();
-			}
+			}*/
 
 			// copy the file into the buffer:
 			fread( buffer, 1, length, files[i].filePointer );
@@ -110,26 +102,22 @@ char* FileEngineSTDIO::Read( unsigned int fileID, unsigned long length )
 				engine->debug->PrintString( "reading error! " );
 				engine->Quit();
 			}
-			break;
+			return;
 		}
 	}
-
-	return buffer;
 }
-char* FileEngineSTDIO::Read( unsigned int fileID, unsigned int start, unsigned long length )
+void FileEngineSTDIO::Read( unsigned int fileID, char* buffer, unsigned int start, unsigned long length )
 {
-    char* buffer = NULL;
-
 	for( unsigned int i = 0; i < files.size(); i++ )
 	{
 		if( files[i].ID == fileID )
 		{
-			buffer = (char*) malloc ( sizeof(char) * length );
+			/*buffer = (char*) malloc ( sizeof(char) * length );
 			if (buffer == NULL) 
 			{
 				engine->debug->PrintString( "Memory error! " );
 				engine->Quit();
-			}
+			}*/
 
 			fseek ( files[i].filePointer , start , SEEK_SET );
 
@@ -140,11 +128,9 @@ char* FileEngineSTDIO::Read( unsigned int fileID, unsigned int start, unsigned l
 				engine->debug->PrintString( "reading error! " );
 				engine->Quit();
 			}
-			break;
+			return;
 		}
 	}
-
-	return buffer;
 }
 void FileEngineSTDIO::Write( unsigned int fileID, char* data, unsigned long length )
 {
@@ -180,11 +166,39 @@ void FileEngineSTDIO::SetFilePos( unsigned int fileID, unsigned long pos )
 	{
 		if( files[i].ID == fileID )
 		{
-			fseek ( files[i].filePointer , pos , SEEK_SET );
-
-			break;
+			fseek ( files[i].filePointer, pos ,SEEK_SET );
+			this->engine->debug->PrintString(" filepos set to %i\n", ftell( files[i].filePointer ) );
+			return;
 		}
 	}
+}
+unsigned long FileEngineSTDIO::GetFilePos( unsigned int fileID )
+{
+	for( unsigned int i = 0; i < files.size(); i++ )
+	{
+		if( files[i].ID == fileID )
+		{
+			return ftell( files[i].filePointer );
+		}
+	}
+	return 0;
+}
+unsigned long FileEngineSTDIO::GetFileSize( unsigned int fileID )
+{
+	for( unsigned int i = 0; i < files.size(); i++ )
+	{
+		if( files[i].ID == fileID )
+		{
+			// obtain file size:
+			unsigned int pos = ftell( files[i].filePointer );
+
+			fseek ( files[i].filePointer , 0 , SEEK_END );
+			unsigned int fileSize = ftell ( files[i].filePointer );
+			fseek( files[i].filePointer, pos, SEEK_SET );
+			return fileSize;
+		}
+	}
+	return 0;
 }
 void FileEngineSTDIO::Rewind( unsigned int fileID )
 {

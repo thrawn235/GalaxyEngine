@@ -609,6 +609,7 @@ public:
 			entry.offset = dataOffset;
 			entry.size = data[i].size;
 			entry.type = data[i].type;
+			entry.id = data[i].id;
 			strcpy( entry.name, data[i].name.c_str() );
 			TOC.push_back( entry );
 

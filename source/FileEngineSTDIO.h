@@ -52,13 +52,15 @@ public:
 
     unsigned int    Open                ( string filePath );
     void            Close               ( unsigned int fileID );
-    char*           ReadWholeFile       ( unsigned int fileID );
-    char*           Read                ( unsigned int fileID, unsigned long length );
-    char*           Read                ( unsigned int fileID, unsigned int start, unsigned long length );
+    void            ReadWholeFile       ( unsigned int fileID, char* buffer );
+    void            Read                ( unsigned int fileID, char* buffer, unsigned long length );
+    void            Read                ( unsigned int fileID, char* buffer, unsigned int start, unsigned long length );
     void            Write               ( unsigned int fileID, char* data, unsigned long length );
     void            Write               ( unsigned int fileID, char* data, unsigned long start, unsigned long length );
 
     void            SetFilePos          ( unsigned int fileID, unsigned long pos );
+    unsigned long   GetFilePos          ( unsigned int fileID );
+    unsigned long   GetFileSize         ( unsigned int fileID );
     void            Rewind              ( unsigned int fileID );
     void            SetFilePosEnd       ( unsigned int fileID );
     void            ChangeFilePos       ( unsigned int fileID, unsigned long delta );

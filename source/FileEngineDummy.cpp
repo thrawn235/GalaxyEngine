@@ -22,17 +22,17 @@ void FileEngineDummy::Close( unsigned int fileID )
 {
 
 }
-char* FileEngineDummy::ReadWholeFile( unsigned int fileID )
+void FileEngineDummy::ReadWholeFile( unsigned int fileID, char* buffer )
 {
-    return NULL;
+
 }
-char* FileEngineDummy::Read( unsigned int fileID, unsigned long length )
+void FileEngineDummy::Read( unsigned int fileID, char* buffer, unsigned long length )
 {
-    return NULL;
+
 }
-char* FileEngineDummy::Read( unsigned int fileID, unsigned int start, unsigned long length )
+void FileEngineDummy::Read( unsigned int fileID, char* buffer, unsigned int start, unsigned long length )
 {
-    return NULL;
+
 }
 void FileEngineDummy::Write( unsigned int fileID, char* data, unsigned long length )
 {
@@ -53,6 +53,14 @@ void FileEngineDummy::Rewind( unsigned int fileID )
 void FileEngineDummy::SetFilePosEnd( unsigned int fileID )
 {
 
+}
+unsigned long FileEngineDummy::GetFilePos( unsigned int fileID )
+{
+	return 0;
+}
+unsigned long FileEngineDummy::GetFileSize( unsigned int fileID )
+{
+	return 0;
 }
 void FileEngineDummy::ChangeFilePos( unsigned int fileID, unsigned long delta )
 {

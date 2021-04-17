@@ -48,35 +48,40 @@ void* DataEngineNGR::GetData( unsigned long id )
 	for( unsigned int i = 0; i < files.size(); i++ )
 	{
 		//goto TOC
-		NGRHeader *header;
+		NGRHeader header;
 		this->engine->debug->PrintString( "read NGR Header...\n" );
-		header = (NGRHeader*)engine->file->Read( files[i], sizeof(NGRHeader) );
+		engine->file->Read( files[i], (char*)&header, sizeof(NGRHeader) );
 		//fread( &header, sizeof(NGRHeader), 1, files[i] );
 		//fseek( files[i], header.offsetTOC, SEEK_SET );
-		this->engine->debug->PrintString( "jump to TOC at %i...\n", header->offsetTOC );
-		engine->file->SetFilePos( files[i], header->offsetTOC );
+		this->engine->debug->PrintString( "jump to TOC at %i...\n", header.offsetTOC );
+		engine->file->SetFilePos( files[i], header.offsetTOC );
 
 		//read TOC
 		//vector<TOCEntry> newEntries;
 		this->engine->debug->PrintString( "read TOC...\n" );
-		for( unsigned int u = 0; u < header->numItems; u++ )
+		for( unsigned int u = 0; u < header.numItems; u++ )
 		{
 			this->engine->debug->PrintString( "TOC Entry %i...\n", u );
+			this->engine->debug->PrintString( "current offset %i\n", header.offsetTOC );
 			this->engine->debug->PrintString( "read...\n" );
-			TOCEntry *entry = (TOCEntry*)engine->file->Read( files[i], sizeof(TOCEntry) );
+			TOCEntry entry;
+			engine->file->Read( files[i], (char*)&entry, sizeof(TOCEntry) );
+			engine->debug->PrintString( "TOCEntry: %i id: %i offset: %i size: %i name: %s\n", u, entry.id, entry.offset, entry.size, entry.name );
+
 			//fread( &entry, sizeof(TOCEntry), 1, files[i] );
 			//newEntries.push_back( entry );
-			if( entry->id == id )
+			if( entry.id == id )
 			{
 				this->engine->debug->PrintString( "asset found in TOC...\n" );
 				//cout<<"TOCEntry: "<<u<<" offset: "<<entry.id<<entry.offset<<" size: "<<entry.size<<" Name: "<<entry.name<<endl;
-				engine->debug->PrintString( "TOCEntry: %i id: %i offset: %i size: %i name: %s\n", u, entry->id, entry->offset, entry->size, entry->name );
+				engine->debug->PrintString( "TOCEntry: %i id: %i offset: %i size: %i name: %s\n", u, entry.id, entry.offset, entry.size, entry.name );
 				DataBlock newBlock;
-				newBlock.id = entry->id;
+				newBlock.id = entry.id;
 				this->engine->debug->PrintString( "reading Data...\n" );
-				engine->file->SetFilePos( files[i], entry->offset + 3 );
+				engine->file->SetFilePos( files[i], entry.offset + 3 );
 				//fseek( files[i], entry.offset + 3, SEEK_SET );
-				newBlock.data = engine->file->Read( files[i], entry->size - 3 );
+				newBlock.data = (char*)malloc( entry.size - 3 );
+				engine->file->Read( files[i], newBlock.data, entry.size - 3 );
 				//fread( newBlock.data, entry.size - 3, 1, files[i] );
 				dataBlocks.push_back( newBlock );
 				return newBlock.data;

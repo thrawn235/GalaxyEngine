@@ -11,4 +11,12 @@ DOS Network implementation
 MemoryEngine
 DLLs dont work in DOS! so no DLLs
 
+need to find an efficient and elegang architecture for adaptive tile refresh
+it either needs to be handled by the graphics engine or by a separate module before it
+
+need to define what the client needs to know and what the server sends them
+
+also a method for the server to efficently filter or rather prefilter objects when tests need to be done
+dont need to check collision for stuff thats not even on the screen or near a player
+
 ClientSideUpdate and UpdateServerIndependend is potentially slow and inefficient
