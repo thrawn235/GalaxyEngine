@@ -388,3 +388,9 @@ void GraphicsEngineSDL::DrawVector( Vector2D pos, Vector2D vec, float scale, uns
         DrawLine( pos, ( vec * scale )+pos, color );
     }
 }
+
+//Sprite
+void GraphicsEngineDummy::DrawSprite( unsigned long id, Vector2D pos )
+{
+    
+}

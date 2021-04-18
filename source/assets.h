@@ -6,6 +6,8 @@
 
 
 //============ defines ===============
-#define DATA_STRING 0
+#define DATA_TESTINDEXED 0
+#define DATA_TEST 2
+#define DATA_STRING 3
 //====================================
 //------------------------- End -------------------------//

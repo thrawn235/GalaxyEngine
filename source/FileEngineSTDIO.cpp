@@ -35,6 +35,7 @@ unsigned int FileEngineSTDIO::Open( string filePath )
 	else
 	{
 		this->engine->debug->PrintString( "error couldnt open file error %i...\n", errno );
+		return 0;
 	}
 
 	file.ID = highestID;

@@ -65,6 +65,9 @@ public:
     void                    DrawCircle                              ( Vector2D pos, int radius, unsigned char color );
     void                    DrawFilledCircle                        ( Vector2D pos, int radius, unsigned char color );
     void                    DrawVector                              ( Vector2D pos, Vector2D vec, float scale, unsigned char color );
+
+    //Sprites
+    void                    DrawSprite                              ( unsigned long id, Vector2D pos );
 };
 
 #endif

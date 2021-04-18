@@ -106,3 +106,9 @@ void GraphicsEngineDummy::DrawVector( Vector2D pos, Vector2D vec, float scale, u
 {
 
 }
+
+//Sprite
+void GraphicsEngineDummy::DrawSprite( unsigned long id, Vector2D pos )
+{
+	
+}

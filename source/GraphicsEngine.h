@@ -94,6 +94,9 @@ public:
     virtual     void                    DrawCircle                  ( Vector2D pos, int radius, unsigned char color )                   = 0;
     virtual     void                    DrawFilledCircle            ( Vector2D pos, int radius, unsigned char color )                   = 0;
     virtual     void                    DrawVector                  ( Vector2D pos, Vector2D vec, float scale, unsigned char color )    = 0;
+
+    //Sprites
+    virtual     void                    DrawSprite                  ( unsigned long id, Vector2D pos )                                  = 0;
 };
 
 #endif

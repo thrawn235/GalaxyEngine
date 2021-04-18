@@ -82,7 +82,8 @@ void Player::Render()
 	engine->graphics->DrawRect( netStats->pos, 16, 16, COLOR_RED );
 	if( netStats->fire )
 	{
-		engine->text->PrintString( (char*)engine->data->GetData( DATA_STRING ) );
+		//engine->text->PrintString( (char*)engine->data->GetData( DATA_STRING ) );
+		engine->graphics->DrawSprite( DATA_TESTINDEXED, Vector2D( 0, 0 ) );
 	}
 }
 

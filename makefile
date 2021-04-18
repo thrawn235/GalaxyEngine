@@ -206,11 +206,13 @@ $(sourceDir)win/InputEngineSDL.o:               $(sourceDir)InputEngineSDL.cpp $
 
 $(binDir)win/main.exe:                          $(sourceDir)main.cpp $(sourceDir)win/Object.o $(sourceDir)win/ObjectsEngineVector.o $(sourceDir)win/ObjectsEngineDummy.o $(sourceDir)win/DataEngineDummy.o $(sourceDir)win/DataEngineNGR.o $(sourceDir)win/FileEngineSTDIO.o $(sourceDir)win/FileEngineDummy.o $(sourceDir)win/TimeEngineSDL.o $(sourceDir)win/TimeEngineDummy.o $(sourceDir)win/GameEngine.o $(sourceDir)win/GraphicsEngineDummy.o $(sourceDir)win/GraphicsEngineSDL.o $(sourceDir)win/InputEngineDummy.o $(sourceDir)win/NetEngineDummy.o $(sourceDir)win/TextEngineDummy.o $(sourceDir)win/GameNode.o $(sourceDir)win/TextEngineIOStream.o $(sourceDir)win/TextEngineSTDIO.o $(sourceDir)win/GameClient.o $(sourceDir)win/GameServer.o $(sourceDir)win/NetEngineLocal.o $(sourceDir)win/NetEngineWinSocketsUDP.o $(sourceDir)win/DerivedObjects.o $(sourceDir)win/NetEngine.o $(sourceDir)win/InputEngineSDL.o
 	$(CompilerWin) $(CFLAGS) -o $@ $^ $(CFLAGSWin)
-	cp $(assetsDir)win/* $(binDir)win/
+	cp $(assetsDir)win/libwinpthread-1.dll $(binDir)win/
+	cp $(assetsDir)win/SDL2.dll $(binDir)win/
 
 $(binDir)win/DedicatedServer.exe:               $(sourceDir)DedicatedServer.cpp $(sourceDir)win/Object.o $(sourceDir)win/ObjectsEngineVector.o $(sourceDir)win/ObjectsEngineDummy.o $(sourceDir)win/DataEngineDummy.o $(sourceDir)win/DataEngineNGR.o $(sourceDir)win/FileEngineSTDIO.o $(sourceDir)win/FileEngineDummy.o $(sourceDir)win/TimeEngineSDL.o $(sourceDir)win/TimeEngineDummy.o $(sourceDir)win/InputEngineDummy.o $(sourceDir)win/GraphicsEngineDummy.o $(sourceDir)win/GraphicsEngineSDL.o $(sourceDir)win/NetEngineDummy.o $(sourceDir)win/GameEngine.o $(sourceDir)win/TextEngineDummy.o $(sourceDir)win/GameNode.o $(sourceDir)win/InputEngineSDL.o $(sourceDir)win/TextEngineIOStream.o $(sourceDir)win/TextEngineSTDIO.o $(sourceDir)win/GameClient.o $(sourceDir)win/GameServer.o $(sourceDir)win/NetEngineLocal.o $(sourceDir)win/NetEngineWinSocketsUDP.o $(sourceDir)win/DerivedObjects.o $(sourceDir)win/NetEngine.o
 	$(CompilerWin) $(CFLAGS) -o $@ $^ $(CFLAGSWin)
-	cp $(assetsDir)win/* $(binDir)win/
+	cp $(assetsDir)win/libwinpthread-1.dll $(binDir)win/
+	cp $(assetsDir)win/SDL2.dll $(binDir)win/
 
 .PHONY: win
 win: $(binDir)win/main.exe
@@ -334,6 +336,14 @@ NGRCreator3: ./NGRCreator/bin/NGRCreator3
 
 .PHONY: stringConverter
 stringConverter: ./FileConversion/bin/stringConverter
+
+
+
+./FileConversion/bin/bmpConverter:		./FileConversion/source/bmpConverter.cpp
+	$(CompilerLinux) $(CFLAGS) $^ -o $@ -lSDL2 -lSDL2_gfx
+
+.PHONY: bmpConverter
+bmpConverter: ./FileConversion/bin/bmpConverter
 #==============================================================================================
 
 #============================================= all ============================================

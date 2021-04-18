@@ -6,13 +6,16 @@ GameClient::GameClient()
 {
     #ifdef TARGET_DOS
         engine->SetGraphicsType( GRAPHICS_TYPE_VESA );
+        engine->data->LoadArchiveFile( "./assets.ngr" );
     #endif
     #ifdef TARGET_LINUX
         engine->SetGraphicsType( GRAPHICS_TYPE_SDL );
         //engine->SetDebugType( TEXT_TYPE_DUMMY );
+        engine->data->LoadArchiveFile( "./assets/linux/assets.ngr" );
     #endif
     #ifdef TARGET_WIN
         engine->SetGraphicsType( GRAPHICS_TYPE_SDL );
+        engine->data->LoadArchiveFile( "./assets/win/assets.ngr" );
     #endif
         
     engine->objects->SetHighestUID( 100000 );
@@ -32,7 +35,6 @@ GameClient::GameClient()
     engine->objects->AddObject( mainMenu );
 
     engine->debug->PrintString(" loading NGR Assets - File\n ");
-    engine->data->LoadArchiveFile( "./assets/linux/assets.ngr" );
 
     engine->debug->PrintString( "\n\n" );
 }

@@ -13,7 +13,7 @@ GraphicsEngineVESA::GraphicsEngineVESA( GameEngine* engine ) : GraphicsEngine( e
     fullScreen      = true; //always true for dos
     initialized     = false;
 
-    InitGraphics();
+    //InitGraphics();
 }
 GraphicsEngineVESA::~GraphicsEngineVESA()
 {
@@ -641,16 +641,46 @@ void GraphicsEngineVESA::DrawFilledCircle( Vector2D pos, int radius, unsigned ch
 void GraphicsEngineVESA::DrawVector( Vector2D pos, Vector2D vec, float scale, unsigned char color )
 {
     //Draw Dot at origin
-    DrawPixel( Vector2D( pos.x-1, pos.y-1 ), color );
-    DrawPixel( Vector2D( pos.x, pos.y-1   ), color );
-    DrawPixel( Vector2D( pos.x+1, pos.y-1 ), color );
-    DrawPixel( Vector2D( pos.x-1, pos.y   ), color );
-    DrawPixel( Vector2D( pos.x, pos.y     ), color );
-    DrawPixel( Vector2D( pos.x+1, pos.y   ), color );
-    DrawPixel( Vector2D( pos.x-1, pos.y+1 ), color );
-    DrawPixel( Vector2D( pos.x, pos.y+1   ), color );
-    DrawPixel( Vector2D( pos.x+1, pos.y+1 ), color );
+    DrawPixel( Vector2D( pos.x - 1, pos.y - 1 ), color );
+    DrawPixel( Vector2D( pos.x    , pos.y - 1 ), color );
+    DrawPixel( Vector2D( pos.x + 1, pos.y - 1 ), color );
+    DrawPixel( Vector2D( pos.x - 1, pos.y     ), color );
+    DrawPixel( Vector2D( pos.x    , pos.y     ), color );
+    DrawPixel( Vector2D( pos.x + 1, pos.y     ), color );
+    DrawPixel( Vector2D( pos.x - 1, pos.y + 1 ), color );
+    DrawPixel( Vector2D( pos.x    , pos.y + 1 ), color );
+    DrawPixel( Vector2D( pos.x + 1, pos.y + 1 ), color );
 
     //Draw Line for Direction
     DrawLine( pos, ( vec * scale )+pos, color );
+}
+
+//Sprite
+void GraphicsEngineVESA::DrawSprite( unsigned long id, Vector2D pos )
+{
+    pos = pos + screenPadding;
+    pos = pos - camPos;
+
+    Sprite* in = (Sprite*)engine->data->GetData( id );
+
+    if( pos.x > 0 && pos.y > 0 && pos.x+in->width < logicalScreenWidth && pos.y + in->height < logicalScreenHeight )
+    {
+        int startAddress = ( int )currentBackBuffer + ( ( int )pos.y * logicalScreenWidth + ( int )pos.x );
+
+        asm( "mov %4, %%ebx;"
+            "loop1%=:;" 
+            "   mov %2, %%ecx;"
+            "   loop2%=:;"
+            "       sub $4, %%ecx;"
+            "       mov ( %%esi, %%ecx ), %%eax;"
+            "       mov %%eax, ( %%edi, %%ecx );"
+            "       ja loop2%=;"
+            "   add %2, %%esi;"
+            "   add %3, %%edi;"
+            "   dec %%ebx;"
+            "   ja loop1%=;"
+            :
+            :"D"( startAddress ), "S"( in->pixelData ), "m"( in->width ), "m"( logicalScreenWidth ), "m"( in->height )
+            :"eax", "ebx", "ecx", "memory" );
+    } 
 }

@@ -27,7 +27,10 @@ void DataEngineNGR::LoadArchiveFile( string filePath )
 {
 	this->engine->debug->PrintString( "load asset file - %s...\n", filePath.c_str() );
 	int file = engine->file->Open( filePath );
-	files.push_back( file );
+	if( file != 0 )
+	{
+		files.push_back( file );
+	}
 }
 void* DataEngineNGR::GetData( unsigned long id )
 {
@@ -80,8 +83,8 @@ void* DataEngineNGR::GetData( unsigned long id )
 				this->engine->debug->PrintString( "reading Data...\n" );
 				engine->file->SetFilePos( files[i], entry.offset + 3 );
 				//fseek( files[i], entry.offset + 3, SEEK_SET );
-				newBlock.data = (char*)malloc( entry.size - 3 );
-				engine->file->Read( files[i], newBlock.data, entry.size - 3 );
+				newBlock.data = (char*)malloc( entry.size /*- 3*/ );
+				engine->file->Read( files[i], newBlock.data, entry.size /*- 3*/ );
 				//fread( newBlock.data, entry.size - 3, 1, files[i] );
 				dataBlocks.push_back( newBlock );
 				return newBlock.data;
