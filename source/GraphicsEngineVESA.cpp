@@ -13,7 +13,7 @@ GraphicsEngineVESA::GraphicsEngineVESA( GameEngine* engine ) : GraphicsEngine( e
     fullScreen      = true; //always true for dos
     initialized     = false;
 
-    //InitGraphics();
+    InitGraphics();
 }
 GraphicsEngineVESA::~GraphicsEngineVESA()
 {
@@ -502,7 +502,7 @@ void GraphicsEngineVESA::DrawVLine( Vector2D start, int length, unsigned char co
     start = start + screenPadding;
     start = start - camPos;
 
-    if(     start.x > 0 && start.y > 0 && start.x < logicalScreenWidth && start.y < logicalScreenHeight &&
+    if( start.x > 0 && start.y > 0 && start.x < logicalScreenWidth && start.y < logicalScreenHeight &&
         start.y + length > 0 && start.y + length < logicalScreenHeight )
     {
         
@@ -662,25 +662,28 @@ void GraphicsEngineVESA::DrawSprite( unsigned long id, Vector2D pos )
     pos = pos - camPos;
 
     Sprite* in = (Sprite*)engine->data->GetData( id );
-
-    if( pos.x > 0 && pos.y > 0 && pos.x+in->width < logicalScreenWidth && pos.y + in->height < logicalScreenHeight )
+    if( in != NULL )
     {
-        int startAddress = ( int )currentBackBuffer + ( ( int )pos.y * logicalScreenWidth + ( int )pos.x );
+        if( pos.x >= 0 && pos.y >= 0 && pos.x+in->width < logicalScreenWidth && pos.y + in->height < logicalScreenHeight )
+        {
+            int startAddress = ( int )currentBackBuffer + ( ( int )pos.y * logicalScreenWidth + ( int )pos.x );
 
-        asm( "mov %4, %%ebx;"
-            "loop1%=:;" 
-            "   mov %2, %%ecx;"
-            "   loop2%=:;"
-            "       sub $4, %%ecx;"
-            "       mov ( %%esi, %%ecx ), %%eax;"
-            "       mov %%eax, ( %%edi, %%ecx );"
-            "       ja loop2%=;"
-            "   add %2, %%esi;"
-            "   add %3, %%edi;"
-            "   dec %%ebx;"
-            "   ja loop1%=;"
-            :
-            :"D"( startAddress ), "S"( in->pixelData ), "m"( in->width ), "m"( logicalScreenWidth ), "m"( in->height )
-            :"eax", "ebx", "ecx", "memory" );
-    } 
+            asm(    "mov %1, %%esi;"
+                    "mov %4, %%ebx;"
+                    "loop1%=:;" 
+                    "   mov %2, %%ecx;"
+                    "   loop2%=:;"
+                    "       sub $4, %%ecx;"
+                    "       mov ( %%esi, %%ecx ), %%eax;"
+                    "       mov %%eax, ( %%edi, %%ecx );"
+                    "       ja loop2%=;"
+                    "   add %2, %%esi;"
+                    "   add %3, %%edi;"
+                    "   dec %%ebx;"
+                    "   ja loop1%=;"
+                    :
+                    :"D"( startAddress ), "m"( &in->pixelData[0] ), "m"( in->width ), "m"( logicalScreenWidth ), "m"( in->height )
+                    :"eax", "ebx", "ecx", "memory" );
+        }
+    }
 }

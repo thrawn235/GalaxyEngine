@@ -28,19 +28,20 @@ using namespace std;
 #include "DataEngine.h"
 #include "ObjectsEngine.h"
 #ifdef TARGET_LINUX
-#include "NetEngineLinuxSocketsUDP.h"
-#include "NetEngineLinuxSocketsTCP.h"
-#include "InputEngineSDL.h"
+    #include "NetEngineLinuxSocketsUDP.h"
+    #include "NetEngineLinuxSocketsTCP.h"
+    #include "InputEngineSDL.h"
 #endif
 #ifdef TARGET_WIN
-#include "NetEngineWinSocketsUDP.h"
-#include "InputEngineSDL.h"
+    #include "NetEngineWinSocketsUDP.h"
+    #include "InputEngineSDL.h"
 #endif
 #ifdef TARGET_DOS
-#include "InputEngineDOS.h"
+    #include "InputEngineDOS.h"
+    #include "AssetsDOS.h"
 #endif
 
-#include "assets.h"
+
 
 
 #include "Vector2D.h"
