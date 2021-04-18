@@ -13,7 +13,7 @@ GraphicsEngineVESA::GraphicsEngineVESA( GameEngine* engine ) : GraphicsEngine( e
     fullScreen      = true; //always true for dos
     initialized     = false;
 
-    InitGraphics();
+    //InitGraphics();
 }
 GraphicsEngineVESA::~GraphicsEngineVESA()
 {
@@ -662,9 +662,12 @@ void GraphicsEngineVESA::DrawSprite( unsigned long id, Vector2D pos )
     pos = pos - camPos;
 
     Sprite* in = (Sprite*)engine->data->GetData( id );
+
+    engine->text->PrintString("maic %c%c%c, w:%i h:%i bpp:%i\n", in->magic[0], in->magic[1], in->magic[2], in->width, in->height, in->bpp );
+
     if( in != NULL )
     {
-        if( pos.x >= 0 && pos.y >= 0 && pos.x+in->width < logicalScreenWidth && pos.y + in->height < logicalScreenHeight )
+        /*if( pos.x >= 0 && pos.y >= 0 && pos.x+in->width < logicalScreenWidth && pos.y + in->height < logicalScreenHeight )
         {
             int startAddress = ( int )currentBackBuffer + ( ( int )pos.y * logicalScreenWidth + ( int )pos.x );
 
@@ -684,6 +687,6 @@ void GraphicsEngineVESA::DrawSprite( unsigned long id, Vector2D pos )
                     :
                     :"D"( startAddress ), "m"( &in->pixelData[0] ), "m"( in->width ), "m"( logicalScreenWidth ), "m"( in->height )
                     :"eax", "ebx", "ecx", "memory" );
-        }
+        }*/
     }
 }
