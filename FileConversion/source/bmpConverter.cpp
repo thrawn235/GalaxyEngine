@@ -659,10 +659,10 @@ void WriteSprite(const char* fileName, Sprite* out)
 	FILE *file = fopen( fileName, "wb+" );
 	char magic[3] = {'S','P','R'};
 	fwrite(magic, 1, 3, file);
-	fwrite(&out->width, 1, sizeof(int16_t), file);
-	fwrite(&out->height, 1, sizeof(int16_t), file);
-	fwrite(&out->pixelFormat, 1, sizeof(int32_t), file);
-	fwrite(&out->bitsPerPixel, 1, sizeof(int16_t), file);
+	fwrite(&out->width, 1, sizeof(uint16_t), file);
+	fwrite(&out->height, 1, sizeof(uint16_t), file);
+	fwrite(&out->pixelFormat, 1, sizeof(uint32_t), file);
+	fwrite(&out->bitsPerPixel, 1, sizeof(uint16_t), file);
 	fputc( 'X', file );
 	fputc( 'X', file );
 	fputc( 'X', file );
@@ -679,10 +679,10 @@ void JustWriteSprite( Sprite* out, FILE* file )
 {
 	char magic[3] = {'S','P','R'};
 	fwrite(magic, 1, 3, file);
-	fwrite(&out->width, 1, sizeof(int16_t), file);
-	fwrite(&out->height, 1, sizeof(int16_t), file);
-	fwrite(&out->pixelFormat, 1, sizeof(int32_t), file);
-	fwrite(&out->bitsPerPixel, 1, sizeof(int16_t), file);
+	fwrite(&out->width, 1, sizeof(uint16_t), file);
+	fwrite(&out->height, 1, sizeof(uint16_t), file);
+	fwrite(&out->pixelFormat, 1, sizeof(uint32_t), file);
+	fwrite(&out->bitsPerPixel, 1, sizeof(uint16_t), file);
 	fputc( 'X', file );
 	fputc( 'X', file );
 	fputc( 'X', file );

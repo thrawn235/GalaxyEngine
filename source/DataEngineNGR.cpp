@@ -81,7 +81,7 @@ void* DataEngineNGR::GetData( unsigned long id )
 				DataBlock newBlock;
 				newBlock.id = entry.id;
 				this->engine->debug->PrintString( "reading Data...\n" );
-				engine->file->SetFilePos( files[i], entry.offset + 3 );
+				engine->file->SetFilePos( files[i], entry.offset /*+ 3 */ );
 				//fseek( files[i], entry.offset + 3, SEEK_SET );
 				newBlock.data = (char*)malloc( entry.size /*- 3*/ );
 				engine->file->Read( files[i], newBlock.data, entry.size /*- 3*/ );

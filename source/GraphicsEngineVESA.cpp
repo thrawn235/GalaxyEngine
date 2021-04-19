@@ -13,7 +13,7 @@ GraphicsEngineVESA::GraphicsEngineVESA( GameEngine* engine ) : GraphicsEngine( e
     fullScreen      = true; //always true for dos
     initialized     = false;
 
-    //InitGraphics();
+    InitGraphics();
 }
 GraphicsEngineVESA::~GraphicsEngineVESA()
 {
@@ -663,16 +663,15 @@ void GraphicsEngineVESA::DrawSprite( unsigned long id, Vector2D pos )
 
     Sprite* in = (Sprite*)engine->data->GetData( id );
 
-    engine->text->PrintString("maic %c%c%c, w:%i h:%i bpp:%i\n", in->magic[0], in->magic[1], in->magic[2], in->width, in->height, in->bpp );
+    //engine->text->PrintString("maic %c%c%c, w:%i h:%i bpp:%i, 1:%i\n", in->magic[0], in->magic[1], in->magic[2], in->width, in->height, in->bpp, in->pixelData );
 
     if( in != NULL )
     {
-        /*if( pos.x >= 0 && pos.y >= 0 && pos.x+in->width < logicalScreenWidth && pos.y + in->height < logicalScreenHeight )
+        if( pos.x >= 0 && pos.y >= 0 && pos.x+in->width < logicalScreenWidth && pos.y + in->height < logicalScreenHeight )
         {
             int startAddress = ( int )currentBackBuffer + ( ( int )pos.y * logicalScreenWidth + ( int )pos.x );
 
-            asm(    "mov %1, %%esi;"
-                    "mov %4, %%ebx;"
+            /*asm(    "mov %4, %%ebx;"
                     "loop1%=:;" 
                     "   mov %2, %%ecx;"
                     "   loop2%=:;"
@@ -685,8 +684,28 @@ void GraphicsEngineVESA::DrawSprite( unsigned long id, Vector2D pos )
                     "   dec %%ebx;"
                     "   ja loop1%=;"
                     :
-                    :"D"( startAddress ), "m"( &in->pixelData[0] ), "m"( in->width ), "m"( logicalScreenWidth ), "m"( in->height )
+                    :"D"( startAddress ), "S"( &in->pixelData ), "m"( in->width ), "m"( logicalScreenWidth ), "m"( in->height )
+                    :"eax", "ebx", "ecx", "memory" );*/
+
+            int i = 10;
+
+            asm(    "mov $0, %%ebx;"
+                    "movw $4, %%ebx;"
+                    "loop1%=:;"
+                    "   movw $0, %%ecx;" 
+                    "   movw %2, %%ecx;"
+                    "   loop2%=:;"
+                    "       sub $4, %%ecx;"
+                    "       mov ( %%esi, %%ecx ), %%eax;"
+                    "       mov %%eax, ( %%edi, %%ecx );"
+                    "       ja loop2%=;"
+                    "   add %2, %%esi;"
+                    "   add %3, %%edi;"
+                    "   dec %%ebx;"
+                    "   ja loop1%=;"
+                    :
+                    :"D"( startAddress ), "S"( &in->pixelData ), "m"( in->width ), "m"( logicalScreenWidth ), "m"( i )
                     :"eax", "ebx", "ecx", "memory" );
-        }*/
+        }
     }
 }

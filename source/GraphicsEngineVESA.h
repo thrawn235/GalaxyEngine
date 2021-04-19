@@ -93,8 +93,8 @@ struct Sprite
     uint32_t    format;
     uint16_t    bpp;
     char        padding[3];
-    char*       pixelData;
-};
+    char        pixelData;
+}__attribute__( ( packed ) );
 
 
 class GraphicsEngineVESA : public GraphicsEngine
