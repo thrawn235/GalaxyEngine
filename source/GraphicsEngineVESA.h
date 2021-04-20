@@ -88,11 +88,10 @@ struct ModeInfoBlock
 struct Sprite
 {
     char        magic[3];
-    uint16_t    width;
-    uint16_t    height;
+    uint32_t    width;
+    uint32_t    height;
     uint32_t    format;
-    uint16_t    bpp;
-    char        padding[3];
+    uint32_t    bpp;
     char        pixelData;
 }__attribute__( ( packed ) );
 
@@ -167,7 +166,10 @@ public:
     void                    DrawVector                  ( Vector2D pos, Vector2D vec, float scale, unsigned char color );
 
     //Sprites
-    void                    DrawSprite                              ( unsigned long id, Vector2D pos );
+    void                    DrawSprite                  ( unsigned long id, Vector2D pos );
+
+    //VESA only
+    void                    LoadPalette                 ( char* palette, int numColors );
 };
 
 #endif

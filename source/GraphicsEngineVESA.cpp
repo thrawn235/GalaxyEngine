@@ -14,6 +14,7 @@ GraphicsEngineVESA::GraphicsEngineVESA( GameEngine* engine ) : GraphicsEngine( e
     initialized     = false;
 
     InitGraphics();
+    LoadPalette( (char*)engine->data->GetData( DATA_VGADEFAULTPALETTE ), 256 );
 }
 GraphicsEngineVESA::~GraphicsEngineVESA()
 {
@@ -68,8 +69,9 @@ void GraphicsEngineVESA::InitGraphics()
     {
         engine->debug->PrintString( "%s\n", modes[i].name.c_str() );
     }
+    //getchar();
 
-    SetDisplayMode( modes[1] );
+    SetDisplayMode( modes[0] );
 }
 vector<DisplayMode> GraphicsEngineVESA::GetAvailableDisplayModes()
 {
@@ -93,7 +95,7 @@ vector<DisplayMode> GraphicsEngineVESA::GetAvailableDisplayModes()
     unsigned int i = 0;
     while( vesaModes[i] != 0xFFFF )
     {
-        printf("Mode %i: %X\n", i, vesaModes[i] );
+        //printf("Mode %i: %X\n", i, vesaModes[i] );
         uint16_t newMode = vesaModes[i];
 
         dosBuffer = __tb & 0xFFFFF;
@@ -108,17 +110,17 @@ vector<DisplayMode> GraphicsEngineVESA::GetAvailableDisplayModes()
         ModeInfoBlock modeInfoBlock;
 
         dosmemget( dosBuffer, sizeof( ModeInfoBlock ), &modeInfoBlock );
-        //printf("Mode %i: %X\n", i, vesaModes[i] );
+        //printf( "Mode %i: %X\n", i, vesaModes[i] );
         //printf( "ModeAttributes: %u \n",    modeInfoBlock.ModeAttributes        );
         //printf( "WinSize: %u \n",           modeInfoBlock.WinSize               );
         //printf( "WinFuncPtr: %p \n",        ( void* )modeInfoBlock.WinFuncPtr   );
         //printf( "BytesPerScanline: %u \n",  modeInfoBlock.BytesPerScanLine      );
-        printf( "XResolution: %hu \n",      modeInfoBlock.XResolution           );
-        printf( "YResolution: %hu \n",      modeInfoBlock.YResolution           );
+        //printf( "XResolution: %hu \n",      modeInfoBlock.XResolution           );
+        //printf( "YResolution: %hu \n",      modeInfoBlock.YResolution           );
         //printf( "XCharSize: %hu \n",        modeInfoBlock.XCharSize             );
         //printf( "YCharSize: %hu \n",        modeInfoBlock.YCharSize             );
         //printf( "NumberOfPlanes: %hu \n",   modeInfoBlock.NumberOfPlanes        );
-        printf( "BitsPerPixel: %hu \n",     modeInfoBlock.BitsPerPixel          );
+        //printf( "BitsPerPixel: %hu \n",     modeInfoBlock.BitsPerPixel          );
         //printf( "NumberOfBanks: %hu \n",    modeInfoBlock.NumberOfBanks         );
         //printf( "MemoryModel: %hu \n",      modeInfoBlock.MemoryModel           );
         //printf( "BankSize: %hu \n",         modeInfoBlock.BankSize              );
@@ -130,8 +132,12 @@ vector<DisplayMode> GraphicsEngineVESA::GetAvailableDisplayModes()
         displayMode.height = modeInfoBlock.YResolution;
         displayMode.colorDepth = modeInfoBlock.BitsPerPixel;
         displayMode.name.append( engine->text->SPrintString( "%X", vesaModes[i] ) );
-        engine->text->PrintString( "%X\n", vesaModes[i] );
-        modes.push_back( displayMode );
+        
+        if( displayMode.colorDepth == 8 )
+        {
+            engine->text->PrintString( "%X, %i;%i;%i\n", vesaModes[i], displayMode.width, displayMode.height, displayMode.colorDepth );
+            modes.push_back( displayMode );
+        }
         i++;
     }   
 
@@ -671,7 +677,7 @@ void GraphicsEngineVESA::DrawSprite( unsigned long id, Vector2D pos )
         {
             int startAddress = ( int )currentBackBuffer + ( ( int )pos.y * logicalScreenWidth + ( int )pos.x );
 
-            /*asm(    "mov %4, %%ebx;"
+            asm(    "mov %4, %%ebx;"
                     "loop1%=:;" 
                     "   mov %2, %%ecx;"
                     "   loop2%=:;"
@@ -685,27 +691,21 @@ void GraphicsEngineVESA::DrawSprite( unsigned long id, Vector2D pos )
                     "   ja loop1%=;"
                     :
                     :"D"( startAddress ), "S"( &in->pixelData ), "m"( in->width ), "m"( logicalScreenWidth ), "m"( in->height )
-                    :"eax", "ebx", "ecx", "memory" );*/
-
-            int i = 10;
-
-            asm(    "mov $0, %%ebx;"
-                    "movw $4, %%ebx;"
-                    "loop1%=:;"
-                    "   movw $0, %%ecx;" 
-                    "   movw %2, %%ecx;"
-                    "   loop2%=:;"
-                    "       sub $4, %%ecx;"
-                    "       mov ( %%esi, %%ecx ), %%eax;"
-                    "       mov %%eax, ( %%edi, %%ecx );"
-                    "       ja loop2%=;"
-                    "   add %2, %%esi;"
-                    "   add %3, %%edi;"
-                    "   dec %%ebx;"
-                    "   ja loop1%=;"
-                    :
-                    :"D"( startAddress ), "S"( &in->pixelData ), "m"( in->width ), "m"( logicalScreenWidth ), "m"( i )
                     :"eax", "ebx", "ecx", "memory" );
         }
+    }
+}
+
+void GraphicsEngineVESA::LoadPalette( char* palette, int numColors )
+{
+    outportb( 0x03c8, 0 );
+    int index = 3;
+    for( int i = 0; i < numColors; i++ ) //+3 for the MAGIC string at the beginning of the data block
+    {
+        outportb( 0x03c9, palette[index + 0]);
+        outportb( 0x03c9, palette[index + 1]);
+        outportb( 0x03c9, palette[index + 2]);
+        
+        index = index + 3;
     }
 }

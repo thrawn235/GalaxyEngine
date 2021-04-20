@@ -1,5 +1,7 @@
 To Do:
 
+bug prevents drawing halfway off the screen
+
 change file engine to take pointer ref instead of returning a buffer. it creates memory leaks
 all engine parts should graceflly skip if they get a NULL pointer
 the data engine should throw a warning when a block of data is not found
@@ -18,5 +20,7 @@ need to define what the client needs to know and what the server sends them
 
 also a method for the server to efficently filter or rather prefilter objects when tests need to be done
 dont need to check collision for stuff thats not even on the screen or near a player
+
+need a way to ell the client to remove objects
 
 ClientSideUpdate and UpdateServerIndependend is potentially slow and inefficient

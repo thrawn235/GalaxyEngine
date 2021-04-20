@@ -5,17 +5,17 @@
 GameClient::GameClient()
 {
     #ifdef TARGET_DOS
-        engine->SetGraphicsType( GRAPHICS_TYPE_VESA );
         engine->data->LoadArchiveFile( "./assets.ngr" );
+        engine->SetGraphicsType( GRAPHICS_TYPE_VESA );
     #endif
     #ifdef TARGET_LINUX
+        engine->data->LoadArchiveFile( "./assets/linux/assets.ngr" );
         engine->SetGraphicsType( GRAPHICS_TYPE_SDL );
         //engine->SetDebugType( TEXT_TYPE_DUMMY );
-        engine->data->LoadArchiveFile( "./assets/linux/assets.ngr" );
     #endif
     #ifdef TARGET_WIN
-        engine->SetGraphicsType( GRAPHICS_TYPE_SDL );
         engine->data->LoadArchiveFile( "./assets/win/assets.ngr" );
+        engine->SetGraphicsType( GRAPHICS_TYPE_SDL );
     #endif
         
     engine->objects->SetHighestUID( 100000 );

@@ -344,6 +344,14 @@ stringConverter: ./FileConversion/bin/stringConverter
 
 .PHONY: bmpConverter
 bmpConverter: ./FileConversion/bin/bmpConverter
+
+
+
+./FileConversion/bin/palConverter:		./FileConversion/source/palConverter.cpp
+	$(CompilerLinux) $(CFLAGS) $^ -o $@
+
+.PHONY: palConverter
+palConverter: ./FileConversion/bin/palConverter
 #==============================================================================================
 
 #============================================= all ============================================

@@ -53,9 +53,9 @@ struct Sprite
 {
 	//MAGIC						//3
 	uint16_t	id;				
-	uint16_t 	width, height;	//4
+	uint32_t 	width, height;	//4
 	uint32_t	pixelFormat;	//4
-	uint16_t	bitsPerPixel;	//2
+	uint32_t	bitsPerPixel;	//2
 	char* 		pixelData;
 };
 struct TileSet
@@ -659,13 +659,10 @@ void WriteSprite(const char* fileName, Sprite* out)
 	FILE *file = fopen( fileName, "wb+" );
 	char magic[3] = {'S','P','R'};
 	fwrite(magic, 1, 3, file);
-	fwrite(&out->width, 1, sizeof(uint16_t), file);
-	fwrite(&out->height, 1, sizeof(uint16_t), file);
+	fwrite(&out->width, 1, sizeof(uint32_t), file);
+	fwrite(&out->height, 1, sizeof(uint32_t), file);
 	fwrite(&out->pixelFormat, 1, sizeof(uint32_t), file);
-	fwrite(&out->bitsPerPixel, 1, sizeof(uint16_t), file);
-	fputc( 'X', file );
-	fputc( 'X', file );
-	fputc( 'X', file );
+	fwrite(&out->bitsPerPixel, 1, sizeof(uint32_t), file);
 	int bytesPerPixel = out->bitsPerPixel / 8;
 	fwrite(out->pixelData, 1, out->width * out->height * bytesPerPixel, file);
 	cout<<"width = "<<out->width<<" height = "<<out->height<<" bpp = "<<bytesPerPixel<<endl;
@@ -679,13 +676,10 @@ void JustWriteSprite( Sprite* out, FILE* file )
 {
 	char magic[3] = {'S','P','R'};
 	fwrite(magic, 1, 3, file);
-	fwrite(&out->width, 1, sizeof(uint16_t), file);
-	fwrite(&out->height, 1, sizeof(uint16_t), file);
+	fwrite(&out->width, 1, sizeof(uint32_t), file);
+	fwrite(&out->height, 1, sizeof(uint32_t), file);
 	fwrite(&out->pixelFormat, 1, sizeof(uint32_t), file);
-	fwrite(&out->bitsPerPixel, 1, sizeof(uint16_t), file);
-	fputc( 'X', file );
-	fputc( 'X', file );
-	fputc( 'X', file );
+	fwrite(&out->bitsPerPixel, 1, sizeof(uint32_t), file);
 	int bytesPerPixel = out->bitsPerPixel / 8;
 	fwrite(out->pixelData, 1, out->width * out->height * bytesPerPixel, file);
 	cout<<"wrote "<<out->width * out->height * bytesPerPixel<<" bytes"<<endl;
