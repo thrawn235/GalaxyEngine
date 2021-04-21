@@ -170,6 +170,7 @@ public:
 
     //VESA only
     void                    LoadPalette                 ( char* palette, int numColors );
+    void                    DrawPalette                 ( Vector2D pos );
 };
 
 #endif

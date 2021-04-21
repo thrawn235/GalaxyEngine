@@ -14,7 +14,7 @@ GraphicsEngineVESA::GraphicsEngineVESA( GameEngine* engine ) : GraphicsEngine( e
     initialized     = false;
 
     InitGraphics();
-    LoadPalette( (char*)engine->data->GetData( DATA_VGADEFAULTPALETTE ), 256 );
+    //LoadPalette( (char*)engine->data->GetData( DATA_VGADEFAULTPALETTE ), 255 );
 }
 GraphicsEngineVESA::~GraphicsEngineVESA()
 {
@@ -527,6 +527,8 @@ void GraphicsEngineVESA::DrawRect( Vector2D pos, int width, int height, unsigned
     DrawVLine( Vector2D( pos.x+width, pos.y ), height+1, color );
     DrawHLine( pos, width, color );
     DrawHLine( Vector2D( pos.x, pos.y+height ), width, color );
+
+    DrawPalette( pos );
 }
 void GraphicsEngineVESA::DrawFilledRect( Vector2D pos, int width, int height, unsigned char color )
 {
@@ -693,6 +695,86 @@ void GraphicsEngineVESA::DrawSprite( unsigned long id, Vector2D pos )
                     :"D"( startAddress ), "S"( &in->pixelData ), "m"( in->width ), "m"( logicalScreenWidth ), "m"( in->height )
                     :"eax", "ebx", "ecx", "memory" );
         }
+    }
+}
+
+void GraphicsEngineVESA::DrawPalette( Vector2D pos )
+{
+    pos = pos + screenPadding;
+    pos = pos - camPos;
+
+    //engine->text->PrintString("maic %c%c%c, w:%i h:%i bpp:%i, 1:%i\n", in->magic[0], in->magic[1], in->magic[2], in->width, in->height, in->bpp, in->pixelData );
+
+    
+
+    for( unsigned int i = 0; i < 16; i++ )
+    {
+        int startAddress = ( int )currentBackBuffer + ( ( ( int )pos.y+i) * logicalScreenWidth + ( int )pos.x );
+        asm(    "mov $16, %%ebx;"
+                "mov $0, %%al;"
+                "loop1%=:;" 
+                "   mov $16, %%ecx;"
+                "   mov $0, %%edx;"
+                "   loop2%=:;"
+                "       mov %%al, ( %%edi, %%edx );"
+                "       inc %%edx;"
+                "       mov %%al, ( %%edi, %%edx );"
+                "       inc %%edx;"
+                "       mov %%al, ( %%edi, %%edx );"
+                "       inc %%edx;"
+                "       mov %%al, ( %%edi, %%edx );"
+                "       inc %%edx;"
+                "       mov %%al, ( %%edi, %%edx );"
+                "       inc %%edx;"
+                "       mov %%al, ( %%edi, %%edx );"
+                "       inc %%edx;"
+                "       mov %%al, ( %%edi, %%edx );"
+                "       inc %%edx;"
+                "       mov %%al, ( %%edi, %%edx );"
+                "       inc %%edx;"
+                "       mov %%al, ( %%edi, %%edx );"
+                "       inc %%edx;"
+                "       mov %%al, ( %%edi, %%edx );"
+                "       inc %%edx;"
+                "       mov %%al, ( %%edi, %%edx );"
+                "       inc %%edx;"
+                "       mov %%al, ( %%edi, %%edx );"
+                "       inc %%edx;"
+                "       mov %%al, ( %%edi, %%edx );"
+                "       inc %%edx;"
+                "       mov %%al, ( %%edi, %%edx );"
+                "       inc %%edx;"
+                "       mov %%al, ( %%edi, %%edx );"
+                "       inc %%edx;"
+                "       mov %%al, ( %%edi, %%edx );"
+                "       inc %%edx;"
+
+                "       inc %%eax;"
+                "       dec %%ecx;"
+                "       ja loop2%=;"
+                "   add %1, %%edi;"
+                "   add %1, %%edi;"
+                "   add %1, %%edi;"
+                "   add %1, %%edi;"
+                "   add %1, %%edi;"
+                "   add %1, %%edi;"
+                "   add %1, %%edi;"
+                "   add %1, %%edi;"
+                "   add %1, %%edi;"
+                "   add %1, %%edi;"
+                "   add %1, %%edi;"
+                "   add %1, %%edi;"
+                "   add %1, %%edi;"
+                "   add %1, %%edi;"
+                "   add %1, %%edi;"
+                "   add %1, %%edi;"
+                "   dec %%ebx;"
+                "   ja loop1%=;"
+                :
+                :"D"( startAddress ), "m"( logicalScreenWidth )
+                :"eax", "ebx", "ecx", "edx", "memory" );
+
+
     }
 }
 
