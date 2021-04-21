@@ -390,7 +390,68 @@ void GraphicsEngineSDL::DrawVector( Vector2D pos, Vector2D vec, float scale, uns
 }
 
 //Sprite
-void GraphicsEngineDummy::DrawSprite( unsigned long id, Vector2D pos )
+void GraphicsEngineSDL::DrawSprite( unsigned long id, Vector2D pos )
+{ 
+    pos = pos - camPos;
+
+    SDL_Texture* texture = GetTexture( id );
+    engine->debug->PrintString( "texture loaded...\n" );
+
+    int access, width, height;
+    Uint32 format;
+    SDL_QueryTexture( texture, &format, &access, &width, &height );
+
+
+    if( texture != NULL )
+    {
+        if( pos.x >= 0 && pos.y >= 0 && pos.x + width < logicalScreenWidth && pos.y + height < logicalScreenHeight )
+        {
+
+            SDL_Rect srcrect;
+            SDL_Rect dstrect;
+
+            srcrect.x = 0;
+            srcrect.y = 0;
+            srcrect.w = width;
+            srcrect.h = height;
+            dstrect.x = pos.x;
+            dstrect.y = pos.y;
+            dstrect.w = width;
+            dstrect.h = height;
+
+
+            SDL_RenderCopy( renderer, texture, &srcrect, &dstrect );
+
+        }
+    }      
+}
+
+SDL_Texture* GraphicsEngineSDL::GetTexture( unsigned long id )
 {
-    
+    for( unsigned int i = 0; i < textures.size(); i++ )
+    {
+        if( id == textures[i].id )
+        {
+            return textures[i].texture;
+        }
+    }
+
+
+    struct Sprite
+    {
+        char        magic[3];
+        uint32_t    width;
+        uint32_t    height;
+        uint32_t    format;
+        uint32_t    bpp;
+        char        pixelData;
+    }__attribute__( ( packed ) );
+
+    //texture not found
+    Sprite* data = (Sprite*)engine->data->GetData( id );
+    engine->debug->PrintString( "w:%i h:%i bpp:%i\n", data->width, data->height, data->bpp );
+
+    int pitch = (data->bpp / 8) * data->width; 
+
+    return SDL_CreateTextureFromSurface( renderer, SDL_CreateRGBSurfaceWithFormatFrom( &data->pixelData, data->width, data->height, data->bpp, pitch, data->format ) );
 }

@@ -31,10 +31,12 @@ using namespace std;
     #include "NetEngineLinuxSocketsUDP.h"
     #include "NetEngineLinuxSocketsTCP.h"
     #include "InputEngineSDL.h"
+    #include "AssetsLinux.h"
 #endif
 #ifdef TARGET_WIN
     #include "NetEngineWinSocketsUDP.h"
     #include "InputEngineSDL.h"
+    #include "AssetsWin.h"
 #endif
 #ifdef TARGET_DOS
     #include "InputEngineDOS.h"
