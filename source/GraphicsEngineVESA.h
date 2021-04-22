@@ -167,10 +167,15 @@ public:
 
     //Sprites
     void                    DrawSprite                  ( unsigned long id, Vector2D pos );
+    void                    DrawSpriteInSheet           ( unsigned int id, unsigned int index, Vector2D pos );
+    void                    DrawSpriteSheet             ( unsigned int id, unsigned int width, Vector2D pos );
 
     //VESA only
+    void                    DrawSprite                  ( Sprite* in, Vector2D pos );
     void                    LoadPalette                 ( char* palette, int numColors );
     void                    DrawPalette                 ( Vector2D pos );
+    Sprite*                 GetSpriteInCollection       ( unsigned int id, unsigned int index );
+
 };
 
 #endif

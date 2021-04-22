@@ -6,7 +6,8 @@
 
 
 //============ defines ===============
-#define DATA_TREEHOUSE 0
-#define DATA_VGADEFAULTPALETTE 1
+#define DATA_LINES 0
+#define DATA_TREEHOUSE 1
+#define DATA_VGADEFAULTPALETTE 2
 //====================================
 //------------------------- End -------------------------//

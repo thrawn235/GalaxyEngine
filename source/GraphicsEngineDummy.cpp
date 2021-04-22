@@ -112,3 +112,12 @@ void GraphicsEngineDummy::DrawSprite( unsigned long id, Vector2D pos )
 {
 	
 }
+void GraphicsEngineDummy::DrawSpriteInSheet( unsigned int id, unsigned int index, Vector2D pos )
+{
+
+}
+
+void GraphicsEngineDummy::DrawSpriteSheet( unsigned int id, unsigned int width, Vector2D pos )
+{
+
+}

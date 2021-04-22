@@ -426,6 +426,16 @@ void GraphicsEngineSDL::DrawSprite( unsigned long id, Vector2D pos )
     }      
 }
 
+void GraphicsEngineSDL::DrawSpriteInSheet( unsigned int id, unsigned int index, Vector2D pos )
+{
+
+}
+
+void GraphicsEngineSDL::DrawSpriteSheet( unsigned int id, unsigned int width, Vector2D pos )
+{
+
+}
+
 SDL_Texture* GraphicsEngineSDL::GetTexture( unsigned long id )
 {
     for( unsigned int i = 0; i < textures.size(); i++ )

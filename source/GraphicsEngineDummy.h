@@ -68,6 +68,9 @@ public:
 
     //Sprites
     void                    DrawSprite                              ( unsigned long id, Vector2D pos );
+    void                    DrawSpriteInSheet                       ( unsigned int id, unsigned int index, Vector2D pos );
+    void                    DrawSpriteSheet                         ( unsigned int id, unsigned int width, Vector2D pos );
+
 };
 
 #endif

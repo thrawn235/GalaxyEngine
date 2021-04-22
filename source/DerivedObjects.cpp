@@ -83,7 +83,8 @@ void Player::Render()
 	if( netStats->fire )
 	{
 		//engine->text->PrintString( (char*)engine->data->GetData( DATA_STRING ) );
-		engine->graphics->DrawSprite( DATA_TREEHOUSE, Vector2D( 0, 0 ) );
+		//engine->graphics->DrawSprite( DATA_TREEHOUSE, Vector2D( 0, 0 ) );
+		engine->graphics->DrawSpriteSheet( DATA_LINES, 2, Vector2D( 0, 0 ) );
 	}
 }
 

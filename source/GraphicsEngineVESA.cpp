@@ -698,6 +698,74 @@ void GraphicsEngineVESA::DrawSprite( unsigned long id, Vector2D pos )
     }
 }
 
+void GraphicsEngineVESA::DrawSprite( Sprite* in, Vector2D pos )
+{
+    pos = pos + screenPadding;
+    pos = pos - camPos;
+
+    if( in != NULL )
+    {
+        if( pos.x >= 0 && pos.y >= 0 && pos.x+in->width < logicalScreenWidth && pos.y + in->height < logicalScreenHeight )
+        {
+            int startAddress = ( int )currentBackBuffer + ( ( int )pos.y * logicalScreenWidth + ( int )pos.x );
+
+            asm(    "mov %4, %%ebx;"
+                    "loop1%=:;" 
+                    "   mov %2, %%ecx;"
+                    "   loop2%=:;"
+                    "       sub $4, %%ecx;"
+                    "       mov ( %%esi, %%ecx ), %%eax;"
+                    "       mov %%eax, ( %%edi, %%ecx );"
+                    "       ja loop2%=;"
+                    "   add %2, %%esi;"
+                    "   add %3, %%edi;"
+                    "   dec %%ebx;"
+                    "   ja loop1%=;"
+                    :
+                    :"D"( startAddress ), "S"( &in->pixelData ), "m"( in->width ), "m"( logicalScreenWidth ), "m"( in->height )
+                    :"eax", "ebx", "ecx", "memory" );
+        }
+    }
+}
+
+void GraphicsEngineVESA::DrawSpriteInSheet( unsigned int id, unsigned int index, Vector2D pos )
+{
+    DrawSprite( GetSpriteInCollection( id, index ), pos );
+}
+
+void GraphicsEngineVESA::DrawSpriteSheet( unsigned int id, unsigned int width, Vector2D pos )
+{
+    Vector2D apos = pos;
+    unsigned int awidth = width;
+
+    struct Collection
+    {
+        char        magic[3];
+        uint32_t    numItems;
+        uint32_t    itemSize;
+        char        data;
+    }__attribute__( ( packed ) );
+
+    Collection* collection = (Collection*)engine->data->GetData( id );
+
+    if( collection != NULL )
+    {
+        for( unsigned int i = 0; i < collection->numItems; i++ )
+        {
+            Sprite* out = (Sprite*)&collection->data + collection->itemSize * i;
+            DrawSprite( out, pos );
+            apos.x = apos.x + out->width;
+            awidth --;
+            if( awidth >= 0 )
+            {
+                awidth = width;
+                apos.x = pos.x;
+                apos.y = apos.y + out->height;
+            }
+        }
+    }
+}
+
 void GraphicsEngineVESA::DrawPalette( Vector2D pos )
 {
     pos = pos + screenPadding;
@@ -790,4 +858,28 @@ void GraphicsEngineVESA::LoadPalette( char* palette, int numColors )
         
         index = index + 3;
     }
+}
+
+Sprite* GraphicsEngineVESA::GetSpriteInCollection( unsigned int id, unsigned int index )
+{
+    struct Collection
+    {
+        char        magic[3];
+        uint32_t    numItems;
+        uint32_t    itemSize;
+        char        data;
+    }__attribute__( ( packed ) );
+
+    Collection* collection = (Collection*)engine->data->GetData( id );
+
+    if( collection != NULL )
+    {
+        if( index <= collection->numItems )
+        {
+            Sprite* out = (Sprite*)&collection->data + collection->itemSize * index;
+            return out;
+        }
+    }
+
+    return NULL;
 }
