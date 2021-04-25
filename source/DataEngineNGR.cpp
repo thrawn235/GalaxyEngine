@@ -18,6 +18,10 @@ DataEngineNGR::~DataEngineNGR()
 		this->engine->debug->PrintString( "close %i ...\n", i );
 		this->engine->file->Close( files[i] );
 	}
+
+	//remove all data
+	this->engine->debug->PrintString( "Free all data...\n" );
+	FreeAllData();
 }
 void DataEngineNGR::Update()
 {
@@ -53,6 +57,7 @@ void* DataEngineNGR::GetData( unsigned long id )
 		//goto TOC
 		NGRHeader header;
 		this->engine->debug->PrintString( "read NGR Header...\n" );
+		engine->file->Rewind( files[i] );
 		engine->file->Read( files[i], (char*)&header, sizeof(NGRHeader) );
 		//fread( &header, sizeof(NGRHeader), 1, files[i] );
 		//fseek( files[i], header.offsetTOC, SEEK_SET );
@@ -106,4 +111,17 @@ void DataEngineNGR::FreeData( unsigned long id )
 			return;
 		}
 	}
+}
+unsigned int DataEngineNGR::GetNumData()
+{
+	//
+	return dataBlocks.size();
+} 
+void DataEngineNGR::FreeAllData()
+{
+	for( unsigned int i = 0; i < dataBlocks.size(); i++ )
+	{
+		free( dataBlocks[i].data );
+	}
+	dataBlocks.clear();
 }

@@ -190,6 +190,11 @@ void MainMenu::UpdateServerIndependend()
 			engine->debug->PrintString( "purge...\n" );
 			engine->objects->PurgeAllObjectsExcept( this, true );
 
+			engine->debug->PrintString( "GameClient: create Performance Overlay...\n" );
+		    PerformanceOverlay* performanceOverlay = new PerformanceOverlay( engine );
+		    engine->debug->PrintString( "GameClient: add PerformanceOverlay...\n" );
+		    engine->objects->AddObject( performanceOverlay );
+
 			//create server
 			if( server != NULL )
 			{
@@ -315,4 +320,42 @@ void MainMenu::UpdateServerIndependend()
 void MainMenu::Render()
 {
 	
+}
+
+
+
+
+
+
+PerformanceOverlay::PerformanceOverlay( GameEngine* engine ) : Object( engine )
+{
+	baseNetStats = (NetStats*)realloc( baseNetStats, sizeof( PerformanceOverlayStats ) );
+
+    netStats = (PerformanceOverlayStats*)baseNetStats;
+    netStats->size = sizeof( PerformanceOverlayStats );
+
+	netStats->type = OBJECT_PERFORMANCE_OVERLAY;
+
+	netStats->persistent = true;
+}
+PerformanceOverlay::~PerformanceOverlay()
+{
+	delete server;
+}
+void PerformanceOverlay::GameLogic()
+{
+	//Performance Overlay is not supposed to even be replicated to the server
+	//
+}
+void PerformanceOverlay::ClientSideUpdate()
+{
+	
+}
+void PerformanceOverlay::UpdateServerIndependend()
+{
+
+}
+void PerformanceOverlay::Render()
+{
+	engine->graphics->DrawText( DATA_SONIC_FONT, engine->text->SPrintString( "PO:Objects\nPO:Memory\nPO:FPS" ), Vector2D( 0, 0 ) );
 }

@@ -65,15 +65,17 @@ protected:
 	vector<DataBlock> 	dataBlocks;
 
 public:
-            DataEngineNGR       ( GameEngine* engine );
-            ~DataEngineNGR  	();
+            		DataEngineNGR       ( GameEngine* engine );
+            		~DataEngineNGR  	();
 
-    void    Update          	();
+    void    		Update          	();
 
-    void 	LoadArchiveFile 	( string filePath );
+    void 			LoadArchiveFile 	( string filePath );
 
-    void*   GetData         	( unsigned long id );
-    void    FreeData        	( unsigned long id );
+    void*   		GetData         	( unsigned long id );
+    void    		FreeData        	( unsigned long id );
+    unsigned int 	GetNumData 			(); 
+    void 			FreeAllData			();
 
     //--------------------- diagnostics ----------------------
 };

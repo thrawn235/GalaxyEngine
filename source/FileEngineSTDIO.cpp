@@ -13,7 +13,7 @@ FileEngineSTDIO::FileEngineSTDIO( GameEngine* engine ) : FileEngine( engine )
 }
 FileEngineSTDIO::~FileEngineSTDIO()
 {
-
+	CloseAll();
 }
 void FileEngineSTDIO::Update()
 {
@@ -54,6 +54,14 @@ void FileEngineSTDIO::Close( unsigned int fileID )
 			break;
 		}
 	}
+}
+void FileEngineSTDIO::CloseAll()
+{
+	for( unsigned int i = 0; i < files.size(); i++ )
+	{
+		fclose( files[i].filePointer );
+	}
+	files.clear();
 }
 void FileEngineSTDIO::ReadWholeFile( unsigned int fileID, char* buffer )
 {

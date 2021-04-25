@@ -800,14 +800,17 @@ void GraphicsEngineVESA::DrawText( unsigned int id, string text, Vector2D pos )
 {
     Vector2D savePos = pos;
     Sprite* firstSprite = (Sprite*)GetSpriteInCollection( id, 0 );
-    for( unsigned int i = 0; i < text.size(); i++ )
+    if( firstSprite != NULL )
     {
-        DrawSpriteInSheet( id, text[i] - 32, pos );
-        pos.x = pos.x + firstSprite->width;
-        if( text[i] == '\n' )
+        for( unsigned int i = 0; i < text.size(); i++ )
         {
-            pos.x = savePos.x;
-            pos.y = pos.y + firstSprite->height;
+            DrawSpriteInSheet( id, text[i] - 32, pos );
+            pos.x = pos.x + firstSprite->width;
+            if( text[i] == '\n' )
+            {
+                pos.x = savePos.x;
+                pos.y = pos.y + firstSprite->height;
+            }
         }
     }    
 }
@@ -816,16 +819,19 @@ void GraphicsEngineVESA::DrawText( unsigned int id, string text, unsigned int li
     unsigned int linePos = 0;
     Vector2D savePos = pos;
     Sprite* firstSprite = (Sprite*)GetSpriteInCollection( id, 0 );
-    for( unsigned int i = 0; i < text.size(); i++ )
+    if( firstSprite != NULL )
     {
-        DrawSpriteInSheet( id, text[i] - 32, pos );
-        pos.x = pos.x + firstSprite->width;
-        linePos++;
-        if( linePos >= lineLength || text[i] == '\n' )
+        for( unsigned int i = 0; i < text.size(); i++ )
         {
-            linePos = 0;
-            pos.x = savePos.x;
-            pos.y = pos.y + firstSprite->height;
+            DrawSpriteInSheet( id, text[i] - 32, pos );
+            pos.x = pos.x + firstSprite->width;
+            linePos++;
+            if( linePos >= lineLength || text[i] == '\n' )
+            {
+                linePos = 0;
+                pos.x = savePos.x;
+                pos.y = pos.y + firstSprite->height;
+            }
         }
     }  
 }

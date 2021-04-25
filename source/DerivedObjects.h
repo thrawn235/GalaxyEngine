@@ -87,4 +87,28 @@ public:
 	//--------------- MainMenu specific -----------------
 };
 
+
+
+
+struct PerformanceOverlayStats : ObjectStats
+{
+	
+};
+
+class PerformanceOverlay : public Object
+{
+private:
+	
+protected:
+	PerformanceOverlayStats*	netStats;
+public:
+					PerformanceOverlay		( GameEngine* engine );
+					~PerformanceOverlay		();
+	virtual void 	GameLogic				();
+	virtual void 	ClientSideUpdate		();
+	virtual void	UpdateServerIndependend	();
+	virtual void	Render					();
+	//--------------- PerformanceOverlay specific -----------------
+};
+
 #endif

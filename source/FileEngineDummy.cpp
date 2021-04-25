@@ -22,6 +22,10 @@ void FileEngineDummy::Close( unsigned int fileID )
 {
 
 }
+void FileEngineDummy::CloseAll()
+{
+
+}
 void FileEngineDummy::ReadWholeFile( unsigned int fileID, char* buffer )
 {
 

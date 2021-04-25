@@ -24,3 +24,6 @@ dont need to check collision for stuff thats not even on the screen or near a pl
 need a way to ell the client to remove objects
 
 ClientSideUpdate and UpdateServerIndependend is potentially slow and inefficient
+
+
+prelode data

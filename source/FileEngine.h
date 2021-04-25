@@ -43,7 +43,8 @@ public:
 
     virtual unsigned int    Open            ( string filePath )                                                             = 0;
     virtual void            Close           ( unsigned int fileID )                                                         = 0;
-    virtual void            ReadWholeFile   ( unsigned int fileID, char* buffer )                                                         = 0;
+    virtual void            CloseAll        ()                                                                              = 0;
+    virtual void            ReadWholeFile   ( unsigned int fileID, char* buffer )                                           = 0;
     virtual void            Read            ( unsigned int fileID, char* buffer, unsigned long length )                     = 0;
     virtual void            Read            ( unsigned int fileID, char* buffer, unsigned int start, unsigned long length ) = 0;
     virtual void            Write           ( unsigned int fileID, char* data, unsigned long length )                       = 0;

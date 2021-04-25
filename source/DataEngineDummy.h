@@ -30,15 +30,17 @@ class DataEngineDummy : public DataEngine
 protected:
 
 public:
-            DataEngineDummy     ( GameEngine* engine );
-            ~DataEngineDummy 	();
+            		DataEngineDummy     ( GameEngine* engine );
+            		~DataEngineDummy 	();
 
-    void    Update          	();
+    void    		Update          	();
 
-    void 	LoadArchiveFile 	( string filePath );
+    void 			LoadArchiveFile 	( string filePath );
 
-    void*   GetData         	( unsigned long id );
-    void    FreeData        	( unsigned long id );
+    void*   		GetData         	( unsigned long id );
+    void    		FreeData        	( unsigned long id );
+    unsigned int 	GetNumData 			(); 
+    void 			FreeAllData			();
 
     //--------------------- diagnostics ----------------------
 };

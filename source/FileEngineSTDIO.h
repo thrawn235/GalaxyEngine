@@ -52,6 +52,7 @@ public:
 
     unsigned int    Open                ( string filePath );
     void            Close               ( unsigned int fileID );
+    void            CloseAll            ();
     void            ReadWholeFile       ( unsigned int fileID, char* buffer );
     void            Read                ( unsigned int fileID, char* buffer, unsigned long length );
     void            Read                ( unsigned int fileID, char* buffer, unsigned int start, unsigned long length );

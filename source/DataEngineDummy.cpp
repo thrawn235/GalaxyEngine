@@ -27,3 +27,11 @@ void DataEngineDummy::FreeData( unsigned long id )
 {
 
 }
+unsigned int DataEngineDummy::GetNumData()
+{
+	return 0;
+} 
+void DataEngineDummy::FreeAllData()
+{
+
+}

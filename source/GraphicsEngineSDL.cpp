@@ -127,6 +127,11 @@ GraphicsEngineSDL::GraphicsEngineSDL( GameEngine* engine ) : GraphicsEngine( eng
 GraphicsEngineSDL::~GraphicsEngineSDL()
 {
     //Free all textures!
+    for( unsigned int i = 0; i < textures.size(); i++ )
+    {
+        engine->data->FreeData( textures[i].id );
+    }
+    textures.clear();
 
     // Close and destroy the window
     SDL_DestroyWindow( window );

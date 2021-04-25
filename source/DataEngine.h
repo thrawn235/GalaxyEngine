@@ -34,15 +34,18 @@ class DataEngine
 protected:
 
 public:
-                        DataEngine      ( GameEngine* engine )  {};
-    virtual             ~DataEngine     ()                      {};
+                        		DataEngine      ( GameEngine* engine )  {};
+    virtual             		~DataEngine     ()                      {};
 
-    virtual     void    Update          ()                      = 0;
+    virtual     void    		Update          ()                      = 0;
 
-    virtual 	void 	LoadArchiveFile ( string filePath )		= 0;
+    virtual 	void 			LoadArchiveFile ( string filePath )		= 0;
 
-    virtual     void*   GetData         ( unsigned long id )    = 0;
-    virtual     void    FreeData        ( unsigned long id )    = 0;
+    virtual     void*   		GetData         ( unsigned long id )    = 0;
+    virtual     void    		FreeData        ( unsigned long id )    = 0;
+    virtual 	void 			FreeAllData		()						= 0;
+
+    virtual 	unsigned int 	GetNumData 		()  					= 0;
 
     //--------------------- diagnostics ----------------------
 };

@@ -36,7 +36,6 @@ GameClient::GameClient()
     MainMenu* mainMenu = new MainMenu( engine );
     engine->debug->PrintString( "GameClient: add MainMenu...\n" );
     engine->objects->AddObject( mainMenu );
-
     
 
     engine->debug->PrintString( "\n\n" );
