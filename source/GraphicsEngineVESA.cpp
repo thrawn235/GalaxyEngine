@@ -795,6 +795,41 @@ void GraphicsEngineVESA::DrawSpriteSheet( unsigned int id, unsigned int width, V
     }
 }
 
+//Text
+void GraphicsEngineVESA::DrawText( unsigned int id, string text, Vector2D pos )
+{
+    Vector2D savePos = pos;
+    Sprite* firstSprite = (Sprite*)GetSpriteInCollection( id, 0 );
+    for( unsigned int i = 0; i < text.size(); i++ )
+    {
+        DrawSpriteInSheet( id, text[i] - 32, pos );
+        pos.x = pos.x + firstSprite->width;
+        if( text[i] == '\n' )
+        {
+            pos.x = savePos.x;
+            pos.y = pos.y + firstSprite->height;
+        }
+    }    
+}
+void GraphicsEngineVESA::DrawText( unsigned int id, string text, unsigned int lineLength, Vector2D pos )
+{
+    unsigned int linePos = 0;
+    Vector2D savePos = pos;
+    Sprite* firstSprite = (Sprite*)GetSpriteInCollection( id, 0 );
+    for( unsigned int i = 0; i < text.size(); i++ )
+    {
+        DrawSpriteInSheet( id, text[i] - 32, pos );
+        pos.x = pos.x + firstSprite->width;
+        linePos++;
+        if( linePos >= lineLength || text[i] == '\n' )
+        {
+            linePos = 0;
+            pos.x = savePos.x;
+            pos.y = pos.y + firstSprite->height;
+        }
+    }  
+}
+
 void GraphicsEngineVESA::DrawPalette( Vector2D pos )
 {
     if( initialized )

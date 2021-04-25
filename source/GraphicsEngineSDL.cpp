@@ -121,13 +121,15 @@ GraphicsEngineSDL::GraphicsEngineSDL( GameEngine* engine ) : GraphicsEngine( eng
     // The window is open: could enter program loop here (see SDL_PollEvent())
 
 
-    SetDisplayMode( modes[30] );
+    SetDisplayMode( modes[25] );
     //SetFullScreen( true );
 }
 GraphicsEngineSDL::~GraphicsEngineSDL()
 {
+    //Free all textures!
+
     // Close and destroy the window
-    SDL_DestroyWindow(window);
+    SDL_DestroyWindow( window );
 
     SDL_QuitSubSystem( SDL_INIT_VIDEO );
 
@@ -421,21 +423,185 @@ void GraphicsEngineSDL::DrawSprite( unsigned long id, Vector2D pos )
 
 
             SDL_RenderCopy( renderer, texture, &srcrect, &dstrect );
-
         }
     }      
 }
 
 void GraphicsEngineSDL::DrawSpriteInSheet( unsigned int id, unsigned int index, Vector2D pos )
 {
-
+    SDL_Texture* texture = GetTextureInCollection( id, index );
+    DrawSprite( texture, pos );
 }
 
 void GraphicsEngineSDL::DrawSpriteSheet( unsigned int id, unsigned int width, Vector2D pos )
 {
+    struct Collection
+    {
+        char        magic[3];
+        uint32_t    numItems;
+        uint32_t    itemSize;
+        char        data;
+    }__attribute__( ( packed ) );
 
+    Vector2D savePos = pos;
+    unsigned int linePos = 0;
+
+    Collection* collection = (Collection*)engine->data->GetData( id );
+
+    SDL_Texture* texture = GetTextureInCollection( id, 0 );
+
+
+    if( collection != NULL )
+    {
+        for( unsigned int i = 0; i < collection->numItems; i++ )
+        {
+            int access, spriteWidth, spriteHeight;
+            Uint32 format;
+            SDL_QueryTexture( texture, &format, &access, &spriteWidth, &spriteHeight );
+
+            DrawSpriteInSheet( id, i, pos );
+            linePos++;
+            pos.x = pos.x + spriteWidth;
+            if( linePos >= width )
+            {
+                linePos = 0;
+                pos.x = savePos.x;
+                pos.y = pos.y + spriteHeight;
+            }
+        }
+    }
 }
 
+//Text
+void GraphicsEngineSDL::DrawText( unsigned int id, string text, Vector2D pos )
+{
+    Vector2D savePos = pos;
+    
+    SDL_Texture* texture = GetTextureInCollection( id, 0 );
+    int access, width, height;
+    Uint32 format;
+    SDL_QueryTexture( texture, &format, &access, &width, &height );
+
+    for( unsigned int i = 0; i < text.size(); i++ )
+    {
+        DrawSpriteInSheet( id, text[i] - 32, pos );
+        pos.x = pos.x + width;
+        if( text[i] == '\n' )
+        {
+            pos.x = savePos.x;
+            pos.y = pos.y + height;
+        }
+    }
+}
+void GraphicsEngineSDL::DrawText( unsigned int id, string text, unsigned int lineLength, Vector2D pos )
+{
+    unsigned int linePos = 0;
+    Vector2D savePos = pos;
+    
+    SDL_Texture* texture = GetTextureInCollection( id, 0 );
+    int access, width, height;
+    Uint32 format;
+    SDL_QueryTexture( texture, &format, &access, &width, &height );
+
+    for( unsigned int i = 0; i < text.size(); i++ )
+    {
+        DrawSpriteInSheet( id, text[i] - 32, pos );
+        pos.x = pos.x + width;
+        linePos++;
+        if( linePos >= lineLength || text[i] == '\n' )
+        {
+            linePos = 0;
+            pos.x = savePos.x;
+            pos.y = pos.y + height;
+        }
+    }  
+}
+
+//SDL only
+SDL_Texture* GraphicsEngineSDL::GetTextureInCollection( unsigned long id, unsigned long index )
+{
+    struct Collection
+    {
+        char        magic[3];
+        uint32_t    numItems;
+        uint32_t    itemSize;
+        char        data;
+    }__attribute__( ( packed ) );
+
+    struct Sprite
+    {
+        char        magic[3];
+        uint32_t    width;
+        uint32_t    height;
+        uint32_t    format;
+        uint32_t    bpp;
+        char        pixelData;
+    }__attribute__( ( packed ) );
+
+    Collection* collection = (Collection*)engine->data->GetData( id );
+
+    if( collection != NULL )
+    {
+        if( index <= collection->numItems )
+        {
+            for( unsigned int i = 0; i < textures.size(); i++ )
+            {
+                if( id * 1000 + index == textures[i].id )
+                {
+                    return textures[i].texture;
+                }
+            }
+
+            char* data = &collection->data + collection->itemSize * index;
+            Sprite* out = (Sprite*)data;
+
+            engine->debug->PrintString( "w:%i h:%i bpp:%i\n", out->width, out->height, out->bpp );
+
+            int pitch = (out->bpp / 8) * out->width; 
+
+            Texture texture;
+            texture.texture = SDL_CreateTextureFromSurface( renderer, SDL_CreateRGBSurfaceWithFormatFrom( &out->pixelData, out->width, out->height, out->bpp, pitch, out->format ) );
+            texture.id = id * 10000 + index;
+            textures.push_back( texture );
+            return texture.texture;        
+        }
+    }
+    return NULL;
+}
+void GraphicsEngineSDL::DrawSprite( SDL_Texture* texture, Vector2D pos )
+{
+    pos = pos - camPos;
+
+    engine->debug->PrintString( "texture loaded...\n" );
+
+    int access, width, height;
+    Uint32 format;
+    SDL_QueryTexture( texture, &format, &access, &width, &height );
+
+
+    if( texture != NULL )
+    {
+        if( pos.x >= 0 && pos.y >= 0 && pos.x + width < logicalScreenWidth && pos.y + height < logicalScreenHeight )
+        {
+
+            SDL_Rect srcrect;
+            SDL_Rect dstrect;
+
+            srcrect.x = 0;
+            srcrect.y = 0;
+            srcrect.w = width;
+            srcrect.h = height;
+            dstrect.x = pos.x;
+            dstrect.y = pos.y;
+            dstrect.w = width;
+            dstrect.h = height;
+
+
+            SDL_RenderCopy( renderer, texture, &srcrect, &dstrect );
+
+        }
+    } 
+}
 SDL_Texture* GraphicsEngineSDL::GetTexture( unsigned long id )
 {
     for( unsigned int i = 0; i < textures.size(); i++ )
@@ -463,5 +629,9 @@ SDL_Texture* GraphicsEngineSDL::GetTexture( unsigned long id )
 
     int pitch = (data->bpp / 8) * data->width; 
 
-    return SDL_CreateTextureFromSurface( renderer, SDL_CreateRGBSurfaceWithFormatFrom( &data->pixelData, data->width, data->height, data->bpp, pitch, data->format ) );
+    Texture texture;
+    texture.texture = SDL_CreateTextureFromSurface( renderer, SDL_CreateRGBSurfaceWithFormatFrom( &data->pixelData, data->width, data->height, data->bpp, pitch, data->format ) );
+    texture.id = id;
+    textures.push_back( texture );
+    return texture.texture;
 }

@@ -60,45 +60,50 @@ class GraphicsEngine
 protected:
 
 public:
-                                        GraphicsEngine              ( GameEngine* engine )                                              {};
-    virtual                             ~GraphicsEngine             ()                                                                  {};
+                                        GraphicsEngine              ( GameEngine* engine )                                                  {};
+    virtual                             ~GraphicsEngine             ()                                                                      {};
 
-    virtual     void                    InitGraphics                ()                                                                  = 0;
+    virtual     void                    InitGraphics                ()                                                                      = 0;
 
-    virtual     vector<DisplayMode>     GetAvailableDisplayModes    ()                                                                  = 0;
-    virtual     void                    SetDisplayMode              ( DisplayMode mode )                                                = 0;
-    virtual     void                    SetFullScreen               ( bool fullScreen )                                                 = 0;
+    virtual     vector<DisplayMode>     GetAvailableDisplayModes    ()                                                                      = 0;
+    virtual     void                    SetDisplayMode              ( DisplayMode mode )                                                    = 0;
+    virtual     void                    SetFullScreen               ( bool fullScreen )                                                     = 0;
 
-    virtual     unsigned int            GetScreenWidth              ()                                                                  = 0;
-    virtual     unsigned int            GetScreenHeight             ()                                                                  = 0;
+    virtual     unsigned int            GetScreenWidth              ()                                                                      = 0;
+    virtual     unsigned int            GetScreenHeight             ()                                                                      = 0;
     
     //Clear and Flip
-    virtual     void                    PreFrame                    ()                                                                  = 0;
-    virtual     void                    PostFrame                   ()                                                                  = 0;
+    virtual     void                    PreFrame                    ()                                                                      = 0;
+    virtual     void                    PostFrame                   ()                                                                      = 0;
 
     //Camera
-    virtual     Vector2D                GetCamPos                   ()                                                                  = 0;
-    virtual     void                    SetCamPos                   ( Vector2D newPos )                                                 = 0;
-    virtual     void                    SetCamCenter                ( Vector2D newPos )                                                 = 0;
-    virtual     Vector2D                GetCamCenter                ()                                                                  = 0;
+    virtual     Vector2D                GetCamPos                   ()                                                                      = 0;
+    virtual     void                    SetCamPos                   ( Vector2D newPos )                                                     = 0;
+    virtual     void                    SetCamCenter                ( Vector2D newPos )                                                     = 0;
+    virtual     Vector2D                GetCamCenter                ()                                                                      = 0;
 
     //Drawing
-    virtual     void                    ClearScreen                 ()                                                                  = 0;
-    virtual     void                    ClearScreen                 ( unsigned char color )                                             = 0;
-    virtual     void                    DrawPixel                   ( Vector2D pos, unsigned char color )                               = 0;
-    virtual     void                    DrawLine                    ( Vector2D start, Vector2D end, unsigned char color )               = 0;
-    virtual     void                    DrawHLine                   ( Vector2D start, int length, unsigned char color )                 = 0;
-    virtual     void                    DrawVLine                   ( Vector2D start, int length, unsigned char color )                 = 0;
-    virtual     void                    DrawRect                    ( Vector2D pos, int width, int height, unsigned char color )        = 0;
-    virtual     void                    DrawFilledRect              ( Vector2D pos, int width, int height, unsigned char color )        = 0;
-    virtual     void                    DrawCircle                  ( Vector2D pos, int radius, unsigned char color )                   = 0;
-    virtual     void                    DrawFilledCircle            ( Vector2D pos, int radius, unsigned char color )                   = 0;
-    virtual     void                    DrawVector                  ( Vector2D pos, Vector2D vec, float scale, unsigned char color )    = 0;
-    virtual     void                    DrawSpriteInSheet           ( unsigned int id, unsigned int index, Vector2D pos )               = 0;
-    virtual     void                    DrawSpriteSheet             ( unsigned int id, unsigned int width, Vector2D pos )               = 0;
+    virtual     void                    ClearScreen                 ()                                                                      = 0;
+    virtual     void                    ClearScreen                 ( unsigned char color )                                                 = 0;
+    virtual     void                    DrawPixel                   ( Vector2D pos, unsigned char color )                                   = 0;
+    virtual     void                    DrawLine                    ( Vector2D start, Vector2D end, unsigned char color )                   = 0;
+    virtual     void                    DrawHLine                   ( Vector2D start, int length, unsigned char color )                     = 0;
+    virtual     void                    DrawVLine                   ( Vector2D start, int length, unsigned char color )                     = 0;
+    virtual     void                    DrawRect                    ( Vector2D pos, int width, int height, unsigned char color )            = 0;
+    virtual     void                    DrawFilledRect              ( Vector2D pos, int width, int height, unsigned char color )            = 0;
+    virtual     void                    DrawCircle                  ( Vector2D pos, int radius, unsigned char color )                       = 0;
+    virtual     void                    DrawFilledCircle            ( Vector2D pos, int radius, unsigned char color )                       = 0;
+    virtual     void                    DrawVector                  ( Vector2D pos, Vector2D vec, float scale, unsigned char color )        = 0;
+    
+    virtual     void                    DrawSpriteInSheet           ( unsigned int id, unsigned int index, Vector2D pos )                   = 0;
+    virtual     void                    DrawSpriteSheet             ( unsigned int id, unsigned int width, Vector2D pos )                   = 0;
+
+    //Text
+    virtual     void                    DrawText                    ( unsigned int id, string text, Vector2D pos )                          = 0;
+    virtual     void                    DrawText                    ( unsigned int id, string text, unsigned int lineLength, Vector2D pos ) = 0;
 
     //Sprites
-    virtual     void                    DrawSprite                  ( unsigned long id, Vector2D pos )                                  = 0;
+    virtual     void                    DrawSprite                  ( unsigned long id, Vector2D pos )                                      = 0;
 };
 
 #endif

@@ -71,6 +71,9 @@ public:
     void                    DrawSpriteInSheet                       ( unsigned int id, unsigned int index, Vector2D pos );
     void                    DrawSpriteSheet                         ( unsigned int id, unsigned int width, Vector2D pos );
 
+    //Text
+    void                    DrawText                                ( unsigned int id, string text, Vector2D pos );
+    void                    DrawText                                ( unsigned int id, string text, unsigned int lineLength, Vector2D pos );
 };
 
 #endif

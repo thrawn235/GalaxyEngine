@@ -7,7 +7,8 @@
 
 //============ defines ===============
 #define DATA_LINES 0
-#define DATA_TREEHOUSE 1
-#define DATA_VGADEFAULTPALETTE 2
+#define DATA_SONIC_FONT 1
+#define DATA_TREEHOUSE 2
+#define DATA_VGADEFAULTPALETTE 3
 //====================================
 //------------------------- End -------------------------//
