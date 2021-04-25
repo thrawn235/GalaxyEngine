@@ -825,7 +825,7 @@ int main( int argc, char* argv[] )
 			fwrite( magic, 1, 3, file );
 			uint32_t numFrames = inSet->tiles.size();
 			fwrite( &numFrames, 1, sizeof(uint32_t), file );
-			uint32_t size = ( ( inSet->tileWidth + inSet->tileHeight ) * ( inSet->tiles[0]->bitsPerPixel / 8 ) + 3 + 4 * sizeof( uint32_t ) );
+			uint32_t size = ( ( inSet->tileWidth * inSet->tileHeight ) * ( inSet->tiles[0]->bitsPerPixel / 8 ) + 3 + 4 * sizeof( uint32_t ) );
 			fwrite( &size, 1, sizeof(uint32_t), file );
 
 			for( unsigned int i = 0; i < inSet->tiles.size(); i++ )

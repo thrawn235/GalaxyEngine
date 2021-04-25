@@ -23,12 +23,13 @@ void GameNode::Run()
 }
 void GameNode::UpdateObjectFromNet( Packet* pkt )
 {
+    engine->debug->PrintString( " GameNode: UpdateObjectFromNet...\n" );
     NetStats* newStatus = (NetStats*)pkt->data;
              
     Object* foundObject = engine->objects->GetObjectByID( newStatus->uid );
     if( foundObject != NULL )
     {
-        engine->debug->PrintString( "   found object(%i) and update...\n", foundObject->GetUID() );
+        engine->debug->PrintString( "Gamenode: found object(%i) and update...\n", foundObject->GetUID() );
         foundObject->LoadStatus( newStatus );
     }
     else
@@ -56,4 +57,5 @@ void GameNode::UpdateObjectFromNet( Packet* pkt )
             engine->objects->AddObject( newObject );
         }
     }
+    engine->debug->PrintString( " GameNode: UpdateObjectFromNet done!\n" );
 }

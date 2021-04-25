@@ -75,7 +75,7 @@ GameEngine::GameEngine()
         objects     = new ObjectsEngineVector( this );
     #endif
     #ifdef TARGET_DOS
-        text        = new TextEngineIOStream;
+        text        = new TextEngineSTDIO;
         debug       = new TextEngineDummy;
         //net       = new NetEngineLocal( this );
         input       = new InputEngineDOS( this );
@@ -598,6 +598,7 @@ void GameEngine::PurgeAllObjectsExcept( Object* object, bool includePersistent )
 
 void GameEngine::UpdateAll()
 {
+    debug->PrintString( "Engine: Update all...\n" );
     vector<Object*> objects = this->objects->GetAllObjects();
     for( unsigned int i = 0; i < objects.size(); i++ )
     {
@@ -609,6 +610,7 @@ void GameEngine::UpdateAll()
 }
 void GameEngine::ClientSideUpdateAll()
 {
+    debug->PrintString( "Engine: ClientSideUpdate all...\n" );
     vector<Object*> objects = this->objects->GetAllObjects();
     for( unsigned int i = 0; i < objects.size(); i++ )
     {
@@ -621,6 +623,7 @@ void GameEngine::ClientSideUpdateAll()
 
 void GameEngine::UpdateServerIndependend()
 {
+    debug->PrintString( "Engine: UpdateServerIndependend all...\n" );
     vector<Object*> objects = this->objects->GetAllObjects();
     for( unsigned int i = 0; i < objects.size(); i++ )
     {
@@ -632,6 +635,7 @@ void GameEngine::UpdateServerIndependend()
 }
 void GameEngine::PredictAll( float tickRate )
 {
+    debug->PrintString( "Engine: Predict all...\n" );
     vector<Object*> objects = this->objects->GetAllObjects();
     for( unsigned int i = 0; i < objects.size(); i++ )
     {
@@ -643,12 +647,13 @@ void GameEngine::PredictAll( float tickRate )
 }
 void GameEngine::RenderAll()
 {
+    debug->PrintString( "Engine: Render all...\n" );
     vector<Object*> objects = this->objects->GetAllObjects();
     for( unsigned int i = 0; i < objects.size(); i++ )
     {
         if( objects[i]->GetVisible() )
         {
-            //text->PrintString("render...\n");
+            debug->PrintString("render uid:%i type:%i\n", objects[i]->GetUID(), objects[i]->GetType() );
             objects[i]->Render();
         }
     }

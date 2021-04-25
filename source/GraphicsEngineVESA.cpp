@@ -419,104 +419,113 @@ void GraphicsEngineVESA::WaitForRetrace()
 }
 void GraphicsEngineVESA::DrawLine( Vector2D start, Vector2D end, unsigned char color )
 {
-    //not by me. method is from brakeen
-    //no boundary checks
-    start = start + screenPadding;
-    end = end + screenPadding;
-    start = start - camPos;
-    end = end - camPos;
-
-    if(     start.x > 0 && start.y > 0 && start.x < logicalScreenWidth && start.y < logicalScreenHeight &&
-        end.x > 0 && end.y > 0 && end.x < logicalScreenWidth && end.y < logicalScreenHeight )
+    if( initialized )
     {
-        #define sgn( x ) ( ( x<0 )?-1:( ( x>0 )?1:0 ) )
+        //not by me. method is from brakeen
+        //no boundary checks
+        start = start + screenPadding;
+        end = end + screenPadding;
+        start = start - camPos;
+        end = end - camPos;
 
-        
-
-        int x1 = start.x;
-        int y1 = start.y;
-        int x2 = end.x;
-        int y2 = end.y;
-
-        int i,dx,dy,sdx,sdy,dxabs,dyabs,x,y,px,py;
-
-        dx=x2-x1;      /* the horizontal distance of the line */
-        dy=y2-y1;      /* the vertical distance of the line */
-        dxabs=abs( dx );
-        dyabs=abs( dy );
-        sdx=sgn( dx );
-        sdy=sgn( dy );
-        x=dyabs>>1;
-        y=dxabs>>1;
-        px=x1;
-        py=y1;
-
-        //VGA[( py<<8 )+( py<<6 )+px]=color;
-        currentBackBuffer[py * logicalScreenWidth + px] = color;
-
-        if ( dxabs>=dyabs ) /* the line is more horizontal than vertical */
+        if(     start.x > 0 && start.y > 0 && start.x < logicalScreenWidth && start.y < logicalScreenHeight &&
+            end.x > 0 && end.y > 0 && end.x < logicalScreenWidth && end.y < logicalScreenHeight )
         {
-            for( i=0;i<dxabs;i++ )
+            #define sgn( x ) ( ( x<0 )?-1:( ( x>0 )?1:0 ) )
+
+            
+
+            int x1 = start.x;
+            int y1 = start.y;
+            int x2 = end.x;
+            int y2 = end.y;
+
+            int i,dx,dy,sdx,sdy,dxabs,dyabs,x,y,px,py;
+
+            dx=x2-x1;      /* the horizontal distance of the line */
+            dy=y2-y1;      /* the vertical distance of the line */
+            dxabs=abs( dx );
+            dyabs=abs( dy );
+            sdx=sgn( dx );
+            sdy=sgn( dy );
+            x=dyabs>>1;
+            y=dxabs>>1;
+            px=x1;
+            py=y1;
+
+            //VGA[( py<<8 )+( py<<6 )+px]=color;
+            currentBackBuffer[py * logicalScreenWidth + px] = color;
+
+            if ( dxabs>=dyabs ) /* the line is more horizontal than vertical */
             {
-                y+=dyabs;
-                if ( y>=dxabs )
+                for( i=0;i<dxabs;i++ )
                 {
-                    y-=dxabs;
-                    py+=sdy;
-                }
-                px+=sdx;
-                //plot_pixel( px,py,color );
-                currentBackBuffer[py * logicalScreenWidth + px] = color;
-            }
-        }
-        else /* the line is more vertical than horizontal */
-        {
-            for( i=0;i<dyabs;i++ )
-            {
-                x+=dxabs;
-                if ( x>=dyabs )
-                {
-                    x-=dyabs;
+                    y+=dyabs;
+                    if ( y>=dxabs )
+                    {
+                        y-=dxabs;
+                        py+=sdy;
+                    }
                     px+=sdx;
+                    //plot_pixel( px,py,color );
+                    currentBackBuffer[py * logicalScreenWidth + px] = color;
                 }
-                py+=sdy;
-                //plot_pixel( px,py,color );
-                currentBackBuffer[py * logicalScreenWidth + px] = color;
+            }
+            else /* the line is more vertical than horizontal */
+            {
+                for( i=0;i<dyabs;i++ )
+                {
+                    x+=dxabs;
+                    if ( x>=dyabs )
+                    {
+                        x-=dyabs;
+                        px+=sdx;
+                    }
+                    py+=sdy;
+                    //plot_pixel( px,py,color );
+                    currentBackBuffer[py * logicalScreenWidth + px] = color;
+                }
             }
         }
     }
 }
 void GraphicsEngineVESA::DrawHLine( Vector2D start, int length, unsigned char color )
 {
-    //assembly and long pointers could speed it up. probably not worth it though
-    start = start + screenPadding;
-    start = start - camPos;
-    
-    if(     start.x > 0 && start.y > 0 && start.x < logicalScreenWidth && start.y < logicalScreenHeight &&
-        start.x + length > 0 && start.x + length < logicalScreenWidth )
+    if( initialized )
     {
+        //assembly and long pointers could speed it up. probably not worth it though
+        start = start + screenPadding;
+        start = start - camPos;
         
-        int startAddress = ( int )start.y * logicalScreenWidth + ( int )start.x;
-        for( int i = 0; i < length; i++ )
+        if(     start.x > 0 && start.y > 0 && start.x < logicalScreenWidth && start.y < logicalScreenHeight &&
+            start.x + length > 0 && start.x + length < logicalScreenWidth )
         {
-            currentBackBuffer[startAddress+i] = color;
+            
+            int startAddress = ( int )start.y * logicalScreenWidth + ( int )start.x;
+            for( int i = 0; i < length; i++ )
+            {
+                currentBackBuffer[startAddress+i] = color;
+            }
         }
     }
 }
 void GraphicsEngineVESA::DrawVLine( Vector2D start, int length, unsigned char color )
 {
-    start = start + screenPadding;
-    start = start - camPos;
-
-    if( start.x > 0 && start.y > 0 && start.x < logicalScreenWidth && start.y < logicalScreenHeight &&
-        start.y + length > 0 && start.y + length < logicalScreenHeight )
+    if( initialized )
     {
-        
-        int startAddress = ( int )start.y * logicalScreenWidth + ( int )start.x;
-        for( int i = 0; i < length; i++ )
+        start = start + screenPadding;
+        start = start - camPos;
+
+        if( start.x > 0 && start.y > 0 && start.x < logicalScreenWidth && start.y < logicalScreenHeight &&
+            start.y + length > 0 && start.y + length < logicalScreenHeight )
         {
-            currentBackBuffer[startAddress] = color;
-            startAddress = startAddress + logicalScreenWidth;
+            
+            int startAddress = ( int )start.y * logicalScreenWidth + ( int )start.x;
+            for( int i = 0; i < length; i++ )
+            {
+                currentBackBuffer[startAddress] = color;
+                startAddress = startAddress + logicalScreenWidth;
+            }
         }
     }
 }
@@ -528,122 +537,131 @@ void GraphicsEngineVESA::DrawRect( Vector2D pos, int width, int height, unsigned
     DrawHLine( pos, width, color );
     DrawHLine( Vector2D( pos.x, pos.y+height ), width, color );
 
-    DrawPalette( pos );
+    //DrawPalette( pos );
 }
 void GraphicsEngineVESA::DrawFilledRect( Vector2D pos, int width, int height, unsigned char color )
 {
-    pos = pos + screenPadding;
-    pos = pos - camPos;
-
-    if( pos.x > 0 && pos.y > 0 && pos.x < logicalScreenWidth && pos.y < logicalScreenHeight )
+    if( initialized )
     {
-        if( pos.x+width > 0 && pos.y+height > 0 && pos.x+width < logicalScreenWidth && pos.y+height < logicalScreenHeight )
+        pos = pos + screenPadding;
+        pos = pos - camPos;
+
+        if( pos.x > 0 && pos.y > 0 && pos.x < logicalScreenWidth && pos.y < logicalScreenHeight )
         {
-            if( width % 4 == 0 )
+            if( pos.x+width > 0 && pos.y+height > 0 && pos.x+width < logicalScreenWidth && pos.y+height < logicalScreenHeight )
             {
-                int startAddress = ( int )currentBackBuffer + ( ( int )pos.y * logicalScreenWidth + ( int )pos.x );
-                asm( "mov %2, %%al;"
-                    "shl $8, %%eax;"
-                    "mov %2, %%al;"
-                    "shl $8, %%eax;"
-                    "mov %2, %%al;"
-                    "shl $8, %%eax;"
-                    "mov %2, %%al;"
-                    "mov $0, %%ebx;"
-                    "loop1%=:;"
-                    "   mov $0, %%ecx;"
-                    "   loop2%=:;"
-                    "       mov %%eax, ( %%edi, %%ecx );"
-                    "       add $4, %%ecx;"
-                    "       cmp %2, %%ecx;"
-                    "       jb loop2%=;"
-                    "   add %1, %%edi;"
-                    "   inc %%ebx;"
-                    "   cmp %3, %%ebx;"
-                    "   jb loop1%=;"
-                    :
-                    :"D"( startAddress ), "m"( logicalScreenWidth ), "m"( width ), "m"( height )
-                    :"eax", "ebx", "ecx", "memory" ); 
-            }
-            else
-            {
-                int startAddress = ( int )currentBackBuffer + ( ( int )pos.y * logicalScreenWidth + ( int )pos.x );
-                int widthMinus4 = width - 4;
-                asm( "mov %2, %%al;"
-                    "shl $8, %%eax;"
-                    "mov %2, %%al;"
-                    "shl $8, %%eax;"
-                    "mov %2, %%al;"
-                    "shl $8, %%eax;"
-                    "mov %2, %%al;"
-                    "mov $0, %%ebx;"
-                    "loop1%=:;"
-                    "   mov $0, %%ecx;"
-                    "   loop2%=:;"
-                    "       mov %%eax, ( %%edi, %%ecx );"
-                    "       add $4, %%ecx;"
-                    "       cmp %2, %%ecx;"
-                    "       jb loop2%=;"
-                    "   loop3%=:;"
-                    "       movb %%al, ( %%edi, %%ecx );"
-                    "       inc %%ecx;"
-                    "       cmp %4, %%ecx;"
-                    "       jb loop3%=;"
-                    "   add %1, %%edi;"
-                    "   inc %%ebx;"
-                    "   cmp %3, %%ebx;"
-                    "   jb loop1%=;"
-                    :
-                    :"D"( startAddress ), "m"( logicalScreenWidth ), "m"( widthMinus4 ), "m"( height ), "m"( width )
-                    :"eax", "ebx", "ecx", "memory" ); 
+                if( width % 4 == 0 )
+                {
+                    int startAddress = ( int )currentBackBuffer + ( ( int )pos.y * logicalScreenWidth + ( int )pos.x );
+                    asm( "mov %2, %%al;"
+                        "shl $8, %%eax;"
+                        "mov %2, %%al;"
+                        "shl $8, %%eax;"
+                        "mov %2, %%al;"
+                        "shl $8, %%eax;"
+                        "mov %2, %%al;"
+                        "mov $0, %%ebx;"
+                        "loop1%=:;"
+                        "   mov $0, %%ecx;"
+                        "   loop2%=:;"
+                        "       mov %%eax, ( %%edi, %%ecx );"
+                        "       add $4, %%ecx;"
+                        "       cmp %2, %%ecx;"
+                        "       jb loop2%=;"
+                        "   add %1, %%edi;"
+                        "   inc %%ebx;"
+                        "   cmp %3, %%ebx;"
+                        "   jb loop1%=;"
+                        :
+                        :"D"( startAddress ), "m"( logicalScreenWidth ), "m"( width ), "m"( height )
+                        :"eax", "ebx", "ecx", "memory" ); 
+                }
+                else
+                {
+                    int startAddress = ( int )currentBackBuffer + ( ( int )pos.y * logicalScreenWidth + ( int )pos.x );
+                    int widthMinus4 = width - 4;
+                    asm( "mov %2, %%al;"
+                        "shl $8, %%eax;"
+                        "mov %2, %%al;"
+                        "shl $8, %%eax;"
+                        "mov %2, %%al;"
+                        "shl $8, %%eax;"
+                        "mov %2, %%al;"
+                        "mov $0, %%ebx;"
+                        "loop1%=:;"
+                        "   mov $0, %%ecx;"
+                        "   loop2%=:;"
+                        "       mov %%eax, ( %%edi, %%ecx );"
+                        "       add $4, %%ecx;"
+                        "       cmp %2, %%ecx;"
+                        "       jb loop2%=;"
+                        "   loop3%=:;"
+                        "       movb %%al, ( %%edi, %%ecx );"
+                        "       inc %%ecx;"
+                        "       cmp %4, %%ecx;"
+                        "       jb loop3%=;"
+                        "   add %1, %%edi;"
+                        "   inc %%ebx;"
+                        "   cmp %3, %%ebx;"
+                        "   jb loop1%=;"
+                        :
+                        :"D"( startAddress ), "m"( logicalScreenWidth ), "m"( widthMinus4 ), "m"( height ), "m"( width )
+                        :"eax", "ebx", "ecx", "memory" ); 
+                }
             }
         }
     }
 }
 void GraphicsEngineVESA::DrawCircle( Vector2D pos, int radius, unsigned char color )
 {
-    //incredibly dumb and horrendously slow!
-
-    pos = pos + screenPadding;
-    pos = pos - camPos;
-
-    Vector2D startCoord( pos.x - radius, pos.y - radius );
-    if( startCoord.x > 0 && startCoord.y > 0 && startCoord.x < logicalScreenWidth && startCoord.y < logicalScreenHeight &&
-        startCoord.x + ( 2*radius ) > 0 && startCoord.y + ( 2*radius ) > 0 && startCoord.x + ( 2*radius ) < logicalScreenWidth && startCoord.y + ( 2*radius ) < logicalScreenHeight )
+    if( initialized )
     {
-        for( int x = startCoord.x; x <= startCoord.x + ( 2*radius ); x++ )
+        //incredibly dumb and horrendously slow!
+
+        pos = pos + screenPadding;
+        pos = pos - camPos;
+
+        Vector2D startCoord( pos.x - radius, pos.y - radius );
+        if( startCoord.x > 0 && startCoord.y > 0 && startCoord.x < logicalScreenWidth && startCoord.y < logicalScreenHeight &&
+            startCoord.x + ( 2*radius ) > 0 && startCoord.y + ( 2*radius ) > 0 && startCoord.x + ( 2*radius ) < logicalScreenWidth && startCoord.y + ( 2*radius ) < logicalScreenHeight )
         {
-            for( int y = startCoord.y; y <= startCoord.y + ( 2*radius ); y++ )
+            for( int x = startCoord.x; x <= startCoord.x + ( 2*radius ); x++ )
             {
-                if( ( int )pos.DistanceFrom( Vector2D( x,y ) ) == radius )
+                for( int y = startCoord.y; y <= startCoord.y + ( 2*radius ); y++ )
                 {
-                    currentBackBuffer[y * logicalScreenWidth + x] = color;
+                    if( ( int )pos.DistanceFrom( Vector2D( x,y ) ) == radius )
+                    {
+                        currentBackBuffer[y * logicalScreenWidth + x] = color;
+                    }
                 }
-            }
-        } 
+            } 
+        }
     }
 }
 void GraphicsEngineVESA::DrawFilledCircle( Vector2D pos, int radius, unsigned char color )
 {
-    //incredibly dumb and horrendously slow!
-
-    pos = pos + screenPadding;
-    pos = pos - camPos;
-
-    Vector2D startCoord( pos.x - radius, pos.y - radius );
-    if( startCoord.x > 0 && startCoord.y > 0 && startCoord.x < logicalScreenWidth && startCoord.y < logicalScreenHeight &&
-        startCoord.x + ( 2*radius ) > 0 && startCoord.y + ( 2*radius ) > 0 && startCoord.x + ( 2*radius ) < logicalScreenWidth && startCoord.y + ( 2*radius ) < logicalScreenHeight )
+    if( initialized )
     {
-        for( int x = startCoord.x; x <= startCoord.x + ( 2*radius ); x++ )
+        //incredibly dumb and horrendously slow!
+
+        pos = pos + screenPadding;
+        pos = pos - camPos;
+
+        Vector2D startCoord( pos.x - radius, pos.y - radius );
+        if( startCoord.x > 0 && startCoord.y > 0 && startCoord.x < logicalScreenWidth && startCoord.y < logicalScreenHeight &&
+            startCoord.x + ( 2*radius ) > 0 && startCoord.y + ( 2*radius ) > 0 && startCoord.x + ( 2*radius ) < logicalScreenWidth && startCoord.y + ( 2*radius ) < logicalScreenHeight )
         {
-            for( int y = startCoord.y; y <= startCoord.y + ( 2*radius ); y++ )
+            for( int x = startCoord.x; x <= startCoord.x + ( 2*radius ); x++ )
             {
-                if( ( int )pos.DistanceFrom( Vector2D( x,y ) ) <= radius )
+                for( int y = startCoord.y; y <= startCoord.y + ( 2*radius ); y++ )
                 {
-                    currentBackBuffer[y * logicalScreenWidth + x] = color;
+                    if( ( int )pos.DistanceFrom( Vector2D( x,y ) ) <= radius )
+                    {
+                        currentBackBuffer[y * logicalScreenWidth + x] = color;
+                    }
                 }
-            }
-        } 
+            } 
+        }
     }
 }
 void GraphicsEngineVESA::DrawVector( Vector2D pos, Vector2D vec, float scale, unsigned char color )
@@ -673,7 +691,7 @@ void GraphicsEngineVESA::DrawSprite( unsigned long id, Vector2D pos )
 
     //engine->text->PrintString("maic %c%c%c, w:%i h:%i bpp:%i, 1:%i\n", in->magic[0], in->magic[1], in->magic[2], in->width, in->height, in->bpp, in->pixelData );
 
-    if( in != NULL )
+    if( in != NULL && initialized )
     {
         if( pos.x >= 0 && pos.y >= 0 && pos.x+in->width < logicalScreenWidth && pos.y + in->height < logicalScreenHeight )
         {
@@ -703,7 +721,7 @@ void GraphicsEngineVESA::DrawSprite( Sprite* in, Vector2D pos )
     pos = pos + screenPadding;
     pos = pos - camPos;
 
-    if( in != NULL )
+    if( in != NULL && initialized )
     {
         if( pos.x >= 0 && pos.y >= 0 && pos.x+in->width < logicalScreenWidth && pos.y + in->height < logicalScreenHeight )
         {
@@ -730,14 +748,12 @@ void GraphicsEngineVESA::DrawSprite( Sprite* in, Vector2D pos )
 
 void GraphicsEngineVESA::DrawSpriteInSheet( unsigned int id, unsigned int index, Vector2D pos )
 {
+    //
     DrawSprite( GetSpriteInCollection( id, index ), pos );
 }
 
 void GraphicsEngineVESA::DrawSpriteSheet( unsigned int id, unsigned int width, Vector2D pos )
 {
-    Vector2D apos = pos;
-    unsigned int awidth = width;
-
     struct Collection
     {
         char        magic[3];
@@ -746,117 +762,136 @@ void GraphicsEngineVESA::DrawSpriteSheet( unsigned int id, unsigned int width, V
         char        data;
     }__attribute__( ( packed ) );
 
+    unsigned int awidth = width;
+
     Collection* collection = (Collection*)engine->data->GetData( id );
+
+    engine->debug->PrintString( "DrawSpriteSheet: data loaded\n" );
 
     if( collection != NULL )
     {
+        engine->debug->PrintString( "collection size:%i, itemsize:%i \n", collection->numItems, collection->itemSize );
+        
+        char* data = &collection->data;
+        
         for( unsigned int i = 0; i < collection->numItems; i++ )
-        {
-            Sprite* out = (Sprite*)&collection->data + collection->itemSize * i;
+        {  
+            Sprite* out = (Sprite*)data;
+            engine->debug->PrintString( "%c%c%c %i/%i pos:%f,%f\n", out->magic[0], out->magic[1], out->magic[2], out->width, out->height, pos.x, pos.y );
+            
             DrawSprite( out, pos );
-            apos.x = apos.x + out->width;
-            awidth --;
-            if( awidth >= 0 )
+
+            pos.x = pos.x + out->width;
+            awidth--;
+            if( awidth == 0 )
             {
                 awidth = width;
-                apos.x = pos.x;
-                apos.y = apos.y + out->height;
+                pos.x = 0;
+                pos.y = pos.y + out->height;
             }
+
+            data = data + collection->itemSize;
         }
     }
 }
 
 void GraphicsEngineVESA::DrawPalette( Vector2D pos )
 {
-    pos = pos + screenPadding;
-    pos = pos - camPos;
-
-    //engine->text->PrintString("maic %c%c%c, w:%i h:%i bpp:%i, 1:%i\n", in->magic[0], in->magic[1], in->magic[2], in->width, in->height, in->bpp, in->pixelData );
-
-    
-
-    for( unsigned int i = 0; i < 16; i++ )
+    if( initialized )
     {
-        int startAddress = ( int )currentBackBuffer + ( ( ( int )pos.y+i) * logicalScreenWidth + ( int )pos.x );
-        asm(    "mov $16, %%ebx;"
-                "mov $0, %%al;"
-                "loop1%=:;" 
-                "   mov $16, %%ecx;"
-                "   mov $0, %%edx;"
-                "   loop2%=:;"
-                "       mov %%al, ( %%edi, %%edx );"
-                "       inc %%edx;"
-                "       mov %%al, ( %%edi, %%edx );"
-                "       inc %%edx;"
-                "       mov %%al, ( %%edi, %%edx );"
-                "       inc %%edx;"
-                "       mov %%al, ( %%edi, %%edx );"
-                "       inc %%edx;"
-                "       mov %%al, ( %%edi, %%edx );"
-                "       inc %%edx;"
-                "       mov %%al, ( %%edi, %%edx );"
-                "       inc %%edx;"
-                "       mov %%al, ( %%edi, %%edx );"
-                "       inc %%edx;"
-                "       mov %%al, ( %%edi, %%edx );"
-                "       inc %%edx;"
-                "       mov %%al, ( %%edi, %%edx );"
-                "       inc %%edx;"
-                "       mov %%al, ( %%edi, %%edx );"
-                "       inc %%edx;"
-                "       mov %%al, ( %%edi, %%edx );"
-                "       inc %%edx;"
-                "       mov %%al, ( %%edi, %%edx );"
-                "       inc %%edx;"
-                "       mov %%al, ( %%edi, %%edx );"
-                "       inc %%edx;"
-                "       mov %%al, ( %%edi, %%edx );"
-                "       inc %%edx;"
-                "       mov %%al, ( %%edi, %%edx );"
-                "       inc %%edx;"
-                "       mov %%al, ( %%edi, %%edx );"
-                "       inc %%edx;"
+        pos = pos + screenPadding;
+        pos = pos - camPos;
 
-                "       inc %%eax;"
-                "       dec %%ecx;"
-                "       ja loop2%=;"
-                "   add %1, %%edi;"
-                "   add %1, %%edi;"
-                "   add %1, %%edi;"
-                "   add %1, %%edi;"
-                "   add %1, %%edi;"
-                "   add %1, %%edi;"
-                "   add %1, %%edi;"
-                "   add %1, %%edi;"
-                "   add %1, %%edi;"
-                "   add %1, %%edi;"
-                "   add %1, %%edi;"
-                "   add %1, %%edi;"
-                "   add %1, %%edi;"
-                "   add %1, %%edi;"
-                "   add %1, %%edi;"
-                "   add %1, %%edi;"
-                "   dec %%ebx;"
-                "   ja loop1%=;"
-                :
-                :"D"( startAddress ), "m"( logicalScreenWidth )
-                :"eax", "ebx", "ecx", "edx", "memory" );
+        //engine->text->PrintString("maic %c%c%c, w:%i h:%i bpp:%i, 1:%i\n", in->magic[0], in->magic[1], in->magic[2], in->width, in->height, in->bpp, in->pixelData );
+
+        
+
+        for( unsigned int i = 0; i < 16; i++ )
+        {
+            int startAddress = ( int )currentBackBuffer + ( ( ( int )pos.y+i) * logicalScreenWidth + ( int )pos.x );
+            asm(    "mov $16, %%ebx;"
+                    "mov $0, %%al;"
+                    "loop1%=:;" 
+                    "   mov $16, %%ecx;"
+                    "   mov $0, %%edx;"
+                    "   loop2%=:;"
+                    "       mov %%al, ( %%edi, %%edx );"
+                    "       inc %%edx;"
+                    "       mov %%al, ( %%edi, %%edx );"
+                    "       inc %%edx;"
+                    "       mov %%al, ( %%edi, %%edx );"
+                    "       inc %%edx;"
+                    "       mov %%al, ( %%edi, %%edx );"
+                    "       inc %%edx;"
+                    "       mov %%al, ( %%edi, %%edx );"
+                    "       inc %%edx;"
+                    "       mov %%al, ( %%edi, %%edx );"
+                    "       inc %%edx;"
+                    "       mov %%al, ( %%edi, %%edx );"
+                    "       inc %%edx;"
+                    "       mov %%al, ( %%edi, %%edx );"
+                    "       inc %%edx;"
+                    "       mov %%al, ( %%edi, %%edx );"
+                    "       inc %%edx;"
+                    "       mov %%al, ( %%edi, %%edx );"
+                    "       inc %%edx;"
+                    "       mov %%al, ( %%edi, %%edx );"
+                    "       inc %%edx;"
+                    "       mov %%al, ( %%edi, %%edx );"
+                    "       inc %%edx;"
+                    "       mov %%al, ( %%edi, %%edx );"
+                    "       inc %%edx;"
+                    "       mov %%al, ( %%edi, %%edx );"
+                    "       inc %%edx;"
+                    "       mov %%al, ( %%edi, %%edx );"
+                    "       inc %%edx;"
+                    "       mov %%al, ( %%edi, %%edx );"
+                    "       inc %%edx;"
+
+                    "       inc %%eax;"
+                    "       dec %%ecx;"
+                    "       ja loop2%=;"
+                    "   add %1, %%edi;"
+                    "   add %1, %%edi;"
+                    "   add %1, %%edi;"
+                    "   add %1, %%edi;"
+                    "   add %1, %%edi;"
+                    "   add %1, %%edi;"
+                    "   add %1, %%edi;"
+                    "   add %1, %%edi;"
+                    "   add %1, %%edi;"
+                    "   add %1, %%edi;"
+                    "   add %1, %%edi;"
+                    "   add %1, %%edi;"
+                    "   add %1, %%edi;"
+                    "   add %1, %%edi;"
+                    "   add %1, %%edi;"
+                    "   add %1, %%edi;"
+                    "   dec %%ebx;"
+                    "   ja loop1%=;"
+                    :
+                    :"D"( startAddress ), "m"( logicalScreenWidth )
+                    :"eax", "ebx", "ecx", "edx", "memory" );
 
 
+        }
     }
 }
 
 void GraphicsEngineVESA::LoadPalette( char* palette, int numColors )
 {
-    outportb( 0x03c8, 0 );
-    int index = 3;
-    for( int i = 0; i < numColors; i++ ) //+3 for the MAGIC string at the beginning of the data block
+    if( initialized )
     {
-        outportb( 0x03c9, palette[index + 0]);
-        outportb( 0x03c9, palette[index + 1]);
-        outportb( 0x03c9, palette[index + 2]);
-        
-        index = index + 3;
+        outportb( 0x03c8, 0 );
+        int index = 3;
+        for( int i = 0; i < numColors; i++ ) //+3 for the MAGIC string at the beginning of the data block
+        {
+            outportb( 0x03c9, palette[index + 0]);
+            outportb( 0x03c9, palette[index + 1]);
+            outportb( 0x03c9, palette[index + 2]);
+            
+            index = index + 3;
+        }
     }
 }
 
@@ -876,7 +911,8 @@ Sprite* GraphicsEngineVESA::GetSpriteInCollection( unsigned int id, unsigned int
     {
         if( index <= collection->numItems )
         {
-            Sprite* out = (Sprite*)&collection->data + collection->itemSize * index;
+            char* data = &collection->data + collection->itemSize * index;
+            Sprite* out = (Sprite*)data;
             return out;
         }
     }

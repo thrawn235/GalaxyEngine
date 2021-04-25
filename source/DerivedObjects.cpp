@@ -84,7 +84,7 @@ void Player::Render()
 	{
 		//engine->text->PrintString( (char*)engine->data->GetData( DATA_STRING ) );
 		//engine->graphics->DrawSprite( DATA_TREEHOUSE, Vector2D( 0, 0 ) );
-		engine->graphics->DrawSpriteSheet( DATA_LINES, 2, Vector2D( 0, 0 ) );
+		engine->graphics->DrawSpriteInSheet( DATA_LINES, 1, Vector2D( 0, 0 ) );
 	}
 }
 

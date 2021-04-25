@@ -26,7 +26,9 @@ int main( int argc, char *argv[] )
 {
     cout<<"Galaxy Engine: Main Client"<<endl<<endl;
 
+    cout<<"creating Gameclient..."<<endl;    
     client = new GameClient();
+    cout<<"GameClient created!"<<endl;
     
     //----------------- Main Loop --------------------
     long int rounds = 0;
@@ -48,10 +50,14 @@ int main( int argc, char *argv[] )
     }
     //-------------------------------------------------
 
+    cout<<"deleting Gameclient..."<<endl;
     delete client;
+    cout<<"Gameclient deleted!"<<endl;
     if( server != NULL )
     {
+        cout<<"deleting Gameserver..."<<endl;
         delete server;
+        cout<<"Gameserver deleted!"<<endl;
     }
 
     cout<<"good bye!"<<endl;
