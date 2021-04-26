@@ -649,12 +649,21 @@ void GameEngine::RenderAll()
 {
     debug->PrintString( "Engine: Render all...\n" );
     vector<Object*> objects = this->objects->GetAllObjects();
-    for( unsigned int i = 0; i < objects.size(); i++ )
+    for( unsigned char currentDrawOrder = 0; currentDrawOrder < 64; currentDrawOrder++ )
     {
-        if( objects[i]->GetVisible() )
+        if( objects.size() == 0 )
         {
-            debug->PrintString("render uid:%i type:%i\n", objects[i]->GetUID(), objects[i]->GetType() );
-            objects[i]->Render();
+            //list empty
+            break;
+        }
+        for( unsigned int i = 0; i < objects.size(); i++ )
+        {
+            if( objects[i]->GetVisible() && objects[i]->GetDrawOrder() == currentDrawOrder )
+            {
+                debug->PrintString("render uid:%i type:%i\n", objects[i]->GetUID(), objects[i]->GetType() );
+                objects[i]->Render();
+                objects.erase( objects.begin() + i );   //remove from list. needs only be drawn once!
+            }
         }
     }
 }

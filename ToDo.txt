@@ -2,6 +2,10 @@ To Do:
 
 bug prevents drawing halfway off the screen
 
+layers/zbuffer priority for sprites
+
+a way to ask client/server for detailed times. render time, gamelogic time etc
+
 change file engine to take pointer ref instead of returning a buffer. it creates memory leaks
 all engine parts should graceflly skip if they get a NULL pointer
 the data engine should throw a warning when a block of data is not found

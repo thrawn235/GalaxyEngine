@@ -338,6 +338,7 @@ PerformanceOverlay::PerformanceOverlay( GameEngine* engine ) : Object( engine )
 	netStats->type = OBJECT_PERFORMANCE_OVERLAY;
 
 	netStats->persistent = true;
+	netStats->drawOrder = 60;
 }
 PerformanceOverlay::~PerformanceOverlay()
 {

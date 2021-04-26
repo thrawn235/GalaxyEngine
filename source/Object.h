@@ -56,6 +56,7 @@ struct ObjectStats : NetStats
             bool                predict;
             bool                clientActive;
             bool                persistent;
+            unsigned char       drawOrder;
 };
 
 class Object
@@ -94,6 +95,8 @@ public:
             void                SetPos                  ( Vector2D pos );
             Vector2D            GetMovement             ();
             void                SetMovement             ( Vector2D movement );
+            unsigned char       GetDrawOrder            ();
+            void                SetDrawOrder            ( unsigned char drawOrder );
 
     virtual void                PrintStats              ();
 

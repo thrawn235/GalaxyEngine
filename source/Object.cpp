@@ -19,6 +19,7 @@ Object::Object( GameEngine* engine )
     netStats->predict         = true;
     netStats->visible         = true;
     netStats->persistent      = false;
+    netStats->drawOrder       = 0;
 
     netStats->type            = OBJECT_TYPE_OBJECT;
 }
@@ -125,6 +126,15 @@ void Object::SetMovement( Vector2D movement )
 {
     //
     netStats->movement = movement;
+}
+unsigned char Object::GetDrawOrder()
+{
+    //
+    return netStats->drawOrder;
+}
+void Object::SetDrawOrder( unsigned char drawOrder )
+{
+    netStats->drawOrder = drawOrder;
 }
 
 void Object::PrintStats()
