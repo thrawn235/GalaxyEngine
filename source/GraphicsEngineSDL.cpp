@@ -478,7 +478,7 @@ void GraphicsEngineSDL::DrawSpriteSheet( unsigned int id, unsigned int width, Ve
 }
 
 //Text
-void GraphicsEngineSDL::DrawText( unsigned int id, string text, Vector2D pos )
+void GraphicsEngineSDL::DrawString( unsigned int id, string text, Vector2D pos )
 {
     Vector2D savePos = pos;
     
@@ -498,7 +498,7 @@ void GraphicsEngineSDL::DrawText( unsigned int id, string text, Vector2D pos )
         }
     }
 }
-void GraphicsEngineSDL::DrawText( unsigned int id, string text, unsigned int lineLength, Vector2D pos )
+void GraphicsEngineSDL::DrawString( unsigned int id, string text, unsigned int lineLength, Vector2D pos )
 {
     unsigned int linePos = 0;
     Vector2D savePos = pos;

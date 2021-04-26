@@ -36,7 +36,7 @@ public:
     virtual             ~GameNode               ();
     		GameEngine* GetEngine               ();
     virtual void        Run                     ();
-    void        		UpdateObjectFromNet     ( Packet* pkt );
+    		void      	UpdateObjectFromNet     ( Packet* pkt );
 };
 
 #endif

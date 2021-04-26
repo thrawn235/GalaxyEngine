@@ -36,6 +36,7 @@ TimeEngineSDL::~TimeEngineSDL()
 //FrameTiming
 void TimeEngineSDL::FrameStart()
 {
+	frameTime = SDL_GetTicks() - frameStart;
 	frameStart = SDL_GetTicks();
 	//
 }
@@ -43,7 +44,7 @@ void TimeEngineSDL::FrameEnd()
 {
 	//frameEnd  = uclock();
 	frameEnd = SDL_GetTicks();
-	frameTime = frameEnd - frameStart;
+	//frameTime = frameEnd - frameStart;
 }
 int TimeEngineSDL::GetLastTime()
 {

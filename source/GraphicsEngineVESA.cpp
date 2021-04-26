@@ -796,7 +796,7 @@ void GraphicsEngineVESA::DrawSpriteSheet( unsigned int id, unsigned int width, V
 }
 
 //Text
-void GraphicsEngineVESA::DrawText( unsigned int id, string text, Vector2D pos )
+void GraphicsEngineVESA::DrawString( unsigned int id, string text, Vector2D pos )
 {
     Vector2D savePos = pos;
     Sprite* firstSprite = (Sprite*)GetSpriteInCollection( id, 0 );
@@ -814,7 +814,7 @@ void GraphicsEngineVESA::DrawText( unsigned int id, string text, Vector2D pos )
         }
     }    
 }
-void GraphicsEngineVESA::DrawText( unsigned int id, string text, unsigned int lineLength, Vector2D pos )
+void GraphicsEngineVESA::DrawString( unsigned int id, string text, unsigned int lineLength, Vector2D pos )
 {
     unsigned int linePos = 0;
     Vector2D savePos = pos;

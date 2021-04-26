@@ -99,8 +99,8 @@ public:
     virtual     void                    DrawSpriteSheet             ( unsigned int id, unsigned int width, Vector2D pos )                   = 0;
 
     //Text
-    virtual     void                    DrawText                    ( unsigned int id, string text, Vector2D pos )                          = 0;
-    virtual     void                    DrawText                    ( unsigned int id, string text, unsigned int lineLength, Vector2D pos ) = 0;
+    virtual     void                    DrawString                  ( unsigned int id, string text, Vector2D pos )                          = 0;
+    virtual     void                    DrawString                  ( unsigned int id, string text, unsigned int lineLength, Vector2D pos ) = 0;
 
     //Sprites
     virtual     void                    DrawSprite                  ( unsigned long id, Vector2D pos )                                      = 0;

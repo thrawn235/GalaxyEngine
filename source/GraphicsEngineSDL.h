@@ -100,8 +100,8 @@ public:
     void                    DrawSpriteSheet             ( unsigned int id, unsigned int width, Vector2D pos );
 
     //Text
-    void                    DrawText                    ( unsigned int id, string text, Vector2D pos );
-    void                    DrawText                    ( unsigned int id, string text, unsigned int lineLength, Vector2D pos );
+    void                    DrawString                  ( unsigned int id, string text, Vector2D pos );
+    void                    DrawString                  ( unsigned int id, string text, unsigned int lineLength, Vector2D pos );
 
     //SDL only
     void                    DrawSprite                  ( SDL_Texture* texture, Vector2D pos );

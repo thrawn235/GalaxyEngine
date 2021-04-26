@@ -123,11 +123,11 @@ void GraphicsEngineDummy::DrawSpriteSheet( unsigned int id, unsigned int width, 
 }
 
 //Text
-void GraphicsEngineDummy::DrawText( unsigned int id, string text, Vector2D pos )
+void GraphicsEngineDummy::DrawString( unsigned int id, string text, Vector2D pos )
 {
 
 }
-void GraphicsEngineDummy::DrawText( unsigned int id, string text, unsigned int lineLength, Vector2D pos )
+void GraphicsEngineDummy::DrawString( unsigned int id, string text, unsigned int lineLength, Vector2D pos )
 {
 	
 }

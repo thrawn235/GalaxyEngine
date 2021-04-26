@@ -52,6 +52,7 @@ TimeEngineDOS::~TimeEngineDOS()
 void TimeEngineDOS::FrameStart()
 {
 	//frameStart = uclock();
+	frameTime = timeCount - frameStart;
 	frameStart = timeCount;
 	//
 }
@@ -59,7 +60,7 @@ void TimeEngineDOS::FrameEnd()
 {
 	//frameEnd  = uclock();
 	frameEnd = timeCount;
-	frameTime = frameEnd - frameStart;
+	//frameTime = frameEnd - frameStart;
 }
 int TimeEngineDOS::GetLastTime()
 {

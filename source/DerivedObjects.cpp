@@ -2,6 +2,7 @@
 
 #include "DerivedObjects.h"
 #include "GameServer.h"
+#include "GameClient.h"
 #include "GameEngine.h"
 
 
@@ -99,8 +100,8 @@ void Player::Render()
 		engine->graphics->DrawSpriteInSheet( DATA_SONIC_FONT, 20, Vector2D( 250, 150 ) );
 		engine->graphics->DrawSpriteInSheet( DATA_SONIC_FONT, 21, Vector2D( 300, 150 ) );
 		engine->graphics->DrawSpriteInSheet( DATA_SONIC_FONT, 22, Vector2D( 350, 150 ) );
-		engine->graphics->DrawText( DATA_SONIC_FONT, "test\nhello world!", Vector2D( 5, 20 ) );
-		engine->graphics->DrawText( DATA_SONIC_FONT, "another test that is a bit more useless bla\nand of course something behind a linebreak", 10, Vector2D( 100,100 ) );
+		engine->graphics->DrawString( DATA_SONIC_FONT, "test\nhello world!", Vector2D( 5, 20 ) );
+		engine->graphics->DrawString( DATA_SONIC_FONT, "another test that is a bit more useless bla\nand of course something behind a linebreak", 10, Vector2D( 100,100 ) );
 	}
 }
 
@@ -357,5 +358,5 @@ void PerformanceOverlay::UpdateServerIndependend()
 }
 void PerformanceOverlay::Render()
 {
-	engine->graphics->DrawText( DATA_SONIC_FONT, engine->text->SPrintString( "PO:Objects\nPO:Memory\nPO:FPS" ), Vector2D( 0, 0 ) );
+	engine->graphics->DrawString( DATA_SONIC_FONT, engine->text->SPrintString( "Objects %i/%i\nMemory\nFPS %f(%i)/%f(%i)", client->GetEngine()->objects->GetAllObjects().size(), server->GetEngine()->objects->GetAllObjects().size(), client->GetEngine()->time->GetFPS(), client->GetEngine()->time->GetLastTime(), server->GetEngine()->time->GetFPS(), server->GetEngine()->time->GetLastTime() ), Vector2D( 0, 0 ) );
 }
