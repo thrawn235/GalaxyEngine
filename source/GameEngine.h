@@ -111,13 +111,6 @@ public:
 
     //----------------- Auxilary Methods --------------
     void                Quit                        ();
-
-    //---------------- Object Update Functions --------
-    void                UpdateAll                   ();                             //all the gamelogic happens here. Usually on the Server side
-    void                ClientSideUpdateAll         ();                             //gamelogic update on the client side. use with caution
-    void                UpdateServerIndependend     ();
-    void                PredictAll                  ( float tickRate );             //moves all objects on along its movement vector based on frametime. this is for visual smoothness only
-    void                RenderAll                   ();                             //draw all objects
 };
 
 //include Guard End

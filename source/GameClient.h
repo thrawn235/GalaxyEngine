@@ -24,6 +24,11 @@ protected:
 	bool			waitingForUpdate;              //true if the server hasnt responded
 	unsigned int	clientTicksSinceLogicTick;     //for prediction
 	float			tickRate;                      //for prediction
+
+    float           networkUpdateTime;
+    float           updateTime;
+    float           renderTime;
+
 	bool			exit;
 
 public:
@@ -34,6 +39,10 @@ public:
     //------------------------------------------------------
             void    Run                     ();     //everything is done here
             void    ConnectToServer         ();
+
+            float   GetNetworkUpdateTime    ();
+            float   GetUpdateTime           ();
+            float   GetRenderTime           ();
 };
 
 //#endif

@@ -91,6 +91,7 @@ void GameClient::Run()
 
 
     //Network----------------------------------------------------
+    int networkTimer = engine->time->AddTimeStamp();
     engine->net->Update();
     engine->debug->PrintString( "client: Ive got %i Packets\n", engine->net->GetNumPacketsInInbox() );
 
@@ -120,34 +121,49 @@ void GameClient::Run()
         //pkt->~Packet();
         delete pkt;
     }
+    networkUpdateTime = engine->time->TicksToMilliSeconds( engine->time->GetTimeSinceStamp( networkTimer ) );
     //-----------------------------------------------------------
 
     //engine->text->PrintString( "       tickrate:%f clientTicks:%i!\n", tickRate, clientTicksSinceLogicTick );
 
-
-    //Update Game Logic------------------------------------------
-    //only update if the server has send a Ack Packet
+    int updateTimer = engine->time->AddTimeStamp();
+    objects = engine->objects->GetAllObjects();
+    for( unsigned int i = 0; i < objects.size(); i++ )
+    {
+        if( !waitingForUpdate && objects[i]->GetClientActive() )
+        {
+            objects[i]->ClientSideUpdate();
+        }
+        objects[i]->UpdateServerIndependend();
+        if( objects[i]->GetPredict() )
+        {
+            objects[i]->Predict( tickRate );
+        }
+    }
+    updateTime = engine->time->TicksToMilliSeconds( engine->time->GetTimeSinceStamp( updateTimer ) );
+    int renderTimer = engine->time->AddTimeStamp();
+    for( unsigned char currentDrawOrder = 0; currentDrawOrder < 64; currentDrawOrder++ )
+    {
+        if( objects.size() == 0 )
+        {
+            //list empty
+            break;
+        }
+        for( unsigned int i = 0; i < objects.size(); i++ )
+        {
+            if( objects[i]->GetVisible() && objects[i]->GetDrawOrder() == currentDrawOrder )
+            {
+                objects[i]->Render();
+                objects.erase( objects.begin() + i );   //remove from list. needs only be drawn once!
+            }
+        }
+    }
+    renderTime = engine->time->TicksToMilliSeconds( engine->time->GetTimeSinceStamp( renderTimer ) );
     if( !waitingForUpdate )
     {
-        engine->ClientSideUpdateAll();
         waitingForUpdate = true;
     }
-    //-----------------------------------------------------------
 
-
-    //Update all Objects even if no connected to server----------
-    engine->UpdateServerIndependend();
-    //-----------------------------------------------------------
-
-
-    //interpolate movement---------------------------------------
-    engine->PredictAll( tickRate );
-    //-----------------------------------------------------------
-
-
-    //Render-----------------------------------------------------
-    engine->RenderAll();
-    //-----------------------------------------------------------
 
     //Graphics Flip----------------------------------------------
     engine->graphics->PostFrame();
@@ -173,4 +189,17 @@ void GameClient::ConnectToServer()
             engine->net->Connect( inet_addr( "127.0.0.1" ) );
         #endif   
     }
+}
+
+float GameClient::GetNetworkUpdateTime()
+{
+    return networkUpdateTime;
+}
+float GameClient::GetUpdateTime()
+{
+    return updateTime;
+}
+float GameClient::GetRenderTime()
+{
+    return renderTime;
 }

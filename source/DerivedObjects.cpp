@@ -338,7 +338,7 @@ PerformanceOverlay::PerformanceOverlay( GameEngine* engine ) : Object( engine )
 	netStats->type = OBJECT_PERFORMANCE_OVERLAY;
 
 	netStats->persistent = true;
-	netStats->drawOrder = 60;
+	netStats->drawOrder = 60; //draw on top of almost everything
 }
 PerformanceOverlay::~PerformanceOverlay()
 {
@@ -359,5 +359,5 @@ void PerformanceOverlay::UpdateServerIndependend()
 }
 void PerformanceOverlay::Render()
 {
-	engine->graphics->DrawString( DATA_SONIC_FONT, engine->text->SPrintString( "Objects %i/%i\nMemory\nFPS %f(%i)/%f(%i)", client->GetEngine()->objects->GetAllObjects().size(), server->GetEngine()->objects->GetAllObjects().size(), client->GetEngine()->time->GetFPS(), client->GetEngine()->time->GetLastTime(), server->GetEngine()->time->GetFPS(), server->GetEngine()->time->GetLastTime() ), Vector2D( 0, 0 ) );
+	engine->graphics->DrawString( DATA_SONIC_FONT, engine->text->SPrintString( "Objects %i/%i\nMemory\nFPS %f(%i)/%f(%i)\nrender time:%f\nnetwork time:%f\nupdate time:%f", client->GetEngine()->objects->GetAllObjects().size(), server->GetEngine()->objects->GetAllObjects().size(), client->GetEngine()->time->GetFPS(), client->GetEngine()->time->GetLastTime(), server->GetEngine()->time->GetFPS(), server->GetEngine()->time->GetLastTime(), client->GetRenderTime(), client->GetNetworkUpdateTime(), client->GetUpdateTime() ), Vector2D( 0, 0 ) );
 }

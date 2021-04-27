@@ -65,7 +65,13 @@ void GameServer::Run()
         }
 
         //Game Logic for all Objects
-        engine->UpdateAll();
+        for( unsigned int i = 0; i <  objects.size(); i++ )
+        {
+            if( objects[i]->GetActive() )
+            {
+                objects[i]->Update();
+            }
+        }
 
         //create and send GameLogic complete packet
         engine->debug->PrintString( "sending Gamelogic comlete packet\n" );
