@@ -23,12 +23,17 @@ class GameNode;
 class GameServer : public GameNode
 {
 protected:
+	float           networkUpdateTime;
+    float           updateTime;
 
 public:
-            			GameServer  ();
-    virtual	       		~GameServer ();
-    		GameEngine*	GetEngine	();
-    		void    	Run         ();
+            			GameServer  			();
+    virtual	       		~GameServer 			();
+    		GameEngine*	GetEngine				();
+    		void    	Run         			();
+
+    		float   	GetNetworkUpdateTime    ();
+            float   	GetUpdateTime           ();
 };
 
 #endif

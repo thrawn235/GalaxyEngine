@@ -42,6 +42,7 @@ void GameServer::Run()
         engine->time->FrameStart();
         engine->debug->PrintString( "================ server ===============:\n" );
         
+        int networkTimer = engine->time->AddTimeStamp();
         engine->debug->PrintString( "checking the net for packtes\n" );
         engine->net->Update();
         engine->debug->PrintString( "Ive got %i Packets\n", engine->net->GetNumPacketsInInbox() );
@@ -55,6 +56,7 @@ void GameServer::Run()
             }
             pkt->~Packet();
         }
+        networkUpdateTime = engine->time->TicksToMilliSeconds( engine->time->GetTimeSinceStamp( networkTimer ) );
 
         
         engine->debug->PrintString( "these are my objects:\n" );
@@ -65,6 +67,7 @@ void GameServer::Run()
         }
 
         //Game Logic for all Objects
+        int updateTimer = engine->time->AddTimeStamp();
         for( unsigned int i = 0; i <  objects.size(); i++ )
         {
             if( objects[i]->GetActive() )
@@ -72,6 +75,7 @@ void GameServer::Run()
                 objects[i]->Update();
             }
         }
+        updateTime = engine->time->TicksToMilliSeconds( engine->time->GetTimeSinceStamp( updateTimer ) );
 
         //create and send GameLogic complete packet
         engine->debug->PrintString( "sending Gamelogic comlete packet\n" );
@@ -82,4 +86,13 @@ void GameServer::Run()
         engine->time->FrameEnd();
         engine->debug->PrintString( "======================================:\n\n\n" );
     }
+}
+
+float GameServer::GetNetworkUpdateTime()
+{
+    return networkUpdateTime;
+}
+float GameServer::GetUpdateTime()
+{
+    return updateTime;
 }

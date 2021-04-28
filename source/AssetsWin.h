@@ -6,7 +6,9 @@
 
 
 //============ defines ===============
-#define DATA_SONIC_FONT 0
-#define DATA_TREEHOUSE 1
+#define DATA_8X8FONT 0
+#define DATA_SONIC_FONT 1
+#define DATA_TILESET 2
+#define DATA_TREEHOUSE 3
 //====================================
 //------------------------- End -------------------------//
