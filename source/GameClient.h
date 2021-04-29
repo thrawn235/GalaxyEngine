@@ -22,9 +22,12 @@ class GameClient : public GameNode
 {
 protected:
 	bool			waitingForUpdate;              //true if the server hasnt responded
-	unsigned int	clientTicksSinceLogicTick;     //for prediction
+	
+    //prediction
+    unsigned int	clientTicksSinceLogicTick;     //for prediction
 	float			tickRate;                      //for prediction
 
+    //performance meassurements
     float           networkUpdateTime;
     float           updateTime;
     float           renderTime;
@@ -32,17 +35,17 @@ protected:
 	bool			exit;
 
 public:
-                    GameClient              ();     //Constructor
-    virtual         ~GameClient             ();     //Destructor
+                        GameClient              ();     //Constructor
+    virtual             ~GameClient             ();     //Destructor
     //------------ communication with main -----------------
-            bool	GetExit					();
+                bool	GetExit					();
     //------------------------------------------------------
-            void    Run                     ();     //everything is done here
-            void    ConnectToServer         ();
+                void    Run                     ();     //everything is done here
+                void    ConnectToServer         ();
 
-            float   GetNetworkUpdateTime    ();
-            float   GetUpdateTime           ();
-            float   GetRenderTime           ();
+                float   GetNetworkUpdateTime    ();
+                float   GetUpdateTime           ();
+                float   GetRenderTime           ();
 };
 
 //#endif

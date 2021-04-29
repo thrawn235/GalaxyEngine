@@ -21,11 +21,11 @@ using namespace std;
 //====================================
 
 //============= defines ==============
-#define OBJECT_TYPE_OBJECT          0
-#define OBJECT_TYPE_PLAYER          1
-#define OBJECT_TYPE_ENEMY           2
-#define OBJECT_TYPE_MAIN_MENU       3
-#define OBJECT_PERFORMANCE_OVERLAY  4
+#define OBJECT_TYPE_OBJECT                  0
+#define OBJECT_TYPE_PLAYER                  1
+#define OBJECT_TYPE_ENEMY                   2
+#define OBJECT_TYPE_MAIN_MENU               3
+#define OBJECT_TYPE_PERFORMANCE_OVERLAY     4
 //====================================
 
 //======= forward declarations =======

@@ -85,11 +85,6 @@ public:
                         GameEngine                  ();
                         ~GameEngine                 ();
 
-    // ------------------ Set / Get --------------------
-    //void                SetHighestUID               ( unsigned long int UID );
-    //unsigned long int   GetHighestUID               ();
-    //unsigned long int   GetHighestUIDAndInc         ();
-
     //-------------- Auxilary Engine Methods ----------
     vector<int>         GetAvailableNetTypes        ();
     void                SetNetType                  ( int netType );

@@ -9,7 +9,10 @@ ObjectsEngineVector::ObjectsEngineVector( GameEngine* engine ) : ObjectsEngine( 
 }
 ObjectsEngineVector::~ObjectsEngineVector()
 {
-
+    engine->debug->PrintString( "Purge all objects... \n" );
+    PurgeAllObjects( true );
+    engine->debug->PrintString( "Clear deleted objects... \n" );
+    ClearAllDeletedObjects();
 }
 void ObjectsEngineVector::SetHighestUID( unsigned long int UID )
 {

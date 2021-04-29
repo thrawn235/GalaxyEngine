@@ -6,11 +6,15 @@
 GameServer::GameServer()
 {  
     engine->SetDebugType( TEXT_TYPE_DUMMY );
+
     //Client and Server cant use the same Input engine. the client keyup might be used by the server and vice versa.
     engine->SetInputType( INPUT_TYPE_DUMMY );
 
     engine->net->ConfigureAsServer();
 
+
+    //adding initial game objects-----------------------------------------------
+    engine->debug->PrintString( "server: add initial game objects...\n" );
     Object* tmp = new Enemy( engine );
     engine->objects->AddObject( tmp );
     tmp = new Enemy( engine );
@@ -21,6 +25,7 @@ GameServer::GameServer()
     tmp->PrintStats();
     tmp = new Enemy( engine );
     engine->objects->AddObject( tmp );
+    //--------------------------------------------------------------------------
 
     engine->debug->PrintString( "\n\n" );
 }
@@ -42,6 +47,8 @@ void GameServer::Run()
         engine->time->FrameStart();
         engine->debug->PrintString( "================ server ===============:\n" );
         
+        
+        //Network updates----------------------------------------------------------------
         int networkTimer = engine->time->AddTimeStamp();
         engine->debug->PrintString( "checking the net for packtes\n" );
         engine->net->Update();
@@ -57,6 +64,8 @@ void GameServer::Run()
             pkt->~Packet();
         }
         networkUpdateTime = engine->time->TicksToMilliSeconds( engine->time->GetTimeSinceStamp( networkTimer ) );
+        //-------------------------------------------------------------------------------
+
 
         
         engine->debug->PrintString( "these are my objects:\n" );
@@ -66,7 +75,7 @@ void GameServer::Run()
             engine->debug->PrintString( "   UID: %i\n", objects[i]->GetUID() );
         }
 
-        //Game Logic for all Objects
+        //Game Logic for all Objects-----------------------------------------------------
         int updateTimer = engine->time->AddTimeStamp();
         for( unsigned int i = 0; i <  objects.size(); i++ )
         {
@@ -76,14 +85,21 @@ void GameServer::Run()
             }
         }
         updateTime = engine->time->TicksToMilliSeconds( engine->time->GetTimeSinceStamp( updateTimer ) );
+        //-------------------------------------------------------------------------------
 
-        //create and send GameLogic complete packet
+
+
+        //create and send GameLogic complete packet--------------------------------------
         engine->debug->PrintString( "sending Gamelogic comlete packet\n" );
         Packet* ack = new Packet;
         ack->type = NET_PACKET_TYPE_SEND_COMPLETE;
         engine->net->Send( ack );
+        //-------------------------------------------------------------------------------
+
+
 
         engine->time->FrameEnd();
+
         engine->debug->PrintString( "======================================:\n\n\n" );
     }
 }

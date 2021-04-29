@@ -57,6 +57,7 @@ GameEngine::GameEngine()
         debug       = new TextEngineSTDIO;
         input       = new InputEngineSDL( this );
         //net       = new NetEngineLinuxSocketsUDP( this );
+        net         = new NetEngineLocal( this );
         graphics    = new GraphicsEngineDummy( this );
         time        = new TimeEngineSDL( this );
         file        = new FileEngineSTDIO( this );
@@ -68,6 +69,7 @@ GameEngine::GameEngine()
         debug       = new TextEngineIOStream;
         input       = new InputEngineSDL( this );
         //net       = new NetEngineWinSocketsUDP( this );
+        net         = new NetEngineLocal( this );
         graphics    = new GraphicsEngineDummy( this );
         time        = new TimeEngineSDL( this );
         file        = new FileEngineSTDIO( this );
@@ -77,7 +79,7 @@ GameEngine::GameEngine()
     #ifdef TARGET_DOS
         text        = new TextEngineSTDIO;
         debug       = new TextEngineDummy;
-        //net       = new NetEngineLocal( this );
+        net         = new NetEngineLocal( this );
         input       = new InputEngineDOS( this );
         graphics    = new GraphicsEngineDummy( this );
         time        = new TimeEngineDOS( this );
@@ -86,18 +88,13 @@ GameEngine::GameEngine()
         objects     = new ObjectsEngineVector( this );
     #endif
 
-    net = new NetEngineLocal( this );
-
     engines.push_back( this );
 
-    objects->SetHighestUID(1);
+    //default. might be changed by server or client later on
+    objects->SetHighestUID( 1 );
 }
 GameEngine::~GameEngine()
 {
-    debug->PrintString( "Purge all objects... \n" );
-    objects->PurgeAllObjects( true );
-    debug->PrintString( "Clear deleted objects... \n" );
-    objects->ClearAllDeletedObjects();
     debug->PrintString( "erase this engine from engines list... \n" );
     for( unsigned int i = 0; i < engines.size(); i++ )
     {
@@ -108,6 +105,14 @@ GameEngine::~GameEngine()
         }
     }
 
+    debug->PrintString( "delete objects... \n" );
+    delete objects;
+    debug->PrintString( "delete data... \n" );
+    delete objects;
+    debug->PrintString( "delete file... \n" );
+    delete file;
+    debug->PrintString( "delete time... \n" );
+    delete time;
     debug->PrintString( "delete graphics... \n" );
     delete graphics;
     debug->PrintString( "delete input... \n" );
@@ -119,19 +124,7 @@ GameEngine::~GameEngine()
     debug->PrintString( "delete debug... \n" );
     delete debug;
 }
-/*void GameEngine::SetHighestUID( unsigned long int UID )
-{
-    highestUID = UID;
-}
-unsigned long int GameEngine::GetHighestUID()
-{
-    return highestUID;
-}
-unsigned long int GameEngine::GetHighestUIDAndInc()
-{
-    highestUID++;
-    return highestUID - 1;
-}*/
+
 vector<int> GameEngine::GetAvailableNetTypes()
 {
     vector<int> availableModes;
@@ -407,6 +400,8 @@ void GameEngine::Quit()
     {
         delete engines[i];
     }
-    engines.clear();
+    //does that call the destructor anyway ?
+    engines.clear();    
+
     exit( EXIT_SUCCESS );
 }

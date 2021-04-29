@@ -126,6 +126,7 @@ void GameClient::Run()
 
     //engine->text->PrintString( "       tickrate:%f clientTicks:%i!\n", tickRate, clientTicksSinceLogicTick );
 
+    //Update Objects------------------------------------------------------
     int updateTimer = engine->time->AddTimeStamp();
     objects = engine->objects->GetAllObjects();
     for( unsigned int i = 0; i < objects.size(); i++ )
@@ -141,6 +142,11 @@ void GameClient::Run()
         }
     }
     updateTime = engine->time->TicksToMilliSeconds( engine->time->GetTimeSinceStamp( updateTimer ) );
+    //--------------------------------------------------------------------
+
+
+
+    //render objects------------------------------------------------------
     int renderTimer = engine->time->AddTimeStamp();
     for( unsigned char currentDrawOrder = 0; currentDrawOrder < 64; currentDrawOrder++ )
     {
@@ -159,10 +165,16 @@ void GameClient::Run()
         }
     }
     renderTime = engine->time->TicksToMilliSeconds( engine->time->GetTimeSinceStamp( renderTimer ) );
+    //--------------------------------------------------------------------
+
+
+    //did we hear from the server that he is done? -----------------------
     if( !waitingForUpdate )
     {
+        //if yes, we have done our updates and we will wait until we hear from the server again:
         waitingForUpdate = true;
     }
+    //--------------------------------------------------------------------
 
 
     //Graphics Flip----------------------------------------------
@@ -191,6 +203,7 @@ void GameClient::ConnectToServer()
     }
 }
 
+//peformance meassurements--------------------------
 float GameClient::GetNetworkUpdateTime()
 {
     return networkUpdateTime;
@@ -203,3 +216,4 @@ float GameClient::GetRenderTime()
 {
     return renderTime;
 }
+//---------------------------------------------------
