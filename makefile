@@ -352,6 +352,14 @@ bmpConverter: ./FileConversion/bin/bmpConverter
 
 .PHONY: palConverter
 palConverter: ./FileConversion/bin/palConverter
+
+
+
+./FileConversion/bin/tmxConverter:		./FileConversion/source/tmxConverter.cpp
+	$(CompilerLinux) $(CFLAGS) -lncurses $^ -o $@
+
+.PHONY: tmxConverter
+tmxConverter: ./FileConversion/bin/tmxConverter
 #==============================================================================================
 
 #============================================= all ============================================
@@ -411,6 +419,7 @@ clean:
 	rm -Rf $(sourceDir)win/*
 	rm -Rf $(sourceDir)linux/*
 	rm -Rf ./WADCreator/bin/*
+	rm -Rf ./FileConversion/bin/*
 #==============================================================================================
 
 
