@@ -25,6 +25,7 @@ using namespace std;
 #define TYPE_ANI 3
 #define TYPE_COL 4
 #define TYPE_STR 5
+#define TYPE_MAP 6
 
 
 struct NGRHeader
@@ -292,6 +293,10 @@ public:
 			{
 				row[columns.typeAlias] = "String";
 			}
+			if( data[i].type == TYPE_MAP )
+			{
+				row[columns.typeAlias] = "Map";
+			}
 			#pragma GCC diagnostic pop
 			
 			row[columns.size] = data[i].size;
@@ -360,6 +365,10 @@ public:
 		else if( compareBytes( dataBlock.data, "STR", 3 ) )
 		{
 			return TYPE_STR;
+		}
+		else if( compareBytes( dataBlock.data, "MAP", 3 ) )
+		{
+			return TYPE_MAP;
 		}
 		else
 		{

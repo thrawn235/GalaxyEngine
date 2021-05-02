@@ -7,8 +7,9 @@
 
 //============ defines ===============
 #define DATA_8X8FONT 0
-#define DATA_SONIC_FONT 1
-#define DATA_TILESET 2
-#define DATA_TREEHOUSE 3
+#define DATA_E1M1 1
+#define DATA_SONIC_FONT 2
+#define DATA_TILESET 3
+#define DATA_TREEHOUSE 4
 //====================================
 //------------------------- End -------------------------//

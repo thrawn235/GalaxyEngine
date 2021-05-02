@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tileset version="1.5" tiledversion="1.6.0" name="tileset" tilewidth="32" tileheight="32" tilecount="392" columns="14">
  <image source="../raw/rgb/tileset.bmp" width="448" height="896"/>
+ <tile id="0">
+  <properties>
+   <property name="proptile" type="int" value="5"/>
+  </properties>
+ </tile>
  <wangsets>
   <wangset name="dirt" type="corner" tile="-1">
    <wangcolor name="water" color="#ff0000" tile="-1" probability="1"/>

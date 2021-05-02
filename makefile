@@ -356,7 +356,7 @@ palConverter: ./FileConversion/bin/palConverter
 
 
 ./FileConversion/bin/tmxConverter:		./FileConversion/source/tmxConverter.cpp
-	$(CompilerLinux) $(CFLAGS) -lncurses $^ -o $@
+	$(CompilerLinux) $(CFLAGS) -lncurses -Wno-write-strings $^ -o $@
 
 .PHONY: tmxConverter
 tmxConverter: ./FileConversion/bin/tmxConverter

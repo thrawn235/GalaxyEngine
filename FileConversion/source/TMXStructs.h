@@ -2,6 +2,7 @@ struct TMXProperty
 {
 	char name[30];
 	char type[30];
+	char value[30];
 	int intValue;
 	float floatValue;
 	bool boolValue;
@@ -68,7 +69,7 @@ struct TMXLayer
 	bool locked;
 	int offsetX, offsetY;
 	vector<TMXProperty> properties;
-	int* data;
+	uint32_t* data;
 };
 
 struct TMXGroup
@@ -117,14 +118,12 @@ struct TMXTileSet
 
 struct TMXMap
 {
-	float XMLVersion;
-	char encoding[30];
 	float version;
 	char tiledVersion[30];
 	char orientation[30];
 	char renderOrder[30];
-	unsigned int width, height;
-	unsigned int tileWidth, tileHeight;
+	uint32_t width, height;
+	uint32_t tileWidth, tileHeight;
 	bool infinite;
 	char backGroundColor[30];
 	unsigned int nextLayerID, nextObjectID; 
