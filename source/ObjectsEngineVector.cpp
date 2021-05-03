@@ -294,3 +294,65 @@ void ObjectsEngineVector::PurgeObjects( vector<Object*> objects )
 // void ObjectsEngineVector::RestoreObject( Object* object, int storeID )
 // void ObjectsEngineVector::RestoreObjects( vector<unsigned long> uids, int storeID )
 // void ObjectsEngineVector::RestoreObjects( vector<Object*> objects, int storeID )
+
+
+unsigned int ObjectsEngineVector::CreateGrid( unsigned int width, unsigned int height, unsigned int tileWidth, unsigned int tileHeight, unsigned int offsetX, unsigned int offsetY )
+{
+    return 0;
+}
+Grid* ObjectsEngineVector::GetGrid( unsigned int id )
+{
+    for( unsigned int i = 0; i < grids.size(); i++ )
+    {
+        if( grids[i]->id == id )
+        {
+            return grids[i];
+        }
+    }
+    return NULL;
+}
+vector<Grid*> ObjectsEngineVector::GetAllGrids()
+{
+    //
+    return grids;
+}
+void ObjectsEngineVector::PopulateGrid( unsigned int gridID, unsigned int assetID )
+{
+
+}
+void ObjectsEngineVector::DeleteGrid( unsigned int id )
+{
+    for( unsigned int i = 0; i < grids.size(); i++ )
+    {
+        if( grids[i]->id == id )
+        {
+            for( unsigned int y = 0; y < grids[i]->objects.size(); y++ )
+            {
+                for( unsigned int x = 0; x < grids[i]->objects[y].size(); x++ )
+                {
+                    DeleteObject( grids[i]->objects[y][x] );
+                }
+                grids[i]->objects[y].clear();
+            }
+            grids[i]->objects.clear();
+            delete grids[i];
+            return;
+        }
+    }
+}
+void ObjectsEngineVector::DeleteAllGrids()
+{
+    for( unsigned int i = 0; i < grids.size(); i++ )
+    {
+        for( unsigned int y = 0; y < grids[i]->objects.size(); y++ )
+        {
+            for( unsigned int x = 0; x < grids[i]->objects[y].size(); x++ )
+            {
+                DeleteObject( grids[i]->objects[y][x] );
+            }
+            grids[i]->objects[y].clear();
+        }
+        grids[i]->objects.clear();
+        delete grids[i];
+    }
+}

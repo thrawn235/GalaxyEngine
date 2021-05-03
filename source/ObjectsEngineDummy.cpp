@@ -156,3 +156,29 @@ void ObjectsEngineDummy::PurgeObjects( vector<Object*> objects )
 // void ObjectsEngineDummy::RestoreObject( Object* object, int storeID )
 // void ObjectsEngineDummy::RestoreObjects( vector<unsigned long> uids, int storeID )
 // void ObjectsEngineDummy::RestoreObjects( vector<Object*> objects, int storeID )
+
+unsigned int ObjectsEngineDummy::CreateGrid( unsigned int width, unsigned int height, unsigned int tileWidth, unsigned int tileHeight, unsigned int offsetX, unsigned int offsetY )
+{
+	return 0;
+}
+Grid* ObjectsEngineDummy::GetGrid( unsigned int id )
+{
+	return NULL;
+}
+vector<Grid*> ObjectsEngineDummy::GetAllGrids()
+{
+	vector<Grid*> grids;
+	return grids;
+}
+void ObjectsEngineDummy::PopulateGrid( unsigned int gridID, unsigned int assetID )
+{
+
+}
+void ObjectsEngineDummy::DeleteGrid( unsigned int id )
+{
+
+}
+void ObjectsEngineDummy::DeleteAllGrids()
+{
+
+}
