@@ -870,7 +870,7 @@ public:
 
         return newTMXMap;
     }
-    void    WriteNMAP( const char* filePath, TMXMap map )
+    void WriteNMAP( const char* filePath, TMXMap map )
     {
         //open File, read only (txt mode)
         FILE* file = fopen( filePath, "wb+" );
@@ -897,28 +897,67 @@ public:
         //write layers
         for( unsigned int i = 0; i < numLayers; i ++ )
         {
+            //find highest guid
+            unsigned int highestGUID = 0;
+            for( unsigned int u = 0; u < map.layers[i].width * map.layers[i].height; u ++ )
+            {
+                if( map.layers[i].data[u] > highestGUID )
+                {
+                    highestGUID = map.layers[i].data[u];
+                }
+            }
+            printf( "highestGUID=%i\n", highestGUID );
+
+            //find fitting GUID;
+            int guid = 0;
+            int low = 1;
+            for( unsigned int guids = 0; guids < map.tileSets.size(); guids++ )
+            {
+                if( highestGUID >= low && highestGUID <= map.tileSets[guids].firstGID )
+                {
+                    guid = map.tileSets[guids].firstGID;
+                    break;
+                }
+                low = map.tileSets[guids].firstGID;
+            }
+
+            int tileSetID = 0;
+            for( unsigned int properties = 0; properties < map.layers[i].properties.size(); properties++ )
+            {
+                if( strcmp( "tileSetID", map.layers[i].properties[properties].name ) == 0 )
+                {
+                    tileSetID = map.layers[i].properties[properties].intValue;
+                    break;
+                }
+            }
+
+            printf( "GUID=%i\n", guid );
+            printf( "tileSetID=%i\n", tileSetID );
+
+            fwrite( &tileSetID, 1, sizeof( uint32_t ), file );
             fwrite( &map.layers[i].width, 1, sizeof( uint32_t ), file );
             fwrite( &map.layers[i].height, 1, sizeof( uint32_t ), file );
             fwrite( &map.layers[i].offsetX, 1, sizeof( uint32_t ), file );
             fwrite( &map.layers[i].offsetY, 1, sizeof( uint32_t ), file );
             for( unsigned int u = 0; u < map.layers[i].width * map.layers[i].height; u ++ )
             {
-                fwrite( &map.layers[i].data[u], 1, sizeof(uint8_t), file );
+                char data = map.layers[i].data[u] - guid;
+                fwrite( &data, 1, sizeof(uint8_t), file );
             }
         }
 
         //write object layers
         uint32_t numObjectLayers = map.objectGroups.size();
         fwrite( &numObjectLayers, 1, sizeof( uint32_t ), file );
-        for( unsigned int i = 0; i < numLayers; i ++ )
+        for( unsigned int z = 0; z < numObjectLayers; z ++ )
         {
-            uint32_t numObjects = map.objectGroups[i].objects.size();
+            uint32_t numObjects = map.objectGroups[z].objects.size();
             fwrite( &numObjects, 1, sizeof( uint32_t ), file );
             for( unsigned int u = 0; u < numObjects; u ++ )
             {
-                fwrite( &map.objectGroups[i].objects[u].id, 1, sizeof(uint32_t), file );
-                fwrite( &map.objectGroups[i].objects[u].pos.x, 1, sizeof(float), file );
-                fwrite( &map.objectGroups[i].objects[u].pos.y, 1, sizeof(float), file );
+                fwrite( &map.objectGroups[z].objects[u].id, 1, sizeof(uint32_t), file );
+                fwrite( &map.objectGroups[z].objects[u].pos.x, 1, sizeof(float), file );
+                fwrite( &map.objectGroups[z].objects[u].pos.y, 1, sizeof(float), file );
             }
         }
 

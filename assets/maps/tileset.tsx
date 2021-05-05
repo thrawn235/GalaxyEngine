@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tileset version="1.5" tiledversion="1.6.0" name="tileset" tilewidth="32" tileheight="32" tilecount="392" columns="14">
+ <properties>
+  <property name="tileSetID" type="int" value="23"/>
+ </properties>
  <image source="../raw/rgb/tileset.bmp" width="448" height="896"/>
  <tile id="0">
   <properties>
    <property name="proptile" type="int" value="5"/>
+   <property name="tileSetID" type="int" value="7"/>
   </properties>
  </tile>
  <wangsets>

@@ -315,6 +315,7 @@ unsigned int ObjectsEngineVector::LoadMap( unsigned int id )
     
     struct Layer
     {
+        uint32_t    tileSetID;
         uint32_t    width;
         uint32_t    height;
         uint32_t    offsetX;
@@ -328,10 +329,10 @@ unsigned int ObjectsEngineVector::LoadMap( unsigned int id )
     for( unsigned int i = 0; i < map->numLayers; i++ )
     {
         Layer* layer = (Layer*)layerPtr;
-        engine->debug->PrintString( "Layer: magic w/h:%i/%i, offsetX/Y: %i/%i\n", layer->width, layer->height, layer->offsetX, layer->offsetY );
+        engine->debug->PrintString( "Layer: SetID:%i w/h:%i/%i, offsetX/Y: %i/%i\n", layer->tileSetID, layer->width, layer->height, layer->offsetX, layer->offsetY );
         
         Grid grid;
-        grid.id             = ??
+        grid.id             = layer->tileSetID;
         grid.width          = layer->height;
         grid.width          = layer->width;
         grid.offsetX        = layer->offsetX;
@@ -340,7 +341,7 @@ unsigned int ObjectsEngineVector::LoadMap( unsigned int id )
         grid.tileHeight     = map->tileHeight;
 
 
-        layerPtr = layerPtr + layer->width * layer->height + sizeof(uint32_t) * 4;
+        layerPtr = layerPtr + layer->width * layer->height + sizeof(uint32_t) * 5;
     }
 
     return 0;
