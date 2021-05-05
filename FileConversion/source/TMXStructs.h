@@ -63,11 +63,11 @@ struct TMXLayer
 	int id;
 	char name[30];
 	char dataEncoding[30];
-	unsigned int width, height;
+	uint32_t width, height;
 	float opacity;
 	bool visible;
 	bool locked;
-	int offsetX, offsetY;
+	uint32_t offsetX, offsetY;
 	vector<TMXProperty> properties;
 	uint32_t* data;
 };

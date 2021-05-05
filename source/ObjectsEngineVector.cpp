@@ -296,7 +296,56 @@ void ObjectsEngineVector::PurgeObjects( vector<Object*> objects )
 // void ObjectsEngineVector::RestoreObjects( vector<Object*> objects, int storeID )
 
 
-unsigned int ObjectsEngineVector::CreateGrid( unsigned int width, unsigned int height, unsigned int tileWidth, unsigned int tileHeight, unsigned int offsetX, unsigned int offsetY )
+unsigned int ObjectsEngineVector::LoadMap( unsigned int id )
+{
+    struct Map
+    {
+        char        magic[3];
+        uint32_t    width;
+        uint32_t    height;
+        uint32_t    tileWidth;
+        uint32_t    tileHeight;
+        uint32_t    numLayers;
+        char        data;
+    }__attribute__((packed));
+
+    Map* map = (Map*)engine->data->GetData( id );
+
+    engine->debug->PrintString( "Map: magic %c%c%c w/h:%i/%i, numLayers:%i\n", map->magic[0], map->magic[1], map->magic[2], map->width, map->height, map->numLayers );
+    
+    struct Layer
+    {
+        uint32_t    width;
+        uint32_t    height;
+        uint32_t    offsetX;
+        uint32_t    offsetY;
+        char        data;
+    }__attribute__((packed));
+    
+    char* layerPtr;
+    layerPtr = &map->data;
+
+    for( unsigned int i = 0; i < map->numLayers; i++ )
+    {
+        Layer* layer = (Layer*)layerPtr;
+        engine->debug->PrintString( "Layer: magic w/h:%i/%i, offsetX/Y: %i/%i\n", layer->width, layer->height, layer->offsetX, layer->offsetY );
+        
+        Grid grid;
+        grid.id             = ??
+        grid.width          = layer->height;
+        grid.width          = layer->width;
+        grid.offsetX        = layer->offsetX;
+        grid.offsetY        = layer->offsetY;
+        grid.tileWidth      = map->tileWidth;
+        grid.tileHeight     = map->tileHeight;
+
+
+        layerPtr = layerPtr + layer->width * layer->height + sizeof(uint32_t) * 4;
+    }
+
+    return 0;
+}
+unsigned int ObjectsEngineVector::ObjectsEngineVector::CreateGrid( unsigned int width, unsigned int height, unsigned int tileWidth, unsigned int tileHeight, unsigned int offsetX, unsigned int offsetY )
 {
     return 0;
 }
@@ -318,7 +367,13 @@ vector<Grid*> ObjectsEngineVector::GetAllGrids()
 }
 void ObjectsEngineVector::PopulateGrid( unsigned int gridID, unsigned int assetID )
 {
-
+    struct layer
+    {
+        uint32_t    width;
+        uint32_t    height;
+        uint32_t    offsetX;
+        uint32_t    offsetY;
+    }__attribute__((packed));
 }
 void ObjectsEngineVector::DeleteGrid( unsigned int id )
 {

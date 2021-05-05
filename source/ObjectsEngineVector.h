@@ -114,6 +114,7 @@ public:
     // void             RestoreObjects              ( vector<Object*> objects, int storeID );
 
     //--------------------------- Grid -----------------------------------
+    unsigned int        LoadMap                     ( unsigned int id );
     unsigned int        CreateGrid                  ( unsigned int width, unsigned int height, unsigned int tileWidth, unsigned int tileHeight, unsigned int offsetX, unsigned int offsetY );
     Grid*               GetGrid                     ( unsigned int id );
     vector<Grid*>       GetAllGrids                 ();

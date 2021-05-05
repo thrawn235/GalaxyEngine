@@ -120,7 +120,8 @@ public:
     // virtual     void             RestoreObjects              ( vector<Object*> objects, int storeID )                                                                                                    = 0;
 
     //--------------------------- Grid -----------------------------------
-    virtual     unsigned int        CreateGrid                  ( unsigned int width, unsigned int height, unsigned int tileWidth, unsigned int tileHeight, unsigned int offsetX, unsigned int offsetY )     = 0;
+    virtual     unsigned int        LoadMap                     ( unsigned int id )                                                                                                                         = 0;
+    virtual     unsigned int        CreateGrid                  ( unsigned int width, unsigned int height, unsigned int tileWidth, unsigned int tileHeight, unsigned int offsetX, unsigned int offsetY )    = 0;
     virtual     Grid*               GetGrid                     ( unsigned int id )                                                                                                                         = 0;
     virtual     vector<Grid*>       GetAllGrids                 ()                                                                                                                                          = 0;
     virtual     void                PopulateGrid                ( unsigned int gridID, unsigned int assetID )                                                                                               = 0;

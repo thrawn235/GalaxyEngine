@@ -109,6 +109,37 @@ void Player::Render()
 
 
 
+Tile::Tile( GameEngine* engine ) : Object( engine )
+{
+	baseNetStats = (NetStats*)realloc( baseNetStats, sizeof( TileStats ) );
+   
+    netStats = (TileStats*)baseNetStats;
+    netStats->size = sizeof( TileStats );
+
+	netStats->type = OBJECT_TYPE_TILE;
+
+	netStats->tileSetID = 0;
+	netStats->tileIndex = 0;
+
+	//engine->text->PrintString( "Tile Constructor: Object UID:%i; Type:%i(Tile); Pos:%f:%f Mov:%f:%f NetAddr:%i\n", netStats->uid, netStats->type, netStats->pos.x, netStats->pos.y, netStats->movement.x, netStats->movement.y, engine->net->GetAddress() );
+}
+void Tile::GameLogic()
+{
+
+}
+void Tile::ClientSideUpdate()
+{
+	
+}
+void Tile::Render()
+{
+
+}
+
+
+
+
+
 Enemy::Enemy( GameEngine* engine ) : Object( engine )
 {
 	baseNetStats = (NetStats*)realloc( baseNetStats, sizeof( EnemyStats ) );

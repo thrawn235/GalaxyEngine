@@ -26,6 +26,7 @@ using namespace std;
 #define OBJECT_TYPE_ENEMY                   2
 #define OBJECT_TYPE_MAIN_MENU               3
 #define OBJECT_TYPE_PERFORMANCE_OVERLAY     4
+#define OBJECT_TYPE_TILE                    5
 //====================================
 
 //======= forward declarations =======

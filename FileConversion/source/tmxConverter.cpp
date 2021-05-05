@@ -889,12 +889,18 @@ public:
         //write map info
         fwrite( &map.width, 1, sizeof( uint32_t ), file );
         fwrite( &map.height, 1, sizeof( uint32_t ), file );
+        fwrite( &map.tileWidth, 1, sizeof( uint32_t ), file );
+        fwrite( &map.tileHeight, 1, sizeof( uint32_t ), file );
         uint32_t numLayers = map.layers.size();
         fwrite( &numLayers, 1, sizeof( uint32_t ), file );
 
         //write layers
         for( unsigned int i = 0; i < numLayers; i ++ )
         {
+            fwrite( &map.layers[i].width, 1, sizeof( uint32_t ), file );
+            fwrite( &map.layers[i].height, 1, sizeof( uint32_t ), file );
+            fwrite( &map.layers[i].offsetX, 1, sizeof( uint32_t ), file );
+            fwrite( &map.layers[i].offsetY, 1, sizeof( uint32_t ), file );
             for( unsigned int u = 0; u < map.layers[i].width * map.layers[i].height; u ++ )
             {
                 fwrite( &map.layers[i].data[u], 1, sizeof(uint8_t), file );

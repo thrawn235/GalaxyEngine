@@ -44,6 +44,26 @@ public:
 };
 
 
+struct TileStats : ObjectStats
+{
+	unsigned int 	tileSetID;
+	unsigned char 	tileIndex;
+};
+
+class Tile : public Object
+{
+private:
+	
+protected:
+	TileStats*		netStats;
+public:
+					Tile				( GameEngine* engine );
+	virtual void 	GameLogic			();
+	virtual void 	ClientSideUpdate	();
+	virtual void	Render				();
+};
+
+
 struct EnemyStats : ObjectStats
 {
 	

@@ -157,6 +157,10 @@ void ObjectsEngineDummy::PurgeObjects( vector<Object*> objects )
 // void ObjectsEngineDummy::RestoreObjects( vector<unsigned long> uids, int storeID )
 // void ObjectsEngineDummy::RestoreObjects( vector<Object*> objects, int storeID )
 
+unsigned int ObjectsEngineDummy::LoadMap( unsigned int id )
+{
+	return 0;
+}
 unsigned int ObjectsEngineDummy::CreateGrid( unsigned int width, unsigned int height, unsigned int tileWidth, unsigned int tileHeight, unsigned int offsetX, unsigned int offsetY )
 {
 	return 0;

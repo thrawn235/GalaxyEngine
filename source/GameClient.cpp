@@ -32,6 +32,7 @@ GameClient::GameClient()
     exit = false;
 
     //initial game objects
+    engine->objects->LoadMap( DATA_E1M1 );
     engine->debug->PrintString( "GameClient: create MainMenu...\n" );
     MainMenu* mainMenu = new MainMenu( engine );
     engine->debug->PrintString( "GameClient: add MainMenu...\n" );
