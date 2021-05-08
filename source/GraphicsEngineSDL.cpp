@@ -551,7 +551,7 @@ SDL_Texture* GraphicsEngineSDL::GetTextureInCollection( unsigned long id, unsign
         {
             for( unsigned int i = 0; i < textures.size(); i++ )
             {
-                if( id * 1000 + index == textures[i].id )
+                if( id * 10000 + index == textures[i].id )
                 {
                     return textures[i].texture;
                 }

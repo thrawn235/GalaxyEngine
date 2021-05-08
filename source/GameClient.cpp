@@ -59,13 +59,13 @@ void GameClient::Run()
     //debug:
     engine->debug->PrintString( "===================== client ==================\n" );
 
-    engine->debug->PrintString( "client: these are my objects:\n" );
+    //engine->debug->PrintString( "client: these are my objects:\n" );
     vector<Object*> objects = engine->objects->GetAllObjects();
     engine->debug->PrintString( "client: ive got %i objects\n", objects.size() );
-    for( unsigned int i = 0; i < objects.size(); i++ )
+    /*for( unsigned int i = 0; i < objects.size(); i++ )
     {
         engine->debug->PrintString( "client:   UID: %i\n", objects[i]->GetUID() );
-    }
+    }*/
 
     //count ticks (for prediction step)
     clientTicksSinceLogicTick++;

@@ -32,6 +32,16 @@ vector<Object*> ObjectsEngineDummy::GetAllObjects()
     vector<Object*> out;
     return out;
 }
+vector<Object*> ObjectsEngineDummy::GetAllGridObjects()
+{
+    vector<Object*> out;
+    return out;
+}
+vector<Object*> ObjectsEngineDummy::GetAllAgentObjects()
+{
+    vector<Object*> out;
+    return out;
+}
 vector<Object*> ObjectsEngineDummy::GetAllObjectsExcept( Object* object )
 {
     vector<Object*> out;

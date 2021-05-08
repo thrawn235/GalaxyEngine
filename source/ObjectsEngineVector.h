@@ -56,6 +56,8 @@ public:
 
     //------------------------ getting objects ----------------------------
     vector<Object*>     GetAllObjects               ();
+    vector<Object*>     GetAllGridObjects           ();
+    vector<Object*>     GetAllAgentObjects          ();
     vector<Object*>     GetAllObjectsExcept         ( Object* object );
     vector<Object*>     GetAllObjectsExcept         ( vector<Object*> objects );
     Object*             GetObjectByID               ( unsigned long uid );

@@ -62,6 +62,8 @@ public:
 
     //------------------------ getting objects ----------------------------
     virtual     vector<Object*>     GetAllObjects               ()                                                                  = 0;
+    virtual     vector<Object*>     GetAllGridObjects           ()                                                                  = 0;      
+    virtual     vector<Object*>     GetAllAgentObjects          ()                                                                  = 0;
     virtual     vector<Object*>     GetAllObjectsExcept         ( Object* object )                                                  = 0;
     virtual     vector<Object*>     GetAllObjectsExcept         ( vector<Object*> objects )                                         = 0;
     virtual     Object*             GetObjectByID               ( unsigned long uid )                                               = 0;

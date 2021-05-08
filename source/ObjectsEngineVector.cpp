@@ -37,9 +37,23 @@ void ObjectsEngineVector::AddObject( Object* object )
     engine->debug->PrintString( "Add object, i have %i\n", objects.size() );
 }
 vector<Object*> ObjectsEngineVector::GetAllObjects()
-{
-    engine->debug->PrintString( "Get objects, i have %i\n", objects.size() );
-    return objects;
+{ 
+    vector<Object*> allObjects;
+    //engine->debug->PrintString( "grids: %i\n", grids.size() );
+    for( unsigned int i = 0; i < grids.size(); i++ )
+    {
+        //engine->debug->PrintString( "grids%i size:%i\n", i, grids[i]->width * grids[i]->height );
+        for( unsigned int u = 0; u < grids[i]->width * grids[i]->height; u++ )
+        {
+            allObjects.push_back( grids[i]->objects[u] );
+        }
+    }
+    for( unsigned int i = 0; i < objects.size(); i++ )
+    {
+        allObjects.push_back( objects[i] );
+    }
+    //engine->debug->PrintString( "Get objects, i have %i\n", allObjects.size() );
+    return allObjects;
 }
 vector<Object*> ObjectsEngineVector::GetAllObjectsExcept( Object* object )
 {
@@ -47,6 +61,16 @@ vector<Object*> ObjectsEngineVector::GetAllObjectsExcept( Object* object )
     return out;
 }
 vector<Object*> ObjectsEngineVector::GetAllObjectsExcept( vector<Object*> objects )
+{
+    vector<Object*> out;
+    return out;
+}
+vector<Object*> ObjectsEngineVector::GetAllGridObjects()
+{
+    vector<Object*> out;
+    return out;
+}
+vector<Object*> ObjectsEngineVector::GetAllAgentObjects()
 {
     vector<Object*> out;
     return out;
@@ -335,33 +359,46 @@ unsigned int ObjectsEngineVector::LoadMap( unsigned int id )
         
         if( layer->tileSetID != 0 )
         {
-            Grid grid;
-            grid.id             = layer->tileSetID;
-            grid.width          = layer->height;
-            grid.width          = layer->width;
-            grid.offsetX        = layer->offsetX;
-            grid.offsetY        = layer->offsetY;
-            grid.tileWidth      = map->tileWidth;
-            grid.tileHeight     = map->tileHeight;
+            Grid* grid = new Grid;
+            grid->id             = layer->tileSetID;
+            grid->width          = layer->width;
+            grid->height         = layer->height;
+            grid->offsetX        = layer->offsetX;
+            grid->offsetY        = layer->offsetY;
+            grid->tileWidth      = map->tileWidth;
+            grid->tileHeight     = map->tileHeight;
 
             unsigned char* data = (unsigned char*)&layer->data;
 
 
-            grid.objects = (Object**)malloc( layer->width * layer->height * sizeof(Object*) );
-
-            for( unsigned int xy = 0; xy < layer->height * layer->width; xy++ )
+            grid->objects = (Object**)malloc( layer->width * layer->height * sizeof(Object*) );
+            Vector2D newTilePos;
+            for( unsigned int y = 0; y < layer->height; y++ )
             {
-                //create tile:
-                Object* tileObjectPtr = new Tile( engine );
-                Tile* tile = (Tile*)tileObjectPtr;
-                tile->SetTileSetID( layer->tileSetID );
-                tile->SetTileIndex( *data );
-                engine->debug->PrintString( "%X,", *data );
-                grid.objects[xy] = tileObjectPtr;
-                data++;
-
-                //dont forget cleanup!
+                for( unsigned int x = 0; x < layer->width; x++ )
+                {
+                    //create tile:
+                    if( *data != 0 )
+                    {
+                        Object* tileObjectPtr = new Tile( engine );
+                        Tile* tile = (Tile*)tileObjectPtr;
+                        if( layer->tileSetID == 23 )  //fix! its fucked up
+                        {
+                            tile->SetTileSetID( DATA_TILESET );
+                        }
+                        tile->SetTileIndex( (*data) - 1 );
+                        tile->SetPos( newTilePos );
+                        engine->debug->PrintString( "%X,", (*data) - 1 );
+                        grid->objects[y * layer->height + x] = tileObjectPtr;
+                        data++;
+                        newTilePos.x = newTilePos.x + map->tileWidth;
+                    }
+                }
+                newTilePos.x = 0;
+                newTilePos.y = newTilePos.y + map->tileHeight;
             }
+
+            grids.push_back( grid );
         }
 
         layerPtr = layerPtr + layer->width * layer->height + sizeof(uint32_t) * 5;

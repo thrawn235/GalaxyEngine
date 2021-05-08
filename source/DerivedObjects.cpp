@@ -85,21 +85,6 @@ void Player::Render()
 	{
 		//engine->text->PrintString( (char*)engine->data->GetData( DATA_STRING ) );
 		engine->graphics->DrawSprite( DATA_TREEHOUSE, Vector2D( 50, 50 ) );
-		engine->graphics->DrawSpriteInSheet( DATA_SONIC_FONT, 8,  Vector2D( 000, 100 ) );
-		engine->graphics->DrawSpriteInSheet( DATA_SONIC_FONT, 9,  Vector2D( 050, 100 ) );
-		engine->graphics->DrawSpriteInSheet( DATA_SONIC_FONT, 10, Vector2D( 150, 100 ) );
-		engine->graphics->DrawSpriteInSheet( DATA_SONIC_FONT, 11, Vector2D( 200, 100 ) );
-		engine->graphics->DrawSpriteInSheet( DATA_SONIC_FONT, 12, Vector2D( 250, 100 ) );
-		engine->graphics->DrawSpriteInSheet( DATA_SONIC_FONT, 13, Vector2D( 300, 100 ) );
-		engine->graphics->DrawSpriteInSheet( DATA_SONIC_FONT, 14, Vector2D( 350, 100 ) );
-		engine->graphics->DrawSpriteInSheet( DATA_SONIC_FONT, 15, Vector2D( 000, 100 ) );
-		engine->graphics->DrawSpriteInSheet( DATA_SONIC_FONT, 16, Vector2D( 050, 150 ) );
-		engine->graphics->DrawSpriteInSheet( DATA_SONIC_FONT, 17, Vector2D( 100, 150 ) );
-		engine->graphics->DrawSpriteInSheet( DATA_SONIC_FONT, 18, Vector2D( 150, 150 ) );
-		engine->graphics->DrawSpriteInSheet( DATA_SONIC_FONT, 19, Vector2D( 200, 150 ) );
-		engine->graphics->DrawSpriteInSheet( DATA_SONIC_FONT, 20, Vector2D( 250, 150 ) );
-		engine->graphics->DrawSpriteInSheet( DATA_SONIC_FONT, 21, Vector2D( 300, 150 ) );
-		engine->graphics->DrawSpriteInSheet( DATA_SONIC_FONT, 22, Vector2D( 350, 150 ) );
 		engine->graphics->DrawString( DATA_SONIC_FONT, "test\nhello world!", Vector2D( 5, 20 ) );
 		engine->graphics->DrawString( DATA_SONIC_FONT, "another test that is a bit more useless bla\nand of course something behind a linebreak", 10, Vector2D( 100,100 ) );
 	}
@@ -149,7 +134,9 @@ void Tile::ClientSideUpdate()
 }
 void Tile::Render()
 {
-
+	engine->graphics->DrawSpriteInSheet( netStats->tileSetID, netStats->tileIndex, netStats->pos );
+	engine->graphics->DrawRect( netStats->pos, 32, 32, COLOR_RED );
+	engine->debug->PrintString( "tileDrawPos:%i/%i\n", netStats->pos.x, netStats->pos.y );
 }
 
 
