@@ -111,9 +111,8 @@ public:
     unsigned int        CreateGrid                  ( unsigned int width, unsigned int height, unsigned int tileWidth, unsigned int tileHeight, unsigned int offsetX, unsigned int offsetY );
     Grid*               GetGrid                     ( unsigned int id );
     vector<Grid*>       GetAllGrids                 ();
-    void                PopulateGrid                ( unsigned int gridID, unsigned int assetID );
-    void                DeleteGrid                  ( unsigned int id );
-    void                DeleteAllGrids              ();
+    void                PurgeGrid                   ( unsigned int id );
+    void                PurgeAllGrids               ();
 };
 
 #endif

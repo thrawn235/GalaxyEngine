@@ -2,6 +2,7 @@
 
 #include "ObjectsEngineVector.h"
 #include "GameEngine.h"
+#include "DerivedObjects.h"
 
 ObjectsEngineVector::ObjectsEngineVector( GameEngine* engine ) : ObjectsEngine( engine )
 {
@@ -11,6 +12,7 @@ ObjectsEngineVector::~ObjectsEngineVector()
 {
     engine->debug->PrintString( "Purge all objects... \n" );
     PurgeAllObjects( true );
+    PurgeAllGrids();
     engine->debug->PrintString( "Clear deleted objects... \n" );
     ClearAllDeletedObjects();
 }
@@ -329,17 +331,38 @@ unsigned int ObjectsEngineVector::LoadMap( unsigned int id )
     for( unsigned int i = 0; i < map->numLayers; i++ )
     {
         Layer* layer = (Layer*)layerPtr;
-        engine->debug->PrintString( "Layer: SetID:%i w/h:%i/%i, offsetX/Y: %i/%i\n", layer->tileSetID, layer->width, layer->height, layer->offsetX, layer->offsetY );
+        engine->debug->PrintString( "Layer: SetID:%i w/h:%i/%i, offsetX/Y: %i/%i tileW/H %i/%i\n", layer->tileSetID, layer->width, layer->height, layer->offsetX, layer->offsetY, map->tileWidth, map->tileHeight );
         
-        Grid grid;
-        grid.id             = layer->tileSetID;
-        grid.width          = layer->height;
-        grid.width          = layer->width;
-        grid.offsetX        = layer->offsetX;
-        grid.offsetY        = layer->offsetY;
-        grid.tileWidth      = map->tileWidth;
-        grid.tileHeight     = map->tileHeight;
+        if( layer->tileSetID != 0 )
+        {
+            Grid grid;
+            grid.id             = layer->tileSetID;
+            grid.width          = layer->height;
+            grid.width          = layer->width;
+            grid.offsetX        = layer->offsetX;
+            grid.offsetY        = layer->offsetY;
+            grid.tileWidth      = map->tileWidth;
+            grid.tileHeight     = map->tileHeight;
 
+            unsigned char* data = (unsigned char*)&layer->data;
+
+
+            grid.objects = (Object**)malloc( layer->width * layer->height * sizeof(Object*) );
+
+            for( unsigned int xy = 0; xy < layer->height * layer->width; xy++ )
+            {
+                //create tile:
+                Object* tileObjectPtr = new Tile( engine );
+                Tile* tile = (Tile*)tileObjectPtr;
+                tile->SetTileSetID( layer->tileSetID );
+                tile->SetTileIndex( *data );
+                engine->debug->PrintString( "%X,", *data );
+                grid.objects[xy] = tileObjectPtr;
+                data++;
+
+                //dont forget cleanup!
+            }
+        }
 
         layerPtr = layerPtr + layer->width * layer->height + sizeof(uint32_t) * 5;
     }
@@ -366,49 +389,32 @@ vector<Grid*> ObjectsEngineVector::GetAllGrids()
     //
     return grids;
 }
-void ObjectsEngineVector::PopulateGrid( unsigned int gridID, unsigned int assetID )
-{
-    struct layer
-    {
-        uint32_t    width;
-        uint32_t    height;
-        uint32_t    offsetX;
-        uint32_t    offsetY;
-    }__attribute__((packed));
-}
-void ObjectsEngineVector::DeleteGrid( unsigned int id )
+void ObjectsEngineVector::PurgeGrid( unsigned int id )
 {
     for( unsigned int i = 0; i < grids.size(); i++ )
     {
         if( grids[i]->id == id )
         {
-            for( unsigned int y = 0; y < grids[i]->objects.size(); y++ )
+            for( unsigned int xy = 0; xy < grids[i]->width * grids[i]->height; xy++ )
             {
-                for( unsigned int x = 0; x < grids[i]->objects[y].size(); x++ )
-                {
-                    DeleteObject( grids[i]->objects[y][x] );
-                }
-                grids[i]->objects[y].clear();
+
+                DeleteObject( grids[i]->objects[xy] );
             }
-            grids[i]->objects.clear();
-            delete grids[i];
+            free( grids[i]->objects );
             return;
         }
     }
 }
-void ObjectsEngineVector::DeleteAllGrids()
+void ObjectsEngineVector::PurgeAllGrids()
 {
     for( unsigned int i = 0; i < grids.size(); i++ )
     {
-        for( unsigned int y = 0; y < grids[i]->objects.size(); y++ )
+        for( unsigned int xy = 0; xy < grids[i]->width * grids[i]->height; xy++ )
         {
-            for( unsigned int x = 0; x < grids[i]->objects[y].size(); x++ )
-            {
-                DeleteObject( grids[i]->objects[y][x] );
-            }
-            grids[i]->objects[y].clear();
+
+            DeleteObject( grids[i]->objects[xy] );
         }
-        grids[i]->objects.clear();
-        delete grids[i];
+        free( grids[i]->objects );
+        return;
     }
 }

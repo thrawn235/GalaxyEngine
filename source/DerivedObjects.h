@@ -57,10 +57,14 @@ private:
 protected:
 	TileStats*		netStats;
 public:
-					Tile				( GameEngine* engine );
-	virtual void 	GameLogic			();
-	virtual void 	ClientSideUpdate	();
-	virtual void	Render				();
+							Tile				( GameEngine* engine );
+	virtual void 			SetTileSetID 		( unsigned int tileSetID );
+	virtual unsigned int 	GetTileSetID 		();
+	virtual void 			SetTileIndex 		( unsigned char tileIndex );
+	virtual unsigned char 	GetTileIndex 		();
+	virtual void 			GameLogic			();
+	virtual void 			ClientSideUpdate	();
+	virtual void			Render				();
 };
 
 

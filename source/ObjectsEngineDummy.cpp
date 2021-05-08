@@ -174,15 +174,11 @@ vector<Grid*> ObjectsEngineDummy::GetAllGrids()
 	vector<Grid*> grids;
 	return grids;
 }
-void ObjectsEngineDummy::PopulateGrid( unsigned int gridID, unsigned int assetID )
+void ObjectsEngineDummy::PurgeGrid( unsigned int id )
 {
 
 }
-void ObjectsEngineDummy::DeleteGrid( unsigned int id )
-{
-
-}
-void ObjectsEngineDummy::DeleteAllGrids()
+void ObjectsEngineDummy::PurgeAllGrids()
 {
 
 }

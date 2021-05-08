@@ -41,7 +41,7 @@ struct Grid
     unsigned int                tileHeight;
     unsigned int                offsetX;
     unsigned int                offsetY;
-    vector<vector<Object*>>     objects;
+    Object**                    objects;
 };
 
 
@@ -124,9 +124,8 @@ public:
     virtual     unsigned int        CreateGrid                  ( unsigned int width, unsigned int height, unsigned int tileWidth, unsigned int tileHeight, unsigned int offsetX, unsigned int offsetY )    = 0;
     virtual     Grid*               GetGrid                     ( unsigned int id )                                                                                                                         = 0;
     virtual     vector<Grid*>       GetAllGrids                 ()                                                                                                                                          = 0;
-    virtual     void                PopulateGrid                ( unsigned int gridID, unsigned int assetID )                                                                                               = 0;
-    virtual     void                DeleteGrid                  ( unsigned int id )                                                                                                                         = 0;
-    virtual     void                DeleteAllGrids              ()                                                                                                                                          = 0;
+    virtual     void                PurgeGrid                   ( unsigned int id )                                                                                                                         = 0;
+    virtual     void                PurgeAllGrids               ()                                                                                                                                          = 0;
 };
 
 #endif

@@ -123,6 +123,22 @@ Tile::Tile( GameEngine* engine ) : Object( engine )
 
 	//engine->text->PrintString( "Tile Constructor: Object UID:%i; Type:%i(Tile); Pos:%f:%f Mov:%f:%f NetAddr:%i\n", netStats->uid, netStats->type, netStats->pos.x, netStats->pos.y, netStats->movement.x, netStats->movement.y, engine->net->GetAddress() );
 }
+void Tile::SetTileSetID( unsigned int tileSetID )
+{
+	netStats->tileSetID = tileSetID;
+}
+unsigned int Tile::GetTileSetID()
+{
+	return netStats->tileSetID;
+}
+void Tile::SetTileIndex( unsigned char tileIndex )
+{
+	netStats->tileIndex = tileIndex;
+}
+unsigned char Tile::GetTileIndex()
+{
+	return netStats->tileIndex;
+}
 void Tile::GameLogic()
 {
 
