@@ -32,7 +32,7 @@ GameClient::GameClient()
     exit = false;
 
     //initial game objects
-    engine->objects->LoadMap( DATA_E1M1 );
+    //engine->objects->LoadMap( DATA_E1M1 );
     engine->debug->PrintString( "GameClient: create MainMenu...\n" );
     MainMenu* mainMenu = new MainMenu( engine );
     engine->debug->PrintString( "GameClient: add MainMenu...\n" );
@@ -128,17 +128,20 @@ void GameClient::Run()
     //engine->text->PrintString( "       tickrate:%f clientTicks:%i!\n", tickRate, clientTicksSinceLogicTick );
 
     //Update Objects------------------------------------------------------
+    //engine->debug->PrintString( "updating Objects...\n" );
     int updateTimer = engine->time->AddTimeStamp();
     objects = engine->objects->GetAllObjects();
     for( unsigned int i = 0; i < objects.size(); i++ )
     {
         if( !waitingForUpdate && objects[i]->GetClientActive() )
         {
+            //engine->debug->PrintString( "client side update...\n" );
             objects[i]->ClientSideUpdate();
         }
         objects[i]->UpdateServerIndependend();
         if( objects[i]->GetPredict() )
         {
+            //engine->debug->PrintString( "client side predict...\n" );
             objects[i]->Predict( tickRate );
         }
     }
@@ -148,6 +151,7 @@ void GameClient::Run()
 
 
     //render objects------------------------------------------------------
+    engine->debug->PrintString( "render Objects...\n" );
     int renderTimer = engine->time->AddTimeStamp();
     for( unsigned char currentDrawOrder = 0; currentDrawOrder < 64; currentDrawOrder++ )
     {

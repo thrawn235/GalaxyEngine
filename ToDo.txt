@@ -1,8 +1,6 @@
 To Do:
 
-bug prevents drawing halfway off the screen
-
-layers/zbuffer priority for sprites
+empty grids should be periodically deleted
 
 a way to ask client/server for detailed times. render time, gamelogic time etc
 

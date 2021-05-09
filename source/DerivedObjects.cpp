@@ -229,6 +229,7 @@ void MainMenu::UpdateServerIndependend()
 		    PerformanceOverlay* performanceOverlay = new PerformanceOverlay( engine );
 		    engine->debug->PrintString( "GameClient: add PerformanceOverlay...\n" );
 		    engine->objects->AddObject( performanceOverlay );
+		    engine->objects->LoadMap( DATA_E1M1 );
 
 			//create server
 			if( server != NULL )

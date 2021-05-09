@@ -159,6 +159,8 @@ public:
     vector<Grid*>       GetAllGrids                 ();                                                         ;
     void                PurgeGrid                   ( unsigned int id );
     void                PurgeAllGrids               ();
+
+    void                FreeGridIfEmpty             ( unsigned int id);
 };
 
 #endif

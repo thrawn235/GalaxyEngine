@@ -38,14 +38,14 @@ void DataEngineNGR::LoadArchiveFile( string filePath )
 }
 void* DataEngineNGR::GetData( unsigned long id )
 {
-	this->engine->debug->PrintString( "loading id: %i...\n", id );
+	//this->engine->debug->PrintString( "loading id: %i...\n", id );
 	//data already loaded ?
 	for( unsigned int i = 0; i < dataBlocks.size(); i++ )
 	{
 		if( dataBlocks[i].id == id )
 		{
 			//yes
-			this->engine->debug->PrintString( "ID found asset already loaaded...\n" );
+			//this->engine->debug->PrintString( "ID found asset already loaaded...\n" );
 			return dataBlocks[i].data;
 		}
 	}

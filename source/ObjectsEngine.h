@@ -59,6 +59,7 @@ public:
 
     //--------------------------- add Objects -----------------------------
     virtual     void                AddObject                   ( Object* object )                                                                                                                          = 0;
+    //virtual     void                AddObjectToGrid             ( Object* object, unsigned int x, unsigned int y )                                                                                          = 0;
 
     //------------------------ getting objects ----------------------------
     virtual     vector<Object*>     GetAllObjects               ()                                                                                                                                          = 0;
