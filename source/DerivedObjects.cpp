@@ -135,8 +135,8 @@ void Tile::ClientSideUpdate()
 void Tile::Render()
 {
 	engine->graphics->DrawSpriteInSheet( netStats->tileSetID, netStats->tileIndex, netStats->pos );
-	engine->graphics->DrawRect( netStats->pos, 32, 32, COLOR_RED );
-	engine->debug->PrintString( "tileDrawPos:%i/%i\n", netStats->pos.x, netStats->pos.y );
+	//engine->graphics->DrawRect( netStats->pos, 32, 32, COLOR_RED );
+	//engine->text->PrintString( "tileDrawPos:%f/%f\n", netStats->pos.x, netStats->pos.y );
 }
 
 

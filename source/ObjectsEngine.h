@@ -50,38 +50,60 @@ class ObjectsEngine
 protected:
 
 public:
-                                    ObjectsEngine               ( GameEngine* engine )                                              {};
-    virtual                         ~ObjectsEngine              ()                                                                  {};
+                                    ObjectsEngine               ( GameEngine* engine )                                                                                                                      {};
+    virtual                         ~ObjectsEngine              ()                                                                                                                                          {};
 
-    virtual     void                SetHighestUID               ( unsigned long int UID )                                           = 0;
-    virtual     unsigned long int   GetHighestUID               ()                                                                  = 0;
-    virtual     unsigned long int   GetHighestUIDAndInc         ()                                                                  = 0;                                                                  
+    virtual     void                SetHighestUID               ( unsigned long int UID )                                                                                                                   = 0;
+    virtual     unsigned long int   GetHighestUID               ()                                                                                                                                          = 0;
+    virtual     unsigned long int   GetHighestUIDAndInc         ()                                                                                                                                          = 0;                                                                  
 
     //--------------------------- add Objects -----------------------------
-    virtual     void                AddObject                   ( Object* object )                                                  = 0;
+    virtual     void                AddObject                   ( Object* object )                                                                                                                          = 0;
 
     //------------------------ getting objects ----------------------------
-    virtual     vector<Object*>     GetAllObjects               ()                                                                  = 0;
-    virtual     vector<Object*>     GetAllGridObjects           ()                                                                  = 0;      
-    virtual     vector<Object*>     GetAllAgentObjects          ()                                                                  = 0;
-    virtual     vector<Object*>     GetAllObjectsExcept         ( Object* object )                                                  = 0;
-    virtual     vector<Object*>     GetAllObjectsExcept         ( vector<Object*> objects )                                         = 0;
-    virtual     Object*             GetObjectByID               ( unsigned long uid )                                               = 0;
+    virtual     vector<Object*>     GetAllObjects               ()                                                                                                                                          = 0;
+    virtual     vector<Object*>     GetAllGridObjects           ()                                                                                                                                          = 0;      
+    virtual     vector<Object*>     GetAllAgentObjects          ()                                                                                                                                          = 0;
+    virtual     vector<Object*>     GetAllObjectsExcept         ( Object* object )                                                                                                                          = 0;
+    virtual     vector<Object*>     GetAllObjectsExcept         ( vector<Object*> objects )                                                                                                                 = 0;
+
+    virtual     vector<Object*>     GetAllAgentObjectsExcept    ( Object* object )                                                                                                                          = 0;
+    virtual     vector<Object*>     GetAllAgentObjectsExcept    ( vector<Object*> objects )                                                                                                                 = 0;
+    virtual     vector<Object*>     GetAllGridObjectsExcept     ( Object* object )                                                                                                                          = 0;
+    virtual     vector<Object*>     GetAllGridObjectsExcept     ( vector<Object*> objects )                                                                                                                 = 0;
+
+    virtual     Object*             GetObjectByID               ( unsigned long uid )                                                                                                                       = 0;
 
     //------------------------ deleting objects ---------------------------
     //(delete = move objects to delete list)
-    virtual     void                DeleteAllObjects            ()                                                                  = 0;
-    virtual     void                DeleteAllObjectsExcept      ( Object* object )                                                  = 0;
-    virtual     void                DeleteAllObjectsExcept      ( vector<Object*> objects )                                         = 0;
-    virtual     void                DeleteAllObjects            ( bool includePersistent )                                          = 0;
-    virtual     void                DeleteAllObjectsExcept      ( Object* object, bool includePersistent )                          = 0;
-    virtual     void                DeleteAllObjectsExcept      ( vector<Object*> objects, bool includePersistent )                 = 0;
-    virtual     void                DeleteObject                ( unsigned long uid )                                               = 0;
-    virtual     void                DeleteObject                ( Object* object )                                                  = 0;
-    virtual     void                DeleteObjects               ( vector<unsigned long> uids )                                      = 0;
-    virtual     void                DeleteObjects               ( vector<Object*> objects )                                         = 0;
-    virtual     void                ClearAllDeletedObjects      ()                                                                  = 0;
-    virtual     void                ClearAllDeletedObjects      ( bool includePersistent )                                          = 0;
+    virtual     void                DeleteAllObjects            ()                                                                                                                                          = 0;
+    virtual     void                DeleteAllObjectsExcept      ( Object* object )                                                                                                                          = 0;
+    virtual     void                DeleteAllObjectsExcept      ( vector<Object*> objects )                                                                                                                 = 0;
+    virtual     void                DeleteAllObjects            ( bool includePersistent )                                                                                                                  = 0;
+    virtual     void                DeleteAllObjectsExcept      ( Object* object, bool includePersistent )                                                                                                  = 0;
+    virtual     void                DeleteAllObjectsExcept      ( vector<Object*> objects, bool includePersistent )                                                                                         = 0;
+
+    virtual     void                DeleteAllGridObjects        ()                                                                                                                                          = 0;
+    virtual     void                DeleteAllGridObjectsExcept  ( Object* object )                                                                                                                          = 0;
+    virtual     void                DeleteAllGridObjectsExcept  ( vector<Object*> objects )                                                                                                                 = 0;
+    virtual     void                DeleteAllGridObjects        ( bool includePersistent )                                                                                                                  = 0;
+    virtual     void                DeleteAllGridObjectsExcept  ( Object* object, bool includePersistent )                                                                                                  = 0;
+    virtual     void                DeleteAllGridObjectsExcept  ( vector<Object*> objects, bool includePersistent )                                                                                         = 0;
+
+    virtual     void                DeleteAllAgentObjects       ()                                                                                                                                          = 0;
+    virtual     void                DeleteAllAgentObjectsExcept ( Object* object )                                                                                                                          = 0;
+    virtual     void                DeleteAllAgentObjectsExcept ( vector<Object*> objects )                                                                                                                 = 0;
+    virtual     void                DeleteAllAgentObjects       ( bool includePersistent )                                                                                                                  = 0;
+    virtual     void                DeleteAllAgentObjectsExcept ( Object* object, bool includePersistent )                                                                                                  = 0;
+    virtual     void                DeleteAllAgentObjectsExcept ( vector<Object*> objects, bool includePersistent )                                                                                         = 0;
+
+    virtual     void                DeleteObject                ( unsigned long uid )                                                                                                                       = 0;
+    virtual     void                DeleteObject                ( Object* object )                                                                                                                          = 0;
+    virtual     void                DeleteObjects               ( vector<unsigned long> uids )                                                                                                              = 0;
+    virtual     void                DeleteObjects               ( vector<Object*> objects )                                                                                                                 = 0;
+    
+    virtual     void                ClearAllDeletedObjects      ()                                                                                                                                          = 0;
+    virtual     void                ClearAllDeletedObjects      ( bool includePersistent )                                                                                                                  = 0;
 
     //------------------------ purging objects ----------------------------
     //(purge = delete objects immediatly. might lead to broken pointers)
@@ -91,6 +113,21 @@ public:
     virtual     void                PurgeAllObjects             ( bool includePersistent )                                                                                                                  = 0;
     virtual     void                PurgeAllObjectsExcept       ( Object* object, bool includePersistent )                                                                                                  = 0;
     virtual     void                PurgeAllObjectsExcept       ( vector<Object*> objects, bool includePersistent )                                                                                         = 0;
+
+    virtual     void                PurgeAllGridObjects         ()                                                                                                                                          = 0;
+    virtual     void                PurgeAllGridObjectsExcept   ( Object* object )                                                                                                                          = 0;
+    virtual     void                PurgeAllGridObjectsExcept   ( vector<Object*> objects )                                                                                                                 = 0;
+    virtual     void                PurgeAllGridObjects         ( bool includePersistent )                                                                                                                  = 0;
+    virtual     void                PurgeAllGridObjectsExcept   ( Object* object, bool includePersistent )                                                                                                  = 0;
+    virtual     void                PurgeAllGridObjectsExcept   ( vector<Object*> objects, bool includePersistent )                                                                                         = 0;
+
+    virtual     void                PurgeAllAgentObjects        ()                                                                                                                                          = 0;
+    virtual     void                PurgeAllAgentObjectsExcept  ( Object* object )                                                                                                                          = 0;
+    virtual     void                PurgeAllAgentObjectsExcept  ( vector<Object*> objects )                                                                                                                 = 0;
+    virtual     void                PurgeAllAgentObjects        ( bool includePersistent )                                                                                                                  = 0;
+    virtual     void                PurgeAllAgentObjectsExcept  ( Object* object, bool includePersistent )                                                                                                  = 0;
+    virtual     void                PurgeAllAgentObjectsExcept  ( vector<Object*> objects, bool includePersistent )                                                                                         = 0;
+
     virtual     void                PurgeObject                 ( unsigned long uid )                                                                                                                       = 0;
     virtual     void                PurgeObject                 ( Object* object )                                                                                                                          = 0;
     virtual     void                PurgeObjects                ( vector<unsigned long> uids )                                                                                                              = 0;

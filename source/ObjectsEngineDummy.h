@@ -53,6 +53,12 @@ public:
     vector<Object*>     GetAllAgentObjects          ();
     vector<Object*>     GetAllObjectsExcept         ( Object* object );
     vector<Object*>     GetAllObjectsExcept         ( vector<Object*> objects );
+
+    vector<Object*>     GetAllAgentObjectsExcept    ( Object* object );
+    vector<Object*>     GetAllAgentObjectsExcept    ( vector<Object*> objects );
+    vector<Object*>     GetAllGridObjectsExcept     ( Object* object );
+    vector<Object*>     GetAllGridObjectsExcept     ( vector<Object*> objects );
+
     Object*             GetObjectByID               ( unsigned long uid );
 
     //------------------------ deleting objects ---------------------------
@@ -63,10 +69,26 @@ public:
     void                DeleteAllObjects            ( bool includePersistent );
     void                DeleteAllObjectsExcept      ( Object* object, bool includePersistent );
     void                DeleteAllObjectsExcept      ( vector<Object*> objects, bool includePersistent );
+
+    void                DeleteAllGridObjects        ();
+    void                DeleteAllGridObjectsExcept  ( Object* object );
+    void                DeleteAllGridObjectsExcept  ( vector<Object*> objects );
+    void                DeleteAllGridObjects        ( bool includePersistent );
+    void                DeleteAllGridObjectsExcept  ( Object* object, bool includePersistent );
+    void                DeleteAllGridObjectsExcept  ( vector<Object*> objects, bool includePersistent );
+
+    void                DeleteAllAgentObjects       ();
+    void                DeleteAllAgentObjectsExcept ( Object* object );
+    void                DeleteAllAgentObjectsExcept ( vector<Object*> objects );
+    void                DeleteAllAgentObjects       ( bool includePersistent );
+    void                DeleteAllAgentObjectsExcept ( Object* object, bool includePersistent );
+    void                DeleteAllAgentObjectsExcept ( vector<Object*> objects, bool includePersistent );
+
     void                DeleteObject                ( unsigned long uid );
     void                DeleteObject                ( Object* object );
     void                DeleteObjects               ( vector<unsigned long> uids );
     void                DeleteObjects               ( vector<Object*> objects );
+    
     void                ClearAllDeletedObjects      ();
     void                ClearAllDeletedObjects      ( bool includePersistent );
 
@@ -78,6 +100,21 @@ public:
     void                PurgeAllObjects             ( bool includePersistent );
     void                PurgeAllObjectsExcept       ( Object* object, bool includePersistent );
     void                PurgeAllObjectsExcept       ( vector<Object*> objects, bool includePersistent );
+
+    void                PurgeAllGridObjects         ();
+    void                PurgeAllGridObjectsExcept   ( Object* object );
+    void                PurgeAllGridObjectsExcept   ( vector<Object*> objects );
+    void                PurgeAllGridObjects         ( bool includePersistent );
+    void                PurgeAllGridObjectsExcept   ( Object* object, bool includePersistent );
+    void                PurgeAllGridObjectsExcept   ( vector<Object*> objects, bool includePersistent );
+
+    void                PurgeAllAgentObjects        ();
+    void                PurgeAllAgentObjectsExcept  ( Object* object );
+    void                PurgeAllAgentObjectsExcept  ( vector<Object*> objects );
+    void                PurgeAllAgentObjects        ( bool includePersistent );
+    void                PurgeAllAgentObjectsExcept  ( Object* object, bool includePersistent );
+    void                PurgeAllAgentObjectsExcept  ( vector<Object*> objects, bool includePersistent );
+
     void                PurgeObject                 ( unsigned long uid );
     void                PurgeObject                 ( Object* object );
     void                PurgeObjects                ( vector<unsigned long> uids );

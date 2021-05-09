@@ -162,6 +162,7 @@ void GameClient::Run()
             {
                 objects[i]->Render();
                 objects.erase( objects.begin() + i );   //remove from list. needs only be drawn once!
+                i--;
             }
         }
     }

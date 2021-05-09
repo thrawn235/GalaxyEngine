@@ -52,6 +52,28 @@ vector<Object*> ObjectsEngineDummy::GetAllObjectsExcept( vector<Object*> objects
     vector<Object*> out;
     return out;
 }
+
+vector<Object*> ObjectsEngineDummy::GetAllGridObjectsExcept( Object* object )
+{
+    vector<Object*> out;
+    return out;
+}
+vector<Object*> ObjectsEngineDummy::GetAllGridObjectsExcept( vector<Object*> objects )
+{
+    vector<Object*> out;
+    return out;
+}
+vector<Object*> ObjectsEngineDummy::GetAllAgentObjectsExcept( Object* object )
+{
+    vector<Object*> out;
+    return out;
+}
+vector<Object*> ObjectsEngineDummy::GetAllAgentObjectsExcept( vector<Object*> objects )
+{
+    vector<Object*> out;
+    return out;
+}
+
 Object* ObjectsEngineDummy::GetObjectByID( unsigned long uid )
 {
 	return NULL;
@@ -80,6 +102,58 @@ void ObjectsEngineDummy::DeleteAllObjectsExcept( vector<Object*> objects, bool i
 {
 
 }
+
+void ObjectsEngineDummy::DeleteAllGridObjects()
+{
+
+}
+void ObjectsEngineDummy::DeleteAllGridObjectsExcept( Object* object )
+{
+
+}
+void ObjectsEngineDummy::DeleteAllGridObjectsExcept( vector<Object*> objects )
+{
+
+}
+void ObjectsEngineDummy::DeleteAllGridObjects( bool includePersistent )
+{
+
+}
+void ObjectsEngineDummy::DeleteAllGridObjectsExcept( Object* object, bool includePersistent )
+{
+
+}
+void ObjectsEngineDummy::DeleteAllGridObjectsExcept( vector<Object*> objects, bool includePersistent )
+{
+
+}
+
+void ObjectsEngineDummy::DeleteAllAgentObjects()
+{
+
+}
+void ObjectsEngineDummy::DeleteAllAgentObjectsExcept( Object* object )
+{
+
+}
+void ObjectsEngineDummy::DeleteAllAgentObjectsExcept( vector<Object*> objects )
+{
+
+}
+void ObjectsEngineDummy::DeleteAllAgentObjects( bool includePersistent )
+{
+
+}
+void ObjectsEngineDummy::DeleteAllAgentObjectsExcept( Object* object, bool includePersistent )
+{
+
+}
+void ObjectsEngineDummy::DeleteAllAgentObjectsExcept( vector<Object*> objects, bool includePersistent )
+{
+
+}
+
+
 void ObjectsEngineDummy::DeleteObject( unsigned long uid )
 {
 
@@ -104,6 +178,7 @@ void ObjectsEngineDummy::ClearAllDeletedObjects( bool includePersistent )
 {
 
 }
+
 void ObjectsEngineDummy::PurgeAllObjects()
 {
 
@@ -128,6 +203,57 @@ void ObjectsEngineDummy::PurgeAllObjectsExcept( vector<Object*> objects, bool in
 {
 
 }
+
+void ObjectsEngineDummy::PurgeAllGridObjects()
+{
+
+}
+void ObjectsEngineDummy::PurgeAllGridObjectsExcept( Object* object )
+{
+
+}
+void ObjectsEngineDummy::PurgeAllGridObjectsExcept( vector<Object*> objects )
+{
+
+}
+void ObjectsEngineDummy::PurgeAllGridObjects( bool includePersistent )
+{
+
+}
+void ObjectsEngineDummy::PurgeAllGridObjectsExcept( Object* object, bool includePersistent )
+{
+
+}
+void ObjectsEngineDummy::PurgeAllGridObjectsExcept( vector<Object*> objects, bool includePersistent )
+{
+
+}
+
+void ObjectsEngineDummy::PurgeAllAgentObjects()
+{
+
+}
+void ObjectsEngineDummy::PurgeAllAgentObjectsExcept( Object* object )
+{
+
+}
+void ObjectsEngineDummy::PurgeAllAgentObjectsExcept( vector<Object*> objects )
+{
+
+}
+void ObjectsEngineDummy::PurgeAllAgentObjects( bool includePersistent )
+{
+
+}
+void ObjectsEngineDummy::PurgeAllAgentObjectsExcept( Object* object, bool includePersistent )
+{
+
+}
+void ObjectsEngineDummy::PurgeAllAgentObjectsExcept( vector<Object*> objects, bool includePersistent )
+{
+
+}
+
 void ObjectsEngineDummy::PurgeObject( unsigned long uid )
 {
 
