@@ -37,6 +37,8 @@ public:
     		GameEngine* GetEngine               ();
     virtual void        Run                     ();
     		void      	UpdateObjectFromNet     ( Packet* pkt );
+    virtual	float   	GetNetworkUpdateTime    () = 0;
+    virtual float   	GetUpdateTime           () = 0;
 };
 
 #endif

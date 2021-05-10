@@ -222,8 +222,8 @@ void MainMenu::UpdateServerIndependend()
 			//2. make sure it uses local buffer networking for single player
 			//3. load all game objects
 			//4. hide main menu
-			engine->debug->PrintString( "purge...\n" );
-			engine->objects->PurgeAllObjectsExcept( this, true );
+			engine->debug->PrintString( "delete...\n" );
+			engine->objects->DeleteAllObjectsExcept( this, true );
 
 			engine->debug->PrintString( "GameClient: create Performance Overlay...\n" );
 		    PerformanceOverlay* performanceOverlay = new PerformanceOverlay( engine );
@@ -236,6 +236,7 @@ void MainMenu::UpdateServerIndependend()
 			{
 				engine->debug->PrintString( "disconnect...\n" );
 				engine->net->Disconnect();
+				engine->debug->PrintString( "disconnected...\n" );
 				delete server;
 				engine->debug->PrintString( "server gone!\n" );
 				server = NULL;
@@ -394,5 +395,6 @@ void PerformanceOverlay::UpdateServerIndependend()
 }
 void PerformanceOverlay::Render()
 {
-	engine->graphics->DrawString( DATA_SONIC_FONT, engine->text->SPrintString( "Objects %i/%i\nMemory\nFPS %f(%i)/%f(%i)\nrender time:%f\nnetwork time:%f\nupdate time:%f", client->GetEngine()->objects->GetAllObjects().size(), server->GetEngine()->objects->GetAllObjects().size(), client->GetEngine()->time->GetFPS(), client->GetEngine()->time->GetLastTime(), server->GetEngine()->time->GetFPS(), server->GetEngine()->time->GetLastTime(), client->GetRenderTime(), client->GetNetworkUpdateTime(), client->GetUpdateTime() ), Vector2D( 0, 0 ) );
+	GameClient* pClient = (GameClient*)client;
+	engine->graphics->DrawString( DATA_SONIC_FONT, engine->text->SPrintString( "Objects %i/%i\nMemory\nFPS %f(%i)/%f(%i)\nrender time:%f\nnetwork time:%f\nupdate time:%f", client->GetEngine()->objects->GetAllObjects().size(), server->GetEngine()->objects->GetAllObjects().size(), client->GetEngine()->time->GetFPS(), client->GetEngine()->time->GetLastTime(), server->GetEngine()->time->GetFPS(), server->GetEngine()->time->GetLastTime(), pClient->GetRenderTime(), client->GetNetworkUpdateTime(), client->GetUpdateTime() ), Vector2D( 0, 0 ) );
 }

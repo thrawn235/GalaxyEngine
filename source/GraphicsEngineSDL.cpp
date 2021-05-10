@@ -402,7 +402,7 @@ void GraphicsEngineSDL::DrawSprite( unsigned long id, Vector2D pos )
     pos = pos - camPos;
 
     SDL_Texture* texture = GetTexture( id );
-    engine->debug->PrintString( "texture loaded...\n" );
+    //engine->debug->PrintString( "texture loaded...\n" );
 
     int access, width, height;
     Uint32 format;
@@ -577,7 +577,7 @@ void GraphicsEngineSDL::DrawSprite( SDL_Texture* texture, Vector2D pos )
 {
     pos = pos - camPos;
 
-    engine->debug->PrintString( "texture loaded...\n" );
+    //engine->debug->PrintString( "texture loaded...\n" );
 
     int access, width, height;
     Uint32 format;

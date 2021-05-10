@@ -5,7 +5,7 @@
 
 GameServer::GameServer()
 {  
-    engine->SetDebugType( TEXT_TYPE_DUMMY );
+    engine->SetDebugType( TEXT_TYPE_STDIO );
 
     //Client and Server cant use the same Input engine. the client keyup might be used by the server and vice versa.
     engine->SetInputType( INPUT_TYPE_DUMMY );
@@ -32,7 +32,7 @@ GameServer::GameServer()
 GameServer::~GameServer()
 {
     engine->debug->PrintString( "destroying gameserver...\n" );
-    delete engine;
+    //delete engine;
 }
 GameEngine* GameServer::GetEngine()
 {

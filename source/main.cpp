@@ -17,9 +17,9 @@ using namespace std;
 
 //========= global variables =========
 //client needs to know server because GameMenu needs to be able to create it. one of the rare cases where a global is justified imho
-GameClient* client = NULL;
+GameNode* client = NULL;
 //server is NOT active at start bc main menu will create it
-GameServer* server = NULL;
+GameNode* server = NULL;
 //====================================
 
 int main( int argc, char *argv[] )
@@ -33,7 +33,8 @@ int main( int argc, char *argv[] )
     //----------------- Main Loop --------------------
     long int rounds = 0;
     cout<<"entering main loop..."<<endl;
-    while( !client->GetExit() )
+    GameClient* pClient = (GameClient*)client;
+    while( !pClient->GetExit() )
     {
         if( client != NULL )
         {

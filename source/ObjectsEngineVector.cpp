@@ -40,147 +40,53 @@ void ObjectsEngineVector::AddObject( Object* object )
 vector<Object*> ObjectsEngineVector::GetAllObjects()
 {
     vector<Object*> allObjects;
-    for( unsigned int i = 0; i < grids.size(); i++ )
-    {
-        for( unsigned int u = 0; u < grids[i]->width * grids[i]->height; u++ )
-        {
-            allObjects.push_back( grids[i]->objects[u] );
-        }
-    }
-    for( unsigned int i = 0; i < objects.size(); i++ )
-    {
-        allObjects.push_back( objects[i] );
-    }
+    GetAllAgentObjects( &allObjects, true );
+    GetAllGridObjects( &allObjects, true );
     engine->debug->PrintString( "Get objects, i have %i\n", allObjects.size() );
     return allObjects;
 }
 vector<Object*> ObjectsEngineVector::GetAllObjectsExcept( Object* object )
 {
     vector<Object*> allObjects;
-    for( unsigned int i = 0; i < grids.size(); i++ )
-    {
-        for( unsigned int u = 0; u < grids[i]->width * grids[i]->height; u++ )
-        {
-            if( grids[i]->objects[u] == object )
-            {
-                allObjects.push_back( grids[i]->objects[u] );
-            }
-        }
-    }
-    for( unsigned int i = 0; i < objects.size(); i++ )
-    {
-        if( objects[i] == object )
-        {
-            allObjects.push_back( objects[i] );
-        }
-    }
-    //engine->debug->PrintString( "Get objects, i have %i\n", allObjects.size() );
+    GetAllAgentObjectsExcept( &allObjects, object, true );
+    GetAllGridObjectsExcept( &allObjects, object, true );
     return allObjects;
 }
 vector<Object*> ObjectsEngineVector::GetAllObjectsExcept( vector<Object*> objects )
 {
     vector<Object*> allObjects;
-    for( unsigned int i = 0; i < grids.size(); i++ )
-    {
-        for( unsigned int u = 0; u < grids[i]->width * grids[i]->height; u++ )
-        {
-            for( unsigned z = 0; z < objects.size(); z++ )
-            {
-                if( grids[i]->objects[u] == objects[z] )
-                {
-                    allObjects.push_back( grids[i]->objects[u] );
-                }
-            }
-        }
-    }
-    for( unsigned int i = 0; i < objects.size(); i++ )
-    {
-        for( unsigned z = 0; z < objects.size(); z++ )
-        {
-            if( this->objects[i] == objects[z] )
-            {
-                allObjects.push_back( this->objects[i] );
-            }
-        }
-    }
-    //engine->debug->PrintString( "Get objects, i have %i\n", allObjects.size() );
+    GetAllAgentObjectsExcept( &allObjects, objects, true );
+    GetAllGridObjectsExcept( &allObjects, objects, true );
     return allObjects;
 }
 vector<Object*> ObjectsEngineVector::GetAllGridObjectsExcept( Object* object )
 {
     vector<Object*> allObjects;
-    for( unsigned int i = 0; i < grids.size(); i++ )
-    {
-        for( unsigned int u = 0; u < grids[i]->width * grids[i]->height; u++ )
-        {
-            if( grids[i]->objects[u] == object )
-            {
-                allObjects.push_back( grids[i]->objects[u] );
-            }
-        }
-    }
-    //engine->debug->PrintString( "Get objects, i have %i\n", allObjects.size() );
+    GetAllGridObjectsExcept( &allObjects, object, true );
     return allObjects;
 }
 vector<Object*> ObjectsEngineVector::GetAllGridObjectsExcept( vector<Object*> objects )
 {
     vector<Object*> allObjects;
-    for( unsigned int i = 0; i < grids.size(); i++ )
-    {
-        for( unsigned int u = 0; u < grids[i]->width * grids[i]->height; u++ )
-        {
-            for( unsigned z = 0; z < objects.size(); z++ )
-            {
-                if( grids[i]->objects[u] == objects[z] )
-                {
-                    allObjects.push_back( grids[i]->objects[u] );
-                }
-            }
-        }
-    }
-    //engine->debug->PrintString( "Get objects, i have %i\n", allObjects.size() );
+    GetAllGridObjectsExcept( &allObjects, objects, true );
     return allObjects;
 }
 vector<Object*> ObjectsEngineVector::GetAllAgentObjectsExcept( Object* object )
 {
     vector<Object*> allObjects;
-    for( unsigned int i = 0; i < objects.size(); i++ )
-    {
-        if( objects[i] == object )
-        {
-            allObjects.push_back( objects[i] );
-        }
-    }
-    //engine->debug->PrintString( "Get objects, i have %i\n", allObjects.size() );
+    GetAllAgentObjectsExcept( &allObjects, object, true );
     return allObjects;
 }
 vector<Object*> ObjectsEngineVector::GetAllAgentObjectsExcept( vector<Object*> objects )
 {
     vector<Object*> allObjects;
-    for( unsigned int i = 0; i < objects.size(); i++ )
-    {
-        for( unsigned z = 0; z < objects.size(); z++ )
-        {
-            if( this->objects[i] == objects[z] )
-            {
-                allObjects.push_back( this->objects[i] );
-            }
-        }
-    }
-    //engine->debug->PrintString( "Get objects, i have %i\n", allObjects.size() );
+    GetAllAgentObjectsExcept( &allObjects, objects, true );
     return allObjects;
 }
 vector<Object*> ObjectsEngineVector::GetAllGridObjects()
 {
     vector<Object*> allObjects;
-    for( unsigned int i = 0; i < grids.size(); i++ )
-    {
-        for( unsigned int u = 0; u < grids[i]->width * grids[i]->height; u++ )
-        {
-            allObjects.push_back( grids[i]->objects[u] );
-        }
-    }
-    //engine->debug->PrintString( "Get objects, i have %i\n", allObjects.size() );
+    GetAllGridObjects( &allObjects, true );
     return allObjects;
 }
 vector<Object*> ObjectsEngineVector::GetAllAgentObjects()
@@ -723,7 +629,7 @@ void ObjectsEngineVector::PurgeAllObjects()
             if( !grids[i]->objects[u]->GetPersistent() )
             {
                 grids[i]->objects[u] = NULL;
-                free( grids[i]->objects[u] );
+                delete( grids[i]->objects[u] );
             }
         }
         FreeGridIfEmpty( grids[i]->id );
@@ -748,7 +654,7 @@ void ObjectsEngineVector::PurgeAllObjectsExcept( Object* object )
                 if( grids[i]->objects[u] != object )
                 {
                     grids[i]->objects[u] = NULL;
-                    free( grids[i]->objects[u] );
+                    delete( grids[i]->objects[u] );
                 }
             }
         }
@@ -779,7 +685,7 @@ void ObjectsEngineVector::PurgeAllObjectsExcept( vector<Object*> objects )
                     if( !grids[i]->objects[u]->GetPersistent() )
                     {
                         grids[i]->objects[u] = NULL;
-                        free( grids[i]->objects[u] );
+                        delete( grids[i]->objects[u] );
                     }
                 }
             }
@@ -810,7 +716,7 @@ void ObjectsEngineVector::PurgeAllObjects( bool includePersistent )
             if( !grids[i]->objects[u]->GetPersistent() || includePersistent )
             {
                 grids[i]->objects[u] = NULL;
-                free( grids[i]->objects[u] );
+                delete( grids[i]->objects[u] );
             }
         }
         FreeGridIfEmpty( grids[i]->id );
@@ -835,7 +741,7 @@ void ObjectsEngineVector::PurgeAllObjectsExcept( Object* object, bool includePer
                 if( grids[i]->objects[u] != object )
                 {
                     grids[i]->objects[u] = NULL;
-                    free( grids[i]->objects[u] );
+                    delete( grids[i]->objects[u] );
                 }
             }
         }
@@ -866,7 +772,7 @@ void ObjectsEngineVector::PurgeAllObjectsExcept( vector<Object*> objects, bool i
                     if( !grids[i]->objects[u]->GetPersistent() || includePersistent )
                     {
                         grids[i]->objects[u] = NULL;
-                        free( grids[i]->objects[u] );
+                        delete( grids[i]->objects[u] );
                     }
                 }
             }
@@ -898,7 +804,7 @@ void ObjectsEngineVector::PurgeAllGridObjects()
             if( !grids[i]->objects[u]->GetPersistent() )
             {
                 grids[i]->objects[u] = NULL;
-                free( grids[i]->objects[u] );
+                delete( grids[i]->objects[u] );
             }
         }
         FreeGridIfEmpty( grids[i]->id );
@@ -915,7 +821,7 @@ void ObjectsEngineVector::PurgeAllGridObjectsExcept( Object* object )
                 if( grids[i]->objects[u] != object )
                 {
                     grids[i]->objects[u] = NULL;
-                    free( grids[i]->objects[u] );
+                    delete( grids[i]->objects[u] );
                 }
             }
         }
@@ -935,7 +841,7 @@ void ObjectsEngineVector::PurgeAllGridObjectsExcept( vector<Object*> objects )
                     if( !grids[i]->objects[u]->GetPersistent() )
                     {
                         grids[i]->objects[u] = NULL;
-                        free( grids[i]->objects[u] );
+                        delete( grids[i]->objects[u] );
                     }
                 }
             }
@@ -952,7 +858,7 @@ void ObjectsEngineVector::PurgeAllGridObjects( bool includePersistent )
             if( !grids[i]->objects[u]->GetPersistent() || includePersistent )
             {
                 grids[i]->objects[u] = NULL;
-                free( grids[i]->objects[u] );
+                delete( grids[i]->objects[u] );
             }
         }
         FreeGridIfEmpty( grids[i]->id );
@@ -969,7 +875,7 @@ void ObjectsEngineVector::PurgeAllGridObjectsExcept( Object* object, bool includ
                 if( grids[i]->objects[u] != object )
                 {
                     grids[i]->objects[u] = NULL;
-                    free( grids[i]->objects[u] );
+                    delete( grids[i]->objects[u] );
                 }
             }
         }
@@ -989,7 +895,7 @@ void ObjectsEngineVector::PurgeAllGridObjectsExcept( vector<Object*> objects, bo
                     if( !grids[i]->objects[u]->GetPersistent() || includePersistent )
                     {
                         grids[i]->objects[u] = NULL;
-                        free( grids[i]->objects[u] );
+                        delete( grids[i]->objects[u] );
                     }
                 }
             }
@@ -1093,7 +999,7 @@ void ObjectsEngineVector::PurgeObject( unsigned long uid )
             if( grids[i]->objects[u]->GetUID() == uid )
             {
                 grids[i]->objects[u] = NULL;
-                free( grids[i]->objects[u] );
+                delete( grids[i]->objects[u] );
             }
         }
     }
@@ -1115,7 +1021,7 @@ void ObjectsEngineVector::PurgeObject( Object* object )
             if( grids[i]->objects[u] == object )
             {
                 grids[i]->objects[u] = NULL;
-                free( grids[i]->objects[u] );
+                delete( grids[i]->objects[u] );
             }
         }
     }
@@ -1139,7 +1045,7 @@ void ObjectsEngineVector::PurgeObjects( vector<unsigned long> uids )
                 if( uids[z] == grids[i]->objects[u]->GetUID() )
                 {
                     grids[i]->objects[u] = NULL;
-                    free( grids[i]->objects[u] );
+                    delete( grids[i]->objects[u] );
                 }
             }
         }
@@ -1327,7 +1233,7 @@ void ObjectsEngineVector::PurgeGrid( unsigned int id )
         {
             for( unsigned int xy = 0; xy < grids[i]->width * grids[i]->height; xy++ )
             {
-                DeleteObject( grids[i]->objects[xy] );
+                delete grids[i]->objects[xy];
             }
             free( grids[i]->objects );
             return;
@@ -1341,7 +1247,7 @@ void ObjectsEngineVector::PurgeAllGrids()
         for( unsigned int xy = 0; xy < grids[i]->width * grids[i]->height; xy++ )
         {
 
-            DeleteObject( grids[i]->objects[xy] );
+            delete grids[i]->objects[xy];
         }
         free( grids[i]->objects );
         return;
@@ -1364,6 +1270,186 @@ void ObjectsEngineVector::FreeGridIfEmpty( unsigned int id )
             free( grids[i]->objects );
             delete grids[i];
             return;
+        }
+    }
+}
+
+void ObjectsEngineVector::GetAllAgentObjects( vector<Object*>* outObjects )
+{
+    for( unsigned int i = 0; i < objects.size(); i++ )
+    {
+        if( !objects[i]->GetPersistent() )
+        {
+            outObjects->push_back( objects[i] );
+        }
+    }
+}
+void ObjectsEngineVector::GetAllAgentObjectsExcept( vector<Object*>* outObjects, Object* object )
+{
+    for( unsigned int i = 0; i < objects.size(); i++ )
+    {
+        if( objects[i] == object )
+        {
+            if( !objects[i]->GetPersistent() )
+            {
+                outObjects->push_back( objects[i] );
+            }
+        }
+    }
+}
+void ObjectsEngineVector::GetAllAgentObjectsExcept( vector<Object*>* outObjects, vector<Object*> objects )
+{
+    for( unsigned int i = 0; i < objects.size(); i++ )
+    {
+        for( unsigned z = 0; z < objects.size(); z++ )
+        {
+            if( this->objects[i] == objects[z] )
+            {
+                if( !objects[i]->GetPersistent() )
+                {
+                    outObjects->push_back( this->objects[i] );
+                }
+            }
+        }
+    }
+}
+
+void ObjectsEngineVector::GetAllAgentObjects( vector<Object*>* outObjects, bool includePersistent )
+{
+    for( unsigned int i = 0; i < objects.size(); i++ )
+    {
+        if( !objects[i]->GetPersistent() || includePersistent )
+        {
+            outObjects->push_back( objects[i] );
+        }
+    }
+}
+void ObjectsEngineVector::GetAllAgentObjectsExcept( vector<Object*>* outObjects, Object* object, bool includePersistent )
+{
+    for( unsigned int i = 0; i < objects.size(); i++ )
+    {
+        if( objects[i] == object )
+        {
+            if( !objects[i]->GetPersistent() || includePersistent )
+            {
+                outObjects->push_back( objects[i] );
+            }
+        }
+    }
+}
+void ObjectsEngineVector::GetAllAgentObjectsExcept( vector<Object*>* outObjects, vector<Object*> objects, bool includePersistent )
+{
+    for( unsigned int i = 0; i < objects.size(); i++ )
+    {
+        for( unsigned z = 0; z < objects.size(); z++ )
+        {
+            if( this->objects[i] == objects[z] )
+            {
+                if( !objects[i]->GetPersistent() || includePersistent )
+                {
+                    outObjects->push_back( this->objects[i] );
+                }
+            }
+        }
+    }
+}
+
+void ObjectsEngineVector::GetAllGridObjects( vector<Object*>* outObjects )
+{
+    vector<Object*> allObjects;
+    for( unsigned int i = 0; i < grids.size(); i++ )
+    {
+        for( unsigned int u = 0; u < grids[i]->width * grids[i]->height; u++ )
+        {
+            if( !objects[i]->GetPersistent() )
+            {
+                outObjects->push_back( grids[i]->objects[u] );
+            }
+        }
+    }
+}
+void ObjectsEngineVector::GetAllGridObjectsExcept( vector<Object*>* outObjects, Object* object )
+{
+    for( unsigned int i = 0; i < grids.size(); i++ )
+    {
+        for( unsigned int u = 0; u < grids[i]->width * grids[i]->height; u++ )
+        {
+            if( grids[i]->objects[u] == object )
+            {
+                if( !objects[i]->GetPersistent() )
+                {
+                    outObjects->push_back( grids[i]->objects[u] );
+                }
+            }
+        }
+    }
+}
+void ObjectsEngineVector::GetAllGridObjectsExcept( vector<Object*>* outObjects, vector<Object*> objects )
+{
+    for( unsigned int i = 0; i < grids.size(); i++ )
+    {
+        for( unsigned int u = 0; u < grids[i]->width * grids[i]->height; u++ )
+        {
+            for( unsigned z = 0; z < objects.size(); z++ )
+            {
+                if( grids[i]->objects[u] == objects[z] )
+                {
+                    if( !objects[i]->GetPersistent() )
+                    {
+                        outObjects->push_back( grids[i]->objects[u] );
+                    }
+                }
+            }
+        }
+    }
+}
+
+void ObjectsEngineVector::GetAllGridObjects( vector<Object*>* outObjects, bool includePersistent )
+{
+    vector<Object*> allObjects;
+    for( unsigned int i = 0; i < grids.size(); i++ )
+    {
+        for( unsigned int u = 0; u < grids[i]->width * grids[i]->height; u++ )
+        {
+            if( !objects[i]->GetPersistent() || includePersistent )
+            {
+                outObjects->push_back( grids[i]->objects[u] );
+            }
+        }
+    }
+}
+void ObjectsEngineVector::GetAllGridObjectsExcept( vector<Object*>* outObjects, Object* object, bool includePersistent )
+{
+    for( unsigned int i = 0; i < grids.size(); i++ )
+    {
+        for( unsigned int u = 0; u < grids[i]->width * grids[i]->height; u++ )
+        {
+            if( grids[i]->objects[u] == object )
+            {
+                if( !objects[i]->GetPersistent() || includePersistent )
+                {
+                    outObjects->push_back( grids[i]->objects[u] );
+                }
+            }
+        }
+    }
+}
+void ObjectsEngineVector::GetAllGridObjectsExcept( vector<Object*>* outObjects, vector<Object*> objects, bool includePersistent )
+{
+    for( unsigned int i = 0; i < grids.size(); i++ )
+    {
+        for( unsigned int u = 0; u < grids[i]->width * grids[i]->height; u++ )
+        {
+            for( unsigned z = 0; z < objects.size(); z++ )
+            {
+                if( grids[i]->objects[u] == objects[z] )
+                {
+                    if( !objects[i]->GetPersistent() || includePersistent )
+                    {
+                        outObjects->push_back( grids[i]->objects[u] );
+                    }
+                }
+            }
         }
     }
 }

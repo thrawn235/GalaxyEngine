@@ -160,7 +160,21 @@ public:
     void                PurgeGrid                   ( unsigned int id );
     void                PurgeAllGrids               ();
 
+    //----------------------- Vector Specific ----------------------------
     void                FreeGridIfEmpty             ( unsigned int id);
+    
+    void                GetAllAgentObjects          ( vector<Object*>* outObjects );
+    void                GetAllAgentObjectsExcept    ( vector<Object*>* outObjects, Object* object );
+    void                GetAllAgentObjectsExcept    ( vector<Object*>* outObjects, vector<Object*> objects );
+    void                GetAllAgentObjects          ( vector<Object*>* outObjects, bool includePersistent );
+    void                GetAllAgentObjectsExcept    ( vector<Object*>* outObjects, Object* object, bool includePersistent );
+    void                GetAllAgentObjectsExcept    ( vector<Object*>* outObjects, vector<Object*> objects, bool includePersistent );
+    void                GetAllGridObjects           ( vector<Object*>* outObjects );
+    void                GetAllGridObjectsExcept     ( vector<Object*>* outObjects, Object* object );
+    void                GetAllGridObjectsExcept     ( vector<Object*>* outObjects, vector<Object*> objects );
+    void                GetAllGridObjects           ( vector<Object*>* outObjects, bool includePersistent );
+    void                GetAllGridObjectsExcept     ( vector<Object*>* outObjects, Object* object, bool includePersistent );
+    void                GetAllGridObjectsExcept     ( vector<Object*>* outObjects, vector<Object*> objects, bool includePersistent );
 };
 
 #endif

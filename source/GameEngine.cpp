@@ -108,7 +108,7 @@ GameEngine::~GameEngine()
     debug->PrintString( "delete objects... \n" );
     delete objects;
     debug->PrintString( "delete data... \n" );
-    delete objects;
+    delete data;
     debug->PrintString( "delete file... \n" );
     delete file;
     debug->PrintString( "delete time... \n" );

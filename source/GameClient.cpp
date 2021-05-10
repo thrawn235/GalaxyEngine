@@ -44,7 +44,7 @@ GameClient::GameClient()
 GameClient::~GameClient()
 {
     engine->debug->PrintString( "destroying gameclient...\n" );
-    delete engine;
+    //delete engine;
 }
 
 bool GameClient::GetExit()
@@ -165,14 +165,16 @@ void GameClient::Run()
             if( objects[i]->GetVisible() && objects[i]->GetDrawOrder() == currentDrawOrder )
             {
                 objects[i]->Render();
-                objects.erase( objects.begin() + i );   //remove from list. needs only be drawn once!
-                i--;
+                //objects.erase( objects.begin() + i );   //remove from list. needs only be drawn once!
+                //i--;
             }
         }
     }
     renderTime = engine->time->TicksToMilliSeconds( engine->time->GetTimeSinceStamp( renderTimer ) );
     //--------------------------------------------------------------------
 
+    engine->debug->PrintString( "Clearing deleted items...\n" );
+    engine->objects->ClearAllDeletedObjects();
 
     //did we hear from the server that he is done? -----------------------
     if( !waitingForUpdate )

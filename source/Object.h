@@ -31,13 +31,14 @@ using namespace std;
 
 //======= forward declarations =======
 class GameEngine;
-class GameClient;
-class GameServer;
+//class GameClient;
+//class GameServer;
+class GameNode;
 //====================================
 
 //=========== global =================
-extern GameServer* server;
-extern GameClient* client;
+extern GameNode* server;
+extern GameNode* client;
 //====================================
 
 struct NetStats
@@ -73,7 +74,7 @@ public:
 
     //------------ Constructor/Destructor: --------------------
                                 Object                  ( GameEngine* engine );
-                                ~Object                 ();
+            virtual             ~Object                 ();
 
     //---------------------- Get/Set --------------------------
             void                SetEngine               ( GameEngine* engine );
