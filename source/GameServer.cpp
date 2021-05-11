@@ -77,13 +77,7 @@ void GameServer::Run()
 
         //Game Logic for all Objects-----------------------------------------------------
         int updateTimer = engine->time->AddTimeStamp();
-        for( unsigned int i = 0; i <  objects.size(); i++ )
-        {
-            if( objects[i]->GetActive() )
-            {
-                objects[i]->Update();
-            }
-        }
+        engine->objects->UpdateAllObjects();
         updateTime = engine->time->TicksToMilliSeconds( engine->time->GetTimeSinceStamp( updateTimer ) );
         //-------------------------------------------------------------------------------
 

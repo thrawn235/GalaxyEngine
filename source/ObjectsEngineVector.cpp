@@ -117,6 +117,36 @@ Object* ObjectsEngineVector::GetObjectByID( unsigned long uid )
     return NULL;
 }
 
+unsigned int ObjectsEngineVector::GetNumObjects()
+{
+    unsigned num = 0;
+    for( unsigned int i = 0; i < grids.size(); i++ )
+    {
+        num = num + grids[i]->width * grids[i]->height;
+    }
+    num = num + objects.size();
+    return num;
+}
+unsigned int ObjectsEngineVector::GetNumAgentObjects()
+{
+    //
+    return objects.size();
+}
+unsigned int ObjectsEngineVector::GetNumGridItems()
+{
+    unsigned num = 0;
+    for( unsigned int i = 0; i < grids.size(); i++ )
+    {
+        num = num + grids[i]->width * grids[i]->height;
+    }
+    return num;
+}
+unsigned int ObjectsEngineVector::GetNumGrids()
+{
+    //
+    return grids.size();
+}
+
 void ObjectsEngineVector::DeleteAllObjects()
 {
     for( unsigned int i = 0; i < grids.size(); i++ )
@@ -606,8 +636,11 @@ void ObjectsEngineVector::DeleteObjects( vector<Object*> objects )
 }
 void ObjectsEngineVector::ClearAllDeletedObjects()
 {
-	//
 	deletedObjects.clear();
+    for( unsigned int i = 0; i < grids.size(); i++ )
+    {
+        FreeGridIfEmpty( grids[i]->id );
+    }
 }
 void ObjectsEngineVector::ClearAllDeletedObjects( bool includePersistent )
 {
@@ -617,6 +650,10 @@ void ObjectsEngineVector::ClearAllDeletedObjects( bool includePersistent )
         {
             deletedObjects.erase( deletedObjects.begin() + i );
         }
+    }
+    for( unsigned int i = 0; i < grids.size(); i++ )
+    {
+        FreeGridIfEmpty( grids[i]->id );
     }
 }
 
@@ -1256,6 +1293,7 @@ void ObjectsEngineVector::PurgeAllGrids()
 
 void ObjectsEngineVector::FreeGridIfEmpty( unsigned int id )
 {
+    engine->debug->PrintString( "free grids: size:%i \n", grids.size() );
     for( unsigned int i = 0; i < grids.size(); i++ )
     {
         if( grids[i]->id == id )
@@ -1269,6 +1307,8 @@ void ObjectsEngineVector::FreeGridIfEmpty( unsigned int id )
             }
             free( grids[i]->objects );
             delete grids[i];
+            engine->debug->PrintString( "free grids: size:%i ", grids.size() );
+            i++;
             return;
         }
     }
@@ -1448,6 +1488,158 @@ void ObjectsEngineVector::GetAllGridObjectsExcept( vector<Object*>* outObjects, 
                     {
                         outObjects->push_back( grids[i]->objects[u] );
                     }
+                }
+            }
+        }
+    }
+}
+
+void ObjectsEngineVector::UpdateAllObjects()
+{
+    //agents:
+    for( unsigned int i = 0; i < objects.size(); i++ )
+    {
+        if( objects[i]->GetActive() )
+        {
+            //engine->debug->PrintString( "client side update...\n" );
+            objects[i]->Update();
+        }
+    }
+    //grids:
+    for( unsigned int i = 0; i < grids.size(); i++ )
+    {
+        for( unsigned int xy = 0; xy < grids[i]->width * grids[i]->height; xy++ )
+        {
+            if( grids[i]->objects[xy]->GetActive() )
+            {
+                //engine->debug->PrintString( "client side update...\n" );
+                grids[i]->objects[xy]->Update();
+            }
+        }
+    }
+}                       
+void ObjectsEngineVector::ClientIndependendUpdateAllObjects()
+{
+    //agents:
+    for( unsigned int i = 0; i < objects.size(); i++ )
+    {
+        objects[i]->UpdateServerIndependend();
+    }
+    //grids:
+    for( unsigned int i = 0; i < grids.size(); i++ )
+    {
+        for( unsigned int xy = 0; xy < grids[i]->width * grids[i]->height; xy++ )
+        {
+            grids[i]->objects[xy]->UpdateServerIndependend();
+        }
+    }
+}                       
+void ObjectsEngineVector::ClientSideUpdateAllObjects( bool waitingForUpdate )
+{
+    //agents:
+    for( unsigned int i = 0; i < objects.size(); i++ )
+    {
+        if( !waitingForUpdate && objects[i]->GetClientActive() )
+        {
+            //engine->debug->PrintString( "client side update...\n" );
+            objects[i]->ClientSideUpdate();
+        }
+    }
+    //grids:
+    for( unsigned int i = 0; i < grids.size(); i++ )
+    {
+        for( unsigned int xy = 0; xy < grids[i]->width * grids[i]->height; xy++ )
+        {
+            if( !waitingForUpdate && grids[i]->objects[xy]->GetClientActive() )
+            {
+                //engine->debug->PrintString( "client side update...\n" );
+                grids[i]->objects[xy]->ClientSideUpdate();
+            }
+        }
+    }
+}
+void ObjectsEngineVector::PredictAllObjects( float tickRate )
+{
+    //agents:
+    for( unsigned int i = 0; i < objects.size(); i++ )
+    {
+        if( objects[i]->GetPredict() )
+        {
+            //engine->debug->PrintString( "client side update...\n" );
+            objects[i]->Predict( tickRate );
+        }
+    }
+    //grids:
+    for( unsigned int i = 0; i < grids.size(); i++ )
+    {
+        for( unsigned int xy = 0; xy < grids[i]->width * grids[i]->height; xy++ )
+        {
+            if( grids[i]->objects[xy]->GetPredict() )
+            {
+                //engine->debug->PrintString( "client side update...\n" );
+                grids[i]->objects[xy]->Predict( tickRate );
+            }
+        }
+    }
+}                       
+void ObjectsEngineVector::ClientSideAndPredictAndIndependentAllObjects( bool waitingForUpdate, float tickRate )
+{
+    //agents:
+    for( unsigned int i = 0; i < objects.size(); i++ )
+    {
+        if( !waitingForUpdate && objects[i]->GetClientActive() )
+        {
+            //engine->debug->PrintString( "client side update...\n" );
+            objects[i]->ClientSideUpdate();
+        }
+        objects[i]->UpdateServerIndependend();
+        if( objects[i]->GetPredict() )
+        {
+            //engine->debug->PrintString( "client side update...\n" );
+            objects[i]->Predict( tickRate );
+        }
+    }
+    //grids:
+    for( unsigned int i = 0; i < grids.size(); i++ )
+    {
+        for( unsigned int xy = 0; xy < grids[i]->width * grids[i]->height; xy++ )
+        {
+            if( !waitingForUpdate && grids[i]->objects[xy]->GetClientActive() )
+            {
+                //engine->debug->PrintString( "client side update...\n" );
+                grids[i]->objects[xy]->ClientSideUpdate();
+            }
+            grids[i]->objects[xy]->UpdateServerIndependend();
+            if( grids[i]->objects[xy]->GetPredict() )
+            {
+                //engine->debug->PrintString( "client side update...\n" );
+                grids[i]->objects[xy]->Predict( tickRate );
+            }
+        }
+    }
+}                     
+void ObjectsEngineVector::RenderAllObjects()
+{
+    for( unsigned char currentDrawOrder = 0; currentDrawOrder < 16; currentDrawOrder++ )
+    {
+        //agents:
+        for( unsigned int i = 0; i < objects.size(); i++ )
+        {
+            if( objects[i]->GetVisible() && currentDrawOrder == objects[i]->GetDrawOrder() )
+            {
+                //engine->debug->PrintString( "client side update...\n" );
+                objects[i]->Render();
+            }
+        }
+        //grids:
+        for( unsigned int i = 0; i < grids.size(); i++ )
+        {
+            for( unsigned int xy = 0; xy < grids[i]->width * grids[i]->height; xy++ )
+            {
+                if( grids[i]->objects[xy]->GetVisible() && currentDrawOrder == grids[i]->objects[xy]->GetDrawOrder() )
+                {
+                    //engine->debug->PrintString( "client side update...\n" );
+                    grids[i]->objects[xy]->Render();
                 }
             }
         }

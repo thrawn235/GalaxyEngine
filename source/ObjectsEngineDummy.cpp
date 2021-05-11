@@ -78,6 +78,22 @@ Object* ObjectsEngineDummy::GetObjectByID( unsigned long uid )
 {
 	return NULL;
 }
+unsigned int ObjectsEngineDummy::GetNumObjects()
+{
+    return 0;
+}
+unsigned int ObjectsEngineDummy::GetNumAgentObjects()
+{
+    return 0;
+}
+unsigned int ObjectsEngineDummy::GetNumGridItems()
+{
+    return 0;
+}
+unsigned int ObjectsEngineDummy::GetNumGrids()
+{
+    return 0;
+}
 void ObjectsEngineDummy::DeleteAllObjects()
 {
 
@@ -315,6 +331,31 @@ void ObjectsEngineDummy::PurgeGrid( unsigned int id )
 
 }
 void ObjectsEngineDummy::PurgeAllGrids()
+{
+
+}
+
+void ObjectsEngineDummy::UpdateAllObjects()
+{
+
+}                       
+void ObjectsEngineDummy::ClientIndependendUpdateAllObjects()
+{
+
+}                       
+void ObjectsEngineDummy::ClientSideUpdateAllObjects( bool waitingForUpdate )
+{
+
+}
+void ObjectsEngineDummy::PredictAllObjects( float tickRate )
+{
+
+}                       
+void ObjectsEngineDummy::ClientSideAndPredictAndIndependentAllObjects( bool waitingForUpdate, float tickRate )
+{
+
+}                     
+void ObjectsEngineDummy::RenderAllObjects()
 {
 
 }

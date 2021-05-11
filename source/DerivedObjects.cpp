@@ -374,7 +374,7 @@ PerformanceOverlay::PerformanceOverlay( GameEngine* engine ) : Object( engine )
 	netStats->type = OBJECT_TYPE_PERFORMANCE_OVERLAY;
 
 	netStats->persistent = true;
-	netStats->drawOrder = 60; //draw on top of almost everything
+	netStats->drawOrder = 15; //draw on top of almost everything
 }
 PerformanceOverlay::~PerformanceOverlay()
 {

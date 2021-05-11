@@ -60,12 +60,8 @@ void GameClient::Run()
     engine->debug->PrintString( "===================== client ==================\n" );
 
     //engine->debug->PrintString( "client: these are my objects:\n" );
-    vector<Object*> objects = engine->objects->GetAllObjects();
-    engine->debug->PrintString( "client: ive got %i objects\n", objects.size() );
-    /*for( unsigned int i = 0; i < objects.size(); i++ )
-    {
-        engine->debug->PrintString( "client:   UID: %i\n", objects[i]->GetUID() );
-    }*/
+    engine->debug->PrintString( "client: ive got %i objects\n", engine->objects->GetNumObjects() );
+
 
     //count ticks (for prediction step)
     clientTicksSinceLogicTick++;
@@ -130,21 +126,7 @@ void GameClient::Run()
     //Update Objects------------------------------------------------------
     //engine->debug->PrintString( "updating Objects...\n" );
     int updateTimer = engine->time->AddTimeStamp();
-    objects = engine->objects->GetAllObjects();
-    for( unsigned int i = 0; i < objects.size(); i++ )
-    {
-        if( !waitingForUpdate && objects[i]->GetClientActive() )
-        {
-            //engine->debug->PrintString( "client side update...\n" );
-            objects[i]->ClientSideUpdate();
-        }
-        objects[i]->UpdateServerIndependend();
-        if( objects[i]->GetPredict() )
-        {
-            //engine->debug->PrintString( "client side predict...\n" );
-            objects[i]->Predict( tickRate );
-        }
-    }
+    engine->objects->ClientSideAndPredictAndIndependentAllObjects( waitingForUpdate, tickRate );
     updateTime = engine->time->TicksToMilliSeconds( engine->time->GetTimeSinceStamp( updateTimer ) );
     //--------------------------------------------------------------------
 
@@ -153,23 +135,7 @@ void GameClient::Run()
     //render objects------------------------------------------------------
     engine->debug->PrintString( "render Objects...\n" );
     int renderTimer = engine->time->AddTimeStamp();
-    for( unsigned char currentDrawOrder = 0; currentDrawOrder < 64; currentDrawOrder++ )
-    {
-        if( objects.size() == 0 )
-        {
-            //list empty
-            break;
-        }
-        for( unsigned int i = 0; i < objects.size(); i++ )
-        {
-            if( objects[i]->GetVisible() && objects[i]->GetDrawOrder() == currentDrawOrder )
-            {
-                objects[i]->Render();
-                //objects.erase( objects.begin() + i );   //remove from list. needs only be drawn once!
-                //i--;
-            }
-        }
-    }
+    engine->objects->RenderAllObjects();
     renderTime = engine->time->TicksToMilliSeconds( engine->time->GetTimeSinceStamp( renderTimer ) );
     //--------------------------------------------------------------------
 
