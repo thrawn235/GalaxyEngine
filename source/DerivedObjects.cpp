@@ -17,6 +17,8 @@ Player::Player( GameEngine* engine ) : Object( engine )
 
 	netStats->up = netStats->down = netStats->left = netStats->right = netStats->fire = false;
 
+	netStats->drawOrder = 1;
+
 	//engine->text->PrintString( "Player Constructor: Object UID:%i; Type:%i(Player); Pos:%f:%f Mov:%f:%f NetAddr:%i\n", netStats->uid, netStats->type, netStats->pos.x, netStats->pos.y, netStats->movement.x, netStats->movement.y, engine->net->GetAddress() );
 }
 void Player::GameLogic()
@@ -106,13 +108,14 @@ Tile::Tile( GameEngine* engine ) : Object( engine )
 	netStats->tileSetID = 0;
 	netStats->tileIndex = 0;
 
-	//engine->text->PrintString( "Tile Constructor: Object UID:%i; Type:%i(Tile); Pos:%f:%f Mov:%f:%f NetAddr:%i\n", netStats->uid, netStats->type, netStats->pos.x, netStats->pos.y, netStats->movement.x, netStats->movement.y, engine->net->GetAddress() );
+	engine->text->PrintString( "Tile Constructor: Object UID:%i; Type:%i(Tile); Pos:%f:%f Mov:%f:%f NetAddr:%i\n", netStats->uid, netStats->type, netStats->pos.x, netStats->pos.y, netStats->movement.x, netStats->movement.y, engine->net->GetAddress() );
 }
 void Tile::SetTileSet( unsigned int tileSetID, unsigned char tileIndex )
 {
 	netStats->tileSetID = tileSetID;
 	netStats->tileIndex = tileIndex;
-	sprite = engine->graphics->GetSpriteInCollection( tileSetID, tileIndex );
+	engine->text->PrintString( "Tile: SetTileSet ID:%i Index:%i\n", netStats->tileSetID, netStats->tileIndex );
+	sprite = engine->graphics->GetSpriteInCollection( netStats->tileSetID, netStats->tileIndex );
 }
 unsigned int Tile::GetTileSetID()
 {
@@ -227,7 +230,9 @@ void MainMenu::UpdateServerIndependend()
 		    PerformanceOverlay* performanceOverlay = new PerformanceOverlay( engine );
 		    engine->debug->PrintString( "GameClient: add PerformanceOverlay...\n" );
 		    engine->objects->AddObject( performanceOverlay );
+		    engine->debug->PrintString( "GameClient: load map...\n" );
 		    engine->objects->LoadMap( DATA_E1M1 );
+		    engine->debug->PrintString( "GameClient: map loaded!\n" );
 
 			//create server
 			if( server != NULL )

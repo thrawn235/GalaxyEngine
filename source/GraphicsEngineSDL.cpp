@@ -532,6 +532,7 @@ void GraphicsEngineSDL::DrawString( unsigned int id, string text, unsigned int l
 //SDL only
 SDL_Texture* GraphicsEngineSDL::GetTextureInCollection( unsigned long id, unsigned long index )
 {
+    engine->debug->PrintString( "GetTextureInCollection: id:%i index:%i\n", id, index );
     struct Collection
     {
         char        magic[3];
@@ -550,6 +551,7 @@ SDL_Texture* GraphicsEngineSDL::GetTextureInCollection( unsigned long id, unsign
         char        pixelData;
     }__attribute__( ( packed ) );
 
+    engine->debug->PrintString( "GetTextureInCollection: GetData id:%i\n" );
     Collection* collection = (Collection*)engine->data->GetData( id );
 
     if( collection != NULL )
@@ -690,5 +692,6 @@ char* GraphicsEngineSDL::GetSprite( unsigned int id )
 }
 char* GraphicsEngineSDL::GetSpriteInCollection( unsigned int id, unsigned int index )
 {
+    engine->debug->PrintString( "GetTextureInCollection id:%i index:%i...\n", id, index );
     return (char*)GetTextureInCollection( id, index );
 }

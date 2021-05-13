@@ -8,6 +8,10 @@ ObjectsEngineVector::ObjectsEngineVector( GameEngine* engine ) : ObjectsEngine( 
 {
     //
 	this->engine = engine;
+    engine->debug->PrintString( "ObjectEngineVector: constructor...\n" );
+    highestUID = 0;
+    engine->debug->PrintString( "ObjectEngineVector: highestUID:%i\n", highestUID );
+
 }
 ObjectsEngineVector::~ObjectsEngineVector()
 {
@@ -19,8 +23,9 @@ ObjectsEngineVector::~ObjectsEngineVector()
 }
 void ObjectsEngineVector::SetHighestUID( unsigned long int UID )
 {
+    engine->debug->PrintString( "ObjectEngineVector: SetHighestUID...\n" );   
 	highestUID = UID;
-	//
+	engine->debug->PrintString( "ObjectEngineVector: highestUID:%i\n", highestUID );
 }
 unsigned long int ObjectsEngineVector::GetHighestUID()
 {
@@ -29,6 +34,7 @@ unsigned long int ObjectsEngineVector::GetHighestUID()
 }
 unsigned long int ObjectsEngineVector::GetHighestUIDAndInc()
 {
+    engine->debug->PrintString("GetHighestUIDAndInc: UID:%i\n", highestUID );
     highestUID++;
     return highestUID - 1;
 }
@@ -1160,6 +1166,7 @@ void ObjectsEngineVector::PurgeObjects( vector<Object*> objects )
 
 unsigned int ObjectsEngineVector::LoadMap( unsigned int id )
 {
+    engine->debug->PrintString( "ObjectEngine: LoadMap..." );
     struct Map
     {
         char        magic[3];
@@ -1216,6 +1223,7 @@ unsigned int ObjectsEngineVector::LoadMap( unsigned int id )
                     //create tile:
                     if( *data != 0 )
                     {
+                        engine->debug->PrintString( "Layer: createTile...\n" );
                         Object* tileObjectPtr = new Tile( engine );
                         Tile* tile = (Tile*)tileObjectPtr;
                         if( layer->tileSetID == 23 )  //fix! its fucked up

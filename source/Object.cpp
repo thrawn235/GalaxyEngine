@@ -5,9 +5,9 @@ Object::Object( GameEngine* engine )
 { 
     this->engine              = engine;
 
-    baseNetStats = new ObjectStats;
-    netStats = (ObjectStats*)baseNetStats;
-    netStats->size = sizeof( ObjectStats );
+    baseNetStats              = new ObjectStats;
+    netStats                  = (ObjectStats*)baseNetStats;
+    netStats->size            = sizeof( ObjectStats );
 
     netStats->uid             = engine->objects->GetHighestUIDAndInc();
 
@@ -22,6 +22,9 @@ Object::Object( GameEngine* engine )
     netStats->drawOrder       = 0;
 
     netStats->type            = OBJECT_TYPE_OBJECT;
+
+    engine->debug->PrintString( "Object Constructor: (Engine:%i) ", engine->GetEngineUID() );
+    PrintStats();
 }
 Object::~Object()
 {

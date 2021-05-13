@@ -67,7 +67,7 @@ class ObjectsEngine;
 class GameEngine
 {
 protected:
-    
+    int engineUID;
 
 public:
     //-------------- Engine Components ----------------
@@ -84,6 +84,8 @@ public:
     //------------- Constructor / Destructor -----------
                         GameEngine                  ();
                         ~GameEngine                 ();
+
+    int                 GetEngineUID                ();
 
     //-------------- Auxilary Engine Methods ----------
     vector<int>         GetAvailableNetTypes        ();

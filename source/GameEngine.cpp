@@ -47,6 +47,7 @@
 
 //global list of all Game Engines. Its prmarily used for ungraceful program termination
 vector<GameEngine*> engines;
+int highestEngineUID = 0;
 
 
 GameEngine::GameEngine()
@@ -88,6 +89,9 @@ GameEngine::GameEngine()
         objects     = new ObjectsEngineVector( this );
     #endif
 
+    engineUID = highestEngineUID;
+    highestEngineUID++;
+    debug->PrintString( "Engine Constructor: UID:%i", engineUID );
     engines.push_back( this );
 
     //default. might be changed by server or client later on
@@ -123,6 +127,12 @@ GameEngine::~GameEngine()
     delete text;
     debug->PrintString( "delete debug... \n" );
     delete debug;
+}
+
+int GameEngine::GetEngineUID()
+{
+    //
+    return engineUID;
 }
 
 vector<int> GameEngine::GetAvailableNetTypes()

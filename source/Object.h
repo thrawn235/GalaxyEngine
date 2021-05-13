@@ -67,7 +67,7 @@ protected:
             NetStats*           baseNetStats        = NULL;
             ObjectStats*        netStats            = NULL;
 
-            GameEngine*         engine;                         //pointer to the game engine
+            GameEngine*         engine              = NULL;    //pointer to the game engine
 
 public:
     
