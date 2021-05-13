@@ -1224,6 +1224,7 @@ unsigned int ObjectsEngineVector::LoadMap( unsigned int id )
                     if( *data != 0 )
                     {
                         engine->debug->PrintString( "Layer: createTile...\n" );
+                        engine->debug->PrintString( "Layer: createTile engineUID:%i, highestUID:%i...\n", engine->GetEngineUID(), GetHighestUID() );
                         Object* tileObjectPtr = new Tile( engine );
                         Tile* tile = (Tile*)tileObjectPtr;
                         if( layer->tileSetID == 23 )  //fix! its fucked up

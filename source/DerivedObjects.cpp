@@ -90,6 +90,8 @@ void Player::Render()
 		engine->graphics->DrawString( DATA_SONIC_FONT, "test\nhello world!", Vector2D( 5, 20 ) );
 		engine->graphics->DrawString( DATA_SONIC_FONT, "another test that is a bit more useless bla\nand of course something behind a linebreak", 10, Vector2D( 100,100 ) );
 	}
+
+	engine->graphics->SetCamPos( netStats->pos );
 }
 
 

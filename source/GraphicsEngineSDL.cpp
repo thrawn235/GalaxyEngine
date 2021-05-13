@@ -305,7 +305,7 @@ void GraphicsEngineSDL::ClearScreen( unsigned char color )
 void GraphicsEngineSDL::DrawPixel( Vector2D pos, unsigned char color )
 {
     pos = pos - camPos;
-    if( pos.x >= 0 && pos.x < screenWidth && pos.y >= 0 && pos.y < screenHeight )
+    if( pos.x >= -screenPadding && pos.x < screenWidth && pos.y >= -screenPadding && pos.y < screenHeight )
     {
         SDL_SetRenderDrawColor( renderer, colors[color].r, colors[color].g, colors[color].b, colors[color].a );
         SDL_RenderDrawPoint( renderer, pos.x, pos.y );
@@ -315,8 +315,8 @@ void GraphicsEngineSDL::DrawLine( Vector2D start, Vector2D end, unsigned char co
 {
     start = start - camPos;
     end = end - camPos;
-    if( start.x >= 0 && start.x < logicalScreenWidth && start.y >= 0 && start.y < logicalScreenHeight &&
-        end.x >= 0 && end.x < logicalScreenWidth && end.y >= 0 && end.y < logicalScreenHeight)
+    if( start.x >= -screenPadding && start.x < logicalScreenWidth && start.y >= -screenPadding && start.y < logicalScreenHeight &&
+        end.x >= -screenPadding && end.x < logicalScreenWidth && end.y >= -screenPadding && end.y < logicalScreenHeight)
     {
         SDL_SetRenderDrawColor( renderer, colors[color].r, colors[color].g, colors[color].b, colors[color].a );
         SDL_RenderDrawLine( renderer, start.x, start.y, end.x, end. y);
@@ -326,8 +326,8 @@ void GraphicsEngineSDL::DrawHLine( Vector2D start, int length, unsigned char col
 {
     start = start - camPos;
     Vector2D end( start.x + length, start.y );
-    if( start.x >= 0 && start.x < logicalScreenWidth && start.y >= 0 && start.y < logicalScreenHeight &&
-        end.x >= 0 && end.x < logicalScreenWidth && end.y >= 0 && end.y < logicalScreenHeight)
+    if( start.x >= -screenPadding && start.x < logicalScreenWidth && start.y >= -screenPadding && start.y < logicalScreenHeight &&
+        end.x >= -screenPadding && end.x < logicalScreenWidth && end.y >= -screenPadding && end.y < logicalScreenHeight)
     {
         SDL_SetRenderDrawColor( renderer, colors[color].r, colors[color].g, colors[color].b, colors[color].a );
         SDL_RenderDrawLine( renderer, start.x, start.y, start.x + length, start.y );
@@ -337,8 +337,8 @@ void GraphicsEngineSDL::DrawVLine( Vector2D start, int length, unsigned char col
 {
     start = start - camPos;
     Vector2D end( start.x, start.y + length );
-    if( start.x >= 0 && start.x < logicalScreenWidth && start.y >= 0 && start.y < logicalScreenHeight &&
-        end.x >= 0 && end.x < logicalScreenWidth && end.y >= 0 && end.y < logicalScreenHeight)
+    if( start.x >= -screenPadding && start.x < logicalScreenWidth && start.y >= -screenPadding && start.y < logicalScreenHeight &&
+        end.x >= -screenPadding && end.x < logicalScreenWidth && end.y >= 0 && end.y < logicalScreenHeight)
     {
         SDL_SetRenderDrawColor( renderer, colors[color].r, colors[color].g, colors[color].b, colors[color].a );
         SDL_RenderDrawLine( renderer, start.x, start.y, start.x, start.y + length );
@@ -348,8 +348,8 @@ void GraphicsEngineSDL::DrawRect( Vector2D pos, int width, int height, unsigned 
 {
     pos = pos - camPos;
     Vector2D end( pos.x + width, pos.y + height );
-    if( pos.x >= 0 && pos.x < logicalScreenWidth && pos.y >= 0 && pos.y < logicalScreenHeight &&
-        end.x >= 0 && end.x < logicalScreenWidth && end.y >= 0 && end.y < logicalScreenHeight)
+    if( pos.x >= -screenPadding && pos.x < logicalScreenWidth && pos.y >= -screenPadding && pos.y < logicalScreenHeight &&
+        end.x >= -screenPadding && end.x < logicalScreenWidth && end.y >= -screenPadding && end.y < logicalScreenHeight)
     {
         SDL_SetRenderDrawColor( renderer, colors[color].r, colors[color].g, colors[color].b, colors[color].a );
         SDL_RenderDrawLine( renderer, pos.x, pos.y, pos.x + width, pos.y );
@@ -362,8 +362,8 @@ void GraphicsEngineSDL::DrawFilledRect( Vector2D pos, int width, int height, uns
 {
     pos = pos + camPos;
     Vector2D end( pos.x + width, pos.y + height );
-    if( pos.x >= 0 && pos.x < logicalScreenWidth && pos.y >= 0 && pos.y < logicalScreenHeight &&
-        end.x >= 0 && end.x < logicalScreenWidth && end.y >= 0 && end.y < logicalScreenHeight)
+    if( pos.x >= -screenPadding && pos.x < logicalScreenWidth && pos.y >= -screenPadding && pos.y < logicalScreenHeight &&
+        end.x >= -screenPadding && end.x < logicalScreenWidth && end.y >= -screenPadding && end.y < logicalScreenHeight)
     {
         SDL_SetRenderDrawColor( renderer, colors[color].r, colors[color].g, colors[color].b, colors[color].a );
         SDL_Rect rect;
@@ -385,7 +385,7 @@ void GraphicsEngineSDL::DrawFilledCircle( Vector2D pos, int radius, unsigned cha
 void GraphicsEngineSDL::DrawVector( Vector2D pos, Vector2D vec, float scale, unsigned char color )
 {
     pos = pos - camPos;
-    if( pos.x >= 0 && pos.x < screenWidth && pos.y >= 0 && pos.y < screenHeight )
+    if( pos.x >= -screenPadding && pos.x < screenWidth && pos.y >= -screenPadding && pos.y < screenHeight )
     {
         //Draw Dot at origin
         DrawPixel( Vector2D( pos.x-1, pos.y-1 ), color );
@@ -418,7 +418,7 @@ void GraphicsEngineSDL::DrawSprite( unsigned long id, Vector2D pos )
 
     if( texture != NULL )
     {
-        if( pos.x >= 0 && pos.y >= 0 && pos.x + width < logicalScreenWidth && pos.y + height < logicalScreenHeight )
+        if( pos.x >= -screenPadding && pos.y >= -screenPadding && pos.x + width < logicalScreenWidth && pos.y + height < logicalScreenHeight )
         {
 
             SDL_Rect srcrect;
@@ -595,7 +595,7 @@ void GraphicsEngineSDL::DrawSprite( SDL_Texture* texture, Vector2D pos )
 
     if( texture != NULL )
     {
-        if( pos.x >= 0 && pos.y >= 0 && pos.x + width < logicalScreenWidth && pos.y + height < logicalScreenHeight )
+        if( pos.x >= -screenPadding && pos.y >= -screenPadding && pos.x + width < logicalScreenWidth && pos.y + height < logicalScreenHeight )
         {
 
             SDL_Rect srcrect;
@@ -665,7 +665,7 @@ void GraphicsEngineSDL::DrawSprite( char* texture, Vector2D pos )
 
     if( SDLTexture != NULL )
     {
-        if( pos.x >= 0 && pos.y >= 0 && pos.x + width < logicalScreenWidth && pos.y + height < logicalScreenHeight )
+        if( pos.x >= -screenPadding && pos.y >= -screenPadding && pos.x + width < logicalScreenWidth && pos.y + height < logicalScreenHeight )
         {
 
             SDL_Rect srcrect;

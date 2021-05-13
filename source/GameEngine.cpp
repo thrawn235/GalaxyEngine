@@ -91,11 +91,11 @@ GameEngine::GameEngine()
 
     engineUID = highestEngineUID;
     highestEngineUID++;
-    debug->PrintString( "Engine Constructor: UID:%i", engineUID );
+    debug->PrintString( "Engine Constructor: UID:%i\n", engineUID );
     engines.push_back( this );
 
     //default. might be changed by server or client later on
-    objects->SetHighestUID( 1 );
+    //objects->SetHighestUID( 1 );
 }
 GameEngine::~GameEngine()
 {
