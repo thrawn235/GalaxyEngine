@@ -108,17 +108,15 @@ Tile::Tile( GameEngine* engine ) : Object( engine )
 
 	//engine->text->PrintString( "Tile Constructor: Object UID:%i; Type:%i(Tile); Pos:%f:%f Mov:%f:%f NetAddr:%i\n", netStats->uid, netStats->type, netStats->pos.x, netStats->pos.y, netStats->movement.x, netStats->movement.y, engine->net->GetAddress() );
 }
-void Tile::SetTileSetID( unsigned int tileSetID )
+void Tile::SetTileSet( unsigned int tileSetID, unsigned char tileIndex )
 {
 	netStats->tileSetID = tileSetID;
+	netStats->tileIndex = tileIndex;
+	sprite = engine->graphics->GetSpriteInCollection( tileSetID, tileIndex );
 }
 unsigned int Tile::GetTileSetID()
 {
 	return netStats->tileSetID;
-}
-void Tile::SetTileIndex( unsigned char tileIndex )
-{
-	netStats->tileIndex = tileIndex;
 }
 unsigned char Tile::GetTileIndex()
 {
@@ -134,7 +132,7 @@ void Tile::ClientSideUpdate()
 }
 void Tile::Render()
 {
-	engine->graphics->DrawSpriteInSheet( netStats->tileSetID, netStats->tileIndex, netStats->pos );
+	engine->graphics->DrawSprite( sprite, netStats->pos );
 	//engine->graphics->DrawRect( netStats->pos, 32, 32, COLOR_RED );
 	//engine->text->PrintString( "tileDrawPos:%f/%f\n", netStats->pos.x, netStats->pos.y );
 }
@@ -251,6 +249,7 @@ void MainMenu::UpdateServerIndependend()
 			server->GetEngine()->net->ConfigureAsServer();
 			engine->debug->PrintString( "set server local buffer...\n" );
 			engine->SetNetType( NET_TYPE_LOCAL_BUFFER );
+			engine->debug->PrintString( "server creation done!\n" );
 
 			//hide main menu
 			hidden = true;
@@ -378,7 +377,7 @@ PerformanceOverlay::PerformanceOverlay( GameEngine* engine ) : Object( engine )
 }
 PerformanceOverlay::~PerformanceOverlay()
 {
-	delete server;
+
 }
 void PerformanceOverlay::GameLogic()
 {
@@ -395,6 +394,9 @@ void PerformanceOverlay::UpdateServerIndependend()
 }
 void PerformanceOverlay::Render()
 {
-	GameClient* pClient = (GameClient*)client;
-	engine->graphics->DrawString( DATA_SONIC_FONT, engine->text->SPrintString( "Objects %i/%i\nMemory\nFPS %f(%i)/%f(%i)\nrender time:%f\nnetwork time:%f\nupdate time:%f", client->GetEngine()->objects->GetAllObjects().size(), server->GetEngine()->objects->GetAllObjects().size(), client->GetEngine()->time->GetFPS(), client->GetEngine()->time->GetLastTime(), server->GetEngine()->time->GetFPS(), server->GetEngine()->time->GetLastTime(), pClient->GetRenderTime(), client->GetNetworkUpdateTime(), client->GetUpdateTime() ), Vector2D( 0, 0 ) );
+	if( client != NULL && server != NULL )
+	{
+		GameClient* pClient = (GameClient*)client;
+		engine->graphics->DrawString( DATA_SONIC_FONT, engine->text->SPrintString( "Objects %i/%i\nMemory\nFPS %f(%i)/%f(%i)\nrender time:%f\nnetwork time:%f\nupdate time:%f", client->GetEngine()->objects->GetAllObjects().size(), server->GetEngine()->objects->GetAllObjects().size(), client->GetEngine()->time->GetFPS(), client->GetEngine()->time->GetLastTime(), server->GetEngine()->time->GetFPS(), server->GetEngine()->time->GetLastTime(), pClient->GetRenderTime(), client->GetNetworkUpdateTime(), client->GetUpdateTime() ), Vector2D( 0, 0 ) );
+	}
 }

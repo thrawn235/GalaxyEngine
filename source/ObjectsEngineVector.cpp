@@ -665,8 +665,8 @@ void ObjectsEngineVector::PurgeAllObjects()
         {
             if( !grids[i]->objects[u]->GetPersistent() )
             {
-                grids[i]->objects[u] = NULL;
                 delete( grids[i]->objects[u] );
+                grids[i]->objects[u] = NULL;
             }
         }
         FreeGridIfEmpty( grids[i]->id );
@@ -690,8 +690,8 @@ void ObjectsEngineVector::PurgeAllObjectsExcept( Object* object )
             {
                 if( grids[i]->objects[u] != object )
                 {
-                    grids[i]->objects[u] = NULL;
                     delete( grids[i]->objects[u] );
+                    grids[i]->objects[u] = NULL;
                 }
             }
         }
@@ -721,8 +721,8 @@ void ObjectsEngineVector::PurgeAllObjectsExcept( vector<Object*> objects )
                 {
                     if( !grids[i]->objects[u]->GetPersistent() )
                     {
-                        grids[i]->objects[u] = NULL;
                         delete( grids[i]->objects[u] );
+                        grids[i]->objects[u] = NULL;
                     }
                 }
             }
@@ -746,26 +746,33 @@ void ObjectsEngineVector::PurgeAllObjectsExcept( vector<Object*> objects )
 }
 void ObjectsEngineVector::PurgeAllObjects( bool includePersistent )
 {
+    engine->debug->PrintString( "purging objects...\n" );
+    engine->debug->PrintString( "purging grids...\n" );
 	for( unsigned int i = 0; i < grids.size(); i++ )
     {
         for( unsigned int u = 0; u < grids[i]->width * grids[i]->height; u++ )
         {
             if( !grids[i]->objects[u]->GetPersistent() || includePersistent )
             {
-                grids[i]->objects[u] = NULL;
+                //engine->debug->PrintString( "deleteing...\n" );
                 delete( grids[i]->objects[u] );
+                grids[i]->objects[u] = NULL;
             }
         }
         FreeGridIfEmpty( grids[i]->id );
     }
+    engine->debug->PrintString( "purging agents...\n" );
+    engine->debug->PrintString( "num agents %i\n", objects.size() );
     for( unsigned int i = 0; i < objects.size(); i++ )
     {
         if( !objects[i]->GetPersistent() || includePersistent )
         {
+            //engine->debug->PrintString( "erasing agents...\n" );
             objects.erase( objects.begin() + i );
             i--;   
         }
     }
+    engine->debug->PrintString( "done purging!\n" );
 }
 void ObjectsEngineVector::PurgeAllObjectsExcept( Object* object, bool includePersistent )
 {
@@ -777,8 +784,8 @@ void ObjectsEngineVector::PurgeAllObjectsExcept( Object* object, bool includePer
             {
                 if( grids[i]->objects[u] != object )
                 {
-                    grids[i]->objects[u] = NULL;
                     delete( grids[i]->objects[u] );
+                    grids[i]->objects[u] = NULL;
                 }
             }
         }
@@ -808,8 +815,8 @@ void ObjectsEngineVector::PurgeAllObjectsExcept( vector<Object*> objects, bool i
                 {
                     if( !grids[i]->objects[u]->GetPersistent() || includePersistent )
                     {
-                        grids[i]->objects[u] = NULL;
                         delete( grids[i]->objects[u] );
+                        grids[i]->objects[u] = NULL;
                     }
                 }
             }
@@ -840,8 +847,8 @@ void ObjectsEngineVector::PurgeAllGridObjects()
         {
             if( !grids[i]->objects[u]->GetPersistent() )
             {
-                grids[i]->objects[u] = NULL;
                 delete( grids[i]->objects[u] );
+                grids[i]->objects[u] = NULL;
             }
         }
         FreeGridIfEmpty( grids[i]->id );
@@ -857,8 +864,8 @@ void ObjectsEngineVector::PurgeAllGridObjectsExcept( Object* object )
             {
                 if( grids[i]->objects[u] != object )
                 {
-                    grids[i]->objects[u] = NULL;
                     delete( grids[i]->objects[u] );
+                    grids[i]->objects[u] = NULL;
                 }
             }
         }
@@ -877,8 +884,8 @@ void ObjectsEngineVector::PurgeAllGridObjectsExcept( vector<Object*> objects )
                 {
                     if( !grids[i]->objects[u]->GetPersistent() )
                     {
-                        grids[i]->objects[u] = NULL;
                         delete( grids[i]->objects[u] );
+                        grids[i]->objects[u] = NULL;
                     }
                 }
             }
@@ -894,8 +901,8 @@ void ObjectsEngineVector::PurgeAllGridObjects( bool includePersistent )
         {
             if( !grids[i]->objects[u]->GetPersistent() || includePersistent )
             {
-                grids[i]->objects[u] = NULL;
                 delete( grids[i]->objects[u] );
+                grids[i]->objects[u] = NULL;
             }
         }
         FreeGridIfEmpty( grids[i]->id );
@@ -911,8 +918,8 @@ void ObjectsEngineVector::PurgeAllGridObjectsExcept( Object* object, bool includ
             {
                 if( grids[i]->objects[u] != object )
                 {
-                    grids[i]->objects[u] = NULL;
                     delete( grids[i]->objects[u] );
+                    grids[i]->objects[u] = NULL;
                 }
             }
         }
@@ -931,8 +938,8 @@ void ObjectsEngineVector::PurgeAllGridObjectsExcept( vector<Object*> objects, bo
                 {
                     if( !grids[i]->objects[u]->GetPersistent() || includePersistent )
                     {
-                        grids[i]->objects[u] = NULL;
                         delete( grids[i]->objects[u] );
+                        grids[i]->objects[u] = NULL;
                     }
                 }
             }
@@ -1213,16 +1220,16 @@ unsigned int ObjectsEngineVector::LoadMap( unsigned int id )
                         Tile* tile = (Tile*)tileObjectPtr;
                         if( layer->tileSetID == 23 )  //fix! its fucked up
                         {
-                            tile->SetTileSetID( DATA_TILESET );
+                            tile->SetTileSet( DATA_TILESET, (*data) - 1 );
                         }
-                        tile->SetTileIndex( (*data) - 1 );
+                        //tile->SetTileIndex( (*data) - 1 );
                         tile->SetPos( newTilePos );
                         engine->debug->PrintString( "%X,", (*data) - 1 );
                         grid->objects[y * layer->height + x] = tileObjectPtr;
                         data++;
                         newTilePos.x = newTilePos.x + map->tileWidth;
 
-                        //engine->text->PrintString( "Tile: %i W/H: %f/%f\n", y * layer->height + x, grid->objects[y * layer->height + x]->GetPos().x, grid->objects[y * layer->height + x]->GetPos().y );
+                        engine->text->PrintString( "Tile: %i W/H: %f/%f\n", y * layer->height + x, grid->objects[y * layer->height + x]->GetPos().x, grid->objects[y * layer->height + x]->GetPos().y );
                     }
                 }
                 newTilePos.x = 0;
@@ -1279,6 +1286,8 @@ void ObjectsEngineVector::PurgeGrid( unsigned int id )
 }
 void ObjectsEngineVector::PurgeAllGrids()
 {
+    engine->debug->PrintString( "purge all grids... \n" );
+    engine->debug->PrintString( "grids: size:%i \n", grids.size() );
     for( unsigned int i = 0; i < grids.size(); i++ )
     {
         for( unsigned int xy = 0; xy < grids[i]->width * grids[i]->height; xy++ )
@@ -1296,17 +1305,24 @@ void ObjectsEngineVector::FreeGridIfEmpty( unsigned int id )
     engine->debug->PrintString( "free grids: size:%i \n", grids.size() );
     for( unsigned int i = 0; i < grids.size(); i++ )
     {
+        engine->debug->PrintString( "free grids: i:%i id:%i\n", i, grids[i]->id );
         if( grids[i]->id == id )
         {
+            engine->debug->PrintString( "id found, width*height:%i\n", grids[i]->width * grids[i]->height );
             for( unsigned int xy = 0; xy < grids[i]->width * grids[i]->height; xy++ )
             {
-                if( grids[i]->objects[xy] != NULL )
+                if( grids[i]->objects != NULL )
                 {
-                    return;
+                    engine->debug->PrintString( "%X,", grids[i]->objects[xy] );
+                    if( grids[i]->objects[xy] != NULL )
+                    {
+                        engine->debug->PrintString( "not empty - return\n" );
+                        return;
+                    }
                 }
             }
             free( grids[i]->objects );
-            delete grids[i];
+            grids.erase( grids.begin() + i);
             engine->debug->PrintString( "free grids: size:%i ", grids.size() );
             i++;
             return;

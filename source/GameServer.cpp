@@ -5,13 +5,19 @@
 
 GameServer::GameServer()
 {  
-    engine->SetDebugType( TEXT_TYPE_STDIO );
+    #ifdef TARGET_DOS
+        engine->SetDebugType( TEXT_TYPE_DUMMY );
+    #else
+        engine->SetDebugType( TEXT_TYPE_STDIO );
+    #endif
 
     //Client and Server cant use the same Input engine. the client keyup might be used by the server and vice versa.
     engine->SetInputType( INPUT_TYPE_DUMMY );
 
     engine->net->ConfigureAsServer();
 
+    networkUpdateTime   = 0.0;
+    updateTime          = 0.0;
 
     //adding initial game objects-----------------------------------------------
     engine->debug->PrintString( "server: add initial game objects...\n" );

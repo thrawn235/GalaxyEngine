@@ -126,16 +126,23 @@ GraphicsEngineSDL::GraphicsEngineSDL( GameEngine* engine ) : GraphicsEngine( eng
 }
 GraphicsEngineSDL::~GraphicsEngineSDL()
 {
+    engine->debug->PrintString( "Graphics(SDL) destructor...\n" );
     //Free all textures!
+    engine->debug->PrintString( "freeing textures...\n" );
+    engine->debug->PrintString( "num textures:%i\n", textures.size() );
     for( unsigned int i = 0; i < textures.size(); i++ )
     {
+        //engine->debug->PrintString( "freeing %i, id:%i...\n", i, textures[i].id );
         engine->data->FreeData( textures[i].id );
     }
+    engine->debug->PrintString( "clear textures vector...\n" );
     textures.clear();
 
     // Close and destroy the window
+    engine->debug->PrintString( "dostory window...\n" );
     SDL_DestroyWindow( window );
 
+    engine->debug->PrintString( "quit SDL video subsystem...\n" );
     SDL_QuitSubSystem( SDL_INIT_VIDEO );
 
     // Clean up
@@ -639,4 +646,49 @@ SDL_Texture* GraphicsEngineSDL::GetTexture( unsigned long id )
     texture.id = id;
     textures.push_back( texture );
     return texture.texture;
+}
+
+void GraphicsEngineSDL::DrawSprite( char* texture, Vector2D pos )
+{
+    SDL_Texture* SDLTexture = (SDL_Texture*)texture;
+
+    pos = pos - camPos;
+
+    //engine->debug->PrintString( "texture loaded...\n" );
+
+    int access, width, height;
+    Uint32 format;
+    SDL_QueryTexture( SDLTexture, &format, &access, &width, &height );
+
+
+    if( SDLTexture != NULL )
+    {
+        if( pos.x >= 0 && pos.y >= 0 && pos.x + width < logicalScreenWidth && pos.y + height < logicalScreenHeight )
+        {
+
+            SDL_Rect srcrect;
+            SDL_Rect dstrect;
+
+            srcrect.x = 0;
+            srcrect.y = 0;
+            srcrect.w = width;
+            srcrect.h = height;
+            dstrect.x = pos.x;
+            dstrect.y = pos.y;
+            dstrect.w = width;
+            dstrect.h = height;
+
+
+            SDL_RenderCopy( renderer, SDLTexture, &srcrect, &dstrect );
+
+        }
+    } 
+}
+char* GraphicsEngineSDL::GetSprite( unsigned int id )
+{
+    return (char*)GetTexture( id );
+}
+char* GraphicsEngineSDL::GetSpriteInCollection( unsigned int id, unsigned int index )
+{
+    return (char*)GetTextureInCollection( id, index );
 }

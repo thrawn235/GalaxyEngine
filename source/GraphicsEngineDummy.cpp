@@ -131,3 +131,16 @@ void GraphicsEngineDummy::DrawString( unsigned int id, string text, unsigned int
 {
 	
 }
+
+void GraphicsEngineDummy::DrawSprite( char* texture, Vector2D pos )
+{
+
+}
+char* GraphicsEngineDummy::GetSprite( unsigned int id )
+{
+	return NULL;
+}
+char* GraphicsEngineDummy::GetSpriteInCollection( unsigned int id, unsigned int index )
+{
+	return NULL;
+}

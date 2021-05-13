@@ -107,14 +107,14 @@ GameEngine::~GameEngine()
 
     debug->PrintString( "delete objects... \n" );
     delete objects;
-    debug->PrintString( "delete data... \n" );
-    delete data;
-    debug->PrintString( "delete file... \n" );
-    delete file;
     debug->PrintString( "delete time... \n" );
     delete time;
     debug->PrintString( "delete graphics... \n" );
     delete graphics;
+    debug->PrintString( "delete data... \n" );
+    delete data;
+    debug->PrintString( "delete file... \n" );
+    delete file;
     debug->PrintString( "delete input... \n" );
     delete input;
     debug->PrintString( "delete net... \n" );

@@ -41,7 +41,7 @@ struct Grid
     unsigned int                tileHeight;
     unsigned int                offsetX;
     unsigned int                offsetY;
-    Object**                    objects;
+    Object**                    objects = NULL;
 };
 
 

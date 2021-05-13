@@ -85,7 +85,7 @@ vector<DisplayMode> GraphicsEngineVESA::GetAvailableDisplayModes()
     unsigned long segment = ( vbeInfoBlock.VideoModePtr & 0xFFFF0000 ) >> 12;
     unsigned long offset = vbeInfoBlock.VideoModePtr & 0x0000FFFF;
     unsigned long final = segment + offset + __djgpp_conventional_base; 
-    printf("seg:%p, off:%p, linear:%p, final:%p\n", (void*)segment, (void*)offset, (void*)(segment+offset), (void*)final );
+    //printf("seg:%p, off:%p, linear:%p, final:%p\n", (void*)segment, (void*)offset, (void*)(segment+offset), (void*)final );
     __djgpp_nearptr_disable();
 
     __dpmi_regs r;
@@ -152,13 +152,13 @@ void GraphicsEngineVESA::SetDisplayMode( DisplayMode mode )
     unsigned long segment = ( vbeInfoBlock.VideoModePtr & 0xFFFF0000 ) >> 12;
     unsigned long offset = vbeInfoBlock.VideoModePtr & 0x0000FFFF;
     unsigned long final = segment + offset + __djgpp_conventional_base; 
-    printf("seg:%p, off:%p, linear:%p, final:%p\n", (void*)segment, (void*)offset, (void*)(segment+offset), (void*)final );
+    //printf("seg:%p, off:%p, linear:%p, final:%p\n", (void*)segment, (void*)offset, (void*)(segment+offset), (void*)final );
     __djgpp_nearptr_disable();
 
     __dpmi_regs r;
     
     uint16_t* vesaModes = (uint16_t*)final;
-    printf( "modeptr %p\n", vesaModes );
+    //printf( "modeptr %p\n", vesaModes );
     unsigned int i = 0;
     while( vesaModes[i] != 0xFFFF )
     {
@@ -203,14 +203,14 @@ void GraphicsEngineVESA::SetDisplayMode( DisplayMode mode )
             //for VESA the back buffer is also in screen memory. we just flip the screen window
             backBuffer = screenMemory + ( logicalScreenWidth*logicalScreenHeight );
 
-            printf( "ScreenMemoryAddress:   %p \n",         ( void* )screenMemory   );
-            printf( "screenWidth:           %i \n",                  screenWidth    );
-            printf( "screenHeight:          %i \n",                  screenHeight   );
-            printf( "screenPadding:         %i \n",                  screenPadding  );
-            printf( "logicalWidth:          %i \n",         logicalScreenWidth  );
-            printf( "logicalHeight:         %i \n",         logicalScreenHeight     );
-            printf( "lWidth*lHeight:        %d \n",         logicalScreenWidth*logicalScreenHeight  );
-            printf( "backBufferAddress:     %p \n",         ( void* )backBuffer     );
+            //printf( "ScreenMemoryAddress:   %p \n",         ( void* )screenMemory   );
+            //printf( "screenWidth:           %i \n",                  screenWidth    );
+            //printf( "screenHeight:          %i \n",                  screenHeight   );
+            //printf( "screenPadding:         %i \n",                  screenPadding  );
+            //printf( "logicalWidth:          %i \n",         logicalScreenWidth  );
+            //printf( "logicalHeight:         %i \n",         logicalScreenHeight     );
+            //printf( "lWidth*lHeight:        %d \n",         logicalScreenWidth*logicalScreenHeight  );
+            //printf( "backBufferAddress:     %p \n",         ( void* )backBuffer     );
             //getchar();    
 
 
@@ -749,7 +749,7 @@ void GraphicsEngineVESA::DrawSprite( Sprite* in, Vector2D pos )
 void GraphicsEngineVESA::DrawSpriteInSheet( unsigned int id, unsigned int index, Vector2D pos )
 {
     //
-    DrawSprite( GetSpriteInCollection( id, index ), pos );
+    DrawSprite( VESAGetSpriteInCollection( id, index ), pos );
 }
 
 void GraphicsEngineVESA::DrawSpriteSheet( unsigned int id, unsigned int width, Vector2D pos )
@@ -799,7 +799,7 @@ void GraphicsEngineVESA::DrawSpriteSheet( unsigned int id, unsigned int width, V
 void GraphicsEngineVESA::DrawString( unsigned int id, string text, Vector2D pos )
 {
     Vector2D savePos = pos;
-    Sprite* firstSprite = (Sprite*)GetSpriteInCollection( id, 0 );
+    Sprite* firstSprite = (Sprite*)VESAGetSpriteInCollection( id, 0 );
     if( firstSprite != NULL )
     {
         for( unsigned int i = 0; i < text.size(); i++ )
@@ -818,7 +818,7 @@ void GraphicsEngineVESA::DrawString( unsigned int id, string text, unsigned int 
 {
     unsigned int linePos = 0;
     Vector2D savePos = pos;
-    Sprite* firstSprite = (Sprite*)GetSpriteInCollection( id, 0 );
+    Sprite* firstSprite = (Sprite*)VESAGetSpriteInCollection( id, 0 );
     if( firstSprite != NULL )
     {
         for( unsigned int i = 0; i < text.size(); i++ )
@@ -936,7 +936,7 @@ void GraphicsEngineVESA::LoadPalette( char* palette, int numColors )
     }
 }
 
-Sprite* GraphicsEngineVESA::GetSpriteInCollection( unsigned int id, unsigned int index )
+Sprite* GraphicsEngineVESA::VESAGetSpriteInCollection( unsigned int id, unsigned int index )
 {
     struct Collection
     {
@@ -959,4 +959,44 @@ Sprite* GraphicsEngineVESA::GetSpriteInCollection( unsigned int id, unsigned int
     }
 
     return NULL;
+}
+
+void GraphicsEngineVESA::DrawSprite( char* texture, Vector2D pos )
+{
+    Sprite* in = (Sprite*)texture;
+
+    pos = pos + screenPadding;
+    pos = pos - camPos;
+
+    if( in != NULL && initialized )
+    {
+        if( pos.x >= 0 && pos.y >= 0 && pos.x+in->width < logicalScreenWidth && pos.y + in->height < logicalScreenHeight )
+        {
+            int startAddress = ( int )currentBackBuffer + ( ( int )pos.y * logicalScreenWidth + ( int )pos.x );
+
+            asm(    "mov %4, %%ebx;"
+                    "loop1%=:;" 
+                    "   mov %2, %%ecx;"
+                    "   loop2%=:;"
+                    "       sub $4, %%ecx;"
+                    "       mov ( %%esi, %%ecx ), %%eax;"
+                    "       mov %%eax, ( %%edi, %%ecx );"
+                    "       ja loop2%=;"
+                    "   add %2, %%esi;"
+                    "   add %3, %%edi;"
+                    "   dec %%ebx;"
+                    "   ja loop1%=;"
+                    :
+                    :"D"( startAddress ), "S"( &in->pixelData ), "m"( in->width ), "m"( logicalScreenWidth ), "m"( in->height )
+                    :"eax", "ebx", "ecx", "memory" );
+        }
+    }
+}
+char* GraphicsEngineVESA::GetSprite( unsigned int id )
+{
+    return (char*)engine->data->GetData( id );
+}
+char* GraphicsEngineVESA::GetSpriteInCollection( unsigned int id, unsigned int index )
+{
+    return (char*)VESAGetSpriteInCollection( id, index );
 }

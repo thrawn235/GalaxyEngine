@@ -151,7 +151,7 @@ void Object::SendStatus()
     pkt->type       = NET_PACKET_TYPE_OBJECT_UPDATE;
 
     engine->debug->PrintString( "sending Status: ");
-    PrintStats();
+    //PrintStats();
 
     engine->net->Send( pkt );
 }
@@ -173,12 +173,12 @@ void Object::GameLogic()
 {
     //
     engine->debug->PrintString( "Game Logic: " );
-    PrintStats();
+    //PrintStats();
 }
 void Object::ClientSideUpdate()
 {
     engine->debug->PrintString( "Client Side: " );
-    PrintStats();
+    //PrintStats();
 
     //SendStatus();
 }
@@ -189,7 +189,7 @@ void Object::UpdateServerIndependend()
 void Object::Predict( float tickRate )
 {
     //engine->text->PrintString( "Predict: " );
-    PrintStats();
+    //PrintStats();
     //engine->text->PrintString( "   tickRate: %f\n", tickRate );
     netStats->pos = netStats->pos + netStats->movement * tickRate;
 }
@@ -197,5 +197,5 @@ void Object::Render()
 {
     //
     engine->debug->PrintString( "Render: " );
-    PrintStats();
+    //PrintStats();
 }

@@ -74,6 +74,10 @@ public:
     //Text
     void                    DrawString                              ( unsigned int id, string text, Vector2D pos );
     void                    DrawString                              ( unsigned int id, string text, unsigned int lineLength, Vector2D pos );
+
+    void                    DrawSprite                              ( char* texture, Vector2D pos );      
+    char*                   GetSprite                               ( unsigned int id );
+    char*                   GetSpriteInCollection                   ( unsigned int id, unsigned int index );
 };
 
 #endif

@@ -178,8 +178,11 @@ public:
     void                    DrawSprite                  ( Sprite* in, Vector2D pos );
     void                    LoadPalette                 ( char* palette, int numColors );
     void                    DrawPalette                 ( Vector2D pos );
-    Sprite*                 GetSpriteInCollection       ( unsigned int id, unsigned int index );
+    Sprite*                 VESAGetSpriteInCollection   ( unsigned int id, unsigned int index );
 
+    void                    DrawSprite                  ( char* texture, Vector2D pos );
+    char*                   GetSprite                   ( unsigned int id );
+    char*                   GetSpriteInCollection       ( unsigned int id, unsigned int index );
 };
 
 #endif

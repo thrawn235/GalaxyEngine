@@ -124,7 +124,7 @@ void GameClient::Run()
     //engine->text->PrintString( "       tickrate:%f clientTicks:%i!\n", tickRate, clientTicksSinceLogicTick );
 
     //Update Objects------------------------------------------------------
-    //engine->debug->PrintString( "updating Objects...\n" );
+    engine->debug->PrintString( "updating Objects...\n" );
     int updateTimer = engine->time->AddTimeStamp();
     engine->objects->ClientSideAndPredictAndIndependentAllObjects( waitingForUpdate, tickRate );
     updateTime = engine->time->TicksToMilliSeconds( engine->time->GetTimeSinceStamp( updateTimer ) );

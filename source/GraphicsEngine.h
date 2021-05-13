@@ -104,6 +104,9 @@ public:
 
     //Sprites
     virtual     void                    DrawSprite                  ( unsigned long id, Vector2D pos )                                      = 0;
+    virtual     void                    DrawSprite                  ( char* texture, Vector2D pos )                                         = 0;
+    virtual     char*                   GetSprite                   ( unsigned int id )                                                     = 0;
+    virtual     char*                   GetSpriteInCollection       ( unsigned int id, unsigned int index )                                 = 0;
 };
 
 #endif

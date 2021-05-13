@@ -56,11 +56,11 @@ private:
 	
 protected:
 	TileStats*		netStats;
+	char* 			sprite;
 public:
 							Tile				( GameEngine* engine );
-	virtual void 			SetTileSetID 		( unsigned int tileSetID );
+	virtual void 			SetTileSet   		( unsigned int tileSetID, unsigned char tileIndex  );
 	virtual unsigned int 	GetTileSetID 		();
-	virtual void 			SetTileIndex 		( unsigned char tileIndex );
 	virtual unsigned char 	GetTileIndex 		();
 	virtual void 			GameLogic			();
 	virtual void 			ClientSideUpdate	();

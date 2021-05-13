@@ -107,6 +107,10 @@ public:
     void                    DrawSprite                  ( SDL_Texture* texture, Vector2D pos );
     SDL_Texture*            GetTextureInCollection      ( unsigned long id, unsigned long index );
     SDL_Texture*            GetTexture                  ( unsigned long id );
+
+    void                    DrawSprite                  ( char* texture, Vector2D pos );
+    char*                   GetSprite                   ( unsigned int id );
+    char*                   GetSpriteInCollection       ( unsigned int id, unsigned int index );
 };
 
 #endif
