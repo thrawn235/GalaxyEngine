@@ -55,6 +55,8 @@ protected:
     int                     screenPadding;
     Color                   colors[16];
 
+    bool                    frameRedraw;
+
     //camera
     Vector2D                camPos;
 
@@ -65,6 +67,8 @@ public:
     virtual                 ~GraphicsEngineSDL          ();
 
     void                    InitGraphics                ();
+
+    void                    SetFrameRedraw              ( bool frameRedraw );
 
     vector<DisplayMode>     GetAvailableDisplayModes    ();
     void                    SetDisplayMode              ( DisplayMode mode );

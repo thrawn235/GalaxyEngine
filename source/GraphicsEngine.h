@@ -65,6 +65,8 @@ public:
 
     virtual     void                    InitGraphics                ()                                                                      = 0;
 
+    virtual     void                    SetFrameRedraw              ( bool frameRedraw )                                                    = 0;    //enable for screen clear and redrawing of every frame, disable for adaptive tile refresh
+
     virtual     vector<DisplayMode>     GetAvailableDisplayModes    ()                                                                      = 0;
     virtual     void                    SetDisplayMode              ( DisplayMode mode )                                                    = 0;
     virtual     void                    SetFullScreen               ( bool fullScreen )                                                     = 0;

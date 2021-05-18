@@ -116,6 +116,7 @@ protected:
     int                 oldMode; //mode to go back to
 
     bool                fullScreen;
+    bool                flip;
 
     //double buffering
     char*               currentBackBuffer;
@@ -130,6 +131,8 @@ public:
                             ~GraphicsEngineVESA         ();
 
     void                    InitGraphics                ();
+
+    void                    SetFrameRedraw              ( bool frameRedraw );
 
     vector<DisplayMode>     GetAvailableDisplayModes    ();
     void                    SetDisplayMode              ( DisplayMode mode );

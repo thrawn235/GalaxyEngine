@@ -38,6 +38,8 @@ public:
 
     void                    InitGraphics                            ();
 
+    void                    SetFrameRedraw                          ( bool frameRedraw );
+
     vector<DisplayMode>     GetAvailableDisplayModes                ();
     void                    SetDisplayMode                          ( DisplayMode mode );
     void                    SetFullScreen                           ( bool fullScreen );

@@ -120,6 +120,7 @@ GraphicsEngineSDL::GraphicsEngineSDL( GameEngine* engine ) : GraphicsEngine( eng
 
     // The window is open: could enter program loop here (see SDL_PollEvent())
 
+    frameRedraw = false;
 
     SetDisplayMode( modes[25] );
     //SetFullScreen( true );
@@ -156,6 +157,13 @@ void GraphicsEngineSDL::InitGraphics()
 {
     
 }
+
+void GraphicsEngineSDL::SetFrameRedraw( bool frameRedraw )
+{
+    //
+    this->frameRedraw = frameRedraw;
+}
+
 vector<DisplayMode> GraphicsEngineSDL::GetAvailableDisplayModes()
 {
     vector<DisplayMode> modes;
@@ -260,7 +268,10 @@ unsigned int GraphicsEngineSDL::GetScreenHeight()
 void GraphicsEngineSDL::PreFrame()
 {
     //
-    ClearScreen();   
+    if( frameRedraw )
+    {
+        ClearScreen();
+    }   
 }
 void GraphicsEngineSDL::PostFrame()
 {

@@ -73,6 +73,13 @@ void GraphicsEngineVESA::InitGraphics()
 
     SetDisplayMode( modes[0] );
 }
+
+void GraphicsEngineVESA::SetFrameRedraw( bool frameRedraw )
+{
+    //
+    flip = frameRedraw;
+}
+
 vector<DisplayMode> GraphicsEngineVESA::GetAvailableDisplayModes()
 {
     vector<DisplayMode> modes;
@@ -227,9 +234,17 @@ void GraphicsEngineVESA::SetDisplayMode( DisplayMode mode )
             __dpmi_int( 0x10, &r );
 
             //setup for Flip    
-            //flip = true;
-            currentScreenMemory = screenMemory;
-            currentBackBuffer = backBuffer;
+            flip = true;
+            if( flip )
+            {
+                currentScreenMemory = screenMemory;
+                currentBackBuffer = backBuffer;
+            }
+            else
+            {
+                currentScreenMemory = backBuffer;
+                currentBackBuffer = screenMemory;
+            }
 
             //set display window to proper position
             r.x.ax = 0x4F07;
@@ -270,13 +285,17 @@ unsigned int GraphicsEngineVESA::GetScreenHeight()
 }
 void GraphicsEngineVESA::PreFrame()
 {
-    //
-    ClearScreen();
+    if( flip )
+    {
+        //ClearScreen();
+    }
 }
 void GraphicsEngineVESA::PostFrame()
 {
-    //
-    Flip();
+    if( flip )
+    {
+        Flip();
+    }
 }
 void GraphicsEngineVESA::Flip()
 {

@@ -13,6 +13,12 @@ void GraphicsEngineDummy::InitGraphics()
 {
 	
 }
+
+void GraphicsEngineDummy::SetFrameRedraw( bool frameRedraw )
+{
+	
+}
+
 vector<DisplayMode> GraphicsEngineDummy::GetAvailableDisplayModes()
 {
 	vector<DisplayMode> modes;
